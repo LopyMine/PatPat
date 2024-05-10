@@ -10,21 +10,24 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.lopymine.patpat.component.*;
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.entity.*;
 
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin {
     @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;scale(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/util/math/MatrixStack;F)V"))
     private void render(LivingEntity livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-        PatPatComponent component = livingEntity.getComponent(PatPatComponents.PATPAT_COMPONENT);
-        if (!component.shouldPat()) {
+        PatEntity patEntity = PatPatClient.getPatEntity(livingEntity);
+        if (patEntity == null) {
             return;
         }
-        int duration = component.getDuration();
-        long time = component.getTimeOfStart();
+
+        PatAnimation patAnimation = patEntity.getAnimation();
+        int duration = patAnimation.getDuration();
+        long time = patAnimation.getTimeOfStart();
         long timeNow = Util.getMeasuringTimeMs();
         if (timeNow > (time + duration)) {
-            component.unPat();
+            PatPatClient.removePatEntity(patEntity);
             return;
         }
 
@@ -32,15 +35,15 @@ public class LivingEntityRendererMixin {
         animationProgress = (float) (1 - Math.pow(1 - animationProgress, 3));
 
         if (animationProgress < 0.2) {
-            component.setFrame(0);
+            patAnimation.setFrame(0);
         } else if (animationProgress < 0.4) {
-            component.setFrame(1);
+            patAnimation.setFrame(1);
         } else if (animationProgress < 0.6) {
-            component.setFrame(2);
+            patAnimation.setFrame(2);
         } else if (animationProgress < 0.8) {
-            component.setFrame(3);
+            patAnimation.setFrame(3);
         } else {
-            component.setFrame(4);
+            patAnimation.setFrame(4);
         }
 
         float range = 0.425F / livingEntity.getHeight();

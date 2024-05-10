@@ -1,4 +1,4 @@
-package net.lopymine.patpat.hand;
+package net.lopymine.patpat.manager;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
@@ -27,6 +27,7 @@ public class PatPatSoundManager {
         if (world == null) {
             return;
         }
+        //todo
         world.playSoundFromEntity(entity, PatPatSoundManager.PATPAT_SOUND, SoundCategory.PLAYERS, 1.0F, 1.0F);
     }
 }

@@ -5,7 +5,7 @@
 	"name": "PatPat",
 	"description": "PatPat mod",
 	"authors": [
-		"nikita51 [author]",
+		"nikita51 [Author]",
 		"LopyMine"
 	],
 	"license": "MIT",
@@ -17,9 +17,6 @@
 		],
 		"client": [
 			"net.lopymine.patpat.client.PatPatClient"
-		],
-		"cardinal-components": [
-			"net.lopymine.patpat.component.PatPatComponents"
 		]
 	},
 	"mixins": [
@@ -30,10 +27,5 @@
 		"minecraft": "~1.20.4",
 		"java": ">=17",
 		"fabric-api": "*"
-	},
-	"custom": {
-		"cardinal-components": [
-			"patpat:patpat"
-		]
 	}
 }

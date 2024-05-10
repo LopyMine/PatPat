@@ -12,9 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.entity.PatEntity;
+import net.lopymine.patpat.entity.*;
 
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin {
@@ -23,12 +22,12 @@ public class EntityRendererMixin {
     @Final
     protected EntityRenderDispatcher dispatcher;
 
-    @Inject(at = @At("HEAD"), method = "render", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "render")
     private void render(Entity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (!(entity instanceof LivingEntity)) {
+        if (!(entity instanceof LivingEntity livingEntity)) {
             return;
         }
-        PatEntity patEntity = PatPatClient.getPatEntity(entity);
+        PatEntity patEntity = PatPatClient.getPatEntity(livingEntity);
         if (patEntity == null) {
             return;
         }
@@ -36,7 +35,8 @@ public class EntityRendererMixin {
         if (cameraEntity == null) {
             return;
         }
-        RenderSystem.setShaderTexture(0, PatPat.i("textures/patpat.png"));
+        PatAnimation patAnimation = patEntity.getAnimation();
+        RenderSystem.setShaderTexture(0, patAnimation.getTexture());
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         BufferBuilder builder = Tessellator.getInstance().getBuffer();
         builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
@@ -44,14 +44,14 @@ public class EntityRendererMixin {
         float patSize = 0.85F;
         float p = patSize / 2.0F;
         matrices.push();
-        matrices.translate(0.0F, entity.getNameLabelHeight() - 0.25F, 0.0F);
+        matrices.translate(0.0F, livingEntity.getNameLabelHeight() - 0.25F, 0.0F);
         matrices.multiply(this.dispatcher.getRotation());
         matrices.scale(-patSize, -patSize, patSize);
 
         Matrix4f matrix = matrices.peek().getPositionMatrix();
 
-        float d = 112F / 560F;
-        float k = patEntity.getAnimation().getFrame() * d;
+        float d = (float) patAnimation.getFrameSize() / patAnimation.getTextureWidth();
+        float k = patAnimation.getFrame() * d;
         builder.vertex(matrix,    -p,           0.0F,           0.0F).texture(k, 0.0F).next();
         builder.vertex(matrix,    -p,           0.0F + patSize, 0.0F).texture(k, 1.0F).next();
         builder.vertex(matrix, -p + patSize, 0.0F + patSize, 0.0F).texture(k + d, 1.0F).next();
@@ -61,6 +61,6 @@ public class EntityRendererMixin {
 
         RenderSystem.enableDepthTest();
         BufferRenderer.drawWithGlobalProgram(builder.end());
-        ci.cancel(); //
+//        ci.cancel(); //
     }
 }

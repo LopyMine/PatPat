@@ -3,13 +3,13 @@
 	"id": "patpat",
 	"version": "${version}",
 	"name": "PatPat",
-	"description": "PatPat mod",
+	"description": "Simple PatPat Fabric mod for patting any mobs!",
 	"authors": [
 		"nikita51 [Author]",
 		"LopyMine"
 	],
 	"license": "MIT",
-	"icon": "assets/patpat/icon.png",
+	"icon": "assets/patpat/icon/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [

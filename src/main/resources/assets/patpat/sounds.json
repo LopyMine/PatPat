@@ -5,5 +5,13 @@
       "patpat:pat1",
       "patpat:pat2"
     ]
+  },
+  "lopi": {
+    "sounds": [
+      "patpat:lopi",
+      "patpat:lopi1",
+      "patpat:lopi2",
+      "patpat:lopi3"
+    ]
   }
 }

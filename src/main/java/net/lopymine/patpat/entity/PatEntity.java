@@ -1,23 +1,23 @@
 package net.lopymine.patpat.entity;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.*;
 
 import java.util.*;
 
 public class PatEntity {
-    private final Entity patEntity;
+    private final LivingEntity patEntity;
     private final PatAnimation animation;
 
-    public PatEntity(Entity entity) {
+    public PatEntity(LivingEntity entity, boolean bl) {
         this.patEntity = entity;
-        this.animation = PatAnimation.of(entity);
+        this.animation = PatAnimation.of(entity, bl);
     }
 
     public PatAnimation getAnimation() {
         return this.animation;
     }
 
-    public boolean is(Entity entity) {
+    public boolean is(LivingEntity entity) {
         return this.is(entity.getUuid());
     }
 
@@ -25,7 +25,7 @@ public class PatEntity {
         return this.patEntity.getUuid().equals(uuid);
     }
 
-    public Entity getEntity() {
+    public LivingEntity getEntity() {
         return this.patEntity;
     }
 }

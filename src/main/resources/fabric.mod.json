@@ -1,0 +1,39 @@
+{
+	"schemaVersion": 1,
+	"id": "patpat",
+	"version": "${version}",
+	"name": "PatPat",
+	"description": "PatPat mod",
+	"authors": [
+		"nikita51 [author]",
+		"LopyMine"
+	],
+	"license": "MIT",
+	"icon": "assets/patpat/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.lopymine.patpat.PatPat"
+		],
+		"client": [
+			"net.lopymine.patpat.client.PatPatClient"
+		],
+		"cardinal-components": [
+			"net.lopymine.patpat.component.PatPatComponents"
+		]
+	},
+	"mixins": [
+		"patpat.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.20.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"custom": {
+		"cardinal-components": [
+			"patpat:patpat"
+		]
+	}
+}

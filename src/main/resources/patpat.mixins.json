@@ -1,16 +1,16 @@
 {
-  "required": true,
-  "package": "net.lopymine.patpat.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "mixins": [
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "client": [
-    "EntityRendererMixin",
-    "LivingEntityRendererMixin",
-    "MinecraftClientMixin",
-    "ReloadableResourceManagerImplMixin"
-  ]
+	"required": true,
+	"package": "net.lopymine.patpat.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"client": [
+		"EntityRendererMixin",
+		"LivingEntityRendererMixin",
+		"MinecraftClientMixin",
+		"ReloadableResourceManagerImplMixin"
+	]
 }

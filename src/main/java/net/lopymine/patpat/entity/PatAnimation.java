@@ -1,82 +1,86 @@
 package net.lopymine.patpat.entity;
 
-import net.minecraft.entity.*;
-import net.minecraft.util.*;
-
-import net.lopymine.patpat.PatPat;
+import lombok.Getter;
+import lombok.Setter;
 import net.lopymine.patpat.config.PatPatHandConfig;
 import net.lopymine.patpat.manager.PatPatResourcePackManager;
+import net.lopymine.patpat.utils.IdentifierUtils;
+import net.lopymine.patpat.utils.SoundUtils;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 
+@Getter
 public class PatAnimation {
-    public static final Identifier PATPAT_TEXTURE = PatPat.i("textures/default/patpat.png");
+	public static final Identifier PATPAT_TEXTURE = IdentifierUtils.textureId("default/patpat.png");
 
-    private final long timeOfStart;
-    private final int duration;
-    private final Identifier texture;
-    private final int textureWidth;
-    private final int frameSize;
-    private final int totalFrames;
-    private final String sounds;
-    private int frame;
+	private static final PatAnimation DEFAULT_PATPAT_ANIMATION = new PatAnimation(
+		PATPAT_TEXTURE,
+		560,
+		112,
+		240,
+		SoundUtils.getSoundEvent("patpat")
+	);
 
-    public PatAnimation(Identifier texture, int textureWidth, int totalFrames, int frameSize, int duration, String sounds) {
-        this.timeOfStart = Util.getMeasuringTimeMs();
-        this.textureWidth = textureWidth;
-        this.totalFrames = totalFrames;
-        this.frameSize = frameSize;
-        this.duration = duration;
-        this.texture = texture;
-        this.sounds = sounds;
-        this.frame = 0;
-    }
+	private static final PatAnimation DEFAULT_LOPI_ANIMATION = new PatAnimation(
+		PATPAT_TEXTURE,
+		560,
+		112,
+		350,
+		SoundUtils.getSoundEvent("lopi")
+	);
 
-    public static PatAnimation of(Entity entity, boolean bl) {
-        PatPatHandConfig config = PatPatResourcePackManager.INSTANCE.getOverrideHandConfig();
-        if (config == null) {
-            config = PatPatResourcePackManager.INSTANCE.getFor(entity);
-        }
-        if (config != null) {
-            return new PatAnimation(PatPat.i("textures/" + config.texture()), config.textureWidth(), config.totalFrames(), config.frameSize(), config.duration(), config.sounds());
-        }
-        if (entity.getType().equals(EntityType.GOAT) && entity.getName().getString().equals("Снежа") && bl) {
-            return new PatAnimation(PATPAT_TEXTURE, 560, 5, 112, 350, "lopi");
-        }
-        return new PatAnimation(PATPAT_TEXTURE, 560, 5, 112, 240, "patpat");
-    }
+	private final int duration;
+	private final Identifier texture;
+	private final int textureWidth;
+	private final int frameSize;
+	private final int totalFrames;
+	private final SoundEvent sound;
+	private long timeOfStart;
 
-    public long getTimeOfStart() {
-        return this.timeOfStart;
-    }
+	@Setter
+	private int frame;
 
-    public int getDuration() {
-        return this.duration;
-    }
+	public PatAnimation(Identifier texture, int textureWidth, int frameSize, int duration, SoundEvent sound) {
+		this.timeOfStart = System.currentTimeMillis();
+		this.textureWidth = textureWidth;
+		this.totalFrames = MathHelper.floor((float) textureWidth / frameSize);
+		this.frameSize = frameSize;
+		this.duration = duration;
+		this.texture = texture;
+		this.sound = sound;
+		this.frame = 0;
+	}
 
-    public Identifier getTexture() {
-        return this.texture;
-    }
+	public static PatAnimation of(Entity entity, boolean bl) {
+		PatPatHandConfig config = PatPatResourcePackManager.INSTANCE.getOverrideHandConfig();
+		if (config == null) {
+			config = PatPatResourcePackManager.INSTANCE.getHandConfig(entity);
+		}
+		if (config != null) {
+			return config.getAnimation().copy();
+		}
+		if (entity.getType().equals(EntityType.GOAT) && entity.getName().getString().equals("Снежа") && bl) {
+			return DEFAULT_LOPI_ANIMATION.copy();
+		}
+		return DEFAULT_PATPAT_ANIMATION.copy();
+	}
 
-    public int getTextureWidth() {
-        return this.textureWidth;
-    }
+	public void resetAnimation() {
+		this.timeOfStart = System.currentTimeMillis();
+		this.frame = 0;
+	}
 
-    public int getFrameSize() {
-        return this.frameSize;
-    }
+	public PatAnimation copy() {
+		return new PatAnimation(
+			this.texture,
+			this.textureWidth,
+			this.frameSize,
+			this.duration,
+			this.sound
+		);
+	}
 
-    public String getSounds() {
-        return this.sounds;
-    }
-
-    public int getFrame() {
-        return this.frame;
-    }
-
-    public int getTotalFrames() {
-        return this.totalFrames;
-    }
-
-    public void setFrame(int frame) {
-        this.frame = frame;
-    }
 }

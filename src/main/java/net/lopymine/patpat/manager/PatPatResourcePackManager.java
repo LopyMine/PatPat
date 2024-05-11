@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
+
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.PatPatHandConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -35,9 +37,11 @@ public class PatPatResourcePackManager {
 	private PatPatResourcePackManager() {
 	}
 
-	public void load(List<ResourcePack> packs) {
+	public void reload(List<ResourcePack> packs) {
 		this.handConfigs.clear();
 		this.overrideHandConfig = null;
+		PatPatClient.reloadPatEntities();
+
 		for (ResourcePack pack : packs) {
 			String name = pack.getName();
 			if (!pack.getNamespaces(ResourceType.CLIENT_RESOURCES).contains(MOD_ID)
@@ -46,12 +50,11 @@ public class PatPatResourcePackManager {
 			}
 
 			LOGGER.info("Registering {} resource pack", name);
-			pack.findResources(ResourceType.CLIENT_RESOURCES, MOD_ID, "textures", (id, input) -> handlerResources(name, id, input));
+			pack.findResources(ResourceType.CLIENT_RESOURCES, MOD_ID, "textures", (id, input) -> this.findCustomHands(name, id, input));
 		}
 	}
 
-	// TODO Подумать над названием
-	private void handlerResources(String packName, Identifier identifier, InputSupplier<InputStream> inputStreamInputSupplier) {
+	private void findCustomHands(String packName, Identifier identifier, InputSupplier<InputStream> inputStreamInputSupplier) {
 		String path = identifier.getPath();
 		if (path.endsWith(".json")) {
 			try (InputStream inputStream = inputStreamInputSupplier.get(); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -79,7 +82,7 @@ public class PatPatResourcePackManager {
 	@Nullable
 	public PatPatHandConfig getHandConfig(@NotNull Entity entity) {
 		EntityType<?> entityType = entity.getType();
-		for (PatPatHandConfig handConfig : handConfigs) {
+		for (PatPatHandConfig handConfig : this.handConfigs) {
 			List<String> entities = handConfig.getEntities();
 			if (entities.contains("all")) {
 				return handConfig;

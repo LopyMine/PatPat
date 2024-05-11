@@ -54,7 +54,7 @@ public class PatAnimation {
 		this.frame = 0;
 	}
 
-	public static PatAnimation of(Entity entity, boolean bl) {
+	public static PatAnimation of(Entity entity, boolean isAuthor) {
 		PatPatHandConfig config = PatPatResourcePackManager.INSTANCE.getOverrideHandConfig();
 		if (config == null) {
 			config = PatPatResourcePackManager.INSTANCE.getHandConfig(entity);
@@ -62,7 +62,7 @@ public class PatAnimation {
 		if (config != null) {
 			return config.getAnimation().copy();
 		}
-		if (entity.getType().equals(EntityType.GOAT) && entity.getName().getString().equals("Снежа") && bl) {
+		if (entity.getType().equals(EntityType.GOAT) && entity.getName().getString().equals("Снежа") && isAuthor) {
 			return DEFAULT_LOPI_ANIMATION.copy();
 		}
 		return DEFAULT_PATPAT_ANIMATION.copy();

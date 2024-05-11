@@ -52,6 +52,10 @@ public class PatPatClient implements ClientModInitializer {
 		return patEntity;
 	}
 
+	public static void reloadPatEntities() {
+		PAT_ENTITIES.clear();
+	}
+
 	@Override
 	public void onInitializeClient() {
 		PatPat.LOGGER.info("PatPat Client Initialized");

@@ -60,8 +60,8 @@ public final class PatPatHandConfig {
 
 	@NotNull
 	public PatAnimation getAnimation() {
-		if (animation == null) {
-			animation = new PatAnimation(
+		if (this.animation == null) {
+			this.animation = new PatAnimation(
 				this.texture,
 				this.textureWidth,
 				this.frameSize,
@@ -69,7 +69,7 @@ public final class PatPatHandConfig {
 				this.soundEvent
 			);
 		}
-		return animation;
+		return this.animation;
 	}
 
 	@Override

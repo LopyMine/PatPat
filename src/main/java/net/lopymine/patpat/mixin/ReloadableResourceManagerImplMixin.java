@@ -21,11 +21,6 @@ public class ReloadableResourceManagerImplMixin {
 		if (packs.isEmpty()) {
 			return;
 		}
-		try {
-			PatPatResourcePackManager.INSTANCE.load(packs); // TODO Отладить ошибку
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		PatPatResourcePackManager.INSTANCE.reload(packs);
 	}
 }

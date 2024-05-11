@@ -3,17 +3,17 @@ package net.lopymine.patpat.entity;
 import lombok.Getter;
 import net.minecraft.entity.LivingEntity;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 public class PatEntity {
 	private final LivingEntity entity;
 	private final PatAnimation animation;
 
-	public PatEntity(LivingEntity entity, boolean bl) {
+	public PatEntity(LivingEntity entity, boolean isAuthor) {
 		this.entity = entity;
-		this.animation = PatAnimation.of(entity, bl);
+		this.animation = PatAnimation.of(entity, isAuthor);
+
 	}
 
 	public boolean is(LivingEntity entity) {
@@ -34,6 +34,6 @@ public class PatEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(entity.getUuid());
+		return Objects.hash(this.entity.getUuid());
 	}
 }

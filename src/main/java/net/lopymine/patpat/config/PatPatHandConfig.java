@@ -3,85 +3,80 @@ package net.lopymine.patpat.config;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import net.lopymine.patpat.entity.PatAnimation;
-import net.lopymine.patpat.utils.IdentifierUtils;
-import net.lopymine.patpat.utils.SoundUtils;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.extension.EntityExtension;
+import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
+
+import static net.lopymine.patpat.config.EntityConfig.ENTITY_FIELD;
 
 @Getter
 @Setter
+@ExtensionMethod(EntityExtension.class)
 public final class PatPatHandConfig {
 
-	// TODO
-	//  На будущее реализовать настройки размера (scale), пропорции(можно через width и height или ratio), смещение вверх/вниз и влево/вправо
-
 	public static final Codec<PatPatHandConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-		Codec.STRING.fieldOf("texture").xmap(IdentifierUtils::textureId, Identifier::toString).forGetter(PatPatHandConfig::getTexture),
-		Codec.STRING.fieldOf("sounds").xmap(SoundUtils::getSoundEvent, sound -> sound.getId().toString()).forGetter(PatPatHandConfig::getSoundEvent),
-		Codec.INT.fieldOf("duration").forGetter(PatPatHandConfig::getDuration),
-		Codec.INT.fieldOf("texture_width").forGetter(PatPatHandConfig::getTextureWidth),
-		Codec.INT.fieldOf("frame_size").forGetter(PatPatHandConfig::getFrameSize),
-		Codec.BOOL.fieldOf("override").orElse(false).forGetter(PatPatHandConfig::isOverride),
-		Codec.either(Codec.STRING.listOf(), Codec.STRING).fieldOf("entities").forGetter(PatPatHandConfig::getEither)
+		Version.CODEC.optionalFieldOf("version", Version.DEFAULT).forGetter(PatPatHandConfig::getVersion),
+		AnimationConfig.CODEC.fieldOf("animation").forGetter(PatPatHandConfig::getAnimation),
+		Codec.BOOL.optionalFieldOf("blacklist", false).forGetter(PatPatHandConfig::isBlacklist),
+		Codec.BOOL.optionalFieldOf("override", false).forGetter(PatPatHandConfig::isOverride),
+		Codec.either(ENTITY_FIELD.listOf(), ENTITY_FIELD).fieldOf("entities").forGetter(PatPatHandConfig::getEither)
 	).apply(instance, PatPatHandConfig::new));
 
 
-	private final Identifier texture;
-	private final SoundEvent soundEvent;
-	private final int duration;
-	private final int textureWidth;
-	private final int frameSize;
+	private final Version version;
+	private final AnimationConfig animation;
+	private final boolean blacklist;
 	private final boolean override;
-	private final Either<List<String>, String> either;
-	private List<String> entities;
-	@Getter(AccessLevel.NONE)
-	private PatAnimation animation;
+	private final Either<List<EntityConfig>, EntityConfig> either;
+	private List<EntityConfig> entities;
+	private boolean all;
 
-	public PatPatHandConfig(Identifier texture, SoundEvent soundEvent, int duration, int textureWidth, int frameSize, boolean override, Either<List<String>, String> either) {
-		this.texture = texture;
-		this.soundEvent = soundEvent;
-		this.duration = duration;
-		this.textureWidth = textureWidth;
-		this.frameSize = frameSize;
+	public PatPatHandConfig(Version version, AnimationConfig animation, boolean blacklist, boolean override, Either<List<EntityConfig>, EntityConfig> either) {
+		this.version = version;
+		this.animation = animation;
+		this.blacklist = blacklist;
 		this.override = override;
 		this.either = either;
 		either.left().ifPresentOrElse(
 			left -> this.entities = left,
 			() -> this.entities = List.of(either.right().orElseThrow())
 		);
+		for (EntityConfig config : this.entities) {
+			if (config.getEntityId().equals("all")) {
+				this.all = true;
+				return;
+			}
+		}
 	}
 
-	@NotNull
-	public PatAnimation getAnimation() {
-		if (this.animation == null) {
-			this.animation = new PatAnimation(
-				this.texture,
-				this.textureWidth,
-				this.frameSize,
-				this.duration,
-				this.soundEvent
-			);
+	public boolean isApply(@NotNull Entity entity) {
+		return isApply(entity.getTypeId(), entity.getName().toString(), entity.getUuid());
+	}
+
+	public boolean isApply(@NotNull String entityTypeId, @Nullable String entityName, @Nullable UUID entityUuid) {
+		if (this.all) {
+			return !this.blacklist;
 		}
-		return this.animation;
+		for (EntityConfig entityConfig : this.entities) {
+			if (entityConfig.is(entityTypeId, entityName, entityUuid)) {
+				return !this.blacklist;
+			}
+		}
+		return this.blacklist;
 	}
 
 	@Override
 	public String toString() {
-		return "PatPatHandConfig{" +
-			"texture='" + texture + '\'' +
-			", sounds='" + soundEvent + '\'' +
-			", duration=" + duration +
-			", textureWidth=" + textureWidth +
-			", frameSize=" + frameSize +
-			", override=" + override +
-			", entities=" + entities +
-			'}';
+		return "PatPatHandConfig{version='%s', animation='%s', blacklist='%s', override='%s', all='%s', entities=%s}"
+			.formatted(version, animation, blacklist, override, all, entities);
 	}
+
+
 }

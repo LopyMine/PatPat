@@ -15,4 +15,9 @@ public class SoundUtils {
 		Identifier identifier = IdentifierUtils.id(value);
 		return SoundEvent.of(identifier);
 	}
+
+	@NotNull
+	public static String getTypeId(@NotNull SoundEvent sound) {
+		return sound.getId().toString();
+	}
 }

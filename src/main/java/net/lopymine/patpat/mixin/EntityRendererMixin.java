@@ -2,7 +2,7 @@ package net.lopymine.patpat.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.entity.PatAnimation;
+import net.lopymine.patpat.config.AnimationConfig;
 import net.lopymine.patpat.entity.PatEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
@@ -39,8 +39,8 @@ public class EntityRendererMixin {
 		if (cameraEntity == null) {
 			return;
 		}
-		PatAnimation patAnimation = patEntity.getAnimation();
-		RenderSystem.setShaderTexture(0, patAnimation.getTexture());
+		AnimationConfig animationConfig = patEntity.getAnimation();
+		RenderSystem.setShaderTexture(0, animationConfig.getTexture());
 		RenderSystem.setShader(GameRenderer::getPositionTexProgram);
 		BufferBuilder builder = Tessellator.getInstance().getBuffer();
 		builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
@@ -54,8 +54,8 @@ public class EntityRendererMixin {
 
 		Matrix4f matrix = matrices.peek().getPositionMatrix();
 
-		float d = (float) patAnimation.getFrameSize() / patAnimation.getTextureWidth();
-		float k = patAnimation.getFrame() * d;
+		float d = (float) animationConfig.getFrameSize() / animationConfig.getTextureWidth();
+		float k = patEntity.getFrame() * d;
 		builder.vertex(matrix, -p, 0.0F, 0.0F).texture(k, 0.0F).next();
 		builder.vertex(matrix, -p, patSize, 0.0F).texture(k, 1.0F).next();
 		builder.vertex(matrix, -p + patSize, patSize, 0.0F).texture(k + d, 1.0F).next();

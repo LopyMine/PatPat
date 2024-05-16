@@ -1,6 +1,7 @@
 package net.lopymine.patpat.manager;
 
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.config.SoundConfig;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.utils.IdentifierUtils;
 import net.minecraft.client.MinecraftClient;
@@ -25,7 +26,18 @@ public class PatPatSoundManager {
 		if (world == null) {
 			return;
 		}
-		SoundEvent soundEvent = patEntity.getAnimation().getSound();
-		world.playSoundFromEntity(player, soundEvent, SoundCategory.PLAYERS, 1.0F, MathHelper.nextFloat(world.random, 0.96F, 1.03F));
+		SoundConfig soundConfig = patEntity.getAnimation().getSoundConfig();
+		SoundEvent soundEvent = soundConfig.getSound();
+		world.playSoundFromEntity(
+			player,
+			soundEvent,
+			SoundCategory.PLAYERS,
+			1.0F,
+			MathHelper.nextFloat(
+				world.random,
+				soundConfig.getMinPitch(),
+				soundConfig.getMaxPitch()
+			)
+		);
 	}
 }

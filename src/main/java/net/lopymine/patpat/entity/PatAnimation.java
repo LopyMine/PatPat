@@ -2,10 +2,10 @@ package net.lopymine.patpat.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.lopymine.patpat.config.AnimationConfig;
 import net.lopymine.patpat.config.PatPatHandConfig;
 import net.lopymine.patpat.manager.PatPatResourcePackManager;
 import net.lopymine.patpat.utils.IdentifierUtils;
-import net.lopymine.patpat.utils.SoundUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.sound.SoundEvent;
@@ -16,20 +16,20 @@ import net.minecraft.util.math.MathHelper;
 public class PatAnimation {
 	public static final Identifier PATPAT_TEXTURE = IdentifierUtils.textureId("default/patpat.png");
 
-	private static final PatAnimation DEFAULT_PATPAT_ANIMATION = new PatAnimation(
+	private static final AnimationConfig DEFAULT_PATPAT_ANIMATION = new AnimationConfig(
 		PATPAT_TEXTURE,
 		560,
 		112,
 		240,
-		SoundUtils.getSoundEvent("patpat")
+		SoundEvent.of(IdentifierUtils.id("patpat"))
 	);
 
-	private static final PatAnimation DEFAULT_LOPI_ANIMATION = new PatAnimation(
+	private static final AnimationConfig DEFAULT_LOPI_ANIMATION = new AnimationConfig(
 		PATPAT_TEXTURE,
 		560,
 		112,
 		350,
-		SoundUtils.getSoundEvent("lopi")
+		SoundEvent.of(IdentifierUtils.id("lopi"))
 	);
 
 	private final int duration;
@@ -54,18 +54,18 @@ public class PatAnimation {
 		this.frame = 0;
 	}
 
-	public static PatAnimation of(Entity entity, boolean isAuthor) {
+	public static AnimationConfig of(Entity entity, boolean isAuthor) {
 		PatPatHandConfig config = PatPatResourcePackManager.INSTANCE.getOverrideHandConfig();
 		if (config == null) {
 			config = PatPatResourcePackManager.INSTANCE.getHandConfig(entity);
 		}
 		if (config != null) {
-			return config.getAnimation().copy();
+			return config.getAnimation();
 		}
 		if (entity.getType().equals(EntityType.GOAT) && entity.getName().getString().equals("Снежа") && isAuthor) {
-			return DEFAULT_LOPI_ANIMATION.copy();
+			return DEFAULT_LOPI_ANIMATION;
 		}
-		return DEFAULT_PATPAT_ANIMATION.copy();
+		return DEFAULT_PATPAT_ANIMATION;
 	}
 
 	public void resetAnimation() {

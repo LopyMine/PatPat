@@ -47,7 +47,7 @@ public class PatPatClient implements ClientModInitializer {
 			patEntity = new PatEntity(entity, pattingPlayerUuid != null && AUTHORS.contains(pattingPlayerUuid));
 			PAT_ENTITIES.put(uuid, patEntity);
 		} else {
-			patEntity.getAnimation().resetAnimation();
+			patEntity.resetAnimation();
 		}
 		return patEntity;
 	}

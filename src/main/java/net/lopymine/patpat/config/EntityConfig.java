@@ -20,8 +20,9 @@ public class EntityConfig {
 	public static final Codec<EntityConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		Codec.STRING.fieldOf("id").forGetter(EntityConfig::getEntityId),
 		Codec.STRING.optionalFieldOf("name", null).forGetter(EntityConfig::getEntityName),
-		Codec.STRING.comapFlatMap(EntityConfig::parseUuid, UUID::toString).optionalFieldOf("uuid", null).orElse(null).forGetter(EntityConfig::getEntityUuid)
+		Codec.STRING.comapFlatMap(EntityConfig::parseUuid, UUID::toString).optionalFieldOf("uuid", null).forGetter(EntityConfig::getEntityUuid)
 	).apply(instance, EntityConfig::new));
+
 	public static final Codec<EntityConfig> ENTITY_FIELD = Codec.either(Codec.STRING, EntityConfig.CODEC).xmap(either -> {
 		if (either.left().isPresent()) {
 			return EntityConfig.of(either.left().get());
@@ -31,9 +32,6 @@ public class EntityConfig {
 		}
 		return null;
 	}, entityConfig -> {
-		if (entityConfig == null) {
-			return null;
-		}
 		String id = entityConfig.getEntityId();
 		String name = entityConfig.getEntityName();
 		UUID uuid = entityConfig.getEntityUuid();

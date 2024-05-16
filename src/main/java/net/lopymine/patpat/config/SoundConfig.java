@@ -14,8 +14,8 @@ public class SoundConfig {
 
 	public static final Codec<SoundConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		Codec.STRING.xmap(SoundUtils::getSoundEvent, SoundUtils::getTypeId).fieldOf("id").forGetter(SoundConfig::getSound),
-		Codec.FLOAT.fieldOf("min_pitch").forGetter(SoundConfig::getMinPitch),
-		Codec.FLOAT.fieldOf("max_pitch").forGetter(SoundConfig::getMaxPitch)
+		Codec.FLOAT.optionalFieldOf("min_pitch", 1f).forGetter(SoundConfig::getMinPitch),
+		Codec.FLOAT.optionalFieldOf("max_pitch", 1f).forGetter(SoundConfig::getMaxPitch)
 	).apply(instance, SoundConfig::new));
 
 	public static final Codec<SoundConfig> SOUND_FIELD = Codec.either(
@@ -47,14 +47,14 @@ public class SoundConfig {
 
 	public SoundConfig(SoundEvent sound) {
 		this.sound = sound;
-		this.minPitch = 0.96F;
-		this.maxPitch = 1.03F;
+		this.minPitch = 1F;
+		this.maxPitch = 1F;
 	}
 
 	public SoundConfig(String sound) {
 		Identifier id = IdentifierUtils.id(sound);
 		this.sound = SoundEvent.of(id);
-		this.minPitch = 0.96F;
-		this.maxPitch = 1.03F;
+		this.minPitch = 1F;
+		this.maxPitch = 1F;
 	}
 }

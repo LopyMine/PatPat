@@ -66,12 +66,14 @@ public class PatPatResourcePackManager {
 					return;
 				}
 				PatPatHandConfig config = pair.get().getFirst();
+				System.out.println(config);
 				if (config.isOverride()) {
 					this.overrideHandConfig = config;
 				}
 				this.handConfigs.add(config);
-			} catch (IOException e) {
+			} catch (IOException | NullPointerException e) {
 				e.printStackTrace();
+				LOGGER.warn("ResourcePack '{}', file '{}' failed to parse, skip", packName, path);
 			}
 		}
 	}

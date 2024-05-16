@@ -21,6 +21,9 @@ import static net.lopymine.patpat.config.EntityConfig.ENTITY_FIELD;
 @ExtensionMethod(EntityExtension.class)
 public final class PatPatHandConfig {
 
+	// TODO
+	//  Добавить priority и сделать правильный приоритет этих конфигов (Приоритет между конфигов и учитывать расположение РП)
+
 	public static final Codec<PatPatHandConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		Version.CODEC.optionalFieldOf("version", Version.DEFAULT).forGetter(PatPatHandConfig::getVersion),
 		AnimationConfig.CODEC.fieldOf("animation").forGetter(PatPatHandConfig::getAnimation),

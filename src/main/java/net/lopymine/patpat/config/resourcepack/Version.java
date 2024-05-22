@@ -1,9 +1,8 @@
-package net.lopymine.patpat.config;
+package net.lopymine.patpat.config.resourcepack;
 
 import com.mojang.serialization.Codec;
-import org.jetbrains.annotations.NotNull;
 
-// TODO Переместить в более подходящее место
+import org.jetbrains.annotations.NotNull;
 
 public record Version(int major, int minor, int patch) {
 
@@ -33,28 +32,28 @@ public record Version(int major, int minor, int patch) {
 		return new Version(major, minor, patch);
 	}
 
-	public boolean isLessThan(Version v) {
-		if (this.major != v.major) {
-			return this.major < v.major;
+	public boolean isLessThan(Version version) {
+		if (this.major != version.major) {
+			return this.major < version.major;
 		}
-		if (this.minor != v.minor) {
-			return this.minor < v.minor;
+		if (this.minor != version.minor) {
+			return this.minor < version.minor;
 		}
-		if (this.patch != v.patch) {
-			return this.patch < v.patch;
+		if (this.patch != version.patch) {
+			return this.patch < version.patch;
 		}
 		return false;
 	}
 
-	public boolean isMoreThan(Version v) {
-		if (this.major != v.major) {
-			return this.major > v.major;
+	public boolean isMoreThan(Version version) {
+		if (this.major != version.major) {
+			return this.major > version.major;
 		}
-		if (this.minor != v.minor) {
-			return this.minor > v.minor;
+		if (this.minor != version.minor) {
+			return this.minor > version.minor;
 		}
-		if (this.patch != v.patch) {
-			return this.patch > v.patch;
+		if (this.patch != version.patch) {
+			return this.patch > version.patch;
 		}
 		return false;
 	}
@@ -69,6 +68,6 @@ public record Version(int major, int minor, int patch) {
 
 	@Override
 	public String toString() {
-		return "%d.%d.%d".formatted(major, minor, patch);
+		return "%d.%d.%d".formatted(this.major, this.minor, this.patch);
 	}
 }

@@ -1,12 +1,15 @@
 package net.lopymine.patpat.packet;
 
-import net.fabricmc.fabric.api.networking.v1.FabricPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.lopymine.patpat.utils.IdentifierUtils;
+import lombok.Getter;
 import net.minecraft.network.PacketByteBuf;
+
+import net.fabricmc.fabric.api.networking.v1.*;
+
+import net.lopymine.patpat.utils.IdentifierUtils;
 
 import java.util.UUID;
 
+@Getter
 public class PatEntityS2CPacket implements FabricPacket {
 	public static final PacketType<PatEntityS2CPacket> TYPE = PacketType.create(IdentifierUtils.id("pat_entity_s2c_packet"), PatEntityS2CPacket::new);
 
@@ -19,7 +22,7 @@ public class PatEntityS2CPacket implements FabricPacket {
 	}
 
 	public PatEntityS2CPacket(PacketByteBuf buf) {
-		this.pattingPlayerUuid = buf.readUuid(); // Проверить, правильно ли подставляются UUID's
+		this.pattingPlayerUuid = buf.readUuid();
 		this.patEntityUuid = buf.readUuid();
 	}
 
@@ -34,11 +37,4 @@ public class PatEntityS2CPacket implements FabricPacket {
 		return TYPE;
 	}
 
-	public UUID getPatEntityUuid() {
-		return this.patEntityUuid;
-	}
-
-	public UUID getPattingPlayerUuid() {
-		return this.pattingPlayerUuid;
-	}
 }

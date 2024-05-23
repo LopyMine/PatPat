@@ -48,7 +48,7 @@ public class EntityRendererMixin {
 		builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE);
 
 		matrices.push();
-		matrices.translate(0.0F, livingEntity.getNameLabelHeight() - 0.35F, 0.0F);
+		matrices.translate(0.0F, livingEntity.getNameLabelHeight() - 0.55F, 0.0F);
 		matrices.multiply(this.dispatcher.getRotation());
 		matrices.scale(-0.85F, -0.85F, 0.85F);
 

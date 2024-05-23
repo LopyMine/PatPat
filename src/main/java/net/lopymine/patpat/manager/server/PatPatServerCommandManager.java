@@ -79,13 +79,8 @@ public class PatPatServerCommandManager {
 
 	private static int onListEnable(CommandContext<ServerCommandSource> ignored, boolean whitelist, boolean enable) {
 		PatPatServerConfig config = PatPat.getConfig();
-		ListConfig firstListConfig = whitelist ? config.getWhitelist() : config.getBlacklist();
-		ListConfig secondListConfig = !whitelist ? config.getWhitelist() : config.getBlacklist();
-
-		if (secondListConfig.isEnable() && enable) {
-			secondListConfig.setEnable(false);
-		}
-		firstListConfig.setEnable(enable);
+		ListConfig listConfig = whitelist ? config.getWhitelist() : config.getBlacklist();
+		listConfig.setEnable(enable);
 
 		config.save();
 		return Command.SINGLE_SUCCESS;

@@ -5,7 +5,7 @@
 	"name": "PatPat",
 	"description": "Simple PatPat Fabric mod for patting any mobs!",
 	"authors": [
-		"nikita51 [Author]",
+		"nikita51",
 		"LopyMine"
 	],
 	"license": "MIT",
@@ -17,6 +17,9 @@
 		],
 		"client": [
 			"net.lopymine.patpat.client.PatPatClient"
+		],
+		"modmenu": [
+			"net.lopymine.patpat.modmenu.ModMenuIntegration"
 		]
 	},
 	"mixins": [

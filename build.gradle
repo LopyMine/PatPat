@@ -11,6 +11,11 @@ base {
 }
 
 repositories {
+	maven { // YACL
+		name 'Xander Maven'
+		url 'https://maven.isxander.dev/releases'
+	}
+	maven { url "https://maven.terraformersmc.com/releases/" } // ModMenu
 }
 
 dependencies {
@@ -25,6 +30,12 @@ dependencies {
 	// Lombok
 	compileOnly 'org.projectlombok:lombok:1.18.32'
 	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+	// ModMenu
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+	// YACL
+	modImplementation("dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-fabric")
 }
 
 processResources {

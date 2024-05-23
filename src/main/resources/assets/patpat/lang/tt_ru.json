@@ -1,0 +1,9 @@
+{
+  "modmenu.descriptionTranslation.patpat": "Простой Fabric мод чтобы гладить любых мобов!",
+
+  "patpat.title": "&lPatPat",
+  "patpat.title.client": "&lPatPat Client",
+
+  "patpat.modmenu.title": "&lPatPat Client конфигурация",
+  "patpat.modmenu.no_yacl_screen.message": "Вам нужно установить &6&lYet Another Config Lib [YACL]&f чтобы открыть экран конфигурации PatPat Client\n\n&a&lОткрыть Modrinth страницу &6&lYACL'a &a&l?"
+}

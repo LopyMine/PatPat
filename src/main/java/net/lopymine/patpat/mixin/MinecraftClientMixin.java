@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.session.Session;
 import net.minecraft.entity.*;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
@@ -11,6 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.config.client.PatPatClientConfig;
+import net.lopymine.patpat.config.resourcepack.PlayerConfig;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.manager.client.*;
 import net.lopymine.patpat.packet.PatEntityC2SPacket;
@@ -36,6 +40,10 @@ public abstract class MinecraftClientMixin {
 
 	@Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
 	private void onRightClickMouse(CallbackInfo ci) {
+		PatPatClientConfig config = PatPatClient.getConfig();
+		if (!config.isModEnabled()) {
+			return;
+		}
 		if (!(this.crosshairTarget instanceof EntityHitResult hitResult)) {
 			return;
 		}
@@ -50,9 +58,15 @@ public abstract class MinecraftClientMixin {
 			return;
 		}
 
-		ClientPlayNetworking.send(new PatEntityC2SPacket(this.player, entity));
-		PatEntity patEntity = PatPatClientManager.pat(livingEntity, this.getSession().getUuidOrNull());
-		PatPatClientSoundManager.playSound(patEntity, this.player);
+		ClientPlayNetworking.send(new PatEntityC2SPacket(livingEntity));
+		Session session = this.getSession();
+		PatEntity patEntity = PatPatClientManager.pat(livingEntity, PlayerConfig.of(session.getUsername(), session.getUuidOrNull()));
+		if (config.isSoundsEnabled()) {
+			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsVolume());
+		}
+		if (config.isSwingHandEnabled()) {
+			this.player.swingHand(Hand.MAIN_HAND);
+		}
 		this.itemUseCooldown = 4;
 		ci.cancel();
 	}

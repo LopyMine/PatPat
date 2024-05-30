@@ -3,21 +3,21 @@ package net.lopymine.patpat.entity;
 import lombok.*;
 import net.minecraft.entity.LivingEntity;
 
-import net.lopymine.patpat.config.resourcepack.AnimationConfig;
+import net.lopymine.patpat.config.resourcepack.*;
 
 import java.util.*;
 
 @Getter
 public class PatEntity {
 	private final LivingEntity entity;
-	private final AnimationConfig animation;
+	private final CustomAnimationSettingsConfig animation;
 	@Setter
 	private int currentFrame;
 	private long timeOfStart;
 
-	public PatEntity(LivingEntity entity, boolean isAuthor) {
+	public PatEntity(LivingEntity entity, PlayerConfig whoPatted) {
 		this.entity = entity;
-		this.animation = AnimationConfig.of(entity, isAuthor);
+		this.animation = CustomAnimationSettingsConfig.of(entity, whoPatted);
 		this.timeOfStart = System.currentTimeMillis();
 		this.currentFrame = 0;
 	}

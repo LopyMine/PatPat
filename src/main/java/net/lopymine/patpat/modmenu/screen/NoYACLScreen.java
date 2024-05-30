@@ -1,11 +1,11 @@
-package net.lopymine.patpat.modmenu;
+package net.lopymine.patpat.modmenu.screen;
 
 import com.google.common.collect.Sets;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.*;
 import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.*;
-import net.minecraft.util.*;
+import net.minecraft.text.Text;
+import net.minecraft.util.Util;
 
 import net.lopymine.patpat.client.PatPatClient;
 
@@ -13,6 +13,9 @@ import java.net.*;
 import java.util.*;
 
 public class NoYACLScreen {
+
+	// TODO Так как мы будем делать поддержку Cloth Config, стоит переписать в будущем этот класс и для Cloth Config
+
 	private static final Text TITLE = Text.translatable("patpat.modmenu.title");
 	private static final Text MESSAGE = Text.translatable("patpat.modmenu.no_yacl_screen.message");
 	private static final Set<String> ALLOWED_PROTOCOLS = Sets.newHashSet("http", "https");

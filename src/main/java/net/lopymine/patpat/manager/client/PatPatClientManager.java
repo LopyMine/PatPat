@@ -2,6 +2,7 @@ package net.lopymine.patpat.manager.client;
 
 import net.minecraft.entity.LivingEntity;
 
+import net.lopymine.patpat.config.resourcepack.PlayerConfig;
 import net.lopymine.patpat.entity.PatEntity;
 
 import java.util.*;
@@ -9,10 +10,6 @@ import org.jetbrains.annotations.*;
 
 public class PatPatClientManager {
 	private static final Map<UUID, PatEntity> PAT_ENTITIES = new HashMap<>();
-	private static final Set<UUID> MOD_AUTHORS = Set.of(
-			UUID.fromString("192e3748-12d5-4573-a8a5-479cd394a1dc"), // LopyMine
-			UUID.fromString("7b829ed5-9b74-428f-9b4d-ede06975fbc1") // nikita51
-	);
 
 	@Nullable
 	public static PatEntity getPatEntity(@NotNull LivingEntity entity) {
@@ -30,11 +27,11 @@ public class PatPatClientManager {
 		}
 	}
 
-	public static PatEntity pat(@NotNull LivingEntity entity, @Nullable UUID pattingPlayerUuid) {
+	public static PatEntity pat(@NotNull LivingEntity entity, @NotNull PlayerConfig whoPatted) {
 		UUID uuid = entity.getUuid();
 		PatEntity patEntity = PAT_ENTITIES.get(uuid);
 		if (patEntity == null) {
-			patEntity = new PatEntity(entity, pattingPlayerUuid != null && MOD_AUTHORS.contains(pattingPlayerUuid));
+			patEntity = new PatEntity(entity, whoPatted);
 			PAT_ENTITIES.put(uuid, patEntity);
 		} else {
 			patEntity.resetAnimation();

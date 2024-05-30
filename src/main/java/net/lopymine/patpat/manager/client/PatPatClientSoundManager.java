@@ -17,7 +17,7 @@ public class PatPatClientSoundManager {
 		Registry.register(Registries.SOUND_EVENT, IdentifierUtils.id("lopi"), SoundEvent.of(IdentifierUtils.id("lopi")));
 	}
 
-	public static void playSound(PatEntity patEntity, PlayerEntity player) {
+	public static void playSound(PatEntity patEntity, PlayerEntity player, double volume) {
 		ClientWorld world = MinecraftClient.getInstance().world;
 		if (world == null) {
 			return;
@@ -28,7 +28,7 @@ public class PatPatClientSoundManager {
 				patEntity.getEntity().getBlockPos(),
 				soundEvent,
 				SoundCategory.PLAYERS,
-				soundConfig.getVolume(),
+				soundConfig.getVolume() * (float) volume,
 				MathHelper.nextFloat(
 						world.random,
 						soundConfig.getMinPitch(),

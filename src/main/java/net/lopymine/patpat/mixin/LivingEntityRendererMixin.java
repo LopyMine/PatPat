@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.lopymine.patpat.config.resourcepack.AnimationConfig;
+import net.lopymine.patpat.config.resourcepack.CustomAnimationSettingsConfig;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.manager.client.PatPatClientManager;
 
@@ -23,7 +23,7 @@ public class LivingEntityRendererMixin {
 			return;
 		}
 
-		AnimationConfig animationConfig = patEntity.getAnimation();
+		CustomAnimationSettingsConfig animationConfig = patEntity.getAnimation();
 		int duration = animationConfig.duration();
 		long time = patEntity.getTimeOfStart();
 		long timeNow = System.currentTimeMillis();

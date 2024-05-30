@@ -1,44 +1,80 @@
 package net.lopymine.patpat.config.client;
 
 import com.google.gson.*;
-import lombok.Getter;
+import lombok.*;
+import net.minecraft.util.Uuids;
 import org.slf4j.*;
 
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.lopymine.patpat.config.ListConfig;
+import net.lopymine.patpat.config.resourcepack.*;
 import net.lopymine.patpat.manager.PatPatConfigManager;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
+@Setter
 public class PatPatClientConfig {
 	public static final Codec<PatPatClientConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			ListConfig.CODEC.fieldOf("whitelist").forGetter(PatPatClientConfig::getWhitelist),
-			ListConfig.CODEC.fieldOf("blacklist").forGetter(PatPatClientConfig::getBlacklist)
+			Codec.BOOL.fieldOf("bypassServerResourcePackPriorityEnabled").forGetter(PatPatClientConfig::isBypassServerResourcePackPriorityEnabled),
+			Codec.BOOL.fieldOf("loweringAnimationEnabled").forGetter(PatPatClientConfig::isLoweringAnimationEnabled),
+			Codec.BOOL.fieldOf("hidingNicknameEnabled").forGetter(PatPatClientConfig::isNicknameHidingEnabled),
+			Codec.BOOL.fieldOf("swingHandEnabled").forGetter(PatPatClientConfig::isSwingHandEnabled),
+			Codec.BOOL.fieldOf("soundsEnabled").forGetter(PatPatClientConfig::isSoundsEnabled),
+			Codec.BOOL.fieldOf("patMeEnabled").forGetter(PatPatClientConfig::isPatMeEnabled),
+			Codec.BOOL.fieldOf("modEnabled").forGetter(PatPatClientConfig::isModEnabled),
+			Codec.DOUBLE.fieldOf("soundsVolume").forGetter(PatPatClientConfig::getSoundsVolume),
+			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatClientConfig::getListMode),
+			Codec.unboundedMap(Uuids.CODEC, Codec.STRING).xmap(HashMap::new, HashMap::new).fieldOf("list").forGetter(PatPatClientConfig::getPlayers),
+			OffsetsConfig.CODEC.fieldOf("animationOffsets").forGetter(PatPatClientConfig::getAnimationOffsets)
 	).apply(instance, PatPatClientConfig::new));
 
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat-сlient.json5").toFile();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final Logger LOGGER = LoggerFactory.getLogger("PatPatClientConfig");
+	private final HashMap<UUID, String> players;
+	private final OffsetsConfig animationOffsets;
+	private boolean bypassServerResourcePackPriorityEnabled;
+	private boolean loweringAnimationEnabled;
+	private boolean nicknameHidingEnabled;
+	private boolean swingHandEnabled;
+	private boolean soundsEnabled;
+	private boolean patMeEnabled;
+	private boolean modEnabled;
+	private double soundsVolume;
+	private ListMode listMode;
 
-	private final ListConfig whitelist;
-	private final ListConfig blacklist;
-
-	private PatPatClientConfig() {
-		this.whitelist = ListConfig.empty();
-		this.whitelist.setEnable(true);
-		this.blacklist = ListConfig.empty();
+	public PatPatClientConfig() {
+		this.bypassServerResourcePackPriorityEnabled = false;
+		this.loweringAnimationEnabled = false;
+		this.nicknameHidingEnabled = true;
+		this.swingHandEnabled = true;
+		this.soundsEnabled = true;
+		this.patMeEnabled = true;
+		this.modEnabled = true;
+		this.soundsVolume = 1.0D;
+		this.listMode = ListMode.DISABLED;
+		this.players = new HashMap<>();
+		this.animationOffsets = OffsetsConfig.EMPTY;
 	}
 
-	private PatPatClientConfig(ListConfig whitelist, ListConfig blacklist) {
-		this.whitelist = whitelist;
-		this.blacklist = blacklist;
+	public PatPatClientConfig(boolean bypassServerResourcePackPriorityEnabled, boolean loweringAnimationEnabled, boolean nicknameHidingEnabled, boolean swingHandEnabled, boolean soundsEnabled, boolean patMeEnabled, boolean modEnabled, double soundsVolume, ListMode listMode, HashMap<UUID, String> players, OffsetsConfig animationOffsets) {
+		this.bypassServerResourcePackPriorityEnabled = bypassServerResourcePackPriorityEnabled;
+		this.loweringAnimationEnabled = loweringAnimationEnabled;
+		this.nicknameHidingEnabled = nicknameHidingEnabled;
+		this.swingHandEnabled = swingHandEnabled;
+		this.soundsEnabled = soundsEnabled;
+		this.patMeEnabled = patMeEnabled;
+		this.modEnabled = modEnabled;
+		this.soundsVolume = soundsVolume;
+		this.listMode = listMode;
+		this.players = players;
+		this.animationOffsets = animationOffsets;
 	}
 
 	public static PatPatClientConfig getInstance() {
@@ -78,15 +114,5 @@ public class PatPatClientConfig {
 				LOGGER.error("Failed to save config", e);
 			}
 		});
-	}
-
-	public boolean containsInEnabledList(UUID playerUuid) { // TODO Додумать проверку
-		if (this.whitelist.isEnable() && !this.blacklist.isEnable()) {
-			return this.whitelist.getPlayers().containsKey(playerUuid);
-		}
-		if (this.blacklist.isEnable() && !this.whitelist.isEnable()) {
-			return this.blacklist.getPlayers().containsKey(playerUuid);
-		}
-		return false;
 	}
 }

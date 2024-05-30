@@ -1,41 +1,44 @@
 package net.lopymine.patpat.config.server;
 
 import com.google.gson.*;
-import lombok.Getter;
+import lombok.*;
+import net.minecraft.util.Uuids;
 import org.slf4j.*;
 
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.lopymine.patpat.config.ListConfig;
+import net.lopymine.patpat.config.resourcepack.ListMode;
 import net.lopymine.patpat.manager.PatPatConfigManager;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
 public class PatPatServerConfig {
 	public static final Codec<PatPatServerConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			ListConfig.CODEC.fieldOf("whitelist").forGetter(PatPatServerConfig::getWhitelist),
-			ListConfig.CODEC.fieldOf("blacklist").forGetter(PatPatServerConfig::getBlacklist)
+			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatServerConfig::getListMode),
+			Codec.unboundedMap(Uuids.CODEC, Codec.STRING).xmap(HashMap::new, HashMap::new).fieldOf("list").forGetter(PatPatServerConfig::getPlayers)
 	).apply(instance, PatPatServerConfig::new));
 
-	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat-server.json5").toFile();
+	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat.json5").toFile();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final Logger LOGGER = LoggerFactory.getLogger("PatPatServerConfig");
-
-	private final ListConfig whitelist;
-	private final ListConfig blacklist;
+	private final HashMap<UUID, String> players;
+	@Setter
+	private ListMode listMode;
 
 	private PatPatServerConfig() {
-		this.whitelist = ListConfig.empty();
-		this.blacklist = ListConfig.empty();
+		this.listMode = ListMode.DISABLED;
+		this.players = new HashMap<>();
 	}
 
-	private PatPatServerConfig(ListConfig whitelist, ListConfig blacklist) {
-		this.whitelist = whitelist;
-		this.blacklist = blacklist;
+	public PatPatServerConfig(ListMode listMode, HashMap<UUID, String> players) {
+		this.listMode = listMode;
+		this.players = players;
 	}
 
 	public static PatPatServerConfig getInstance() {
@@ -67,21 +70,13 @@ public class PatPatServerConfig {
 	}
 
 	public void save() {
-		String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).getOrThrow(false, LOGGER::error));
-		try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
-			writer.write(json);
-		} catch (Exception e) {
-			LOGGER.error("Failed to save config", e);
-		}
-	}
-
-	public ListConfig getEnabledOne() {
-		if (this.whitelist.isEnable() && !this.blacklist.isEnable()) {
-			return this.whitelist;
-		}
-		if (this.blacklist.isEnable() && !this.whitelist.isEnable()) {
-			return this.blacklist;
-		}
-		return this.whitelist;
+		CompletableFuture.runAsync(() -> {
+			String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).getOrThrow(false, LOGGER::error));
+			try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
+				writer.write(json);
+			} catch (Exception e) {
+				LOGGER.error("Failed to save config", e);
+			}
+		});
 	}
 }

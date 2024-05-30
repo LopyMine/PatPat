@@ -1,9 +1,56 @@
 {
   "modmenu.descriptionTranslation.patpat": "Simple Fabric mod for patting any mobs!",
 
-  "patpat.title": "&lPatPat",
-  "patpat.title.client": "&lPatPat Client",
+  "patpat.title": "§lPatPat",
+  "patpat.title.client": "§lPatPat Client",
 
-  "patpat.modmenu.title": "&lPatPat Client Configuration",
-  "patpat.modmenu.no_yacl_screen.message": "You need to install &6&lYet Another Config Lib [YACL]&f to open PatPat Client Configuration Screen\n\n&a&lOpen &6&lYACL &a&lModrinth page?"
+  "patpat.command.argument.player_info.exception.failed_parsing": "Failed parsing: %s",
+  "patpat.command.argument.player_info.exception.unknown_player": "Unknown player: %s",
+
+  "patpat.command.list.add.success": "Successfully added to list player[%s, %s]",
+  "patpat.command.list.add.failed": "Player[%s, %s] already added to list",
+  "patpat.command.list.remove.success": "Successfully removed from list player[%s, %s]",
+  "patpat.command.list.remove.failed": "Player[%s, %s] was not found in list",
+  "patpat.command.list.mode.success": "List Mode has been changed from %s to %s",
+  "patpat.command.list.mode.failed": "Failed to parse ListMode[whitelist, blacklist, disabled] from %s",
+
+  "patpat.modmenu.title": "§lPatPat Client-side Configuration",
+  "patpat.modmenu.no_yacl_screen.message": "You need to install §6§lYet Another Config Lib [YACL]§f to open PatPat Client Configuration Screen\n\n§a§lOpen §6§lYACL §a§lModrinth page?",
+
+  "patpat.modmenu.main": "§lMain",
+  "patpat.modmenu.main.description": "Main settings of PatPat mod.",
+  "patpat.modmenu.main.option.enable_mod": "Enable Mod",
+  "patpat.modmenu.main.option.enable_mod.description": "If enabled, you will see mob patting and other features, if disabled, won't.",
+
+  "patpat.modmenu.sound": "§lSound",
+  "patpat.modmenu.sound.description": "Sound settings of PatPat mod.",
+  "patpat.modmenu.sound.option.enable_sounds": "Enable Sounds",
+  "patpat.modmenu.sound.option.enable_sounds.description": "If enabled, you will hear the patting sounds, in disabled, won't.",
+  "patpat.modmenu.sound.option.sounds_volume": "Volume",
+  "patpat.modmenu.sound.option.sounds_volume.description": "Overall volume of patting sounds.",
+
+  "patpat.modmenu.visual": "§lVisual",
+  "patpat.modmenu.visual.description": "Visual settings of PatPat mod.",
+  "patpat.modmenu.visual.option.hiding_nickname_enabled": "Enable Nickname Hiding",
+  "patpat.modmenu.visual.option.hiding_nickname_enabled.description": "If enabled, entity's nickname will disappear when you or someone pats it, if disabled, won't.",
+  "patpat.modmenu.visual.option.swing_hand_enabled": "Enable Hand Swinging",
+  "patpat.modmenu.visual.option.swing_hand_enabled.description": "If enabled, your hand in hud will moving, if disabled, won't.",
+  "patpat.modmenu.visual.option.lowering_animation_enabled": "Enable Lowering Animation",
+  "patpat.modmenu.visual.option.lowering_animation_enabled.description": "If enabled, pat animation will lowering, if disabled, won't.",
+  "patpat.modmenu.visual.option.hand_offset_x": "Hand Offset X",
+  "patpat.modmenu.visual.option.hand_offset_x.description": "Transfer the hand along X axis relative to default pos.",
+  "patpat.modmenu.visual.option.hand_offset_y": "Hand Offset Y",
+  "patpat.modmenu.visual.option.hand_offset_y.description": "Transfer the hand along Y axis relative to default pos.",
+  "patpat.modmenu.visual.option.hand_offset_z": "Hand Offset Z",
+  "patpat.modmenu.visual.option.hand_offset_z.description": "Transfer the hand along Z axis relative to default pos.",
+
+  "patpat.modmenu.server": "§lServer",
+  "patpat.modmenu.server.description": "Server-related settings of PatPat mod.",
+  "patpat.modmenu.server.option.pat_me_enabled": "Enable Pat Me",
+  "patpat.modmenu.server.option.pat_me_enabled.description": "If enabled, other players will be able to pat you, if disabled, won't be able.",
+  "patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled": "Enable Server Resource Pack Priority Bypassing",
+  "patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled.description": "If enabled, server resource pack priority will bypassing, if disabled, won't.",
+
+  "patpat.modmenu.formatter.enable_or_disable.true": "Enabled",
+  "patpat.modmenu.formatter.enable_or_disable.false": "Disabled"
 }

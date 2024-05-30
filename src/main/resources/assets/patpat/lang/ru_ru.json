@@ -1,9 +1,56 @@
 {
-  "modmenu.descriptionTranslation.patpat": "Простой Fabric мод чтобы гладить любых мобов!",
+  "modmenu.descriptionTranslation.patpat": "Простой Fabric мод для похлопывания мобов!",
 
-  "patpat.title": "&lPatPat",
-  "patpat.title.client": "&lPatPat Client",
+  "patpat.title": "§lPatPat",
+  "patpat.title.client": "§lPatPat Клиент",
 
-  "patpat.modmenu.title": "&lPatPat Client конфигурация",
-  "patpat.modmenu.no_yacl_screen.message": "Вам нужно установить &6&lYet Another Config Lib [YACL]&f чтобы открыть экран конфигурации PatPat Client\n\n&a&lОткрыть Modrinth страницу &6&lYACL'a &a&l?"
+  "patpat.command.argument.player_info.exception.failed_parsing": "Ошибка получения данных: %s",
+  "patpat.command.argument.player_info.exception.unknown_player": "Неизвестный игрок: %s",
+
+  "patpat.command.list.add.success": "Игрок[%s, %s] успешно добавлен в список.",
+  "patpat.command.list.add.failed": "Игрок[%s, %s] уже в списке.",
+  "patpat.command.list.remove.success": "Игрок[%s, %s] успешно удалён из списка.",
+  "patpat.command.list.remove.failed": "Игрок[%s, %s] не найден в списке.",
+  "patpat.command.list.mode.success": "Режим списка изменён с %s на %s.",
+  "patpat.command.list.mode.failed": "Не удалось получить режим списка[whitelist, blacklist, disabled] из %s",
+
+  "patpat.modmenu.title": "§lКлиенские настройки PatPat мода",
+  "patpat.modmenu.no_yacl_screen.message": "Вам нужно установить §6§lYet Another Config Lib [YACL]§f, чтобы открыть экран настроек PatPat клиента\n\n§a§lОткрыть страницу §6§lYACL §a§lна Modrinth?",
+
+  "patpat.modmenu.main": "§lОсновные",
+  "patpat.modmenu.main.description": "Основные настройки.",
+  "patpat.modmenu.main.option.enable_mod": "Включить мод",
+  "patpat.modmenu.main.option.enable_mod.description": "Если включено, вы увидите похлопывание мобов и другие функции; если отключено, не увидите.",
+
+  "patpat.modmenu.sound": "§lЗвуковые",
+  "patpat.modmenu.sound.description": "Настройки, связанные со звуком.",
+  "patpat.modmenu.sound.option.enable_sounds": "Включить звуки",
+  "patpat.modmenu.sound.option.enable_sounds.description": "Если включено, вы услышите звуки похлопывания; если отключено, не услышите.",
+  "patpat.modmenu.sound.option.sounds_volume": "Громкость",
+  "patpat.modmenu.sound.option.sounds_volume.description": "Общая громкость звуков похлопывания.",
+
+  "patpat.modmenu.visual": "§lВизуальные",
+  "patpat.modmenu.visual.description": "Настройки, связанные с визуальной частью.",
+  "patpat.modmenu.visual.option.hiding_nickname_enabled": "Включить скрытие никнейма",
+  "patpat.modmenu.visual.option.hiding_nickname_enabled.description": "Если включено, никнейм сущности исчезнет, когда вы или кто-то другой её похлопает; если отключено, не исчезнет.",
+  "patpat.modmenu.visual.option.swing_hand_enabled": "Включить размахивание рукой",
+  "patpat.modmenu.visual.option.swing_hand_enabled.description": "Если включено, ваша основная рука будет махать при похлопывании моба; если отключено, не будет.",
+  "patpat.modmenu.visual.option.lowering_animation_enabled": "Включить понижение анимации",
+  "patpat.modmenu.visual.option.lowering_animation_enabled.description": "Если включено, анимация похлопывания будет понижаться; если отключено, не будет.",
+  "patpat.modmenu.visual.option.hand_offset_x": "Смещение анимации похлопывания по оси X",
+  "patpat.modmenu.visual.option.hand_offset_x.description": "Переместить анимации похлопывания по оси X относительно стандартного положения.",
+  "patpat.modmenu.visual.option.hand_offset_y": "Смещение анимации похлопывания по оси Y",
+  "patpat.modmenu.visual.option.hand_offset_y.description": "Переместить анимации похлопывания по оси Y относительно стандартного положения.",
+  "patpat.modmenu.visual.option.hand_offset_z": "Смещение анимации похлопывания по оси Z",
+  "patpat.modmenu.visual.option.hand_offset_z.description": "Переместить анимации похлопывания по оси Z относительно стандартного положения.",
+
+  "patpat.modmenu.server": "§lСерверные",
+  "patpat.modmenu.server.description": "Настройки, связанные с сервером.",
+  "patpat.modmenu.server.option.pat_me_enabled": "Разрешить хлопать меня",
+  "patpat.modmenu.server.option.pat_me_enabled.description": "Если включено, другие игроки смогут вас похлопать; если отключено, не смогут.",
+  "patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled": "Включить обход приоритета серверного ресурс-пака",
+  "patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled.description": "Если включено, приоритет сервеного ресурс-пака будет обходиться; если отключено, не будет.",
+
+  "patpat.modmenu.formatter.enable_or_disable.true": "Включено",
+  "patpat.modmenu.formatter.enable_or_disable.false": "Отключено"
 }

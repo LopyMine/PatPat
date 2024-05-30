@@ -2,7 +2,7 @@ package net.lopymine.patpat.utils;
 
 import net.minecraft.client.network.*;
 
-import net.lopymine.patpat.config.ListConfig;
+import net.lopymine.patpat.config.client.PatPatClientConfig;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -13,7 +13,7 @@ public class ClientNetworkUtils {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static List<String> getOnlinePlayersFromUuids(@Nullable ClientPlayNetworkHandler networkHandler, @NotNull ListConfig config) {
+	public static List<String> getOnlinePlayersFromUuids(@Nullable ClientPlayNetworkHandler networkHandler, @NotNull PatPatClientConfig config) {
 		if (networkHandler == null) {
 			return List.of();
 		}

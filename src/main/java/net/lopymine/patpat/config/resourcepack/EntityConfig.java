@@ -16,11 +16,11 @@ import org.jetbrains.annotations.*;
 @Getter
 @ExtensionMethod(EntityExtension.class)
 public class EntityConfig {
-
 	public static final Codec<EntityConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.STRING.fieldOf("id").forGetter(EntityConfig::getEntityId),
 			Codec.STRING.optionalFieldOf("name").forGetter(EntityConfig::getOptionalEntityName),
-			Uuids.CODEC.optionalFieldOf("uuid").forGetter(EntityConfig::getOptionalEntityUuid)
+			Uuids.CODEC.optionalFieldOf("uuid").forGetter(EntityConfig::getOptionalEntityUuid),
+			PlayerConfig.CODEC.listOf().optionalFieldOf("from").forGetter(EntityConfig::getOptionalFrom)
 	).apply(instance, EntityConfig::new));
 
 	public static final Codec<EntityConfig> STRINGED_CODEC = Codec.either(Codec.STRING, EntityConfig.CODEC).xmap(either -> {
@@ -35,7 +35,8 @@ public class EntityConfig {
 		String id = entityData.getEntityId();
 		String name = entityData.getEntityName();
 		UUID uuid = entityData.getEntityUuid();
-		if (name == null && uuid == null) {
+		List<PlayerConfig> from = entityData.getFrom();
+		if (name == null && uuid == null && from == null) {
 			return Either.left(id);
 		}
 		return Either.right(entityData);
@@ -62,21 +63,24 @@ public class EntityConfig {
 	private final String entityName;
 	@Nullable
 	private final UUID entityUuid;
+	@Nullable
+	private final List<PlayerConfig> from;
 
-	public EntityConfig(@NotNull String entityId, Optional<String> entityName, Optional<UUID> entityUuid) {
+	public EntityConfig(@NotNull String entityId, Optional<String> entityName, Optional<UUID> entityUuid, Optional<List<PlayerConfig>> from) {
 		this.entityId = entityId;
 		this.entityName = entityName.orElse(null);
 		this.entityUuid = entityUuid.orElse(null);
+		this.from = from.orElse(null);
 	}
 
 	public static EntityConfig of(@NotNull String entityId) {
-		return new EntityConfig(entityId, Optional.empty(), Optional.empty());
+		return new EntityConfig(entityId, Optional.empty(), Optional.empty(), Optional.empty());
 	}
 
 	public boolean is(@NotNull String entityTypeId, @Nullable String entityName, @Nullable UUID entityUuid) {
 		return entityTypeId.equalsIgnoreCase(this.entityId)
-				&& this.entityName == null || Objects.equals(this.entityName, entityName)
-				&& this.entityUuid == null || Objects.equals(this.entityUuid, entityUuid);
+				&& (this.entityName == null || Objects.equals(this.entityName, entityName))
+				&& (this.entityUuid == null || Objects.equals(this.entityUuid, entityUuid));
 	}
 
 	private Optional<String> getOptionalEntityName() {
@@ -85,5 +89,19 @@ public class EntityConfig {
 
 	private Optional<UUID> getOptionalEntityUuid() {
 		return Optional.ofNullable(this.entityUuid);
+	}
+
+	private Optional<List<PlayerConfig>> getOptionalFrom() {
+		return Optional.ofNullable(this.from);
+	}
+
+	@Override
+	public String toString() {
+		return "EntityConfig{" +
+				"entityId='" + entityId + '\'' +
+				", entityName='" + entityName + '\'' +
+				", entityUuid=" + entityUuid +
+				", from=" + from +
+				'}';
 	}
 }

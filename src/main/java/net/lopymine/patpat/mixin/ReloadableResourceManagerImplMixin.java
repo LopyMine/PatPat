@@ -6,6 +6,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.config.client.PatPatClientConfig;
 import net.lopymine.patpat.manager.client.PatPatClientResourcePackManager;
 
 import java.util.List;
@@ -18,6 +20,10 @@ public class ReloadableResourceManagerImplMixin {
 		if (packs.isEmpty()) {
 			return;
 		}
-		PatPatClientResourcePackManager.INSTANCE.reload(packs);
+		PatPatClientConfig config = PatPatClient.getConfig();
+		if (!config.isModEnabled()) {
+			return;
+		}
+		initialStage.thenRunAsync(() -> PatPatClientResourcePackManager.INSTANCE.reload(packs), applyExecutor);
 	}
 }

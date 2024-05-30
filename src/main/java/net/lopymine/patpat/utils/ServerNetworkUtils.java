@@ -3,7 +3,7 @@ package net.lopymine.patpat.utils;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-import net.lopymine.patpat.config.ListConfig;
+import net.lopymine.patpat.config.server.PatPatServerConfig;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -14,7 +14,7 @@ public class ServerNetworkUtils {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static List<String> getPlayersFromList(@NotNull PlayerManager playerManager, @NotNull ListConfig config) {
+	public static List<String> getPlayersFromList(@NotNull PlayerManager playerManager, @NotNull PatPatServerConfig config) {
 		return config.getPlayers().entrySet().stream().flatMap(entry -> {
 			ServerPlayerEntity entity = playerManager.getPlayer(entry.getKey());
 			if (entity == null) {

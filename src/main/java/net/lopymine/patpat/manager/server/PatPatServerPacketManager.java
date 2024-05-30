@@ -5,19 +5,24 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
 
+import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.config.resourcepack.ListMode;
+import net.lopymine.patpat.config.server.PatPatServerConfig;
 import net.lopymine.patpat.packet.*;
 
 public class PatPatServerPacketManager {
 	public static void register() {
 		ServerPlayNetworking.registerGlobalReceiver(PatEntityC2SPacket.TYPE, (packet, sender, responseSender) -> {
-			if (PatPat.getConfig().getEnabledOne().getPlayers().containsKey(sender.getUuid())) {
+			PatPatServerConfig config = PatPat.getConfig();
+			GameProfile senderProfile = sender.getGameProfile();
+			if ((config.getListMode() == ListMode.WHITELIST && !config.getPlayers().containsKey(senderProfile.getId())) || (config.getListMode() == ListMode.BLACKLIST && config.getPlayers().containsKey(sender.getUuid()))) {
 				return;
 			}
 			ServerWorld serverWorld = sender.getServerWorld();
-			Entity entity = serverWorld.getEntity(packet.getPatEntityUuid());
+			Entity entity = serverWorld.getEntity(packet.getPattedEntityUuid());
 			if (entity == null) {
 				return;
 			}
@@ -26,7 +31,7 @@ public class PatPatServerPacketManager {
 				if (player == sender) {
 					continue;
 				}
-				ServerPlayNetworking.send(player, new PatEntityS2CPacket(packet.getPattingPlayerUuid(), packet.getPatEntityUuid()));
+				ServerPlayNetworking.send(player, new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderProfile.getId(), senderProfile.getName()));
 			}
 		});
 	}

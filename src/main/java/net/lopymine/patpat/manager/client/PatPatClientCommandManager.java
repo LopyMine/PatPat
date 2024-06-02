@@ -34,11 +34,11 @@ public class PatPatClientCommandManager {
 						.then(literal("add")
 								.then(argument("player", PlayerInfoArgumentType.player())
 										.suggests(((context, builder) -> CommandSource.suggestMatching(context.getSource().getPlayerNames(), builder)))
-										.executes((context) -> PatPatClientCommandManager.onListChange(context, true))))
+										.executes(context -> PatPatClientCommandManager.onListChange(context, true))))
 						.then(literal("remove")
 								.then(argument("player", PlayerInfoArgumentType.player())
 										.suggests((context, builder) -> CommandSource.suggestMatching(ClientNetworkUtils.getOnlinePlayersFromUuids(context.getSource().getClient().getNetworkHandler(), PatPatClient.getConfig()), builder))
-										.executes((context) -> PatPatClientCommandManager.onListChange(context, false))))
+										.executes(context -> PatPatClientCommandManager.onListChange(context, false))))
 				)
 		)));
 	}

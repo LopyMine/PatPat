@@ -30,14 +30,16 @@ public class PatPatClientConfig {
 			Codec.BOOL.fieldOf("modEnabled").forGetter(PatPatClientConfig::isModEnabled),
 			Codec.DOUBLE.fieldOf("soundsVolume").forGetter(PatPatClientConfig::getSoundsVolume),
 			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatClientConfig::getListMode),
-			Codec.unboundedMap(Uuids.CODEC, Codec.STRING).xmap(HashMap::new, HashMap::new).fieldOf("list").forGetter(PatPatClientConfig::getPlayers),
+			Codec.unboundedMap(Uuids.CODEC, Codec.STRING).fieldOf("list").forGetter(PatPatClientConfig::getPlayers),
 			OffsetsConfig.CODEC.fieldOf("animationOffsets").forGetter(PatPatClientConfig::getAnimationOffsets)
 	).apply(instance, PatPatClientConfig::new));
 
-	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat-сlient.json5").toFile();
+	public static final PatPatClientConfig DEFAULT = new PatPatClientConfig();
+
+	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat-client.json5").toFile();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final Logger LOGGER = LoggerFactory.getLogger("PatPatClientConfig");
-	private final HashMap<UUID, String> players;
+	private final Map<UUID, String> players;
 	private final OffsetsConfig animationOffsets;
 	private boolean bypassServerResourcePackPriorityEnabled;
 	private boolean loweringAnimationEnabled;
@@ -63,7 +65,7 @@ public class PatPatClientConfig {
 		this.animationOffsets = OffsetsConfig.EMPTY;
 	}
 
-	public PatPatClientConfig(boolean bypassServerResourcePackPriorityEnabled, boolean loweringAnimationEnabled, boolean nicknameHidingEnabled, boolean swingHandEnabled, boolean soundsEnabled, boolean patMeEnabled, boolean modEnabled, double soundsVolume, ListMode listMode, HashMap<UUID, String> players, OffsetsConfig animationOffsets) {
+	public PatPatClientConfig(boolean bypassServerResourcePackPriorityEnabled, boolean loweringAnimationEnabled, boolean nicknameHidingEnabled, boolean swingHandEnabled, boolean soundsEnabled, boolean patMeEnabled, boolean modEnabled, double soundsVolume, ListMode listMode, Map<UUID, String> players, OffsetsConfig animationOffsets) {
 		this.bypassServerResourcePackPriorityEnabled = bypassServerResourcePackPriorityEnabled;
 		this.loweringAnimationEnabled = loweringAnimationEnabled;
 		this.nicknameHidingEnabled = nicknameHidingEnabled;
@@ -73,7 +75,7 @@ public class PatPatClientConfig {
 		this.modEnabled = modEnabled;
 		this.soundsVolume = soundsVolume;
 		this.listMode = listMode;
-		this.players = players;
+		this.players = new HashMap<>(players);
 		this.animationOffsets = animationOffsets;
 	}
 

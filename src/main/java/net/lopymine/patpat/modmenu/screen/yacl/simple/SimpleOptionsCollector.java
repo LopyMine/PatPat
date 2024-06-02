@@ -20,18 +20,18 @@ public class SimpleOptionsCollector {
 	}
 
 	public Option<Boolean> addBooleanOption(String optionId, boolean defValue, Supplier<Boolean> getter, Consumer<Boolean> setter, ValueFormatter<Boolean> formatter) {
-		return this.option(Boolean.class, optionId, defValue, getter, setter)
-				.controller((o) -> BooleanControllerBuilder.create(o).coloured(true).formatValue(formatter))
+		return this.option(optionId, defValue, getter, setter)
+				.controller(o -> BooleanControllerBuilder.create(o).coloured(true).formatValue(formatter))
 				.build();
 	}
 
 	public Option<Double> addDoubleOptionAsSlider(String optionId, double min, double max, double step, double defValue, Supplier<Double> getter, Consumer<Double> setter) {
-		return this.option(Double.class, optionId, defValue, getter, setter)
-				.controller((o) -> DoubleSliderControllerBuilder.create(o).range(min, max).step(step))
+		return this.option(optionId, defValue, getter, setter)
+				.controller(o -> DoubleSliderControllerBuilder.create(o).range(min, max).step(step))
 				.build();
 	}
 
-	private <C> Option.Builder<C> option(Class<C> ignored, String optionId, C defValue, Supplier<C> getter, Consumer<C> setter) {
+	private <C> Option.Builder<C> option(String optionId, C defValue, Supplier<C> getter, Consumer<C> setter) {
 		String optionKey = ModMenuUtils.getOptionKey(this.groupId, optionId);
 		String optionDescription = ModMenuUtils.getDescriptionKey(optionKey);
 

@@ -1,6 +1,11 @@
 package net.lopymine.patpat.utils;
 
 public class ModMenuUtils {
+
+	private ModMenuUtils(){
+		throw new IllegalStateException("Utility class");
+	}
+
 	public static String getGroupTitleKey(String group) {
 		return "patpat.modmenu." + group;
 	}

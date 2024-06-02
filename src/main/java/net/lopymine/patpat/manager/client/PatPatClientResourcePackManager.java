@@ -26,37 +26,38 @@ public class PatPatClientResourcePackManager {
 	private final LinkedList<List<CustomAnimationConfig>> loadedAnimations = new LinkedList<>();
 
 	private PatPatClientResourcePackManager() {
+		throw new IllegalStateException("Manager class");
 	}
 
 	public static void parseConfig(String packName, Identifier identifier, InputSupplier<InputStream> inputStreamInputSupplier, List<CustomAnimationConfig> configs) {
 		String path = identifier.getPath();
-		if (path.endsWith(".json") || path.endsWith(".json5")) {
-			try (InputStream inputStream = inputStreamInputSupplier.get(); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-				JsonElement json = JsonParser.parseReader(reader);
+		if (!path.endsWith(".json") && !path.endsWith(".json5")) {
+			return;
+		}
+		try (InputStream inputStream = inputStreamInputSupplier.get(); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+			JsonElement json = JsonParser.parseReader(reader);
 
-				if (json.isJsonObject()) {
-					JsonObject jsonObject = json.getAsJsonObject();
-					JsonElement jsonElement = jsonObject.get("version");
-					if (jsonElement != null) {
-						String string = jsonElement.getAsString();
-						Version configVersion = Version.of(string);
-						if (configVersion.isLessThan(Version.DEFAULT)) {
-							PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has old version[{} > {}], there may be errors!", packName, path, Version.DEFAULT, configVersion);
-							// TODO Может добавить в PatPatClientConfig опцию:
-							//  "Пропускать устаревшие анимации",
-							//  "Если включено, кастомные анимации с устаревшей версией конфига будут пропущены, если отключено, не будут. Отключение опции может привести к ошибкам"
-						}
-					} else {
-						PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' failed to verify version because it's missing, skip", packName, path);
-						return;
-					}
-				}
-
-				CustomAnimationConfig config = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json).getOrThrow(false, PatPatClient.LOGGER::error).getFirst();
-				configs.add(config);
-			} catch (Exception e) {
-				PatPatClient.LOGGER.warn(String.format("ResourcePack '%s', file '%s' failed to parse, skip", packName, path), e);
+			if (!json.isJsonObject()) {
+				return;
 			}
+
+			JsonObject jsonObject = json.getAsJsonObject();
+			JsonElement jsonElement = jsonObject.get("version");
+			if (jsonElement != null) {
+				String string = jsonElement.getAsString();
+				Version configVersion = Version.of(string);
+				if (configVersion.isLessThan(Version.DEFAULT)) {
+					PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has old version[{} > {}], there may be errors!", packName, path, Version.DEFAULT, configVersion);
+				}
+			} else {
+				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' failed to verify version because it's missing, skip", packName, path);
+				return;
+			}
+
+			CustomAnimationConfig config = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json).getOrThrow(false, PatPatClient.LOGGER::error).getFirst();
+			configs.add(config);
+		} catch (Exception e) {
+			PatPatClient.LOGGER.warn(String.format("ResourcePack '%s', file '%s' failed to parse, skip", packName, path), e);
 		}
 	}
 

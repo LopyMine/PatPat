@@ -35,7 +35,7 @@ public class EntityConfig {
 		String id = entityData.getEntityId();
 		String name = entityData.getEntityName();
 		UUID uuid = entityData.getEntityUuid();
-		List<PlayerConfig> from = entityData.getFrom();
+		List<PlayerConfig> from = entityData.getEntitiesFrom();
 		if (name == null && uuid == null && from == null) {
 			return Either.left(id);
 		}
@@ -64,13 +64,13 @@ public class EntityConfig {
 	@Nullable
 	private final UUID entityUuid;
 	@Nullable
-	private final List<PlayerConfig> from;
+	private final List<PlayerConfig> entitiesFrom;
 
-	public EntityConfig(@NotNull String entityId, Optional<String> entityName, Optional<UUID> entityUuid, Optional<List<PlayerConfig>> from) {
+	public EntityConfig(@NotNull String entityId, Optional<String> entityName, Optional<UUID> entityUuid, Optional<List<PlayerConfig>> entitiesFrom) {
 		this.entityId = entityId;
 		this.entityName = entityName.orElse(null);
 		this.entityUuid = entityUuid.orElse(null);
-		this.from = from.orElse(null);
+		this.entitiesFrom = entitiesFrom.orElse(null);
 	}
 
 	public static EntityConfig of(@NotNull String entityId) {
@@ -92,7 +92,7 @@ public class EntityConfig {
 	}
 
 	private Optional<List<PlayerConfig>> getOptionalFrom() {
-		return Optional.ofNullable(this.from);
+		return Optional.ofNullable(this.entitiesFrom);
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class EntityConfig {
 				"entityId='" + entityId + '\'' +
 				", entityName='" + entityName + '\'' +
 				", entityUuid=" + entityUuid +
-				", from=" + from +
+				", from=" + entitiesFrom +
 				'}';
 	}
 }

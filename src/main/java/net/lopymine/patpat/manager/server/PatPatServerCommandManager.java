@@ -37,11 +37,11 @@ public class PatPatServerCommandManager {
 						.then(literal("add")
 								.then(argument("profile", GameProfileArgumentType.gameProfile())
 										.suggests(((context, builder) -> CommandSource.suggestMatching(context.getSource().getPlayerNames(), builder)))
-										.executes((context) -> PatPatServerCommandManager.onListChange(context, true))))
+										.executes(context -> PatPatServerCommandManager.onListChange(context, true))))
 						.then(literal("remove")
 								.then(argument("profile", GameProfileArgumentType.gameProfile())
 										.suggests((context, builder) -> CommandSource.suggestMatching(ServerNetworkUtils.getPlayersFromList(context.getSource().getServer().getPlayerManager(), PatPat.getConfig()), builder))
-										.executes((context) -> PatPatServerCommandManager.onListChange(context, false))))
+										.executes(context -> PatPatServerCommandManager.onListChange(context, false))))
 				)
 		)));
 	}
@@ -62,16 +62,16 @@ public class PatPatServerCommandManager {
 					context.getSource().sendFeedback(() -> PATPAT_ID.copy().append(string), true);
 					PatPat.LOGGER.warn(string);
 				}
+				continue;
+			}
+			if (players.remove(uuid) != null) {
+				String string = Text.stringifiedTranslatable("patpat.command.list.remove.success", gameProfile.getName(), uuid).getString();
+				context.getSource().sendFeedback(() -> PATPAT_ID.copy().append(string), true);
+				PatPat.LOGGER.info(string);
 			} else {
-				if (players.remove(uuid) != null) {
-					String string = Text.stringifiedTranslatable("patpat.command.list.remove.success", gameProfile.getName(), uuid).getString();
-					context.getSource().sendFeedback(() -> PATPAT_ID.copy().append(string), true);
-					PatPat.LOGGER.info(string);
-				} else {
-					String string = Text.stringifiedTranslatable("patpat.command.list.remove.failed", gameProfile.getName(), uuid).getString();
-					context.getSource().sendFeedback(() -> PATPAT_ID.copy().append(string), true);
-					PatPat.LOGGER.warn(string);
-				}
+				String string = Text.stringifiedTranslatable("patpat.command.list.remove.failed", gameProfile.getName(), uuid).getString();
+				context.getSource().sendFeedback(() -> PATPAT_ID.copy().append(string), true);
+				PatPat.LOGGER.warn(string);
 			}
 		}
 

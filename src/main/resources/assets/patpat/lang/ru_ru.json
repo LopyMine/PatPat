@@ -14,7 +14,7 @@
   "patpat.command.list.mode.success": "Режим списка изменён с %s на %s.",
   "patpat.command.list.mode.failed": "Не удалось получить режим списка[whitelist, blacklist, disabled] из %s",
 
-  "patpat.modmenu.title": "§lКлиенские настройки PatPat мода",
+  "patpat.modmenu.title": "§lКлиентские настройки PatPat мода",
   "patpat.modmenu.no_yacl_screen.message": "Вам нужно установить §6§lYet Another Config Lib [YACL]§f, чтобы открыть экран настроек PatPat клиента\n\n§a§lОткрыть страницу §6§lYACL §a§lна Modrinth?",
 
   "patpat.modmenu.main": "§lОсновные",
@@ -22,14 +22,14 @@
   "patpat.modmenu.main.option.enable_mod": "Включить мод",
   "patpat.modmenu.main.option.enable_mod.description": "Если включено, вы увидите похлопывание мобов и другие функции; если отключено, не увидите.",
 
-  "patpat.modmenu.sound": "§lЗвуковые",
+  "patpat.modmenu.sound": "§lЗвук",
   "patpat.modmenu.sound.description": "Настройки, связанные со звуком.",
   "patpat.modmenu.sound.option.enable_sounds": "Включить звуки",
   "patpat.modmenu.sound.option.enable_sounds.description": "Если включено, вы услышите звуки похлопывания; если отключено, не услышите.",
   "patpat.modmenu.sound.option.sounds_volume": "Громкость",
   "patpat.modmenu.sound.option.sounds_volume.description": "Общая громкость звуков похлопывания.",
 
-  "patpat.modmenu.visual": "§lВизуальные",
+  "patpat.modmenu.visual": "§lВизуал",
   "patpat.modmenu.visual.description": "Настройки, связанные с визуальной частью.",
   "patpat.modmenu.visual.option.hiding_nickname_enabled": "Включить скрытие никнейма",
   "patpat.modmenu.visual.option.hiding_nickname_enabled.description": "Если включено, никнейм сущности исчезнет, когда вы или кто-то другой её похлопает; если отключено, не исчезнет.",
@@ -44,7 +44,7 @@
   "patpat.modmenu.visual.option.hand_offset_z": "Смещение анимации похлопывания по оси Z",
   "patpat.modmenu.visual.option.hand_offset_z.description": "Переместить анимации похлопывания по оси Z относительно стандартного положения.",
 
-  "patpat.modmenu.server": "§lСерверные",
+  "patpat.modmenu.server": "§lСервер",
   "patpat.modmenu.server.description": "Настройки, связанные с сервером.",
   "patpat.modmenu.server.option.pat_me_enabled": "Разрешить хлопать меня",
   "patpat.modmenu.server.option.pat_me_enabled.description": "Если включено, другие игроки смогут вас похлопать; если отключено, не смогут.",

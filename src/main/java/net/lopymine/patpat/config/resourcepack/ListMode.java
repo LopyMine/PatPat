@@ -11,7 +11,7 @@ public enum ListMode implements StringIdentifiable {
 	BLACKLIST("blacklist"),
 	DISABLED("disabled");
 
-	public static Codec<ListMode> CODEC = StringIdentifiable.createCodec(ListMode::values);
+	public static final Codec<ListMode> CODEC = StringIdentifiable.createCodec(ListMode::values);
 	private final String id;
 
 	ListMode(String id) {
@@ -20,12 +20,11 @@ public enum ListMode implements StringIdentifiable {
 
 	@Nullable
 	public static ListMode getById(String modeId) {
-		for (ListMode value : ListMode.values()) {
-			if (value.id.equals(modeId)) {
-				return value;
-			}
+		try {
+			return ListMode.valueOf(modeId);
+		} catch (IllegalArgumentException ignored) {
+			return null;
 		}
-		return null;
 	}
 
 	@Override

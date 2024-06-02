@@ -21,13 +21,13 @@ import org.jetbrains.annotations.NotNull;
 public class PatPatServerConfig {
 	public static final Codec<PatPatServerConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatServerConfig::getListMode),
-			Codec.unboundedMap(Uuids.CODEC, Codec.STRING).xmap(HashMap::new, HashMap::new).fieldOf("list").forGetter(PatPatServerConfig::getPlayers)
+			Codec.unboundedMap(Uuids.CODEC, Codec.STRING).fieldOf("list").forGetter(PatPatServerConfig::getPlayers)
 	).apply(instance, PatPatServerConfig::new));
 
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat.json5").toFile();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final Logger LOGGER = LoggerFactory.getLogger("PatPatServerConfig");
-	private final HashMap<UUID, String> players;
+	private final Map<UUID, String> players;
 	@Setter
 	private ListMode listMode;
 
@@ -36,9 +36,9 @@ public class PatPatServerConfig {
 		this.players = new HashMap<>();
 	}
 
-	public PatPatServerConfig(ListMode listMode, HashMap<UUID, String> players) {
+	public PatPatServerConfig(ListMode listMode, Map<UUID, String> players) {
 		this.listMode = listMode;
-		this.players = players;
+		this.players = new HashMap<>(players);
 	}
 
 	public static PatPatServerConfig getInstance() {

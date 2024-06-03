@@ -16,17 +16,20 @@ public class PatEntityS2CPacket implements FabricPacket {
 	private final UUID pattedEntityUuid;
 	private final UUID playerUuid;
 	private final String playerName;
+	private final boolean donor;
 
-	public PatEntityS2CPacket(UUID pattedEntityUuid, UUID playerUuid, String playerName) {
+	public PatEntityS2CPacket(UUID pattedEntityUuid, UUID playerUuid, String playerName, boolean donor) {
 		this.pattedEntityUuid = pattedEntityUuid;
 		this.playerUuid = playerUuid;
 		this.playerName = playerName;
+		this.donor = donor;
 	}
 
 	public PatEntityS2CPacket(PacketByteBuf buf) {
 		this.pattedEntityUuid = buf.readUuid();
 		this.playerUuid = buf.readUuid();
 		this.playerName = buf.readString();
+		this.donor = buf.readBoolean();
 	}
 
 	@Override
@@ -34,6 +37,7 @@ public class PatEntityS2CPacket implements FabricPacket {
 		buf.writeUuid(this.pattedEntityUuid);
 		buf.writeUuid(this.playerUuid);
 		buf.writeString(this.playerName);
+		buf.writeBoolean(this.donor);
 	}
 
 	@Override

@@ -15,9 +15,9 @@ public class PatEntity {
 	private int currentFrame;
 	private long timeOfStart;
 
-	public PatEntity(LivingEntity entity, PlayerConfig whoPatted) {
+	public PatEntity(LivingEntity entity, PlayerConfig whoPatted, boolean donor) {
 		this.entity = entity;
-		this.animation = CustomAnimationSettingsConfig.of(entity, whoPatted);
+		this.animation = CustomAnimationSettingsConfig.of(entity, whoPatted, donor);
 		this.timeOfStart = System.currentTimeMillis();
 		this.currentFrame = 0;
 	}

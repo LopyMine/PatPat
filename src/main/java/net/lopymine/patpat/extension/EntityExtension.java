@@ -5,7 +5,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registries;
 
 public class EntityExtension {
-
 	private EntityExtension() {
 		throw new IllegalStateException("Extension class");
 	}

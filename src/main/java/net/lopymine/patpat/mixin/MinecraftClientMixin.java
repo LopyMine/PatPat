@@ -58,15 +58,20 @@ public abstract class MinecraftClientMixin {
 			return;
 		}
 
-		ClientPlayNetworking.send(new PatEntityC2SPacket(livingEntity));
+		boolean donor = PatPatClientDonorManager.getInstance().isAmDonor() && config.isUseDonorAnimationEnabled();
+		ClientPlayNetworking.send(new PatEntityC2SPacket(livingEntity, donor));
+
 		Session session = this.getSession();
-		PatEntity patEntity = PatPatClientManager.pat(livingEntity, PlayerConfig.of(session.getUsername(), session.getUuidOrNull()));
+		PlayerConfig whoPatted = PlayerConfig.of(session.getUsername(), session.getUuidOrNull());
+		PatEntity patEntity = PatPatClientManager.pat(livingEntity, whoPatted, donor);
+
 		if (config.isSoundsEnabled()) {
 			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsVolume());
 		}
 		if (config.isSwingHandEnabled()) {
 			this.player.swingHand(Hand.MAIN_HAND);
 		}
+
 		this.itemUseCooldown = 4;
 		ci.cancel();
 	}

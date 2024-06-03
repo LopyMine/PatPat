@@ -44,7 +44,7 @@ public class PatPatClientPacketManager {
 			if (!(entity instanceof LivingEntity livingEntity)) {
 				return;
 			}
-			PatEntity patEntity = PatPatClientManager.pat(livingEntity, PlayerConfig.of(playerName, playerUuid));
+			PatEntity patEntity = PatPatClientManager.pat(livingEntity, PlayerConfig.of(playerName, playerUuid), packet.isDonor());
 			if (config.isSoundsEnabled()) {
 				PatPatClientSoundManager.playSound(patEntity, player, config.getSoundsVolume());
 			}

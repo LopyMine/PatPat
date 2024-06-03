@@ -1,8 +1,11 @@
 package net.lopymine.patpat.manager.server;
 
+import lombok.experimental.ExtensionMethod;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.GameProfileArgumentType;
+import net.minecraft.entity.EntityType;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.ClickEvent.Action;
 import net.minecraft.text.*;
 
 import com.mojang.authlib.GameProfile;
@@ -15,24 +18,24 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.config.resourcepack.ListMode;
 import net.lopymine.patpat.config.server.PatPatServerConfig;
-import net.lopymine.patpat.utils.ServerNetworkUtils;
+import net.lopymine.patpat.extension.TextExtension;
+import net.lopymine.patpat.utils.*;
 
 import java.util.*;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
+@ExtensionMethod(TextExtension.class)
 public class PatPatServerCommandManager {
-	// TODO Надо будет доработать команды, хочу формат вывода потом переделать, оставлю эту тудушку тут чтобы не забыть
-
-	private static final MutableText PATPAT_ID = Text.literal("[PatPat] ");
+	private static final MutableText PATPAT_ID = Text.literal("[§aPatPat§f] ");
 
 	public static void register() {
 		CommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess, environment) -> dispatcher.register(literal("patpat")
 				.then(literal("list")
 						.then(literal("set")
 								.then(argument("mode", StringArgumentType.word())
-										.suggests(((context, builder) -> CommandSource.suggestMatching(List.of("whitelist", "blacklist", "disabled"), builder)))
+										.suggests(((context, builder) -> CommandSource.suggestMatching(List.of("WHITELIST", "BLACKLIST", "DISABLED"), builder)))
 										.executes(PatPatServerCommandManager::onSetListMode)))
 						.then(literal("add")
 								.then(argument("profile", GameProfileArgumentType.gameProfile())
@@ -51,27 +54,34 @@ public class PatPatServerCommandManager {
 		Map<UUID, String> players = config.getPlayers();
 		Collection<GameProfile> profile = GameProfileArgumentType.getProfileArgument(context, "profile");
 		for (GameProfile gameProfile : profile) {
+			String name = gameProfile.getName();
 			UUID uuid = gameProfile.getId();
+
+			boolean success = false;
 			if (add) {
-				if (players.put(uuid, gameProfile.getName()) == null) {
-					String string = Text.stringifiedTranslatable("patpat.command.list.add.success", gameProfile.getName(), uuid).getString();
-					context.getSource().sendFeedback(() -> PATPAT_ID.copy().append(string), true);
-					PatPat.LOGGER.info(string);
-				} else {
-					String string = Text.stringifiedTranslatable("patpat.command.list.add.failed", gameProfile.getName(), uuid).getString();
-					context.getSource().sendFeedback(() -> PATPAT_ID.copy().append(string), true);
-					PatPat.LOGGER.warn(string);
+				if (players.put(uuid, name) == null) {
+					success = true;
 				}
-				continue;
-			}
-			if (players.remove(uuid) != null) {
-				String string = Text.stringifiedTranslatable("patpat.command.list.remove.success", gameProfile.getName(), uuid).getString();
-				context.getSource().sendFeedback(() -> PATPAT_ID.copy().append(string), true);
-				PatPat.LOGGER.info(string);
 			} else {
-				String string = Text.stringifiedTranslatable("patpat.command.list.remove.failed", gameProfile.getName(), uuid).getString();
-				context.getSource().sendFeedback(() -> PATPAT_ID.copy().append(string), true);
-				PatPat.LOGGER.warn(string);
+				if (players.remove(uuid) != null) {
+					success = true;
+				}
+			}
+
+			String action = add ? "add" : "remove";
+			String result = success ? "success" : "failed";
+			String key = String.format("patpat.command.list.%s.%s", action, result);
+
+			Text text = CommandTextBuilder.startBuilder(key, name)
+					.withShowEntity(EntityType.PLAYER, uuid, name)
+					.withClickEvent(Action.COPY_TO_CLIPBOARD, uuid)
+					.build();
+
+			context.getSource().sendFeedback(() -> PATPAT_ID.copy().append(text), true);
+			if (success) {
+				PatPat.LOGGER.info(text.asString());
+			} else {
+				PatPat.LOGGER.warn(text.asString());
 			}
 		}
 
@@ -81,21 +91,30 @@ public class PatPatServerCommandManager {
 
 	private static int onSetListMode(CommandContext<ServerCommandSource> context) {
 		String modeId = StringArgumentType.getString(context, "mode");
-		ListMode listMode = ListMode.getById(modeId);
-		if (listMode == null) {
-			String string = Text.stringifiedTranslatable("patpat.command.list.mode.failed", modeId).getString();
-			context.getSource().sendFeedback(() -> Text.of(string), true);
-			PatPat.LOGGER.warn(string);
-			return 0;
-		}
 		PatPatServerConfig config = PatPat.getConfig();
-		ListMode oldMode = config.getListMode();
-		config.setListMode(listMode);
-		config.save();
+		ListMode listMode = ListMode.getById(modeId);
 
-		String string = Text.stringifiedTranslatable("patpat.command.list.mode.success", oldMode, listMode).getString();
-		context.getSource().sendFeedback(() -> Text.of(string), true);
-		PatPat.LOGGER.info(string);
-		return Command.SINGLE_SUCCESS;
+		boolean success = listMode != null;
+		if (success) {
+			config.setListMode(listMode);
+		}
+
+		String result = success ? "success" : "failed";
+		String key = String.format("patpat.command.list.mode.%s", result);
+		Object arg = success ? listMode.getText() : modeId;
+
+		CommandTextBuilder builder = CommandTextBuilder.startBuilder(key, arg);
+		if (!success) {
+			builder.withHoverText(Arrays.stream(ListMode.values()).map(ListMode::getText).toArray());
+		}
+		Text text = builder.build();
+
+		context.getSource().sendFeedback(() -> PATPAT_ID.copy().append(text), true);
+		if (success) {
+			PatPat.LOGGER.info(text.asString());
+		} else {
+			PatPat.LOGGER.warn(text.asString());
+		}
+		return success ? Command.SINGLE_SUCCESS : 0;
 	}
 }

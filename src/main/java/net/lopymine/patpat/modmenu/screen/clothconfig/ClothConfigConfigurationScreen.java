@@ -106,30 +106,30 @@ public class ClothConfigConfigurationScreen {
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_x"), (float) config.getAnimationOffsets().getOffsetX())
+				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_x"), (float) config.getAnimationOffsetX())
 						.setTooltip(Text.translatable("patpat.modmenu.visual.option.hand_offset_x.description"))
-						.setDefaultValue((float) PatPatClientConfig.DEFAULT.getAnimationOffsets().getOffsetX())
+						.setDefaultValue((float) PatPatClientConfig.DEFAULT.getAnimationOffsetX())
 						.setMin(-5)
 						.setMax(5)
-						.setSaveConsumer(value -> config.getAnimationOffsets().setOffsetX(Math.round(value * 100) / 100f))
+						.setSaveConsumer(value -> config.setAnimationOffsetX(Math.round(value * 100) / 100f))
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_y"), (float) config.getAnimationOffsets().getOffsetY())
+				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_y"), (float) config.getAnimationOffsetY())
 						.setTooltip(Text.translatable("patpat.modmenu.visual.option.hand_offset_y.description"))
-						.setDefaultValue((float) PatPatClientConfig.DEFAULT.getAnimationOffsets().getOffsetY())
+						.setDefaultValue((float) PatPatClientConfig.DEFAULT.getAnimationOffsetY())
 						.setMin(-5)
 						.setMax(5)
-						.setSaveConsumer(value -> config.getAnimationOffsets().setOffsetY(Math.round(value * 100) / 100f))
+						.setSaveConsumer(value -> config.setAnimationOffsetY(Math.round(value * 100) / 100f))
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_z"), (float) config.getAnimationOffsets().getOffsetZ())
+				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_z"), (float) config.getAnimationOffsetZ())
 						.setTooltip(Text.translatable("patpat.modmenu.visual.option.hand_offset_z.description"))
-						.setDefaultValue((float) PatPatClientConfig.DEFAULT.getAnimationOffsets().getOffsetZ())
+						.setDefaultValue((float) PatPatClientConfig.DEFAULT.getAnimationOffsetZ())
 						.setMin(-5)
 						.setMax(5)
-						.setSaveConsumer(value -> config.getAnimationOffsets().setOffsetZ(Math.round(value * 100) / 100f))
+						.setSaveConsumer(value -> config.setAnimationOffsetZ(Math.round(value * 100) / 100f))
 						.build()
 		);
 		subcategory.setExpanded(true);

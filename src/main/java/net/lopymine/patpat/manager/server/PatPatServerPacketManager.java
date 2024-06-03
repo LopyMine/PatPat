@@ -31,7 +31,7 @@ public class PatPatServerPacketManager {
 				if (player == sender) {
 					continue;
 				}
-				ServerPlayNetworking.send(player, new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderProfile.getId(), senderProfile.getName()));
+				ServerPlayNetworking.send(player, new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderProfile.getId(), senderProfile.getName(), packet.isDonor()));
 			}
 		});
 	}

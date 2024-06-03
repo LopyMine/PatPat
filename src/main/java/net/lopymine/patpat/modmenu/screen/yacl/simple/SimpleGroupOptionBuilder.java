@@ -28,6 +28,9 @@ public class SimpleGroupOptionBuilder {
 		SimpleOptionsCollector collector = SimpleOptionsCollector.createBuilder(this.groupId);
 		Option<?>[] options = function.apply(collector);
 		for (Option<?> option : options) {
+			if (option == null) {
+				continue;
+			}
 			this.groupBuilder.option(option);
 		}
 		return this;

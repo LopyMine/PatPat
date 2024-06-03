@@ -39,31 +39,29 @@ public class EntityRendererMixin {
 			return;
 		}
 
-		OffsetsConfig configOffsets = config.getAnimationOffsets();
 		CustomAnimationSettingsConfig animation = patEntity.getAnimation();
 		FrameConfig frameConfig = animation.frameConfig();
-		OffsetsConfig frameOffsets = frameConfig.offsetsConfig();
 
 		RenderSystem.enableBlend();
 
 		matrices.push();
-		matrices.translate(0.0F, livingEntity.getNameLabelHeight() - 0.55F, 0.0F);
+		matrices.translate(0.0F, livingEntity.getNameLabelHeight() - 0.55F + ((float) frameConfig.animationOffsetY()) + ((float) config.getAnimationOffsetY()), 0.0F);
 		matrices.multiply(this.dispatcher.getRotation());
 		matrices.scale(-0.85F, -0.85F, 0.85F);
 
 		float textureWidth = frameConfig.frameWidth() * frameConfig.totalFrames(); // all texture width
 		float textureFrameWidth = frameConfig.frameWidth() / textureWidth; // one frame size, for example: 0.33
 
-		float worldFrameWidth = (float) frameConfig.frameWidth() / FrameConfig.DEFAULT_FRAME.frameWidth() - 0.15F; // frame width in !! world !!, default: 1.0F
-		float worldFrameHeight = (float) frameConfig.frameHeight() / FrameConfig.DEFAULT_FRAME.frameWidth() - 0.15F; // frame height in !! world !!, default: 1.0F
+		float worldFrameWidth = (float) frameConfig.frameWidth() / FrameConfig.DEFAULT_FRAME.frameWidth(); // frame width in !! world !!, default: 1.0F
+		float worldFrameHeight = (float) frameConfig.frameHeight() / FrameConfig.DEFAULT_FRAME.frameWidth(); // frame height in !! world !!, default: 1.0F
 
-		float x1 = -(worldFrameWidth / 2F) + ((float) frameOffsets.getOffsetX()) + ((float) configOffsets.getOffsetX());
+		float x1 = -(worldFrameWidth / 2F) + ((float) frameConfig.animationOffsetX()) + ((float) config.getAnimationOffsetX());
 		float x2 = x1 + worldFrameWidth;
 
-		float y1 = -(worldFrameHeight / 2F) - ((float) frameOffsets.getOffsetY()) - ((float) configOffsets.getOffsetY());
+		float y1 = -(worldFrameHeight / 2F);
 		float y2 = y1 + worldFrameHeight;
 
-		float z = ((float) frameOffsets.getOffsetZ()) + ((float) configOffsets.getOffsetZ());
+		float z = ((float) frameConfig.animationOffsetZ()) + ((float) config.getAnimationOffsetZ());
 
 		float u1 = patEntity.getCurrentFrame() * textureFrameWidth;
 		float u2 = u1 + textureFrameWidth;

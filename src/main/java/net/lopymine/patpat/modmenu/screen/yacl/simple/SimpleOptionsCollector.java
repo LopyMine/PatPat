@@ -1,6 +1,7 @@
 package net.lopymine.patpat.modmenu.screen.yacl.simple;
 
 import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.OptionDescription.Builder;
 import dev.isxander.yacl3.api.controller.*;
 import net.minecraft.text.Text;
 
@@ -19,29 +20,54 @@ public class SimpleOptionsCollector {
 		return new SimpleOptionsCollector(groupId);
 	}
 
-	public Option<Boolean> addBooleanOption(String optionId, boolean defValue, Supplier<Boolean> getter, Consumer<Boolean> setter, ValueFormatter<Boolean> formatter) {
-		return this.option(optionId, defValue, getter, setter)
+	public Option<Boolean> getBooleanOption(String optionId, boolean defValue, Supplier<Boolean> getter, Consumer<Boolean> setter, ValueFormatter<Boolean> formatter, SimpleContent content) {
+		return this.getOption(optionId, defValue, getter, setter, content)
 				.controller(o -> BooleanControllerBuilder.create(o).coloured(true).formatValue(formatter))
 				.build();
 	}
 
-	public Option<Double> addDoubleOptionAsSlider(String optionId, double min, double max, double step, double defValue, Supplier<Double> getter, Consumer<Double> setter) {
-		return this.option(optionId, defValue, getter, setter)
+	public Option<Double> getDoubleOptionAsSlider(String optionId, double min, double max, double step, double defValue, Supplier<Double> getter, Consumer<Double> setter, SimpleContent content) {
+		return this.getOption(optionId, defValue, getter, setter, content)
 				.controller(o -> DoubleSliderControllerBuilder.create(o).range(min, max).step(step))
 				.build();
 	}
 
-	private <C> Option.Builder<C> option(String optionId, C defValue, Supplier<C> getter, Consumer<C> setter) {
+	public Option<Boolean> getBooleanOption(String optionId, boolean defValue, Supplier<Boolean> getter, Consumer<Boolean> setter, ValueFormatter<Boolean> formatter) {
+		return this.getOption(optionId, defValue, getter, setter, SimpleContent.NONE)
+				.controller(o -> BooleanControllerBuilder.create(o).coloured(true).formatValue(formatter))
+				.build();
+	}
+
+	public Option<Double> getDoubleOptionAsSlider(String optionId, double min, double max, double step, double defValue, Supplier<Double> getter, Consumer<Double> setter) {
+		return this.getOption(optionId, defValue, getter, setter, SimpleContent.NONE)
+				.controller(o -> DoubleSliderControllerBuilder.create(o).range(min, max).step(step))
+				.build();
+	}
+
+	private <C> Option.Builder<C> getOption(String optionId, C defValue, Supplier<C> getter, Consumer<C> setter, SimpleContent content) {
 		String optionKey = ModMenuUtils.getOptionKey(this.groupId, optionId);
 		String optionDescription = ModMenuUtils.getDescriptionKey(optionKey);
 
+		Builder descriptionBuilder = OptionDescription.createBuilder().text(Text.translatable(optionDescription));
+		switch (content) {
+			case IMAGE -> descriptionBuilder.image(ModMenuUtils.getContentId(content, optionId), 600, 600);
+			case WEBP -> descriptionBuilder.webpImage(ModMenuUtils.getContentId(content, optionId));
+			default -> {}
+		}
 		return Option.<C>createBuilder()
 				.name(Text.translatable(optionKey))
-				.description(OptionDescription.of(Text.translatable(optionDescription)))
+				.description(descriptionBuilder.build())
 				.binding(defValue, getter, setter);
 	}
 
 	public Option<?>[] collect(Option<?>... options) {
 		return options;
+	}
+
+	public <T> Option<?> getIf(Option<T> option, Supplier<Boolean> condition) {
+		if (condition.get()) {
+			return option;
+		}
+		return null;
 	}
 }

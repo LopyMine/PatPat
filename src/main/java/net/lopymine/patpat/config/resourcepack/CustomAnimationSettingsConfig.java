@@ -6,7 +6,7 @@ import net.minecraft.util.Identifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.lopymine.patpat.manager.client.PatPatClientResourcePackManager;
+import net.lopymine.patpat.manager.client.*;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
 public record CustomAnimationSettingsConfig(Identifier texture, int duration, FrameConfig frameConfig, SoundConfig soundConfig) {
@@ -24,7 +24,17 @@ public record CustomAnimationSettingsConfig(Identifier texture, int duration, Fr
 			SoundConfig.PATPAT_SOUND
 	);
 
-	public static CustomAnimationSettingsConfig of(LivingEntity entity, PlayerConfig whoPatted) {
+	public static final CustomAnimationSettingsConfig DONOR_ANIMATION = new CustomAnimationSettingsConfig(
+			IdentifierUtils.textureId("donors/golden_patpat.png"),
+			240,
+			FrameConfig.DEFAULT_FRAME,
+			SoundConfig.PATPAT_SOUND
+	);
+
+	public static CustomAnimationSettingsConfig of(LivingEntity entity, PlayerConfig whoPatted, boolean donor) {
+		if (donor && PatPatClientDonorManager.getInstance().getDonors().contains(whoPatted.getUuid())) {
+			return DONOR_ANIMATION;
+		}
 		PatPatClientResourcePackManager manager = PatPatClientResourcePackManager.INSTANCE;
 		CustomAnimationConfig config = manager.getAnimationConfig(entity, whoPatted);
 		if (config != null) {

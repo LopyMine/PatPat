@@ -30,8 +30,12 @@ public class PatPatClientConfig {
 			Codec.BOOL.fieldOf("modEnabled").forGetter(PatPatClientConfig::isModEnabled),
 			Codec.DOUBLE.fieldOf("soundsVolume").forGetter(PatPatClientConfig::getSoundsVolume),
 			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatClientConfig::getListMode),
-			Codec.unboundedMap(Uuids.CODEC, Codec.STRING).fieldOf("list").forGetter(PatPatClientConfig::getPlayers),
-			OffsetsConfig.CODEC.fieldOf("animationOffsets").forGetter(PatPatClientConfig::getAnimationOffsets)
+			Codec.unboundedMap(Uuids.CODEC, Codec.STRING).xmap(HashMap::new, HashMap::new).fieldOf("list").forGetter(PatPatClientConfig::getPlayers),
+			Codec.DOUBLE.fieldOf("animationOffsetX").forGetter(PatPatClientConfig::getAnimationOffsetX),
+			Codec.DOUBLE.fieldOf("animationOffsetY").forGetter(PatPatClientConfig::getAnimationOffsetY),
+			Codec.DOUBLE.fieldOf("animationOffsetZ").forGetter(PatPatClientConfig::getAnimationOffsetZ),
+			Codec.BOOL.fieldOf("useDonorAnimationEnabled").forGetter(PatPatClientConfig::isUseDonorAnimationEnabled),
+			Codec.BOOL.fieldOf("skipOldAnimationsEnabled").forGetter(PatPatClientConfig::isSkipOldAnimationsEnabled)
 	).apply(instance, PatPatClientConfig::new));
 
 	public static final PatPatClientConfig DEFAULT = new PatPatClientConfig();
@@ -39,8 +43,6 @@ public class PatPatClientConfig {
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat-client.json5").toFile();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final Logger LOGGER = LoggerFactory.getLogger("PatPatClientConfig");
-	private final Map<UUID, String> players;
-	private final OffsetsConfig animationOffsets;
 	private boolean bypassServerResourcePackPriorityEnabled;
 	private boolean loweringAnimationEnabled;
 	private boolean nicknameHidingEnabled;
@@ -50,6 +52,12 @@ public class PatPatClientConfig {
 	private boolean modEnabled;
 	private double soundsVolume;
 	private ListMode listMode;
+	private final HashMap<UUID, String> players;
+	private double animationOffsetX;
+	private double animationOffsetY;
+	private double animationOffsetZ;
+	private boolean useDonorAnimationEnabled;
+	private boolean skipOldAnimationsEnabled;
 
 	public PatPatClientConfig() {
 		this.bypassServerResourcePackPriorityEnabled = false;
@@ -62,10 +70,14 @@ public class PatPatClientConfig {
 		this.soundsVolume = 1.0D;
 		this.listMode = ListMode.DISABLED;
 		this.players = new HashMap<>();
-		this.animationOffsets = OffsetsConfig.EMPTY;
+		this.animationOffsetX = 0.0D;
+		this.animationOffsetY = 0.0D;
+		this.animationOffsetZ = 0.0D;
+		this.useDonorAnimationEnabled = false;
+		this.skipOldAnimationsEnabled = true;
 	}
 
-	public PatPatClientConfig(boolean bypassServerResourcePackPriorityEnabled, boolean loweringAnimationEnabled, boolean nicknameHidingEnabled, boolean swingHandEnabled, boolean soundsEnabled, boolean patMeEnabled, boolean modEnabled, double soundsVolume, ListMode listMode, Map<UUID, String> players, OffsetsConfig animationOffsets) {
+	public PatPatClientConfig(boolean bypassServerResourcePackPriorityEnabled, boolean loweringAnimationEnabled, boolean nicknameHidingEnabled, boolean swingHandEnabled, boolean soundsEnabled, boolean patMeEnabled, boolean modEnabled, double soundsVolume, ListMode listMode, HashMap<UUID, String> players1, double animationOffsetX, double animationOffsetY, double animationOffsetZ, boolean useDonorAnimationEnabled, boolean skipOldAnimationsEnabled) {
 		this.bypassServerResourcePackPriorityEnabled = bypassServerResourcePackPriorityEnabled;
 		this.loweringAnimationEnabled = loweringAnimationEnabled;
 		this.nicknameHidingEnabled = nicknameHidingEnabled;
@@ -75,8 +87,12 @@ public class PatPatClientConfig {
 		this.modEnabled = modEnabled;
 		this.soundsVolume = soundsVolume;
 		this.listMode = listMode;
-		this.players = new HashMap<>(players);
-		this.animationOffsets = animationOffsets;
+		this.players = players1;
+		this.animationOffsetX = animationOffsetX;
+		this.animationOffsetY = animationOffsetY;
+		this.animationOffsetZ = animationOffsetZ;
+		this.useDonorAnimationEnabled = useDonorAnimationEnabled;
+		this.skipOldAnimationsEnabled = skipOldAnimationsEnabled;
 	}
 
 	public static PatPatClientConfig getInstance() {

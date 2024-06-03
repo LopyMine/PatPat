@@ -25,10 +25,6 @@ public class PatPatClientResourcePackManager {
 	public static final PatPatClientResourcePackManager INSTANCE = new PatPatClientResourcePackManager();
 	private final LinkedList<List<CustomAnimationConfig>> loadedAnimations = new LinkedList<>();
 
-	private PatPatClientResourcePackManager() {
-		throw new IllegalStateException("Manager class");
-	}
-
 	public static void parseConfig(String packName, Identifier identifier, InputSupplier<InputStream> inputStreamInputSupplier, List<CustomAnimationConfig> configs) {
 		String path = identifier.getPath();
 		if (!path.endsWith(".json") && !path.endsWith(".json5")) {

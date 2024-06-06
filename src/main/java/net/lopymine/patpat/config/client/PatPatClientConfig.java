@@ -22,18 +22,18 @@ import org.jetbrains.annotations.NotNull;
 public class PatPatClientConfig {
 	public static final Codec<PatPatClientConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.BOOL.fieldOf("bypassServerResourcePackPriorityEnabled").forGetter(PatPatClientConfig::isBypassServerResourcePackPriorityEnabled),
-			Codec.BOOL.fieldOf("loweringAnimationEnabled").forGetter(PatPatClientConfig::isLoweringAnimationEnabled),
+			Codec.BOOL.fieldOf("loweringAnimationEnabled").forGetter(PatPatClientConfig::isLoweringAnimationEnabled), // TODO Сделать реализацию этой фичи, т.к. я хз как
 			Codec.BOOL.fieldOf("hidingNicknameEnabled").forGetter(PatPatClientConfig::isNicknameHidingEnabled),
 			Codec.BOOL.fieldOf("swingHandEnabled").forGetter(PatPatClientConfig::isSwingHandEnabled),
 			Codec.BOOL.fieldOf("soundsEnabled").forGetter(PatPatClientConfig::isSoundsEnabled),
 			Codec.BOOL.fieldOf("patMeEnabled").forGetter(PatPatClientConfig::isPatMeEnabled),
 			Codec.BOOL.fieldOf("modEnabled").forGetter(PatPatClientConfig::isModEnabled),
-			Codec.DOUBLE.fieldOf("soundsVolume").forGetter(PatPatClientConfig::getSoundsVolume),
+			Codec.FLOAT.fieldOf("soundsVolume").forGetter(PatPatClientConfig::getSoundsVolume),
 			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatClientConfig::getListMode),
 			Codec.unboundedMap(Uuids.CODEC, Codec.STRING).xmap(HashMap::new, HashMap::new).fieldOf("list").forGetter(PatPatClientConfig::getPlayers),
-			Codec.DOUBLE.fieldOf("animationOffsetX").forGetter(PatPatClientConfig::getAnimationOffsetX),
-			Codec.DOUBLE.fieldOf("animationOffsetY").forGetter(PatPatClientConfig::getAnimationOffsetY),
-			Codec.DOUBLE.fieldOf("animationOffsetZ").forGetter(PatPatClientConfig::getAnimationOffsetZ),
+			Codec.FLOAT.fieldOf("animationOffsetX").forGetter(PatPatClientConfig::getAnimationOffsetX),
+			Codec.FLOAT.fieldOf("animationOffsetY").forGetter(PatPatClientConfig::getAnimationOffsetY),
+			Codec.FLOAT.fieldOf("animationOffsetZ").forGetter(PatPatClientConfig::getAnimationOffsetZ),
 			Codec.BOOL.fieldOf("useDonorAnimationEnabled").forGetter(PatPatClientConfig::isUseDonorAnimationEnabled),
 			Codec.BOOL.fieldOf("skipOldAnimationsEnabled").forGetter(PatPatClientConfig::isSkipOldAnimationsEnabled)
 	).apply(instance, PatPatClientConfig::new));
@@ -50,12 +50,12 @@ public class PatPatClientConfig {
 	private boolean soundsEnabled;
 	private boolean patMeEnabled;
 	private boolean modEnabled;
-	private double soundsVolume;
+	private float soundsVolume;
 	private ListMode listMode;
 	private final HashMap<UUID, String> players;
-	private double animationOffsetX;
-	private double animationOffsetY;
-	private double animationOffsetZ;
+	private float animationOffsetX;
+	private float animationOffsetY;
+	private float animationOffsetZ;
 	private boolean useDonorAnimationEnabled;
 	private boolean skipOldAnimationsEnabled;
 
@@ -67,17 +67,17 @@ public class PatPatClientConfig {
 		this.soundsEnabled = true;
 		this.patMeEnabled = true;
 		this.modEnabled = true;
-		this.soundsVolume = 1.0D;
+		this.soundsVolume = 1.0F;
 		this.listMode = ListMode.DISABLED;
 		this.players = new HashMap<>();
-		this.animationOffsetX = 0.0D;
-		this.animationOffsetY = 0.0D;
-		this.animationOffsetZ = 0.0D;
+		this.animationOffsetX = 0.0F;
+		this.animationOffsetY = 0.0F;
+		this.animationOffsetZ = 0.0F;
 		this.useDonorAnimationEnabled = false;
 		this.skipOldAnimationsEnabled = true;
 	}
 
-	public PatPatClientConfig(boolean bypassServerResourcePackPriorityEnabled, boolean loweringAnimationEnabled, boolean nicknameHidingEnabled, boolean swingHandEnabled, boolean soundsEnabled, boolean patMeEnabled, boolean modEnabled, double soundsVolume, ListMode listMode, HashMap<UUID, String> players1, double animationOffsetX, double animationOffsetY, double animationOffsetZ, boolean useDonorAnimationEnabled, boolean skipOldAnimationsEnabled) {
+	public PatPatClientConfig(boolean bypassServerResourcePackPriorityEnabled, boolean loweringAnimationEnabled, boolean nicknameHidingEnabled, boolean swingHandEnabled, boolean soundsEnabled, boolean patMeEnabled, boolean modEnabled, float soundsVolume, ListMode listMode, HashMap<UUID, String> players, float animationOffsetX, float animationOffsetY, float animationOffsetZ, boolean useDonorAnimationEnabled, boolean skipOldAnimationsEnabled) {
 		this.bypassServerResourcePackPriorityEnabled = bypassServerResourcePackPriorityEnabled;
 		this.loweringAnimationEnabled = loweringAnimationEnabled;
 		this.nicknameHidingEnabled = nicknameHidingEnabled;
@@ -87,7 +87,7 @@ public class PatPatClientConfig {
 		this.modEnabled = modEnabled;
 		this.soundsVolume = soundsVolume;
 		this.listMode = listMode;
-		this.players = players1;
+		this.players = players;
 		this.animationOffsetX = animationOffsetX;
 		this.animationOffsetY = animationOffsetY;
 		this.animationOffsetZ = animationOffsetZ;

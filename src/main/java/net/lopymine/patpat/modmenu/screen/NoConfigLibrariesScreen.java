@@ -15,7 +15,7 @@ import java.util.*;
 public class NoConfigLibrariesScreen {
 
 	private NoConfigLibrariesScreen() {
-		throw new IllegalStateException("Screen class");
+		throw new IllegalStateException("Screen class, use NoConfigLibrariesScreen.createScreen(...) method!");
 	}
 
 	private static final Text TITLE = Text.translatable("patpat.modmenu.title");

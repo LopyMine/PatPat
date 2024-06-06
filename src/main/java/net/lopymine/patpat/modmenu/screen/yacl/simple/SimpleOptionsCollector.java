@@ -26,9 +26,9 @@ public class SimpleOptionsCollector {
 				.build();
 	}
 
-	public Option<Double> getDoubleOptionAsSlider(String optionId, double min, double max, double step, double defValue, Supplier<Double> getter, Consumer<Double> setter, SimpleContent content) {
+	public Option<Float> getFloatOptionAsSlider(String optionId, float min, float max, float step, float defValue, Supplier<Float> getter, Consumer<Float> setter, SimpleContent content) {
 		return this.getOption(optionId, defValue, getter, setter, content)
-				.controller(o -> DoubleSliderControllerBuilder.create(o).range(min, max).step(step))
+				.controller(o -> FloatSliderControllerBuilder.create(o).range(min, max).step(step))
 				.build();
 	}
 
@@ -38,9 +38,9 @@ public class SimpleOptionsCollector {
 				.build();
 	}
 
-	public Option<Double> getDoubleOptionAsSlider(String optionId, double min, double max, double step, double defValue, Supplier<Double> getter, Consumer<Double> setter) {
+	public Option<Float> getFloatOptionAsSlider(String optionId, float min, float max, float step, float defValue, Supplier<Float> getter, Consumer<Float> setter) {
 		return this.getOption(optionId, defValue, getter, setter, SimpleContent.NONE)
-				.controller(o -> DoubleSliderControllerBuilder.create(o).range(min, max).step(step))
+				.controller(o -> FloatSliderControllerBuilder.create(o).range(min, max).step(step))
 				.build();
 	}
 

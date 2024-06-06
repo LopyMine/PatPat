@@ -51,10 +51,16 @@ public class YACLConfigurationScreen {
 		)).build();
 	}
 
+	private static OptionGroup getResourcePacksGroup(PatPatClientConfig defConfig, PatPatClientConfig config) {
+		return SimpleGroupOptionBuilder.createBuilder("resource_packs").options(collector -> collector.collect(
+				collector.getBooleanOption("skip_outdated_animations_enabled", defConfig.isSkipOldAnimationsEnabled(), config::isSkipOldAnimationsEnabled, config::setSkipOldAnimationsEnabled, ENABLED_OR_DISABLE_FORMATTER::apply)
+		)).build();
+	}
+
 	private static OptionGroup getSoundGroup(PatPatClientConfig defConfig, PatPatClientConfig config) {
 		return SimpleGroupOptionBuilder.createBuilder("sound").options(collector -> collector.collect(
 				collector.getBooleanOption("enable_sounds", defConfig.isSoundsEnabled(), config::isSoundsEnabled, config::setSoundsEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-				collector.getDoubleOptionAsSlider("sounds_volume", 0D, 2D, 0.01D, defConfig.getSoundsVolume(), config::getSoundsVolume, config::setSoundsVolume)
+				collector.getFloatOptionAsSlider("sounds_volume", 0F, 2F, 0.01F, defConfig.getSoundsVolume(), config::getSoundsVolume, config::setSoundsVolume)
 		)).build();
 	}
 
@@ -63,9 +69,9 @@ public class YACLConfigurationScreen {
 				collector.getBooleanOption("lowering_animation_enabled", defConfig.isLoweringAnimationEnabled(), config::isLoweringAnimationEnabled, config::setLoweringAnimationEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
 				collector.getBooleanOption("hiding_nickname_enabled", defConfig.isNicknameHidingEnabled(), config::isNicknameHidingEnabled, config::setNicknameHidingEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
 				collector.getBooleanOption("swing_hand_enabled", defConfig.isSwingHandEnabled(), config::isSwingHandEnabled, config::setSwingHandEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-				collector.getDoubleOptionAsSlider("hand_offset_x", -5D, 5D, 0.01D, defConfig.getAnimationOffsetX(), config::getAnimationOffsetX, config::setAnimationOffsetX, SimpleContent.WEBP),
-				collector.getDoubleOptionAsSlider("hand_offset_y", -5D, 5D, 0.01D, defConfig.getAnimationOffsetY(), config::getAnimationOffsetY, config::setAnimationOffsetY, SimpleContent.WEBP),
-				collector.getDoubleOptionAsSlider("hand_offset_z", -5D, 5D, 0.01D, defConfig.getAnimationOffsetZ(), config::getAnimationOffsetZ, config::setAnimationOffsetZ, SimpleContent.WEBP)
+				collector.getFloatOptionAsSlider("hand_offset_x", -5F, 5F, 0.01F, defConfig.getAnimationOffsetX(), config::getAnimationOffsetX, config::setAnimationOffsetX, SimpleContent.WEBP),
+				collector.getFloatOptionAsSlider("hand_offset_y", -5F, 5F, 0.01F, defConfig.getAnimationOffsetY(), config::getAnimationOffsetY, config::setAnimationOffsetY, SimpleContent.WEBP),
+				collector.getFloatOptionAsSlider("hand_offset_z", -5F, 5F, 0.01F, defConfig.getAnimationOffsetZ(), config::getAnimationOffsetZ, config::setAnimationOffsetZ, SimpleContent.WEBP)
 		)).build();
 	}
 
@@ -73,12 +79,6 @@ public class YACLConfigurationScreen {
 		return SimpleGroupOptionBuilder.createBuilder("server").options(collector -> collector.collect(
 				collector.getBooleanOption("pat_me_enabled", defConfig.isPatMeEnabled(), config::isPatMeEnabled, config::setPatMeEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
 				collector.getBooleanOption("bypass_server_resource_pack_priority_enabled", defConfig.isBypassServerResourcePackPriorityEnabled(), config::isBypassServerResourcePackPriorityEnabled, config::setBypassServerResourcePackPriorityEnabled, ENABLED_OR_DISABLE_FORMATTER::apply)
-		)).build();
-	}
-
-	private static OptionGroup getResourcePacksGroup(PatPatClientConfig defConfig, PatPatClientConfig config) {
-		return SimpleGroupOptionBuilder.createBuilder("resource_packs").options(collector -> collector.collect(
-				collector.getBooleanOption("skip_old_animations_enabled", defConfig.isSkipOldAnimationsEnabled(), config::isSkipOldAnimationsEnabled, config::setSkipOldAnimationsEnabled, ENABLED_OR_DISABLE_FORMATTER::apply)
 		)).build();
 	}
 }

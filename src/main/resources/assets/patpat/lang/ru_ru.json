@@ -27,6 +27,11 @@
   "patpat.modmenu.main.option.use_donor_animation": "§e§lИспользовать специальную анимацию",
   "patpat.modmenu.main.option.use_donor_animation.description": "Если включено, вы и другие игроки увидете специальную анимацию за то, что поддержали мод; если отключено, будет использоваться стандартная анимация.\nДанная анимация имеет максимальный приоритет.",
 
+  "patpat.modmenu.resource_packs": "§lСобственные анимации",
+  "patpat.modmenu.resource_packs.description": "Настройки, связанные с наборами ресурсов и их собственными анимациями.",
+  "patpat.modmenu.resource_packs.option.skip_outdated_animations_enabled": "Пропускать устаревшие анимации",
+  "patpat.modmenu.resource_packs.option.skip_outdated_animations_enabled.description": "Если включено, устаревшие анимации из наборов ресурсов будут пропущены; если отключено, не будут.",
+
   "patpat.modmenu.sound": "§lЗвук",
   "patpat.modmenu.sound.description": "Настройки, связанные со звуком.",
   "patpat.modmenu.sound.option.enable_sounds": "Включить звуки",

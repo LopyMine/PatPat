@@ -45,7 +45,7 @@ public class EntityRendererMixin {
 		RenderSystem.enableBlend();
 
 		matrices.push();
-		matrices.translate(0.0F, livingEntity.getNameLabelHeight() - 0.55F + ((float) frameConfig.animationOffsetY()) + ((float) config.getAnimationOffsetY()), 0.0F);
+		matrices.translate(0.0F, livingEntity.getNameLabelHeight() - 0.55F + frameConfig.animationOffsetY() + config.getAnimationOffsetY(), 0.0F);
 		matrices.multiply(this.dispatcher.getRotation());
 		matrices.scale(-0.85F, -0.85F, 0.85F);
 
@@ -55,13 +55,13 @@ public class EntityRendererMixin {
 		float worldFrameWidth = (float) frameConfig.frameWidth() / FrameConfig.DEFAULT_FRAME.frameWidth(); // frame width in !! world !!, default: 1.0F
 		float worldFrameHeight = (float) frameConfig.frameHeight() / FrameConfig.DEFAULT_FRAME.frameWidth(); // frame height in !! world !!, default: 1.0F
 
-		float x1 = -(worldFrameWidth / 2F) + ((float) frameConfig.animationOffsetX()) + ((float) config.getAnimationOffsetX());
+		float x1 = -(worldFrameWidth / 2F) + frameConfig.animationOffsetX() + config.getAnimationOffsetX();
 		float x2 = x1 + worldFrameWidth;
 
 		float y1 = -(worldFrameHeight / 2F);
 		float y2 = y1 + worldFrameHeight;
 
-		float z = ((float) frameConfig.animationOffsetZ()) + ((float) config.getAnimationOffsetZ());
+		float z = frameConfig.animationOffsetZ() + config.getAnimationOffsetZ();
 
 		float u1 = patEntity.getCurrentFrame() * textureFrameWidth;
 		float u2 = u1 + textureFrameWidth;

@@ -33,6 +33,7 @@ public class ClothConfigConfigurationScreen {
 		ConfigCategory general = builder.getOrCreateCategory(Text.translatable("patpat.modmenu.title"));
 
 		general.addEntry(getMainGroup(entryBuilder, config));
+		general.addEntry(getResourcePackGroup(entryBuilder, config));
 		general.addEntry(getSoundGroup(entryBuilder, config));
 		general.addEntry(getVisualGroup(entryBuilder, config));
 		general.addEntry(getServerGroup(entryBuilder, config));
@@ -56,6 +57,20 @@ public class ClothConfigConfigurationScreen {
 		return subcategory.build();
 	}
 
+	private static SubCategoryListEntry getResourcePackGroup(ConfigEntryBuilder entryBuilder, PatPatClientConfig config) {
+		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(Text.translatable("patpat.modmenu.resource_packs"));
+		subcategory.add(
+				entryBuilder.startBooleanToggle(Text.translatable("patpat.modmenu.resource_packs.option.skip_outdated_animations_enabled"), config.isModEnabled())
+						.setTooltip(Text.translatable("patpat.modmenu.resource_packs.option.skip_outdated_animations_enabled.description"))
+						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.isSkipOldAnimationsEnabled())
+						.setSaveConsumer(config::setSkipOldAnimationsEnabled)
+						.build()
+		);
+		subcategory.setExpanded(true);
+		return subcategory.build();
+	}
+
 	private static SubCategoryListEntry getSoundGroup(ConfigEntryBuilder entryBuilder, PatPatClientConfig config) {
 		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(Text.translatable("patpat.modmenu.sound"));
 		subcategory.add(
@@ -67,9 +82,9 @@ public class ClothConfigConfigurationScreen {
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.sound.option.sounds_volume"), (float) config.getSoundsVolume())
+				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.sound.option.sounds_volume"), config.getSoundsVolume())
 						.setTooltip(Text.translatable("patpat.modmenu.sound.option.sounds_volume.description"))
-						.setDefaultValue((float) PatPatClientConfig.DEFAULT.getSoundsVolume())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getSoundsVolume())
 						.setMin(0)
 						.setMax(1)
 						.setSaveConsumer(value -> config.setSoundsVolume(Math.round(value * 100) / 100f))
@@ -106,27 +121,27 @@ public class ClothConfigConfigurationScreen {
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_x"), (float) config.getAnimationOffsetX())
+				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_x"), config.getAnimationOffsetX())
 						.setTooltip(Text.translatable("patpat.modmenu.visual.option.hand_offset_x.description"))
-						.setDefaultValue((float) PatPatClientConfig.DEFAULT.getAnimationOffsetX())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getAnimationOffsetX())
 						.setMin(-5)
 						.setMax(5)
 						.setSaveConsumer(value -> config.setAnimationOffsetX(Math.round(value * 100) / 100f))
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_y"), (float) config.getAnimationOffsetY())
+				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_y"), config.getAnimationOffsetY())
 						.setTooltip(Text.translatable("patpat.modmenu.visual.option.hand_offset_y.description"))
-						.setDefaultValue((float) PatPatClientConfig.DEFAULT.getAnimationOffsetY())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getAnimationOffsetY())
 						.setMin(-5)
 						.setMax(5)
 						.setSaveConsumer(value -> config.setAnimationOffsetY(Math.round(value * 100) / 100f))
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_z"), (float) config.getAnimationOffsetZ())
+				entryBuilder.startFloatField(Text.translatable("patpat.modmenu.visual.option.hand_offset_z"), config.getAnimationOffsetZ())
 						.setTooltip(Text.translatable("patpat.modmenu.visual.option.hand_offset_z.description"))
-						.setDefaultValue((float) PatPatClientConfig.DEFAULT.getAnimationOffsetZ())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getAnimationOffsetZ())
 						.setMin(-5)
 						.setMax(5)
 						.setSaveConsumer(value -> config.setAnimationOffsetZ(Math.round(value * 100) / 100f))

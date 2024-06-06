@@ -27,6 +27,11 @@
   "patpat.modmenu.main.option.use_donor_animation": "§e§lUse Donor Animation",
   "patpat.modmenu.main.option.use_donor_animation.description": "If enabled, you and other players will see a special animation for supporting the mod; if disabled, will be used default animation.\nThis animation has maximum priority",
 
+  "patpat.modmenu.resource_packs": "§lResource Packs",
+  "patpat.modmenu.resource_packs.description": "Resource Pack settings of PatPat mod.",
+  "patpat.modmenu.resource_packs.option.skip_outdated_animations_enabled": "Skip outdated animations",
+  "patpat.modmenu.resource_packs.option.skip_outdated_animations_enabled.description": "If enabled, resource packs animations with outdated config version will be skipped, if disabled, won't.",
+
   "patpat.modmenu.sound": "§lSound",
   "patpat.modmenu.sound.description": "Sound settings of PatPat mod.",
   "patpat.modmenu.sound.option.enable_sounds": "Enable Sounds",

@@ -19,6 +19,7 @@ import java.util.*;
 
 @Getter
 public class PatPatClientDonorManager {
+
 	private static final PatPatClientDonorManager INSTANCE = new PatPatClientDonorManager();
 	private static final Codec<Set<UUID>> CODEC = Uuids.CODEC.listOf().xmap(HashSet::new, ArrayList::new);
 	// TODO
@@ -40,7 +41,7 @@ public class PatPatClientDonorManager {
 		PatPatClient.LOGGER.info("Start loading donors...");
 		JsonElement sources = GithubSourcesUtils.getSources(GITHUB_SOURCES_URL);
 		if (sources == null) {
-			PatPatClient.LOGGER.error("Failed to get donors from github, loading from mod sources");
+			PatPatClient.LOGGER.warn("Failed to get donors from github, loading from mod sources");
 			sources = ModSourcesUtils.getSources(MOD_SOURCES_PATH);
 		}
 		if (sources == null) {

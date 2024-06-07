@@ -12,6 +12,11 @@ import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
 public class PatPatClientSoundManager {
+
+	private PatPatClientSoundManager() {
+		throw new IllegalStateException("Manager class");
+	}
+
 	public static void register() {
 		Registry.register(Registries.SOUND_EVENT, IdentifierUtils.id("patpat"), SoundEvent.of(IdentifierUtils.id("patpat")));
 		Registry.register(Registries.SOUND_EVENT, IdentifierUtils.id("lopi"), SoundEvent.of(IdentifierUtils.id("lopi")));

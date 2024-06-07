@@ -33,10 +33,7 @@ public class YACLConfigurationScreen {
 						.group(getVisualGroup(defConfig, config))
 						.group(getServerGroup(defConfig, config))
 						.build())
-				.save(() -> {
-					config.save();
-					PatPatClient.setConfig(config);
-				})
+				.save(config::save)
 				.build()
 				.generateScreen(parent);
 	}
@@ -78,7 +75,7 @@ public class YACLConfigurationScreen {
 	private static OptionGroup getServerGroup(PatPatClientConfig defConfig, PatPatClientConfig config) {
 		return SimpleGroupOptionBuilder.createBuilder("server").options(collector -> collector.collect(
 				collector.getBooleanOption("pat_me_enabled", defConfig.isPatMeEnabled(), config::isPatMeEnabled, config::setPatMeEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-				collector.getBooleanOption("bypass_server_resource_pack_priority_enabled", defConfig.isBypassServerResourcePackPriorityEnabled(), config::isBypassServerResourcePackPriorityEnabled, config::setBypassServerResourcePackPriorityEnabled, ENABLED_OR_DISABLE_FORMATTER::apply)
+				collector.getBooleanOption("bypass_server_resource_pack_priority_enabled", defConfig.isBypassServerResourcePackEnabled(), config::isBypassServerResourcePackEnabled, config::setBypassServerResourcePackEnabled, ENABLED_OR_DISABLE_FORMATTER::apply)
 		)).build();
 	}
 }

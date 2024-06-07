@@ -162,11 +162,11 @@ public class ClothConfigConfigurationScreen {
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startBooleanToggle(Text.translatable("patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled"), config.isBypassServerResourcePackPriorityEnabled())
+				entryBuilder.startBooleanToggle(Text.translatable("patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled"), config.isBypassServerResourcePackEnabled())
 						.setTooltip(Text.translatable("patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled.description"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
-						.setDefaultValue(PatPatClientConfig.DEFAULT.isBypassServerResourcePackPriorityEnabled())
-						.setSaveConsumer(config::setBypassServerResourcePackPriorityEnabled)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.isBypassServerResourcePackEnabled())
+						.setSaveConsumer(config::setBypassServerResourcePackEnabled)
 						.build()
 		);
 		subcategory.setExpanded(true);

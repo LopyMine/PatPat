@@ -30,6 +30,7 @@ public final class CustomAnimationConfig implements Comparable<CustomAnimationCo
 	private final boolean blacklist;
 	private final boolean useForAll;
 	private List<EntityConfig> entities;
+	private String configPath;
 
 	public CustomAnimationConfig(Version version, int priority, CustomAnimationSettingsConfig animation, boolean blacklist, List<EntityConfig> entities) {
 		this.version = version;
@@ -58,7 +59,11 @@ public final class CustomAnimationConfig implements Comparable<CustomAnimationCo
 
 	@Override
 	public int compareTo(@NotNull CustomAnimationConfig o) {
-		return Integer.compare(o.getPriority(), this.priority);
+		int compare = Integer.compare(this.priority, o.getPriority());
+		if (compare == 0) {
+			compare = this.configPath.compareTo(o.getConfigPath());
+		}
+		return compare;
 	}
 
 	@Override

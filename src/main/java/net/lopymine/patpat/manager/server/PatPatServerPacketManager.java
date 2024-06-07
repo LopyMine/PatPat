@@ -14,6 +14,11 @@ import net.lopymine.patpat.config.server.PatPatServerConfig;
 import net.lopymine.patpat.packet.*;
 
 public class PatPatServerPacketManager {
+
+	private PatPatServerPacketManager(){
+		throw new IllegalStateException("Manager class");
+	}
+
 	public static void register() {
 		ServerPlayNetworking.registerGlobalReceiver(PatEntityC2SPacket.TYPE, (packet, sender, responseSender) -> {
 			PatPatServerConfig config = PatPat.getConfig();

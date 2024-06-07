@@ -7,6 +7,7 @@ import net.minecraft.text.HoverEvent.*;
 import java.util.UUID;
 
 public class CommandTextBuilder {
+
 	private final String key;
 	private final MutableText text;
 
@@ -16,7 +17,7 @@ public class CommandTextBuilder {
 	}
 
 	private static MutableText translatable(String key, Object[] args) {
-		return Text.literal(Text.stringifiedTranslatable(key, args).getString().replaceAll("&", "§"));
+		return Text.literal(Text.stringifiedTranslatable(key, args).getString().replace("&", "§"));
 	}
 
 	public static CommandTextBuilder startBuilder(String key, Object... args) {

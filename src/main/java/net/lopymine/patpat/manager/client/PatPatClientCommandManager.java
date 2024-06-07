@@ -3,8 +3,8 @@ package net.lopymine.patpat.manager.client;
 import lombok.experimental.ExtensionMethod;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.EntityType;
-import net.minecraft.text.*;
 import net.minecraft.text.ClickEvent.Action;
+import net.minecraft.text.*;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
@@ -25,7 +25,13 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 
 @ExtensionMethod(TextExtension.class)
 public class PatPatClientCommandManager {
+
 	private static final MutableText PATPAT_ID = Text.literal("[§aPatPat/Client§f] ");
+	private static final String PLAYER_ARGUMENT_NAME = "player";
+
+	private PatPatClientCommandManager() {
+		throw new IllegalStateException("Manager class");
+	}
 
 	public static void register() {
 		ClientCommandRegistrationCallback.EVENT.register(((dispatcher, environment) -> dispatcher.register(literal("patpat-client")
@@ -34,11 +40,11 @@ public class PatPatClientCommandManager {
 								.then(argument("mode", ListModeArgumentType.listMode())
 										.executes(PatPatClientCommandManager::onSetListMode)))
 						.then(literal("add")
-								.then(argument("player", PlayerInfoArgumentType.player())
+								.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
 										.suggests(((context, builder) -> CommandSource.suggestMatching(context.getSource().getPlayerNames(), builder)))
 										.executes(context -> PatPatClientCommandManager.onListChange(context, true))))
 						.then(literal("remove")
-								.then(argument("player", PlayerInfoArgumentType.player())
+								.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
 										.suggests((context, builder) -> CommandSource.suggestMatching(ClientNetworkUtils.getOnlinePlayersFromUuids(context.getSource().getClient().getNetworkHandler(), PatPatClient.getConfig()), builder))
 										.executes(context -> PatPatClientCommandManager.onListChange(context, false))))
 				)
@@ -48,20 +54,11 @@ public class PatPatClientCommandManager {
 	private static int onListChange(CommandContext<FabricClientCommandSource> context, boolean add) {
 		PatPatClientConfig config = PatPatClient.getConfig();
 		Map<UUID, String> players = config.getPlayers();
-		PlayerInfo playerInfo = PlayerInfoArgumentType.getPlayerInfo("player", context);
+		PlayerInfo playerInfo = PlayerInfoArgumentType.getPlayerInfo(PLAYER_ARGUMENT_NAME, context);
 		UUID uuid = playerInfo.getUuid();
 		String name = playerInfo.getNickname();
 
-		boolean success = false;
-		if (add) {
-			if (players.put(uuid, name) == null) {
-				success = true;
-			}
-		} else {
-			if (players.remove(uuid) != null) {
-				success = true;
-			}
-		}
+		boolean success = (add && players.put(uuid, name) == null) || players.remove(uuid) != null;
 
 		String action = add ? "add" : "remove";
 		String result = success ? "success" : "failed";

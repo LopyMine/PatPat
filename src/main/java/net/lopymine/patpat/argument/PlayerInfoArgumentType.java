@@ -17,6 +17,7 @@ import java.util.*;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
+
 	public static final DynamicCommandExceptionType FAILED_PARSING = new DynamicCommandExceptionType(o -> Text.stringifiedTranslatable("patpat.command.argument.player_info.exception.failed_parsing", o));
 	public static final DynamicCommandExceptionType UNKNOWN_PLAYER = new DynamicCommandExceptionType(o -> Text.stringifiedTranslatable("patpat.command.argument.player_info.exception.unknown_player", o));
 	private static final Collection<String> EXAMPLES = Arrays.asList("LopyMine", "nikita51", "192e3748-12d5-4573-a8a5-479cd394a1dc", "7b829ed5-9b74-428f-9b4d-ede06975fbc1");

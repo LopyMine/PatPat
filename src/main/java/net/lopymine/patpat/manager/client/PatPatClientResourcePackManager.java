@@ -1,8 +1,8 @@
 package net.lopymine.patpat.manager.client;
 
+import com.google.common.collect.Lists;
 import com.google.gson.*;
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.resource.*;
 import net.minecraft.util.Identifier;
@@ -22,8 +22,9 @@ import static net.lopymine.patpat.PatPat.MOD_ID;
 
 @ExtensionMethod(EntityExtension.class)
 public class PatPatClientResourcePackManager {
+
 	public static final PatPatClientResourcePackManager INSTANCE = new PatPatClientResourcePackManager();
-	private final LinkedList<List<CustomAnimationConfig>> loadedAnimations = new LinkedList<>();
+	private final List<List<CustomAnimationConfig>> loadedAnimations = new ArrayList<>();
 
 	private PatPatClientResourcePackManager() {
 	}
@@ -42,22 +43,22 @@ public class PatPatClientResourcePackManager {
 
 			JsonObject jsonObject = json.getAsJsonObject();
 			JsonElement jsonElement = jsonObject.get("version");
-			if (jsonElement != null) {
-				String string = jsonElement.getAsString();
-				Version configVersion = Version.of(string);
-				if (configVersion.isLessThan(Version.DEFAULT)) {
-					boolean shouldSkip = config.isSkipOldAnimationsEnabled();
-					PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has old version[{} > {}], {}!", packName, path, Version.DEFAULT, configVersion, (shouldSkip ? "skip" : "there may be errors"));
-					if (shouldSkip) {
-						return;
-					}
-				}
-			} else {
+			if (jsonElement == null) {
 				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' failed to verify version because it's missing, skip", packName, path);
 				return;
 			}
 
+			String string = jsonElement.getAsString();
+			Version configVersion = Version.of(string);
+			if (configVersion.isLessThan(Version.DEFAULT)) {
+				boolean shouldSkip = config.isSkipOldAnimationsEnabled();
+				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has old version[{} > {}], {}!", packName, path, Version.DEFAULT, configVersion, (shouldSkip ? "skip" : "there may be errors"));
+				if (shouldSkip) {
+					return;
+				}
+			}
 			CustomAnimationConfig animationConfig = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json).getOrThrow(false, PatPatClient.LOGGER::error).getFirst();
+			animationConfig.setConfigPath("%s/%s".formatted(packName, path));
 			configs.add(animationConfig);
 		} catch (Exception e) {
 			PatPatClient.LOGGER.warn(String.format("ResourcePack '%s', file '%s' failed to parse, skip", packName, path), e);
@@ -69,26 +70,14 @@ public class PatPatClientResourcePackManager {
 		this.loadedAnimations.clear();
 		PatPatClientManager.reloadPatEntities();
 
-		LinkedList<List<CustomAnimationConfig>> bypassedLoadedAnimations = new LinkedList<>();
-		// TODO
-		//  Этот код нужно переписать/дописать т.к. сейчас он работает не совсем правильно
-		//  Сейчас есть проблема в сортировке ресурспаков, так как:
-		//  В packs ресурспаки сортируется вот так: 1)Моды 2)Модовые ресурспаки 3)Встроенные ресурспаки 4)Пользовательские ресурспаки (вроде так)
-		//  Также пользовательские ресурспаки с наибольшим приоритетом в игре находятся в самом конце списка,
-		//  поэтому цикл снизу идёт с конца, но в таком варианте есть ещё другая проблема:
-		//  В таком варианте трудно переместить серверный ресурспак, ведь если ставить его в самый конец, то выйдет что
-		//  он будет по приоритету ниже модовых (самые первые в списке)
+		packs = packs.stream().filter(resourcePack -> resourcePack.getNamespaces(ResourceType.CLIENT_RESOURCES).contains(MOD_ID)).toList();
+		List<List<CustomAnimationConfig>> serverResourcePacks = new ArrayList<>();
+		List<List<CustomAnimationConfig>> resourcePacks = new ArrayList<>();
 
-		for (int i = packs.size() - 1; i > 0; i--) {
-			ResourcePack pack = packs.get(i);
-//			System.out.println(pack.getClass());
+		for (ResourcePack pack : packs) {
 			String resourcePackName = pack.getName();
-//			System.out.println(resourcePackName);
-			if (!pack.getNamespaces(ResourceType.CLIENT_RESOURCES).contains(MOD_ID)) {
-				continue;
-			}
-
 			List<CustomAnimationConfig> animationConfigs = new ArrayList<>();
+
 			PatPatClient.LOGGER.info("Registering {} resource pack", resourcePackName);
 			pack.findResources(ResourceType.CLIENT_RESOURCES, MOD_ID, "textures", (id, input) -> parseConfig(resourcePackName, id, input, animationConfigs, config));
 
@@ -96,17 +85,17 @@ public class PatPatClientResourcePackManager {
 				continue;
 			}
 
-			animationConfigs.sort((Comparator.naturalOrder()));
+			animationConfigs.sort(CustomAnimationConfig::compareTo);
+			Collections.reverse(animationConfigs);
 
-			ResourcePackProfile profile = MinecraftClient.getInstance().getResourcePackManager().getProfile(resourcePackName);
-			boolean addLater = (profile != null && profile.isPinned() && config.isBypassServerResourcePackPriorityEnabled()) || resourcePackName.equals(MOD_ID);
-			if (addLater) {
-				bypassedLoadedAnimations.add(animationConfigs);
+			if (config.isBypassServerResourcePackEnabled() && resourcePackName.startsWith("server/")) {
+				serverResourcePacks.add(animationConfigs);
 			} else {
-				this.loadedAnimations.add(animationConfigs);
+				resourcePacks.add(animationConfigs);
 			}
 		}
-		this.loadedAnimations.addAll(bypassedLoadedAnimations);
+		this.loadedAnimations.addAll(Lists.reverse(resourcePacks));
+		this.loadedAnimations.addAll(Lists.reverse(serverResourcePacks));
 	}
 
 	@Nullable

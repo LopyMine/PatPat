@@ -9,7 +9,12 @@ import java.util.*;
 import org.jetbrains.annotations.*;
 
 public class PatPatClientManager {
+
 	private static final Map<UUID, PatEntity> PAT_ENTITIES = new HashMap<>();
+
+	private PatPatClientManager() {
+		throw new IllegalStateException("Manager class");
+	}
 
 	@Nullable
 	public static PatEntity getPatEntity(@NotNull LivingEntity entity) {

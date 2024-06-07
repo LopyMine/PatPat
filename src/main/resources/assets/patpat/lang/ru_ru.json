@@ -58,7 +58,7 @@
   "patpat.modmenu.server.description": "Настройки, связанные с сервером.",
   "patpat.modmenu.server.option.pat_me_enabled": "Разрешить хлопать меня",
   "patpat.modmenu.server.option.pat_me_enabled.description": "Если включено, другие игроки смогут вас похлопать; если отключено, не смогут.",
-  "patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled": "Включить обход приоритета серверного ресурс-пака",
+  "patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled": "Включить обход серверного ресурс-пака",
   "patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled.description": "Если включено, приоритет сервеного ресурс-пака будет обходиться; если отключено, не будет.",
 
   "patpat.modmenu.formatter.enable_or_disable.true": "Включено",

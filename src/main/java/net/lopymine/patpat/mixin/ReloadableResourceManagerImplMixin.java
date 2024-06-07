@@ -10,7 +10,7 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.client.PatPatClientConfig;
 import net.lopymine.patpat.manager.client.PatPatClientResourcePackManager;
 
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 
 @Mixin(ReloadableResourceManagerImpl.class)
@@ -24,6 +24,6 @@ public class ReloadableResourceManagerImplMixin {
 		if (!config.isModEnabled()) {
 			return;
 		}
-		initialStage.thenRunAsync(() -> PatPatClientResourcePackManager.INSTANCE.reload(packs), applyExecutor);
+		initialStage.thenRunAsync(() -> PatPatClientResourcePackManager.INSTANCE.reload(new ArrayList<>(packs)), applyExecutor);
 	}
 }

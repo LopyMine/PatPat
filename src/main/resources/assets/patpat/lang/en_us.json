@@ -58,7 +58,7 @@
   "patpat.modmenu.server.description": "Server-related settings of PatPat mod.",
   "patpat.modmenu.server.option.pat_me_enabled": "Enable Pat Me",
   "patpat.modmenu.server.option.pat_me_enabled.description": "If enabled, other players will be able to pat you, if disabled, won't be able.",
-  "patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled": "Enable Server Resource Pack Priority Bypassing",
+  "patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled": "Bypass Server Resource Pack",
   "patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled.description": "If enabled, server resource pack priority will bypassing, if disabled, won't.",
 
   "patpat.modmenu.formatter.enable_or_disable.true": "Enabled",

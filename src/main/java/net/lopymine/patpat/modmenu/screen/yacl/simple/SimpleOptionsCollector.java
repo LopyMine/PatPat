@@ -49,10 +49,11 @@ public class SimpleOptionsCollector {
 		String optionDescription = ModMenuUtils.getDescriptionKey(optionKey);
 
 		Builder descriptionBuilder = OptionDescription.createBuilder().text(Text.translatable(optionDescription));
-		switch (content) {
-			case IMAGE -> descriptionBuilder.image(ModMenuUtils.getContentId(content, optionId), 600, 600);
-			case WEBP -> descriptionBuilder.webpImage(ModMenuUtils.getContentId(content, optionId));
-			default -> {}
+		if (content == SimpleContent.IMAGE) {
+			descriptionBuilder.image(ModMenuUtils.getContentId(content, optionId), 600, 600);
+		}
+		if (content == SimpleContent.WEBP) {
+			descriptionBuilder.webpImage(ModMenuUtils.getContentId(content, optionId));
 		}
 		return Option.<C>createBuilder()
 				.name(Text.translatable(optionKey))
@@ -64,8 +65,8 @@ public class SimpleOptionsCollector {
 		return options;
 	}
 
-	public <T> Option<?> getIf(Option<T> option, Supplier<Boolean> condition) {
-		if (condition.get()) {
+	public <T> Option<T> getIf(Option<T> option, BooleanSupplier condition) {
+		if (condition.getAsBoolean()) {
 			return option;
 		}
 		return null;

@@ -1,6 +1,7 @@
 package net.lopymine.patpat.manager.client;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.SocialInteractionsManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.*;
 
@@ -16,6 +17,11 @@ import net.lopymine.patpat.utils.WorldUtils;
 import java.util.UUID;
 
 public class PatPatClientPacketManager {
+
+	private PatPatClientPacketManager() {
+		throw new IllegalStateException("Manager class");
+	}
+
 	public static void register() {
 		ClientPlayNetworking.registerGlobalReceiver(PatEntityS2CPacket.TYPE, ((packet, player, responseSender) -> {
 			PatPatClientConfig config = PatPatClient.getConfig();
@@ -33,11 +39,7 @@ public class PatPatClientPacketManager {
 			if (pattedMe && !config.isPatMeEnabled()) {
 				return;
 			}
-			if ((config.getListMode() == ListMode.WHITELIST && !config.getPlayers().containsKey(playerUuid))
-					|| (config.getListMode() == ListMode.BLACKLIST && config.getPlayers().containsKey(playerUuid))
-					|| MinecraftClient.getInstance().getSocialInteractionsManager().isPlayerBlocked(playerUuid)
-					|| MinecraftClient.getInstance().getSocialInteractionsManager().isPlayerHidden(playerUuid)
-					|| MinecraftClient.getInstance().getSocialInteractionsManager().isPlayerMuted(playerUuid)) {
+			if (isBlocked(config, playerUuid)) {
 				return;
 			}
 			Entity entity = WorldUtils.getEntity(clientWorld, pattedEntityUuid);
@@ -49,5 +51,14 @@ public class PatPatClientPacketManager {
 				PatPatClientSoundManager.playSound(patEntity, player, config.getSoundsVolume());
 			}
 		}));
+	}
+
+	private static boolean isBlocked(PatPatClientConfig config, UUID playerUuid) {
+		SocialInteractionsManager socialManager = MinecraftClient.getInstance().getSocialInteractionsManager();
+		return (config.getListMode() == ListMode.WHITELIST && !config.getPlayers().containsKey(playerUuid))
+				|| (config.getListMode() == ListMode.BLACKLIST && config.getPlayers().containsKey(playerUuid))
+				|| socialManager.isPlayerBlocked(playerUuid)
+				|| socialManager.isPlayerHidden(playerUuid)
+				|| socialManager.isPlayerMuted(playerUuid);
 	}
 }

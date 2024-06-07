@@ -28,7 +28,12 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 @ExtensionMethod(TextExtension.class)
 public class PatPatServerCommandManager {
+
 	private static final MutableText PATPAT_ID = Text.literal("[§aPatPat§f] ");
+
+	private PatPatServerCommandManager(){
+		throw new IllegalStateException("Manager class");
+	}
 
 	public static void register() {
 		CommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess, environment) -> dispatcher.register(literal("patpat")
@@ -57,16 +62,7 @@ public class PatPatServerCommandManager {
 			String name = gameProfile.getName();
 			UUID uuid = gameProfile.getId();
 
-			boolean success = false;
-			if (add) {
-				if (players.put(uuid, name) == null) {
-					success = true;
-				}
-			} else {
-				if (players.remove(uuid) != null) {
-					success = true;
-				}
-			}
+			boolean success = (add && players.put(uuid, name) == null) || players.remove(uuid) != null;
 
 			String action = add ? "add" : "remove";
 			String result = success ? "success" : "failed";

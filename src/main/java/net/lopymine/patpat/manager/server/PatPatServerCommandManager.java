@@ -31,7 +31,7 @@ public class PatPatServerCommandManager {
 
 	private static final MutableText PATPAT_ID = Text.literal("[§aPatPat§f] ");
 
-	private PatPatServerCommandManager(){
+	private PatPatServerCommandManager() {
 		throw new IllegalStateException("Manager class");
 	}
 

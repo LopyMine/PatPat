@@ -1,16 +1,13 @@
 package net.lopymine.patpat.manager.client;
 
-import com.google.gson.*;
+import com.google.gson.JsonElement;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Uuids;
 
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.datafixers.util.*;
 import com.mojang.serialization.*;
 import com.mojang.serialization.DataResult.PartialResult;
-
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.utils.*;
@@ -27,6 +24,7 @@ public class PatPatClientDonorManager {
 	//  https://raw.githubusercontent.com/LopyMine/PatPat/dev/src/main/resources/donors/donors.json
 	private static final String GITHUB_SOURCES_URL = "https://raw.githubusercontent.com/LopyMine/CollisionFix/master/src/main/resources/test.json";
 	private static final String MOD_SOURCES_PATH = "donors/donors.json";
+	private Set<UUID> donors = new HashSet<>();
 
 	private PatPatClientDonorManager() {
 	}
@@ -34,8 +32,6 @@ public class PatPatClientDonorManager {
 	public static PatPatClientDonorManager getInstance() {
 		return PatPatClientDonorManager.INSTANCE;
 	}
-
-	private Set<UUID> donors = new HashSet<>();
 
 	public void loadDonors() {
 		PatPatClient.LOGGER.info("Start loading donors...");

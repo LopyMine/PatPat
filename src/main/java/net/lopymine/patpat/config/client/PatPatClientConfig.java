@@ -33,9 +33,9 @@ public class PatPatClientConfig {
 			Codec.FLOAT.fieldOf("soundsVolume").forGetter(PatPatClientConfig::getSoundsVolume),
 			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatClientConfig::getListMode),
 			Codec.unboundedMap(Uuids.CODEC, Codec.STRING).fieldOf("list").forGetter(PatPatClientConfig::getPlayers),
-			Codec.FLOAT.fieldOf("animationOffsetX").forGetter(PatPatClientConfig::getAnimationOffsetX),
-			Codec.FLOAT.fieldOf("animationOffsetY").forGetter(PatPatClientConfig::getAnimationOffsetY),
-			Codec.FLOAT.fieldOf("animationOffsetZ").forGetter(PatPatClientConfig::getAnimationOffsetZ),
+			Codec.FLOAT.fieldOf("offsetX").forGetter(PatPatClientConfig::getAnimationOffsetX),
+			Codec.FLOAT.fieldOf("offsetY").forGetter(PatPatClientConfig::getAnimationOffsetY),
+			Codec.FLOAT.fieldOf("offsetZ").forGetter(PatPatClientConfig::getAnimationOffsetZ),
 			Codec.BOOL.fieldOf("useDonorAnimationEnabled").forGetter(PatPatClientConfig::isUseDonorAnimationEnabled),
 			Codec.BOOL.fieldOf("skipOldAnimationsEnabled").forGetter(PatPatClientConfig::isSkipOldAnimationsEnabled)
 	).apply(instance, PatPatClientConfig::new));
@@ -45,6 +45,7 @@ public class PatPatClientConfig {
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat-client.json5").toFile();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final Logger LOGGER = LoggerFactory.getLogger("PatPatClientConfig");
+	private final Map<UUID, String> players;
 	private boolean bypassServerResourcePackEnabled;
 	private boolean loweringAnimationEnabled;
 	private boolean nicknameHidingEnabled;
@@ -54,7 +55,6 @@ public class PatPatClientConfig {
 	private boolean modEnabled;
 	private float soundsVolume;
 	private ListMode listMode;
-	private final Map<UUID, String> players;
 	private float animationOffsetX;
 	private float animationOffsetY;
 	private float animationOffsetZ;

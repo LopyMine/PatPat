@@ -24,7 +24,7 @@ public class LivingEntityRendererMixin {
 		}
 
 		CustomAnimationSettingsConfig animationConfig = patEntity.getAnimation();
-		int duration = animationConfig.duration();
+		int duration = animationConfig.getDuration();
 		long time = patEntity.getTimeOfStart();
 		long timeNow = System.currentTimeMillis();
 		if (timeNow >= (time + duration)) {
@@ -34,7 +34,7 @@ public class LivingEntityRendererMixin {
 
 		float animationProgress = MathHelper.clamp((float) (timeNow - time) / duration, 0.0F, 1.0F);
 		animationProgress = (float) (1 - Math.pow(1 - animationProgress, 2));
-		int totalFrames = animationConfig.frameConfig().totalFrames();
+		int totalFrames = animationConfig.getFrameConfig().totalFrames();
 
 		int frame = MathHelper.clamp((int) Math.floor(totalFrames * animationProgress), 0, totalFrames - 1);
 		patEntity.setCurrentFrame(frame);

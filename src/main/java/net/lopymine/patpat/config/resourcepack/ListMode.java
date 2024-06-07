@@ -34,7 +34,7 @@ public enum ListMode implements StringIdentifiable {
 		return Text.literal(String.format("&%s%s&f", this.formatting.getCode(), this.asString()));
 	}
 
- 	@Override
+	@Override
 	public String asString() {
 		return this.id;
 	}

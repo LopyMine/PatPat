@@ -71,7 +71,12 @@ public final class CustomAnimationConfig implements Comparable<CustomAnimationCo
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		CustomAnimationConfig that = (CustomAnimationConfig) o;
-		return priority == that.priority && blacklist == that.blacklist && useForAll == that.useForAll && Objects.equals(version, that.version) && Objects.equals(animation, that.animation) && Objects.equals(entities, that.entities);
+		return priority == that.priority
+				&& blacklist == that.blacklist
+				&& useForAll == that.useForAll
+				&& Objects.equals(version, that.version)
+				&& Objects.equals(animation, that.animation)
+				&& Objects.equals(entities, that.entities);
 	}
 
 	@Override

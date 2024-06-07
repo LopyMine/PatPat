@@ -52,9 +52,9 @@ public abstract class MinecraftClientMixin {
 		}
 		Entity entity = hitResult.getEntity();
 		if (!(entity instanceof LivingEntity livingEntity)
-			|| this.player.isSpectator()
-			|| !this.player.getMainHandStack().isEmpty()
-			|| !this.player.isSneaking()) {
+				|| this.player.isSpectator()
+				|| !this.player.getMainHandStack().isEmpty()
+				|| !this.player.isSneaking()) {
 			return;
 		}
 

@@ -27,7 +27,7 @@ public class PatPatClientSoundManager {
 		if (world == null) {
 			return;
 		}
-		SoundConfig soundConfig = patEntity.getAnimation().soundConfig();
+		SoundConfig soundConfig = patEntity.getAnimation().getSoundConfig();
 		SoundEvent soundEvent = soundConfig.getSound();
 		world.playSound(player,
 				patEntity.getEntity().getBlockPos(),

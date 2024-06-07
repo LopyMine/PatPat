@@ -1,6 +1,7 @@
 package net.lopymine.patpat.utils;
 
 import net.minecraft.util.Identifier;
+
 import org.jetbrains.annotations.NotNull;
 
 import static net.lopymine.patpat.PatPat.MOD_ID;

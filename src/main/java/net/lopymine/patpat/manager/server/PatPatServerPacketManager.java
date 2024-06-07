@@ -15,7 +15,7 @@ import net.lopymine.patpat.packet.*;
 
 public class PatPatServerPacketManager {
 
-	private PatPatServerPacketManager(){
+	private PatPatServerPacketManager() {
 		throw new IllegalStateException("Manager class");
 	}
 

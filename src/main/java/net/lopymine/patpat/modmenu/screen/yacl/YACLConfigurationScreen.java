@@ -42,8 +42,8 @@ public class YACLConfigurationScreen {
 		return SimpleGroupOptionBuilder.createBuilder("main").options(collector -> collector.collect(
 				collector.getBooleanOption("enable_mod", defConfig.isModEnabled(), config::isModEnabled, config::setModEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
 				collector.getIf(
-					collector.getBooleanOption("use_donor_animation", defConfig.isUseDonorAnimationEnabled(), config::isUseDonorAnimationEnabled, config::setUseDonorAnimationEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-					() -> PatPatClientDonorManager.getInstance().isAmDonor()
+						collector.getBooleanOption("use_donor_animation", defConfig.isUseDonorAnimationEnabled(), config::isUseDonorAnimationEnabled, config::setUseDonorAnimationEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
+						() -> PatPatClientDonorManager.getInstance().isAmDonor()
 				)
 		)).build();
 	}

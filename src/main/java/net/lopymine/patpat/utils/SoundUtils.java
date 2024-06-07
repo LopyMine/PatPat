@@ -2,6 +2,7 @@ package net.lopymine.patpat.utils;
 
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+
 import org.jetbrains.annotations.NotNull;
 
 public class SoundUtils {

@@ -40,37 +40,44 @@ public class EntityRendererMixin {
 		}
 
 		CustomAnimationSettingsConfig animation = patEntity.getAnimation();
-		FrameConfig frameConfig = animation.frameConfig();
+		FrameConfig frameConfig = animation.getFrameConfig();
 
 		RenderSystem.enableBlend();
 
 		matrices.push();
-		matrices.translate(0.0F, livingEntity.getNameLabelHeight() - 0.55F + frameConfig.animationOffsetY() + config.getAnimationOffsetY(), 0.0F);
+		matrices.translate(0.0F, livingEntity.getNameLabelHeight() - 0.55F + frameConfig.offsetY() + config.getAnimationOffsetY(), 0.0F);
 		matrices.multiply(this.dispatcher.getRotation());
 		matrices.scale(-0.85F, -0.85F, 0.85F);
 
-		float textureWidth = frameConfig.frameWidth() * frameConfig.totalFrames(); // all texture width
-		float textureFrameWidth = frameConfig.frameWidth() / textureWidth; // one frame size, for example: 0.33
+		int frameWidth = animation.getTextureWidth() / frameConfig.totalFrames();
+		int frameHeight = animation.getTextureHeight();
 
-		float worldFrameWidth = (float) frameConfig.frameWidth() / FrameConfig.DEFAULT_FRAME.frameWidth(); // frame width in !! world !!, default: 1.0F
-		float worldFrameHeight = (float) frameConfig.frameHeight() / FrameConfig.DEFAULT_FRAME.frameWidth(); // frame height in !! world !!, default: 1.0F
+		float scaleX = 1;
+		float scaleY = 1;
+		if (frameHeight > frameWidth) {
+			scaleX = (float) frameWidth / frameHeight;
+		} else if (frameHeight < frameWidth) {
+			scaleY = (float) frameHeight / frameWidth;
+		}
 
-		float x1 = -(worldFrameWidth / 2F) + frameConfig.animationOffsetX() + config.getAnimationOffsetX();
-		float x2 = x1 + worldFrameWidth;
+		scaleX *= frameConfig.scaleX();
+		scaleY *= frameConfig.scaleY();
 
-		float y1 = -(worldFrameHeight / 2F);
-		float y2 = y1 + worldFrameHeight;
+		float x1 = -(scaleX / 2F) + frameConfig.offsetX() + config.getAnimationOffsetX();
+		float x2 = x1 + scaleX;
+		float y1 = -(scaleY / 2F) + frameConfig.offsetY() + config.getAnimationOffsetY();
+		float y2 = y1 + scaleY;
+		float z = frameConfig.offsetZ() + config.getAnimationOffsetZ();
 
-		float z = frameConfig.animationOffsetZ() + config.getAnimationOffsetZ();
-
-		float u1 = patEntity.getCurrentFrame() * textureFrameWidth;
-		float u2 = u1 + textureFrameWidth;
+		float framePercent = (float) 1 / frameConfig.totalFrames();
+		float u1 = patEntity.getCurrentFrame() * framePercent;
+		float u2 = u1 + framePercent;
 		float v1 = 0.0F;
 		float v2 = 1.0F;
 
 		Entry peek = matrices.peek();
 		Matrix4f matrix4f = peek.getPositionMatrix();
-		VertexConsumer buffer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(animation.texture()));
+		VertexConsumer buffer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(animation.getTexture()));
 
 		buffer.vertex(matrix4f, x1, y1, z).color(255, 255, 255, 255).texture(u1, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(0, 1, 0).next();
 		buffer.vertex(matrix4f, x1, y2, z).color(255, 255, 255, 255).texture(u1, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(0, 1, 0).next();

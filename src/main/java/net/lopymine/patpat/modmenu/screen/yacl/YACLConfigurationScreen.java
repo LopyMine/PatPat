@@ -1,12 +1,12 @@
 package net.lopymine.patpat.modmenu.screen.yacl;
 
-import dev.isxander.yacl3.api.*;
 import net.minecraft.client.gui.screen.Screen;
+//? >=1.20 {
+import dev.isxander.yacl3.api.*;
 import net.minecraft.text.Text;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.client.PatPatClientConfig;
-import net.lopymine.patpat.manager.client.PatPatClientDonorManager;
 import net.lopymine.patpat.modmenu.screen.yacl.simple.*;
 
 import java.util.function.Function;
@@ -40,11 +40,7 @@ public class YACLConfigurationScreen {
 
 	private static OptionGroup getMainGroup(PatPatClientConfig defConfig, PatPatClientConfig config) {
 		return SimpleGroupOptionBuilder.createBuilder("main").options(collector -> collector.collect(
-				collector.getBooleanOption("enable_mod", defConfig.isModEnabled(), config::isModEnabled, config::setModEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-				collector.getIf(
-						collector.getBooleanOption("use_donor_animation", defConfig.isUseDonorAnimationEnabled(), config::isUseDonorAnimationEnabled, config::setUseDonorAnimationEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-						() -> PatPatClientDonorManager.getInstance().isAmDonor()
-				)
+				collector.getBooleanOption("enable_mod", defConfig.isModEnabled(), config::isModEnabled, config::setModEnabled, ENABLED_OR_DISABLE_FORMATTER::apply)
 		)).build();
 	}
 
@@ -63,7 +59,7 @@ public class YACLConfigurationScreen {
 
 	private static OptionGroup getVisualGroup(PatPatClientConfig defConfig, PatPatClientConfig config) {
 		return SimpleGroupOptionBuilder.createBuilder("visual").options(collector -> collector.collect(
-				collector.getBooleanOption("lowering_animation_enabled", defConfig.isLoweringAnimationEnabled(), config::isLoweringAnimationEnabled, config::setLoweringAnimationEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
+						//collector.getBooleanOption("lowering_animation_enabled", defConfig.isLoweringAnimationEnabled(), config::isLoweringAnimationEnabled, config::setLoweringAnimationEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
 				collector.getBooleanOption("hiding_nickname_enabled", defConfig.isNicknameHidingEnabled(), config::isNicknameHidingEnabled, config::setNicknameHidingEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
 				collector.getBooleanOption("swing_hand_enabled", defConfig.isSwingHandEnabled(), config::isSwingHandEnabled, config::setSwingHandEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
 				collector.getFloatOptionAsSlider("hand_offset_x", -5F, 5F, 0.01F, defConfig.getAnimationOffsetX(), config::getAnimationOffsetX, config::setAnimationOffsetX, SimpleContent.WEBP),
@@ -79,5 +75,17 @@ public class YACLConfigurationScreen {
 		)).build();
 	}
 }
+//?} else {
+/*public class YACLConfigurationScreen {
+
+	private YACLConfigurationScreen() {
+		throw new IllegalStateException("Screen class");
+	}
+
+	public static Screen createScreen(Screen parent) {
+		throw new IllegalStateException("YACL Screen for PatPat mod available only since 1.20!");
+	}
+}
+*///?}
 
 

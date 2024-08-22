@@ -50,8 +50,7 @@ public class SoundConfig {
 	}
 
 	public SoundConfig(String sound) {
-		Identifier id = IdentifierUtils.id(sound);
-		this.sound = SoundEvent.of(id);
+		this.sound = SoundUtils.getSoundEvent(sound);
 		this.minPitch = 1.0F;
 		this.maxPitch = 1.0F;
 		this.volume = 1.0F;

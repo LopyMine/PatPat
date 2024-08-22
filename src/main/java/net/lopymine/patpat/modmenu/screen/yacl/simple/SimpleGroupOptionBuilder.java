@@ -1,5 +1,6 @@
 package net.lopymine.patpat.modmenu.screen.yacl.simple;
 
+//? >=1.20 {
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.OptionGroup.Builder;
 import net.minecraft.text.Text;
@@ -40,3 +41,6 @@ public class SimpleGroupOptionBuilder {
 		return this.groupBuilder.build();
 	}
 }
+//?}
+
+

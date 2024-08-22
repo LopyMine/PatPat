@@ -1,10 +1,11 @@
 package net.lopymine.patpat.extension;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.registry.Registries;
+import net.minecraft.entity.*;
+
+import net.lopymine.patpat.utils.VersionedThings;
 
 public class EntityExtension {
+
 	private EntityExtension() {
 		throw new IllegalStateException("Extension class");
 	}
@@ -14,6 +15,6 @@ public class EntityExtension {
 	}
 
 	public static String getId(EntityType<?> entityType) {
-		return Registries.ENTITY_TYPE.getId(entityType).toString();
+		return VersionedThings.ENTITY_TYPE.getId(entityType).toString();
 	}
 }

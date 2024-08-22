@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 
 import com.mojang.serialization.JsonOps;
 
+import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.client.PatPatClientConfig;
 import net.lopymine.patpat.config.resourcepack.*;
@@ -16,9 +17,8 @@ import net.lopymine.patpat.extension.EntityExtension;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;
-
-import static net.lopymine.patpat.PatPat.MOD_ID;
 
 @ExtensionMethod(EntityExtension.class)
 public class PatPatClientResourcePackManager {
@@ -29,22 +29,22 @@ public class PatPatClientResourcePackManager {
 	private PatPatClientResourcePackManager() {
 	}
 
-	public static void parseConfig(String packName, Identifier identifier, InputSupplier<InputStream> inputStreamInputSupplier, List<CustomAnimationConfig> configs, PatPatClientConfig config) {
+	public static void parseConfig(String packName, Identifier identifier, Supplier<InputStream> inputStreamInputSupplier, List<CustomAnimationConfig> configs, PatPatClientConfig config) {
 		String path = identifier.getPath();
 		if (!path.endsWith(".json") && !path.endsWith(".json5")) {
 			return;
 		}
 		try (InputStream inputStream = inputStreamInputSupplier.get(); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-			JsonElement json = JsonParser.parseReader(reader);
+			JsonElement json = /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/;
 			if (!json.isJsonObject()) {
-				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' is not a json object, skip", packName, path);
+				PatPatClient.warn("ResourcePack '{}', file '{}' is not a json object, skip", packName, path);
 				return;
 			}
 
 			JsonObject jsonObject = json.getAsJsonObject();
 			JsonElement jsonElement = jsonObject.get("version");
 			if (jsonElement == null) {
-				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' failed to verify version because it's missing, skip", packName, path);
+				PatPatClient.warn("ResourcePack '{}', file '{}' failed to verify version because it's missing, skip", packName, path);
 				return;
 			}
 
@@ -52,34 +52,55 @@ public class PatPatClientResourcePackManager {
 			Version configVersion = Version.of(string);
 			if (configVersion.isLessThan(Version.DEFAULT)) {
 				boolean shouldSkip = config.isSkipOldAnimationsEnabled();
-				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has old version[{} > {}], {}!", packName, path, Version.DEFAULT, configVersion, (shouldSkip ? "skip" : "there may be errors"));
+				PatPatClient.warn("ResourcePack '{}', file '{}' has old version[{} > {}], {}!", packName, path, Version.DEFAULT, configVersion, (shouldSkip ? "skip" : "there may be errors"));
 				if (shouldSkip) {
 					return;
 				}
 			}
-			CustomAnimationConfig animationConfig = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json).getOrThrow(false, PatPatClient.LOGGER::error).getFirst();
+			CustomAnimationConfig animationConfig = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, PatPatClient::error)*//*?}*/.getFirst();
 			animationConfig.setConfigPath("%s/%s".formatted(packName, path));
 			configs.add(animationConfig);
 		} catch (Exception e) {
-			PatPatClient.LOGGER.warn(String.format("ResourcePack '%s', file '%s' failed to parse, skip", packName, path), e);
+			PatPatClient.warn(String.format("ResourcePack '%s', file '%s' failed to parse, skip", packName, path), e);
 		}
 	}
 
-	public void reload(List<ResourcePack> packs) {
+	public void reload(List<ResourcePack> reloadPacks, ResourceManager manager) {
 		PatPatClientConfig config = PatPatClient.getConfig();
 		this.loadedAnimations.clear();
 		PatPatClientManager.reloadPatEntities();
-
-		packs = packs.stream().filter(resourcePack -> resourcePack.getNamespaces(ResourceType.CLIENT_RESOURCES).contains(MOD_ID)).toList();
+		List<ResourcePack> packs = reloadPacks.stream().filter(pack -> pack.getNamespaces(ResourceType.CLIENT_RESOURCES).contains(PatPat.MOD_ID)).toList();
 		List<List<CustomAnimationConfig>> serverResourcePacks = new ArrayList<>();
 		List<List<CustomAnimationConfig>> resourcePacks = new ArrayList<>();
 
 		for (ResourcePack pack : packs) {
-			String resourcePackName = pack.getName();
+			String resourcePackName = /*? >=1.20.5 {*/ pack.getId(); /*?} else {*//*pack.getName();*//*?}*/
 			List<CustomAnimationConfig> animationConfigs = new ArrayList<>();
 
-			PatPatClient.LOGGER.info("Registering {} resource pack", resourcePackName);
-			pack.findResources(ResourceType.CLIENT_RESOURCES, MOD_ID, "textures", (id, input) -> parseConfig(resourcePackName, id, input, animationConfigs, config));
+			PatPatClient.info("Registering {} resource pack", resourcePackName);
+			//? >=1.19.3 {
+			pack.findResources(ResourceType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures", (id, input) -> {
+				try (InputStream inputStream = input.get()) {
+					parseConfig(resourcePackName, id, () -> inputStream, animationConfigs, config);
+				} catch (Exception e) {
+					PatPatClient.error("Failed to read custom animation at {} from {}", id.toString(), resourcePackName);
+				}
+			});//?} else {
+			/*Collection<Identifier> customAnimationIds = pack.findResources(ResourceType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures",/^? <=1.18.2 {^/0,/^?}^/ (identifier) -> {
+				//? >=1.19 {
+				/^return identifier.getPath().endsWith(".json") || identifier.getPath().endsWith(".json5");
+				^///?} else {
+				return identifier.endsWith(".json") || identifier.endsWith(".json5");
+				//?}
+			});
+			for (Identifier customAnimationId : customAnimationIds) {
+				try (InputStream inputStream = /^? >=1.19 {^//^manager.open(customAnimationId)^//^?} else {^/manager.getResource(customAnimationId).getInputStream()/^?}^/) {
+					PatPatClientResourcePackManager.parseConfig(resourcePackName, customAnimationId, () -> inputStream, animationConfigs, config);
+				} catch (Exception e) {
+					PatPatClient.error("Failed to read custom animation at {} from {}", customAnimationId.toString(), resourcePackName);
+				}
+			}
+			*///?}
 
 			if (animationConfigs.isEmpty()) {
 				continue;

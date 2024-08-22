@@ -32,11 +32,11 @@ public class PatPatClientManager {
 		}
 	}
 
-	public static PatEntity pat(@NotNull LivingEntity entity, @NotNull PlayerConfig whoPatted, boolean donor) {
+	public static PatEntity pat(@NotNull LivingEntity entity, @NotNull PlayerConfig whoPatted) {
 		UUID uuid = entity.getUuid();
 		PatEntity patEntity = PAT_ENTITIES.get(uuid);
 		if (patEntity == null) {
-			patEntity = new PatEntity(entity, whoPatted, donor);
+			patEntity = new PatEntity(entity, whoPatted);
 			PAT_ENTITIES.put(uuid, patEntity);
 		} else {
 			patEntity.resetAnimation();

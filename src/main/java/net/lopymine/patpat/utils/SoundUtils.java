@@ -13,8 +13,8 @@ public class SoundUtils {
 
 	@NotNull
 	public static SoundEvent getSoundEvent(@NotNull String value) {
-		Identifier identifier = IdentifierUtils.id(value);
-		return SoundEvent.of(identifier);
+		Identifier id = IdentifierUtils.id(value);
+		return /*? >=1.19.3 {*/SoundEvent.of(id)/*?} else {*//*new SoundEvent(id)*//*?}*/;
 	}
 
 	@NotNull

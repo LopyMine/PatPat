@@ -10,7 +10,8 @@ import net.minecraft.util.Identifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.lopymine.patpat.manager.client.*;
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.manager.client.PatPatClientResourcePackManager;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
 import java.io.*;
@@ -18,6 +19,7 @@ import java.util.*;
 
 @Getter
 public final class CustomAnimationSettingsConfig {
+
 	public static final Codec<CustomAnimationSettingsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.STRING.fieldOf("texture").xmap(IdentifierUtils::textureId, Identifier::toString).forGetter(CustomAnimationSettingsConfig::getTexture),
 			Codec.INT.fieldOf("duration").forGetter(CustomAnimationSettingsConfig::getDuration),
@@ -31,13 +33,7 @@ public final class CustomAnimationSettingsConfig {
 			FrameConfig.DEFAULT_FRAME,
 			SoundConfig.PATPAT_SOUND
 	);
-
-	public static final CustomAnimationSettingsConfig DONOR_ANIMATION = new CustomAnimationSettingsConfig(
-			IdentifierUtils.textureId("donors/golden_patpat.png"),
-			240,
-			FrameConfig.DEFAULT_FRAME,
-			SoundConfig.PATPAT_SOUND
-	);
+	;
 
 	private final Identifier texture;
 	private final int duration;
@@ -47,17 +43,14 @@ public final class CustomAnimationSettingsConfig {
 	private int textureHeight;
 
 	public CustomAnimationSettingsConfig(Identifier texture, int duration, FrameConfig frameConfig, SoundConfig soundConfig) {
-		this.texture = texture;
-		this.duration = duration;
+		this.texture     = texture;
+		this.duration    = duration;
 		this.frameConfig = frameConfig;
 		this.soundConfig = soundConfig;
-		this.getSize();
+		this.loadSize();
 	}
 
-	public static CustomAnimationSettingsConfig of(LivingEntity entity, PlayerConfig whoPatted, boolean donor) {
-		if (donor && PatPatClientDonorManager.getInstance().getDonors().contains(whoPatted.getUuid())) {
-			return DONOR_ANIMATION;
-		}
+	public static CustomAnimationSettingsConfig of(LivingEntity entity, PlayerConfig whoPatted) {
 		PatPatClientResourcePackManager manager = PatPatClientResourcePackManager.INSTANCE;
 		CustomAnimationConfig config = manager.getAnimationConfig(entity, whoPatted);
 		if (config != null) {
@@ -85,21 +78,25 @@ public final class CustomAnimationSettingsConfig {
 	@Override
 	public String toString() {
 		return "CustomAnimationSettingsConfig[" +
-				"texture=" + texture + ", " +
-				"duration=" + duration + ", " +
-				"frameConfig=" + frameConfig + ", " +
-				"soundConfig=" + soundConfig + ']';
+				"texture=" + this.texture + ", " +
+				"duration=" + this.duration + ", " +
+				"frameConfig=" + this.frameConfig + ", " +
+				"soundConfig=" + this.soundConfig + ']';
 	}
 
-	private void getSize() {
-		Optional<Resource> resource = MinecraftClient.getInstance().getResourceManager().getResource(this.texture);
-		if (resource.isEmpty()) {
-			System.out.printf("Texture '%s' is not found from resource%n", this.texture);
-			return;
-		}
-		try (InputStream inputStream = resource.get().getInputStream()) {
+	private void loadSize() {
+		try {
+			/*? >=1.19 {*/
+			Optional<Resource>/*?} else {*//*Resource*//*?}*/ resource = MinecraftClient.getInstance().getResourceManager().getResource(this.texture);
+			//? >=1.19 {
+			if (resource.isEmpty()) {
+				PatPatClient.LOGGER.error("Failed to find texture at '{}'", this.texture);
+				return;
+			}
+			//?}
+			InputStream inputStream = resource/*? >=1.19 {*/.get()/*?}*/.getInputStream();
 			NativeImage nativeImage = NativeImage.read(inputStream);
-			this.textureWidth = nativeImage.getWidth();
+			this.textureWidth  = nativeImage.getWidth();
 			this.textureHeight = nativeImage.getHeight();
 		} catch (IOException e) {
 			e.printStackTrace();

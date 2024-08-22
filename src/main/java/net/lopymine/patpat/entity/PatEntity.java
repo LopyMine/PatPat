@@ -9,21 +9,22 @@ import java.util.*;
 
 @Getter
 public class PatEntity {
+
 	private final LivingEntity entity;
 	private final CustomAnimationSettingsConfig animation;
 	@Setter
 	private int currentFrame;
 	private long timeOfStart;
 
-	public PatEntity(LivingEntity entity, PlayerConfig whoPatted, boolean donor) {
-		this.entity = entity;
-		this.animation = CustomAnimationSettingsConfig.of(entity, whoPatted, donor);
-		this.timeOfStart = System.currentTimeMillis();
+	public PatEntity(LivingEntity entity, PlayerConfig whoPatted) {
+		this.entity       = entity;
+		this.animation    = CustomAnimationSettingsConfig.of(entity, whoPatted);
+		this.timeOfStart  = System.currentTimeMillis();
 		this.currentFrame = 0;
 	}
 
 	public void resetAnimation() {
-		this.timeOfStart = System.currentTimeMillis();
+		this.timeOfStart  = System.currentTimeMillis();
 		this.currentFrame = 0;
 	}
 

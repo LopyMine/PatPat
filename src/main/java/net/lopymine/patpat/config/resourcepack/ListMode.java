@@ -1,23 +1,30 @@
 package net.lopymine.patpat.config.resourcepack;
 
 import net.minecraft.text.Text;
-import net.minecraft.util.*;
+import net.minecraft.util.Formatting;
 
 import com.mojang.serialization.Codec;
 
+import net.lopymine.patpat.utils.TextUtils;
+
 import org.jetbrains.annotations.Nullable;
 
-public enum ListMode implements StringIdentifiable {
-	WHITELIST("WHITELIST", Formatting.DARK_GREEN),
-	BLACKLIST("BLACKLIST", Formatting.DARK_GREEN),
-	DISABLED("DISABLED", Formatting.DARK_RED);
+public enum ListMode {
+	WHITELIST(Formatting.DARK_GREEN),
+	BLACKLIST(Formatting.DARK_GREEN),
+	DISABLED(Formatting.DARK_RED);
 
-	public static final Codec<ListMode> CODEC = StringIdentifiable.createCodec(ListMode::values);
-	private final String id;
+	public static final Codec<ListMode> CODEC = Codec.STRING.xmap((string) -> {
+		ListMode listMode = ListMode.getById(string);
+		if (listMode == null) {
+			listMode = DISABLED;
+		}
+		return listMode;
+	}, Enum::name);
+
 	private final Formatting formatting;
 
-	ListMode(String id, Formatting formatting) {
-		this.id = id;
+	ListMode(Formatting formatting) {
 		this.formatting = formatting;
 	}
 
@@ -31,11 +38,6 @@ public enum ListMode implements StringIdentifiable {
 	}
 
 	public Text getText() {
-		return Text.literal(String.format("&%s%s&f", this.formatting.getCode(), this.asString()));
-	}
-
-	@Override
-	public String asString() {
-		return this.id;
+		return TextUtils.literal(String.format("&%s%s&f", this.formatting./*? >=1.17 {*/getCode()/*?} else {*//*code*//*?}*/, this.name()));
 	}
 }

@@ -1,10 +1,182 @@
+import groovy.json.JsonSlurper
+import groovy.json.JsonBuilder
+
 pluginManagement {
-	repositories {
-		maven {
-			name = 'Fabric'
-			url = 'https://maven.fabricmc.net/'
-		}
-		mavenCentral()
-		gradlePluginPortal()
-	}
+    repositories {
+	    mavenLocal()
+	    mavenCentral()
+	    gradlePluginPortal()
+        maven {
+            name "Fabric"
+            url "https://maven.fabricmc.net/"
+        }
+        maven {
+            name "Kiku Snapshots"
+            url "https://maven.kikugie.dev/snapshots"
+        }
+        maven {
+            name "Kiku Releases"
+            url "https://maven.kikugie.dev/releases"
+        }
+    }
 }
+
+plugins {
+    id "dev.kikugie.stonecutter" version "0.4.4"
+}
+
+def multiVersions = getMultiVersions()
+
+println "Found MC versions: ${multiVersions}"
+
+def additionalDepends = []
+properties.each { k, v ->
+    def key = k.toString()
+    if (key.startsWith("dep.")) {
+        def i = key.indexOf(".") + 1
+        def modId = key.substring(i)
+        additionalDepends.add(modId)
+    }
+}
+
+if (additionalDepends.isEmpty()) {
+    println "Not found any additional depends"
+} else {
+    println "Found additional depends: ${additionalDepends}"
+}
+
+stonecutter {
+    shared {
+        versions(multiVersions)
+        vcsVersion = multiVersions.last()
+    }
+
+    create(rootProject)
+
+    multiVersions.each { multiVersion ->
+        createGradleProperties(multiVersion, additionalDepends)
+        createAW(multiVersion)
+        createMixin(multiVersion)
+    }
+}
+
+rootProject.name = mod_name
+
+def createAW(String version) {
+    def awsFolder = file("src/main/resources/aws/")
+    if (!awsFolder.exists() && !awsFolder.mkdirs()) {
+        return
+    }
+    def awFile = file("src/main/resources/aws/${version}.accesswidener")
+    if (awFile.exists() || !awFile.createNewFile()) {
+        return
+    }
+
+    awFile.createNewFile()
+    def writer = new FileWriter(awFile)
+    writer.write("accessWidener v2 named\n")
+    writer.write("# ${version} AW\n")
+    writer.close()
+    println "Successfully created AW for ${version}"
+}
+
+def createMixin(String version) {
+	def mixinsFolder = file("src/main/resources/mixins/")
+	if (!mixinsFolder.exists() && !mixinsFolder.mkdirs()) {
+		return
+	}
+	def mixinsFile = file("src/main/resources/mixins/${version}-${mod_id}.mixins.json5")
+	if (mixinsFile.exists() || !mixinsFile.createNewFile()) {
+		return
+	}
+
+	def mixinContent = [
+			required: true,
+			package: '${mod_group}.mixin',
+			refmap: '${mod_id}.refmap.json',
+			compatibilityLevel: 'JAVA_${java}',
+			mixins: [],
+			client: [],
+			injectors: [
+					defaultRequire: 1
+			]
+	]
+
+	mixinsFile.text = new JsonBuilder(mixinContent).toPrettyString()
+	println "Successfully created Mixin for ${version}"
+}
+
+def createGradleProperties(String version, ArrayList<String> additionalDepends) {
+    def folderFile = file("/versions/${version}")
+    if (!folderFile.exists() && !folderFile.mkdirs()) {
+        return
+    }
+    def gradleProperties = file("/versions/${version}/gradle.properties")
+    if (gradleProperties.exists() || !gradleProperties.createNewFile()) {
+        return
+    }
+
+    def writer = new FileWriter(gradleProperties)
+    writer.write("# Versioned Properties\n")
+    writer.write("\n")
+    writer.write("# Fabric Properties, check https://fabricmc.net/develop/\n")
+    writer.write("build.yarn=${getYarnVersion(version)}\n")
+    //writer.write("build.fabric_loader=${getFabricLoaderVersion(version)}\n")
+    writer.write("build.fabric_api=${getDependVersion("fabric-api", version)}")
+    if (!additionalDepends.isEmpty()) {
+        writer.write("\n")
+        writer.write("\n")
+        writer.write("# Additional Dependencies Properties\n")
+        additionalDepends.each { depend ->
+            def dep = depend.toString()
+            writer.write("# ${dep}, check https://modrinth.com/mod/${dep}/versions?g=${version}\n")
+            writer.write("dep.${dep}=${getDependVersion(dep, version)}\n")
+        }
+    }
+    writer.close()
+    println "Successfully created gradle.properties for ${version}"
+}
+
+static String getYarnVersion(String minecraftVersion) {
+    def url = new URL("https://meta.fabricmc.net/v2/versions/yarn/${minecraftVersion}?limit=1")
+    def json = new JsonSlurper().parseText(url.text)
+    return json[0]["version"].toString()
+}
+
+static String getFabricLoaderVersion(String minecraftVersion) {
+    def url = new URL("https://meta.fabricmc.net/v2/versions/loader/${minecraftVersion}?limit=1")
+    def json = new JsonSlurper().parseText(url.text)
+    return json[0]["loader"]["version"].toString()
+}
+
+static String getDependVersion(String modId, String minecraftVersion) {
+    def url = new URL("https://api.modrinth.com/v2/project/${modId}/version")
+    def json = new JsonSlurper().parseText(url.text)
+
+    def result = json.findResult { o ->
+        if (o["game_versions"].contains(minecraftVersion) && o["loaders"].contains("fabric")) {
+            return o
+        }
+        return null
+    }
+
+    if (result == null) {
+        return "unknown"
+    }
+
+    return result["version_number"].toString()
+}
+
+String[] getMultiVersions() {
+	def versions = []
+	multi_versions.toString().split(" ").each { s ->
+		def index = s.indexOf("[")
+		if (index == -1) {
+			versions.add(s)
+			return
+		}
+		versions.add(s.substring(0, index))
+	}
+	return versions
+}
+

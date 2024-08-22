@@ -1,0 +1,17 @@
+{
+	"required": true,
+	"package": "${mod_group}.mixin",
+	"refmap": "${mod_id}.refmap.json",
+	"compatibilityLevel": "JAVA_${java}",
+	"mixins": [
+	],
+	"client": [
+		"EntityRendererMixin",
+		"LivingEntityRendererMixin",
+		"MinecraftClientMixin",
+		"TitleScreenMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

@@ -1,10 +1,11 @@
 package net.lopymine.patpat.config.resourcepack;
 
 import lombok.Getter;
-import net.minecraft.util.Uuids;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import net.lopymine.patpat.utils.VersionedThings;
 
 import java.util.*;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class PlayerConfig {
 	public static final Codec<PlayerConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.STRING.optionalFieldOf("name").forGetter(PlayerConfig::getOptionalName),
-			Uuids.CODEC.optionalFieldOf("uuid").forGetter(PlayerConfig::getOptionalUuid)
+			VersionedThings.UUID_CODEC.optionalFieldOf("uuid").forGetter(PlayerConfig::getOptionalUuid)
 	).apply(instance, PlayerConfig::new));
 
 	@Nullable

@@ -2,9 +2,9 @@ package net.lopymine.patpat.utils;
 
 import net.minecraft.util.Identifier;
 
-import org.jetbrains.annotations.NotNull;
+import net.lopymine.patpat.PatPat;
 
-import static net.lopymine.patpat.PatPat.MOD_ID;
+import org.jetbrains.annotations.*;
 
 public class IdentifierUtils {
 
@@ -14,27 +14,29 @@ public class IdentifierUtils {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static Identifier id(@NotNull String path) {
-		if (path.contains(":")) {
-			return new Identifier(path);
-		}
-		return new Identifier(MOD_ID, path);
+	public static Identifier id(@NotNull String id) {
+		return IdentifierUtils.typeId(id, null);
 	}
 
-	public static Identifier textureId(@NotNull String path) {
-		return typeId(path, TEXTURES_PATH);
+	public static Identifier textureId(@NotNull String id) {
+		return IdentifierUtils.typeId(id, TEXTURES_PATH);
 	}
 
-	public static Identifier typeId(@NotNull String path, @NotNull String type) {
-		String namespace = MOD_ID;
+	public static Identifier typeId(@NotNull String id, @Nullable String type) {
+		String namespace = PatPat.MOD_ID;
+		String path = id;
 		String[] split = path.split(":");
 		if (split.length >= 2) {
 			namespace = split[0];
-			path = split[1];
+			path      = split[1];
 		}
-		if (!path.startsWith(type)) {
+		if (type != null && !path.startsWith(type)) {
 			path = type + path;
 		}
-		return new Identifier(namespace, path);
+		//? >=1.19 {
+		return Identifier.of(namespace, path);
+		//?} else {
+		/*return new Identifier(namespace, path);
+		*///?}
 	}
 }

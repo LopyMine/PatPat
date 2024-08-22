@@ -2,7 +2,6 @@ package net.lopymine.patpat.argument;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.*;
-import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 
 import com.mojang.authlib.GameProfile;
@@ -12,17 +11,19 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.*;
 
 import net.lopymine.patpat.argument.PlayerInfoArgumentType.PlayerInfo;
+import net.lopymine.patpat.utils.CommandTextBuilder;
 
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 
-	public static final DynamicCommandExceptionType FAILED_PARSING = new DynamicCommandExceptionType(o -> Text.stringifiedTranslatable("patpat.command.argument.player_info.exception.failed_parsing", o));
-	public static final DynamicCommandExceptionType UNKNOWN_PLAYER = new DynamicCommandExceptionType(o -> Text.stringifiedTranslatable("patpat.command.argument.player_info.exception.unknown_player", o));
+	public static final DynamicCommandExceptionType FAILED_PARSING = new DynamicCommandExceptionType(o -> CommandTextBuilder.startBuilder("argument.player_info.exception.failed_parsing", o).build());
+	public static final DynamicCommandExceptionType UNKNOWN_PLAYER = new DynamicCommandExceptionType(o -> CommandTextBuilder.startBuilder("argument.player_info.exception.unknown_player", o).build());
 	private static final Collection<String> EXAMPLES = Arrays.asList("LopyMine", "nikita51", "192e3748-12d5-4573-a8a5-479cd394a1dc", "7b829ed5-9b74-428f-9b4d-ede06975fbc1");
 
 	private PlayerInfoArgumentType() {
+
 	}
 
 	public static @NotNull PlayerInfoArgumentType player() {
@@ -42,6 +43,7 @@ public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 			if (networkHandler == null) {
 				throw FAILED_PARSING.createWithContext(reader, reader.getString());
 			}
+
 			for (PlayerListEntry entry : networkHandler.getPlayerList()) {
 				GameProfile profile = entry.getProfile();
 				if (profile.getName().equals(s)) {
@@ -65,6 +67,7 @@ public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 	}
 
 	public static class PlayerInfo {
+
 		private final Pair<String, UUID> pair;
 
 		public PlayerInfo(String nickname, UUID uuid) {

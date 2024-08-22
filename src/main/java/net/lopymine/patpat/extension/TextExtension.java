@@ -3,6 +3,7 @@ package net.lopymine.patpat.extension;
 import net.minecraft.text.Text;
 
 public class TextExtension {
+
 	private TextExtension() {
 		throw new IllegalStateException("Extension class");
 	}

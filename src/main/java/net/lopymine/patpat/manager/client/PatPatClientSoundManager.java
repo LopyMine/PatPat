@@ -3,13 +3,12 @@ package net.lopymine.patpat.manager.client;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.*;
 import net.minecraft.sound.*;
 import net.minecraft.util.math.MathHelper;
 
 import net.lopymine.patpat.config.resourcepack.SoundConfig;
 import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.utils.IdentifierUtils;
+import net.lopymine.patpat.utils.*;
 
 public class PatPatClientSoundManager {
 
@@ -18,8 +17,20 @@ public class PatPatClientSoundManager {
 	}
 
 	public static void register() {
-		Registry.register(Registries.SOUND_EVENT, IdentifierUtils.id("patpat"), SoundEvent.of(IdentifierUtils.id("patpat")));
-		Registry.register(Registries.SOUND_EVENT, IdentifierUtils.id("lopi"), SoundEvent.of(IdentifierUtils.id("lopi")));
+		PatPatClientSoundManager.registerModSound("patpat");
+		PatPatClientSoundManager.registerModSound("lopi");
+	}
+
+	private static void registerModSound(String id) {
+		/*? >=1.19.3 {*/
+		net.minecraft.registry.Registry
+		/*?} else {*/
+		/*net.minecraft.util.registry.Registry
+		*//*?}*/.register(
+				VersionedThings.SOUND_EVENT,
+				IdentifierUtils.id(id),
+				SoundUtils.getSoundEvent(id)
+		);
 	}
 
 	public static void playSound(PatEntity patEntity, PlayerEntity player, double volume) {

@@ -21,7 +21,7 @@ public class PatPatConfigManager {
 			return;
 		}
 		if (file.mkdirs()) {
-			PatPat.LOGGER.info("Successfully created PatPat config folder");
+			PatPat.info("Successfully created PatPat config folder");
 		}
 	}
 }

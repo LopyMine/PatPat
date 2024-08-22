@@ -2,14 +2,14 @@ package net.lopymine.patpat.config.server;
 
 import com.google.gson.*;
 import lombok.*;
-import net.minecraft.util.Uuids;
-import org.slf4j.*;
 
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.config.resourcepack.ListMode;
 import net.lopymine.patpat.manager.PatPatConfigManager;
+import net.lopymine.patpat.utils.VersionedThings;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -19,26 +19,26 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 public class PatPatServerConfig {
+
 	public static final Codec<PatPatServerConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatServerConfig::getListMode),
-			Codec.unboundedMap(Uuids.CODEC, Codec.STRING).fieldOf("list").forGetter(PatPatServerConfig::getPlayers)
+			Codec.unboundedMap(VersionedThings.UUID_CODEC, Codec.STRING).fieldOf("list").forGetter(PatPatServerConfig::getList)
 	).apply(instance, PatPatServerConfig::new));
 
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat.json5").toFile();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	private static final Logger LOGGER = LoggerFactory.getLogger("PatPatServerConfig");
-	private final Map<UUID, String> players;
+	private final Map<UUID, String> list;
 	@Setter
 	private ListMode listMode;
 
 	private PatPatServerConfig() {
 		this.listMode = ListMode.DISABLED;
-		this.players = new HashMap<>();
+		this.list     = new HashMap<>();
 	}
 
-	public PatPatServerConfig(ListMode listMode, Map<UUID, String> players) {
+	public PatPatServerConfig(ListMode listMode, Map<UUID, String> list) {
 		this.listMode = listMode;
-		this.players = new HashMap<>(players);
+		this.list     = new HashMap<>(list);
 	}
 
 	public static PatPatServerConfig getInstance() {
@@ -47,11 +47,11 @@ public class PatPatServerConfig {
 
 	private static @NotNull PatPatServerConfig create() {
 		PatPatServerConfig config = new PatPatServerConfig();
-		String json = GSON.toJson(CODEC.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).getOrThrow(false, LOGGER::error));
 		try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
+			String json = GSON.toJson(CODEC.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPat::error));*/
 			writer.write(json);
 		} catch (Exception e) {
-			LOGGER.error("Failed to create config", e);
+			PatPat.error("Failed to create config", e);
 		}
 		return config;
 	}
@@ -62,20 +62,20 @@ public class PatPatServerConfig {
 		}
 
 		try (FileReader reader = new FileReader(CONFIG_FILE, StandardCharsets.UTF_8)) {
-			return CODEC.decode(JsonOps.INSTANCE, JsonParser.parseReader(reader)).getOrThrow(false, LOGGER::error).getFirst();
+			return CODEC.decode(JsonOps.INSTANCE, /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, PatPat::error)*//*?}*/.getFirst();
 		} catch (Exception e) {
-			LOGGER.error("Failed to read config", e);
+			PatPat.error("Failed to read config", e);
 		}
 		return PatPatServerConfig.create();
 	}
 
 	public void save() {
 		CompletableFuture.runAsync(() -> {
-			String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).getOrThrow(false, LOGGER::error));
 			try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
+				String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPat::error));*/
 				writer.write(json);
 			} catch (Exception e) {
-				LOGGER.error("Failed to save config", e);
+				PatPat.error("Failed to save config", e);
 			}
 		});
 	}

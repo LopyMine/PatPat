@@ -1,5 +1,6 @@
 package net.lopymine.patpat.modmenu.screen.yacl.simple;
 
+//? >=1.20 {
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.OptionDescription.Builder;
 import dev.isxander.yacl3.api.controller.*;
@@ -22,7 +23,9 @@ public class SimpleOptionsCollector {
 
 	public Option<Boolean> getBooleanOption(String optionId, boolean defValue, Supplier<Boolean> getter, Consumer<Boolean> setter, ValueFormatter<Boolean> formatter, SimpleContent content) {
 		return this.getOption(optionId, defValue, getter, setter, content)
-				.controller(o -> BooleanControllerBuilder.create(o).coloured(true).formatValue(formatter))
+				.controller(o -> BooleanControllerBuilder.create(o)
+						.coloured(true)
+						.formatValue(formatter))
 				.build();
 	}
 
@@ -34,7 +37,10 @@ public class SimpleOptionsCollector {
 
 	public Option<Boolean> getBooleanOption(String optionId, boolean defValue, Supplier<Boolean> getter, Consumer<Boolean> setter, ValueFormatter<Boolean> formatter) {
 		return this.getOption(optionId, defValue, getter, setter, SimpleContent.NONE)
-				.controller(o -> BooleanControllerBuilder.create(o).coloured(true).formatValue(formatter))
+				.controller(o -> BooleanControllerBuilder.create(o)
+						.coloured(true)
+						.formatValue(formatter)
+				)
 				.build();
 	}
 
@@ -72,3 +78,5 @@ public class SimpleOptionsCollector {
 		return null;
 	}
 }
+//?}
+

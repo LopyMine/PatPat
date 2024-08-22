@@ -8,7 +8,6 @@ import net.minecraft.text.*;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command.v2.*;
 
 import net.lopymine.patpat.argument.*;
 import net.lopymine.patpat.argument.PlayerInfoArgumentType.PlayerInfo;
@@ -20,13 +19,21 @@ import net.lopymine.patpat.utils.*;
 
 import java.util.*;
 
+//? >=1.19 {
+import net.fabricmc.fabric.api.client.command.v2.*;
+
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+//?} else {
+/*import net.fabricmc.fabric.api.client.command.v1.*;
+import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.argument;
+import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
+*///?}
 
 @ExtensionMethod(TextExtension.class)
 public class PatPatClientCommandManager {
 
-	private static final MutableText PATPAT_ID = Text.literal("[§aPatPat/Client§f] ");
+	private static final MutableText PATPAT_ID = TextUtils.literal("[§aPatPat/Client§f] ");
 	private static final String PLAYER_ARGUMENT_NAME = "player";
 
 	private PatPatClientCommandManager() {
@@ -34,21 +41,27 @@ public class PatPatClientCommandManager {
 	}
 
 	public static void register() {
-		ClientCommandRegistrationCallback.EVENT.register(((dispatcher, environment) -> dispatcher.register(literal("patpat-client")
-				.then(literal("list")
-						.then(literal("set")
-								.then(argument("mode", ListModeArgumentType.listMode())
-										.executes(PatPatClientCommandManager::onSetListMode)))
-						.then(literal("add")
-								.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
-										.suggests(((context, builder) -> CommandSource.suggestMatching(context.getSource().getPlayerNames(), builder)))
-										.executes(context -> PatPatClientCommandManager.onListChange(context, true))))
-						.then(literal("remove")
-								.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
-										.suggests((context, builder) -> CommandSource.suggestMatching(ClientNetworkUtils.getOnlinePlayersFromUuids(context.getSource().getClient().getNetworkHandler(), PatPatClient.getConfig()), builder))
-										.executes(context -> PatPatClientCommandManager.onListChange(context, false))))
+		/*? >=1.19 {*/
+		ClientCommandRegistrationCallback.EVENT.register(((dispatcher, environment) -> dispatcher
+				/*?} else {*/
+				/*ClientCommandManager.DISPATCHER
+				 *//*?}*/
+				.register(literal("patpat-client")
+						.then(literal("list")
+								.then(literal("set")
+										.then(argument("mode", ListModeArgumentType.listMode())
+												.executes(PatPatClientCommandManager::onSetListMode)))
+								.then(literal("add")
+										.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
+												.suggests(((context, builder) -> CommandSource.suggestMatching(context.getSource().getPlayerNames(), builder)))
+												.executes(context -> PatPatClientCommandManager.onListChange(context, true))))
+								.then(literal("remove")
+										.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
+												.suggests((context, builder) -> CommandSource.suggestMatching(ClientNetworkUtils.getOnlinePlayersFromUuids(context.getSource().getClient().getNetworkHandler(), PatPatClient.getConfig()), builder))
+												.executes(context -> PatPatClientCommandManager.onListChange(context, false))))
+						)
 				)
-		)));
+				/*? >=1.19 {*/))/*?}*/;
 	}
 
 	private static int onListChange(CommandContext<FabricClientCommandSource> context, boolean add) {
@@ -62,7 +75,7 @@ public class PatPatClientCommandManager {
 
 		String action = add ? "add" : "remove";
 		String result = success ? "success" : "failed";
-		String key = String.format("patpat.command.list.%s.%s", action, result);
+		String key = String.format("list.%s.%s", action, result);
 
 		Text text = CommandTextBuilder.startBuilder(key, name)
 				.withShowEntity(EntityType.PLAYER, uuid, name)
@@ -71,9 +84,9 @@ public class PatPatClientCommandManager {
 
 		context.getSource().sendFeedback(PATPAT_ID.copy().append(text));
 		if (success) {
-			PatPatClient.LOGGER.info(text.asString());
+			PatPatClient.info(text.asString());
 		} else {
-			PatPatClient.LOGGER.warn(text.asString());
+			PatPatClient.warn(text.asString());
 		}
 
 		config.save();
@@ -86,10 +99,10 @@ public class PatPatClientCommandManager {
 		config.setListMode(mode);
 		config.save();
 
-		Text text = CommandTextBuilder.startBuilder("patpat.command.list.mode.success", mode.getText()).build();
+		Text text = CommandTextBuilder.startBuilder("list.mode.success", mode.getText()).build();
 
 		context.getSource().sendFeedback(PATPAT_ID.copy().append(text));
-		PatPatClient.LOGGER.info(text.asString());
+		PatPatClient.info(text.asString());
 		return Command.SINGLE_SUCCESS;
 	}
 }

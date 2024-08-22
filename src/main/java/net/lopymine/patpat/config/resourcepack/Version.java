@@ -2,12 +2,14 @@ package net.lopymine.patpat.config.resourcepack;
 
 import com.mojang.serialization.Codec;
 
+import net.lopymine.patpat.PatPat;
+
 import org.jetbrains.annotations.NotNull;
 
 public record Version(int major, int minor, int patch) {
 
 	public static final Codec<Version> CODEC = Codec.STRING.xmap(Version::of, Version::toString);
-	public static final Version DEFAULT = new Version(1, 0, 0);
+	public static final Version DEFAULT = Version.of(PatPat.MOD_VERSION);
 
 	public static Version of(@NotNull String version) {
 		String[] numbers = version.split("\\.");
@@ -16,18 +18,9 @@ public record Version(int major, int minor, int patch) {
 		int patch = 0;
 		try {
 			major = Integer.parseInt(numbers[0]);
-		} catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {
-			// An error occurred while parsing major value
-		}
-		try {
 			minor = Integer.parseInt(numbers[1]);
-		} catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {
-			// An error occurred while parsing minor value
-		}
-		try {
 			patch = Integer.parseInt(numbers[2]);
-		} catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {
-			// An error occurred while parsing patch value
+		} catch (Exception ignored) {
 		}
 		return new Version(major, minor, patch);
 	}

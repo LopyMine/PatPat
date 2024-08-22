@@ -16,3 +16,5 @@ public enum SimpleContent {
 		this.fileExtension = fileExtension;
 	}
 }
+
+

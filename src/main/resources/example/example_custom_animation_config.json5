@@ -1,67 +1,67 @@
+// no j52j
+// The comment above is important, see https://github.com/LopyMine/Mossy?tab=readme-ov-file#about-json5-files
 {
-  "version": "1.0.0",
-  "priority": 1,
-  // Optional, default 0
+	"version": "1.0.0",
+	"priority": 1,
+	// Optional, default 0
 
-  "animation": {
-    "texture": "patpat:textures/test1/custom_hand.png",
-    "duration": 230,
-    "frame": {
-      "totalFrames": 3,
-      // Total frames on your texture
-      "scaleX": 1,
-      // Frame scale width, supports float numbers, optional, default 0.9
-      "scaleY": 1,
-      // Frame scale height, supports float numbers, optional, default 0.9
-      "offsetX": 0,
-      // Optional, default 0, supports float numbers, like 0.543, 0.2, 0.00002
-      "offsetY": 0,
-      // Optional, default 0, supports float numbers, like 0.543, 0.2, 0.00002
-      "offsetZ": 0
-      // Optional, default 0, supports float numbers, like 0.543, 0.2, 0.00002
-    },
-    "sound": {
-      "id": "patpat:bonk",
-      "min_pitch": 0.9,
-      // Optional, default 1
-      "max_pitch": 1.2,
-      // Optional, default 1
-      "volume": 2.5
-      // Optional, default 1
-    },
-    // Or you can just use "sound": "patpat:bonk"
-  },
-  "override": false,
-  // Optional, default 'false', if true then this config will be for all mobs without considering "entities"
-  "blacklist": false,
-  // Optional, default 'false', if true then this config will be for all mobs except "entities"
+	"animation": {
+		"texture": "patpat:textures/test1/custom_hand.png",
+		"duration": 230,
+		"frame": {
+			"totalFrames": 3,
+			// Total frames on your texture
+			"scaleX": 1,
+			// Frame scale width, supports float numbers, optional, default 1
+			"scaleY": 1,
+			// Frame scale height, supports float numbers, optional, default 1
+			"offsetX": 0,
+			// Optional, default 0, supports float numbers, like 0.543, 0.2, 0.00002
+			"offsetY": 0,
+			// Optional, default 0, supports float numbers, like 0.543, 0.2, 0.00002
+			"offsetZ": 0
+			// Optional, default 0, supports float numbers, like 0.543, 0.2, 0.00002
+		},
+		"sound": {
+			"id": "patpat:bonk",
+			"min_pitch": 0.9,
+			// Optional, default 1
+			"max_pitch": 1.2,
+			// Optional, default 1
+			"volume": 2.5
+			// Optional, default 1
+		},
+		// Or you can use "sound": "patpat:bonk"
+	},
+	"blacklist": false,
+	// Optional, default 'false', if true, then this config will be for all mobs except "entities"
 
-  "entities": [
-    "minecraft:goat",
-    "minecraft:cat",
-    {
-      "id": "minecraft:player",
-      "name": "LopyMine",
-      // Optional
-      "uuid": "192e3748-12d5-4573-a8a5-479cd394a1dc"
-      // Optional
-    },
-    // Detailed entity info
-    {
-      "id": "minecraft:goat",
-      "name": "Funny Goat",
-      // Optional
-      "from": [
-        // Optional
-        {
-          "name": "nikita51",
-          // Optional
-          "uuid": "7b829ed59b74428f9b4dede06975fbc1"
-          // Optional
-        }
-        // If both fields are missing, will be thrown error
-      ]
-    }
-  ],
-  // Or you can just use "entities": "minecraft:goat", for one entity
+	"entities": [
+		"minecraft:goat",
+		"minecraft:cat",
+		{
+			"id": "minecraft:player",
+			"name": "LopyMine",
+			// Optional
+			"uuid": "192e3748-12d5-4573-a8a5-479cd394a1dc"
+			// Optional
+		},
+		// Detailed entity info
+		{
+			"id": "minecraft:goat",
+			"name": "Funny Goat",
+			// Optional
+			"from": [
+				// Optional
+				{
+					"name": "nikita51",
+					// Optional
+					"uuid": "7b829ed59b74428f9b4dede06975fbc1"
+					// Optional
+				}
+				// If both fields are missing, will be thrown error
+			]
+		}
+	],
+	// Or you can use "entities": "minecraft:goat", for one entity
 }

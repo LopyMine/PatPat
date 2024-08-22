@@ -4,7 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public record FrameConfig(int totalFrames, float scaleX, float scaleY, float offsetX, float offsetY, float offsetZ) {
-	public static final FrameConfig DEFAULT_FRAME = new FrameConfig(5, 0.9F, 0.9F, 0F, 0F, 0F);
+
+	public static final FrameConfig DEFAULT_FRAME = new FrameConfig(5, 1F, 1F, 0F, 0F, 0F);
 
 	public static final Codec<FrameConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.fieldOf("totalFrames").orElse(DEFAULT_FRAME.totalFrames()).forGetter(FrameConfig::totalFrames),

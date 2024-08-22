@@ -10,12 +10,13 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
 public class ServerNetworkUtils {
+
 	private ServerNetworkUtils() {
 		throw new IllegalStateException("Utility class");
 	}
 
 	public static List<String> getPlayersFromList(@NotNull PlayerManager playerManager, @NotNull PatPatServerConfig config) {
-		return config.getPlayers().entrySet().stream().flatMap(entry -> {
+		return config.getList().entrySet().stream().flatMap(entry -> {
 			ServerPlayerEntity entity = playerManager.getPlayer(entry.getKey());
 			if (entity == null) {
 				return Stream.of(entry.getValue());

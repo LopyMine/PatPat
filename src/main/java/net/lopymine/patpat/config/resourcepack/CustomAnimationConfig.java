@@ -16,6 +16,7 @@ import org.jetbrains.annotations.*;
 @Setter
 @ExtensionMethod(EntityExtension.class)
 public final class CustomAnimationConfig implements Comparable<CustomAnimationConfig> {
+
 	public static final Codec<CustomAnimationConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Version.CODEC.fieldOf("version").forGetter(CustomAnimationConfig::getVersion),
 			Codec.INT.optionalFieldOf("priority", 0).forGetter(CustomAnimationConfig::getPriority),
@@ -33,11 +34,11 @@ public final class CustomAnimationConfig implements Comparable<CustomAnimationCo
 	private String configPath;
 
 	public CustomAnimationConfig(Version version, int priority, CustomAnimationSettingsConfig animation, boolean blacklist, List<EntityConfig> entities) {
-		this.version = version;
-		this.priority = priority;
+		this.version   = version;
+		this.priority  = priority;
 		this.animation = animation;
 		this.blacklist = blacklist;
-		this.entities = entities;
+		this.entities  = entities;
 		this.useForAll = entities.stream().anyMatch(config -> config.getEntityId().equals("all"));
 	}
 

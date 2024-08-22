@@ -2,13 +2,13 @@ package net.lopymine.patpat.config.resourcepack;
 
 import lombok.Getter;
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.util.Uuids;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.extension.EntityExtension;
+import net.lopymine.patpat.utils.VersionedThings;
 
 import java.util.*;
 import org.jetbrains.annotations.*;
@@ -16,10 +16,11 @@ import org.jetbrains.annotations.*;
 @Getter
 @ExtensionMethod(EntityExtension.class)
 public class EntityConfig {
+
 	public static final Codec<EntityConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.STRING.fieldOf("id").forGetter(EntityConfig::getEntityId),
 			Codec.STRING.optionalFieldOf("name").forGetter(EntityConfig::getOptionalEntityName),
-			Uuids.CODEC.optionalFieldOf("uuid").forGetter(EntityConfig::getOptionalEntityUuid),
+			VersionedThings.UUID_CODEC.optionalFieldOf("uuid").forGetter(EntityConfig::getOptionalEntityUuid),
 			PlayerConfig.CODEC.listOf().optionalFieldOf("from").forGetter(EntityConfig::getOptionalFrom)
 	).apply(instance, EntityConfig::new));
 
@@ -67,9 +68,9 @@ public class EntityConfig {
 	private final List<PlayerConfig> entitiesFrom;
 
 	public EntityConfig(@NotNull String entityId, Optional<String> entityName, Optional<UUID> entityUuid, Optional<List<PlayerConfig>> entitiesFrom) {
-		this.entityId = entityId;
-		this.entityName = entityName.orElse(null);
-		this.entityUuid = entityUuid.orElse(null);
+		this.entityId     = entityId;
+		this.entityName   = entityName.orElse(null);
+		this.entityUuid   = entityUuid.orElse(null);
 		this.entitiesFrom = entitiesFrom.orElse(null);
 	}
 

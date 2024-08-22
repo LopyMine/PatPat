@@ -1,28 +1,30 @@
+// no j52j
+// The comment above is important, see https://github.com/LopyMine/Mossy?tab=readme-ov-file#about-json5-files
 {
-  "version": "1.0.0",
-  "priority": 1,
-  "animation": {
-    "texture": "patpat:textures/default/patpat.png",
-    "duration": 350,
-    "frame": {
-      "totalFrames": 5,
-      "frameWidth": 112,
-      "frameHeight": 112
-    },
-    "sound": "patpat:lopi"
-  },
-  "entities": {
-    "id": "minecraft:goat",
-    "name": "Снежа",
-    "from": [
-      {
-        "name": "LopyMine",
-        "uuid": "192e3748-12d5-4573-a8a5-479cd394a1dc"
-      },
-      {
-        "name": "nikita51",
-        "uuid": "7b829ed5-9b74-428f-9b4d-ede06975fbc1"
-      }
-    ]
-  }
+	"version": "1.0.0",
+	"priority": 1,
+	"animation": {
+		"texture": "patpat:textures/default/patpat.png",
+		"duration": 350,
+		"frame": {
+			"totalFrames": 5,
+			"frameWidth": 112,
+			"frameHeight": 112
+		},
+		"sound": "patpat:lopi"
+	},
+	"entities": {
+		"id": "minecraft:goat",
+		"name": "Снежа",
+		"from": [
+			{
+				"name": "LopyMine",
+				"uuid": "192e3748-12d5-4573-a8a5-479cd394a1dc"
+			},
+			{
+				"name": "nikita51",
+				"uuid": "7b829ed5-9b74-428f-9b4d-ede06975fbc1"
+			}
+		]
+	}
 }

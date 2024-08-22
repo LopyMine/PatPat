@@ -4,6 +4,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.text.*;
 import net.minecraft.text.HoverEvent.*;
 
+import net.lopymine.patpat.PatPat;
+
 import java.util.UUID;
 
 public class CommandTextBuilder {
@@ -12,20 +14,31 @@ public class CommandTextBuilder {
 	private final MutableText text;
 
 	private CommandTextBuilder(String key, Object... args) {
-		this.key = key;
+		this.key  = key;
 		this.text = CommandTextBuilder.translatable(key, args);
 	}
 
-	private static MutableText translatable(String key, Object[] args) {
-		return Text.literal(Text.stringifiedTranslatable(key, args).getString().replace("&", "§"));
+	private static MutableText translatable(String key, Object... args) {
+		for (int i = 0; i < args.length; ++i) {
+			Object object = args[i];
+			if (!isPrimitive(object) && !(object instanceof Text)) {
+				args[i] = String.valueOf(object);
+			}
+		}
+
+		return TextUtils.literal(PatPat.text(key, args).getString().replace("&", "§"));
+	}
+
+	private static boolean isPrimitive(Object object) {
+		return object instanceof Number || object instanceof Boolean || object instanceof String;
 	}
 
 	public static CommandTextBuilder startBuilder(String key, Object... args) {
-		return new CommandTextBuilder(key, args);
+		return new CommandTextBuilder("command." + key, args);
 	}
 
 	public CommandTextBuilder withShowEntity(EntityType<?> type, UUID uuid, String name) {
-		return this.withShowEntity(type, uuid, Text.literal(name));
+		return this.withShowEntity(type, uuid, TextUtils.literal(name));
 	}
 
 	public CommandTextBuilder withShowEntity(EntityType<?> type, UUID uuid, Text name) {

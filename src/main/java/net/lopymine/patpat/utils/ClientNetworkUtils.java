@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.*;
 
 public class ClientNetworkUtils {
+
 	private ClientNetworkUtils() {
 		throw new IllegalStateException("Utility class");
 	}

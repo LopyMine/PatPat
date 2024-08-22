@@ -8,6 +8,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.utils.TextUtils;
 
 import java.net.*;
 import java.util.*;
@@ -18,10 +19,10 @@ public class NoConfigLibrariesScreen {
 		throw new IllegalStateException("Screen class, use NoConfigLibrariesScreen.createScreen(...) method!");
 	}
 
-	private static final Text TITLE = Text.translatable("patpat.modmenu.title");
-	private static final Text MESSAGE = Text.translatable("patpat.modmenu.no_config_libraries_screen.message");
-	private static final Text OPEN_YACL_PAGE = Text.translatable("patpat.modmenu.no_config_libraries_screen.open_yacl_page");
-	private static final Text OPEN_CLOTH_CONFIG_PAGE = Text.translatable("patpat.modmenu.no_config_libraries_screen.open_cloth_config_page");
+	private static final Text TITLE = TextUtils.translatable("patpat.modmenu.title");
+	private static final Text MESSAGE = TextUtils.translatable("patpat.modmenu.no_config_libraries_screen.message");
+	private static final Text OPEN_YACL_PAGE = TextUtils.translatable("patpat.modmenu.no_config_libraries_screen.open_yacl_page");
+	private static final Text OPEN_CLOTH_CONFIG_PAGE = TextUtils.translatable("patpat.modmenu.no_config_libraries_screen.open_cloth_config_page");
 	private static final Set<String> ALLOWED_PROTOCOLS = Sets.newHashSet("http", "https");
 	private static final String YACL_MODRINTH_LINK = "https://modrinth.com/mod/yacl/versions?l=fabric&g=";
 	private static final String CLOTH_CONFIG_API_MODRINTH_LINK = "https://modrinth.com/mod/cloth-config/versions?l=fabric&g=";
@@ -31,7 +32,7 @@ public class NoConfigLibrariesScreen {
 			@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 				if (keyCode == 256 && this.shouldCloseOnEsc()) {
-					this.close();
+					MinecraftClient.getInstance()./*? <=1.17 {*//*openScreen*//*?} else {*/setScreen/*?}*/(parent);
 					return true;
 				}
 				return super.keyPressed(keyCode, scanCode, modifiers);
@@ -40,11 +41,6 @@ public class NoConfigLibrariesScreen {
 			@Override
 			public boolean shouldCloseOnEsc() {
 				return true;
-			}
-
-			@Override
-			public void close() {
-				MinecraftClient.getInstance().setScreen(parent);
 			}
 		};
 	}
@@ -63,7 +59,7 @@ public class NoConfigLibrariesScreen {
 			}
 			Util.getOperatingSystem().open(link);
 		} catch (URISyntaxException e) {
-			PatPatClient.LOGGER.error("Can't open {} Modrinth page: ", (bl ? "YACL" : "Cloth Config API"), e);
+			PatPatClient.error("Can't open {} Modrinth page: ", (bl ? "YACL" : "Cloth Config API"), e);
 		}
 	}
 }

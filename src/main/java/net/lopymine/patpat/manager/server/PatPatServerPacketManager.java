@@ -13,6 +13,9 @@ import net.lopymine.patpat.config.resourcepack.ListMode;
 import net.lopymine.patpat.config.server.PatPatServerConfig;
 import net.lopymine.patpat.packet.*;
 
+//? <=1.19.3
+/*import net.minecraft.network.PacketByteBuf;*/
+
 public class PatPatServerPacketManager {
 
 	private PatPatServerPacketManager() {
@@ -20,24 +23,46 @@ public class PatPatServerPacketManager {
 	}
 
 	public static void register() {
-		ServerPlayNetworking.registerGlobalReceiver(PatEntityC2SPacket.TYPE, (packet, sender, responseSender) -> {
-			PatPatServerConfig config = PatPat.getConfig();
-			GameProfile senderProfile = sender.getGameProfile();
-			if ((config.getListMode() == ListMode.WHITELIST && !config.getPlayers().containsKey(senderProfile.getId())) || (config.getListMode() == ListMode.BLACKLIST && config.getPlayers().containsKey(sender.getUuid()))) {
-				return;
-			}
-			ServerWorld serverWorld = sender.getServerWorld();
-			Entity entity = serverWorld.getEntity(packet.getPattedEntityUuid());
-			if (entity == null) {
-				return;
-			}
-			ChunkPos chunkPos = sender.getChunkPos();
-			for (ServerPlayerEntity player : PlayerLookup.tracking(serverWorld, chunkPos)) {
-				if (player == sender) {
-					continue;
-				}
-				ServerPlayNetworking.send(player, new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderProfile.getId(), senderProfile.getName(), packet.isDonor()));
-			}
-		});
+		//? >=1.20.5 {
+		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playC2S().register(PatEntityC2SPacket.TYPE, PatEntityC2SPacket.CODEC);
+		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C().register(PatEntityS2CPacket.TYPE, PatEntityS2CPacket.CODEC);
+		//?}
+
+		ServerPlayNetworking.registerGlobalReceiver(PatEntityC2SPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
+				//? >=1.20.5 {
+				(packet, context) -> {
+					ServerPlayerEntity sender = context.player();
+					//?} elif <=1.20.4 && >=1.19.4 {
+					/*(packet, sender, responseSender) -> {
+					 *///?} else {
+				/*(server, sender, handler, buf, responseSender) -> {
+					PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);
+				*///?}
+					PatPatServerConfig config = PatPat.getConfig();
+					GameProfile senderProfile = sender.getGameProfile();
+					if ((config.getListMode() == ListMode.WHITELIST && !config.getList().containsKey(senderProfile.getId())) || (config.getListMode() == ListMode.BLACKLIST && config.getList().containsKey(senderProfile.getId()))) {
+						return;
+					}
+					ServerWorld serverWorld = (ServerWorld) sender./*? >=1.18 {*/getWorld()/*?} else {*//*world*//*?}*/;
+					Entity entity = serverWorld.getEntity(packet.getPattedEntityUuid());
+					if (entity == null) {
+						return;
+					}
+					ChunkPos chunkPos = /*? >=1.17 {*/sender.getChunkPos()/*?} else {*//*serverWorld.getChunk(sender.getBlockPos()).getPos()*//*?}*/;
+					for (ServerPlayerEntity player : PlayerLookup.tracking(serverWorld, chunkPos)) {
+//						if (player.equals(sender)) {
+//							continue;
+//						}
+
+						//? >=1.19.4 {
+						ServerPlayNetworking.send(player, new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderProfile.getId()));
+						//?} else {
+						/*PatEntityS2CPacket response = new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderProfile.getId());
+						PacketByteBuf responseBuf = PacketByteBufs.create();
+						response.write(responseBuf);
+						ServerPlayNetworking.send(player, PatEntityS2CPacket.PACKET_ID, responseBuf);
+						*///?}
+					}
+				});
 	}
 }

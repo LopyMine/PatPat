@@ -1,57 +1,209 @@
+import java.awt.Desktop
+
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
-	id 'maven-publish'
+	id "fabric-loom" version "1.6-SNAPSHOT"
+	id "dev.kikugie.j52j" version "1.0.2"
+	id "me.modmuss50.mod-publish-plugin" version "0.6.3"
+	id "net.lopymine.discord-mod-announcer" version "1.0.0"
 }
 
-version = project.mod_version
-group = project.maven_group
+def modId = project.mod_id
+def modName = project.mod_name
+def modVersion = project.mod_version
+def modGroup = project.mod_group
+def modMavenGroup = project.mod_maven_group
+def modDescription = project.mod_description
+def modAuthors = project.mod_authors
+def modLicense = project.mod_license
+def lombokVersion = project.lombok_version
+
+def mcVersion = stonecutter.current.version.toString() // Current MC version from "./versions/" folder
+def versionsWithSupportRange = getVersionsWithSupportRange()
+def supportedMinecraftVersionRange = getSupportedMinecraftVersionRange(versionsWithSupportRange, mcVersion)
+println "[${mcVersion}] Supported Minecraft Versions: ${supportedMinecraftVersionRange}"
+
+def javaVersionAsInt = getJavaVersionAsInteger(mcVersion)
+def javaVersion = JavaVersion.toVersion(javaVersionAsInt)
+println "[${mcVersion}] Using Java: ${javaVersion.toString()}"
+
+version = "${modVersion}+${supportedMinecraftVersionRange}"
+group = modMavenGroup
+
+j52j {
+	sources(sourceSets["main"])
+}
 
 base {
-	archivesName = project.archives_base_name
+	archivesName = modName
 }
 
 repositories {
-	maven { // YACL
-		name 'Xander Maven'
+	maven { url "https://maven.quiltmc.org/repository/release/" } // Stil for YACL
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" } // Stil for YACL
+	maven {
+		name "Terraformers" // ModMenu
+		url "https://maven.terraformersmc.com/"
+	}
+	maven {
+		name 'Xander Maven' // YACL
 		url 'https://maven.isxander.dev/releases'
 	}
-	maven { url "https://maven.terraformersmc.com/releases/" } // ModMenu
-	maven { url "https://maven.shedaniel.me/" } // Cloth Config
+	maven {
+		url "https://maven.nucleoid.xyz/"
+		name "Nucleoid"
+	}
+	// For Mod Menu, because at 1.20.4 it needs PlaceHolder API, see https://github.com/TerraformersMC/ModMenu/issues/752
+	maven {
+		name "Cloth Config"
+		url "https://maven.shedaniel.me/"
+	} // Cloth Config
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	minecraft "com.mojang:minecraft:${mcVersion}"
+	mappings "net.fabricmc:yarn:${findProperty("build.yarn")}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${findProperty("build.fabric_loader")}"
 
 	// Lombok
-	compileOnly 'org.projectlombok:lombok:1.18.32'
-	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-	// ModMenu
-	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	// Fabric API
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${findProperty("build.fabric_api")}"
+
+	// Mod Menu
+	modImplementation "com.terraformersmc:modmenu:${findProperty("dep.modmenu")}"
 
 	// YACL
-	modImplementation("dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-fabric")
+	if (stonecutter.compare("1.20", mcVersion) != 1) {
+		def minecraftVersionsWithOldYACLMaven = Set.of("1.19.4", "1.20", "1.20.2", "1.20.3")
+		def yaclVersion = findProperty("dep.yacl")
+		if (minecraftVersionsWithOldYACLMaven.contains(mcVersion)) {
+			modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${substringBefore(yaclVersion.toString(), "-", true)}"
+		} else {
+			modImplementation "dev.isxander:yet-another-config-lib:${ yaclVersion}"
+		}
+	}
 
 	// Cloth Config
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") { exclude(group: "net.fabricmc.fabric-api") }
+	def clothConfigVersion = findProperty("dep.cloth-config")
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${stonecutter.compare("1.19", mcVersion) == 1 ? clothConfigVersion : substringBefore(clothConfigVersion, "+")}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+}
+
+loom {
+	mixin {
+		defaultRefmapName.set("${modId}.refmap.json")
+	}
+
+	def accessWidenerFile = project.rootProject.file("src/main/resources/aws/${mcVersion}.accesswidener")
+	if (accessWidenerFile.exists()) {
+		accessWidenerPath = accessWidenerFile
+	}
+
+	def playerProperties = getPlayerProperties()
+
+	def playerNicknameProperty = playerProperties.get("player_nickname").toString() // Your in-game nickname
+	def playerNickname = getNickname(playerNicknameProperty)
+
+	def playerUuidProperty = playerProperties.get("player_uuid").toString() // Your in-game uuid
+	def playerUuid = getUUID(playerUuidProperty, playerUuidProperty.indexOf("-") == -1)
+
+	runConfigs.configureEach { config ->
+		config.setIdeConfigGenerated(true) // generate IDE tasks for running client, server and testmod, datagen if those are present
+		config.setRunDir("../../runs/${config.environment}") // use a global run directory for all versions
+
+		if (config.getEnvironment() == "client") { // setting player properties from "./players/player.properties" file
+			if (playerNickname != null) {
+				config.programArgs("--username", playerNickname.toString())
+			}
+			if (playerUuid != null) {
+				config.programArgs("--uuid", playerUuid.toString())
+			}
+		}
+	}
 }
 
 processResources {
-	inputs.property "version", project.version
+	def props = [:]
+	props.put("mod_id", modId.toString())
+	props.put("mod_authors", modAuthors.toString())
+	props.put("mod_group", modGroup)
+	props.put("mod_description", modDescription.toString())
+	props.put("mod_name", modName.toString())
+	props.put("mod_license", modLicense.toString())
+	props.put("version", version.toString())
+	props.put("fabric_loader", findProperty("build.fabric_loader").toString())
+	props.put("minecraft", mcVersion.toString())
+	props.put("java", javaVersionAsInt.toString())
+	props.put("fabric_api", substringBefore(findProperty("build.fabric_api").toString(), "+"))
+	props.put("fabric_api_id", stonecutter.compare("1.19.1", mcVersion) >= 0 ? "fabric" : "fabric-api")
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+	props.each { key, value ->
+		inputs.property key, value
+	}
+
+	filesMatching(["fabric.mod.json"]) {
+		expand(props)
+	}
+
+	filesMatching("aws/*.accesswidener") {
+		if (!it.getName().startsWith(mcVersion)) {
+			it.exclude()
+		}
+	}
+
+	filesMatching("mixins/*.mixins.json5") {
+		def fileName = it.getName().toString()
+		if (substringBefore(fileName, "-") == mcVersion) {
+			expand(props)
+		} else {
+			it.exclude()
+		}
+	}
+}
+
+stonecutter {
+	swap("mod_version", "\"${findProperty("mod_version")}\";")
+	swap("mod_id", "\"${findProperty("mod_id")}\";")
+	swap("mod_name", "\"${findProperty("mod_name")}\";")
+}
+
+configurations.all {
+	resolutionStrategy {
+		force("net.fabricmc:fabric-loader:${findProperty("build.fabric_loader").toString()}")
 	}
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+	it.options.release = (javaVersionAsInt as int)
+}
+
+tasks.register('buildAndCollect', Copy) {
+	group = 'build'
+	from(tasks.remapJar.archiveFile)
+	into(project.rootProject.layout.buildDirectory.file("libs/"))
+
+	doLast {
+		def provider = project.rootProject.layout.buildDirectory.file("libs/")
+		if (provider.isPresent()) {
+			File file = provider.get().getAsFile()
+			if (file.exists() && file.isDirectory()) {
+				Desktop.getDesktop().open(file)
+			}
+		}
+	}
+
+	dependsOn('rebuildLibs')
+}
+
+tasks.register('rebuildLibs', Delete) {
+	group = 'build'
+	delete(project.rootProject.layout.buildDirectory.file("libs/${modName}-${version}.jar"))
+	delete(project.layout.buildDirectory.file("libs/${modName}-${version}.jar"))
+	delete(project.layout.buildDirectory.file("libs/${modName}-${version}-sources.jar"))
+	finalizedBy("build")
 }
 
 java {
@@ -60,8 +212,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = javaVersion
+	targetCompatibility = javaVersion
 }
 
 jar {
@@ -70,20 +222,335 @@ jar {
 	}
 }
 
-// configure the maven publication
-publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
-			from components.java
+static String substringBefore(Object o, String ch) {
+	substringBefore(o, ch, false)
+}
+
+static String substringBefore(Object o, String ch, boolean last) {
+	if (o == null) {
+		return "null"
+	}
+	def string = o.toString()
+	def i = last ? string.lastIndexOf(ch) : string.indexOf(ch)
+	if (i == -1) {
+		return string
+	} else {
+		return string.substring(0, i)
+	}
+}
+
+static String getSupportedMinecraftVersionRange(VersionWithSupportRange[] versionsWithSupportRange, String currentMinecraftVersion) {
+	def result = versionsWithSupportRange.findResult { v ->
+		def min = v.minVersion.toString()
+		def max = v.maxVersion.toString()
+		if (v.projectVersion == currentMinecraftVersion && min != max) {
+			return "${min}-${max}".toString()
+		}
+		return null
+	}
+	return result == null ? currentMinecraftVersion : result
+}
+
+String getNickname(String nickname) {
+	if (nickname == null) {
+		return null
+	}
+	if (!nickname.matches('^[a-zA-Z0-9_]{2,16}$')) {
+		println "WARNING — Your nickname is wrong, using default nickname 'Player'"
+		return "Player"
+	}
+	return nickname
+}
+
+UUID getUUID(String uuid, boolean undashed) {
+	if (uuid == null) {
+		return null
+	}
+	try {
+		if (undashed) {
+			return UUID.fromString(uuid.replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", '$1-$2-$3-$4-$5'))
+		}
+		return UUID.fromString(uuid)
+	} catch (Exception e) {
+		e.printStackTrace()
+	}
+	println "WARNING — Your UUID is wrong, failed to parse it"
+	return null
+}
+
+// Cannot be static!
+int getJavaVersionAsInteger(String minecraftVersion) {
+	return stonecutter.compare("1.20.5", minecraftVersion) == 1 ?
+			stonecutter.compare("1.18", minecraftVersion) == 1 ?
+					16
+					:
+					17
+			:
+			21
+}
+
+Properties getPlayerProperties() {
+	def playerProperties = new Properties()
+	def playerPropertiesFile = project.rootProject.file("player/player.properties")
+	if (playerPropertiesFile.exists()) {
+		playerPropertiesFile.withInputStream { stream ->
+			playerProperties.load(stream)
+		}
+	} else {
+		println "Failed to find player properties at ${playerPropertiesFile}"
+	}
+	return playerProperties
+}
+
+Properties getPublicationProperties() {
+	def properties = new Properties()
+	def publicationPropertiesFile = project.rootProject.file("publish/publish.properties")
+	if (publicationPropertiesFile.exists()) {
+		publicationPropertiesFile.withInputStream { stream ->
+			properties.load(stream)
+		}
+	}
+	return properties
+}
+
+VersionWithSupportRange[] getVersionsWithSupportRange() {
+	def pubVersions = []
+	def versions = project.multi_versions.toString().split(" ")
+
+	versions.each { version ->
+		if (version.contains("[")) {
+			def range = version.substring(0, version.length() - 1).split("\\[")
+			if (range.size() == 2) {
+				def min = range[0]
+				def max = range[1]
+				if (!max.contains(".")) {
+					def i = min.lastIndexOf(".")
+					if (i != -1) {
+						max = min.substring(0, i + 1) + max
+					} else {
+						max = min + "." + max
+					}
+				}
+				pubVersions.add(new VersionWithSupportRange(projectVersion: min, minVersion: min, maxVersion: max))
+			}
+		} else {
+			pubVersions.add(new VersionWithSupportRange(projectVersion: version, minVersion: version, maxVersion: version))
 		}
 	}
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
+	return pubVersions
+}
+
+def getBuildedModFileOrDefault(String modName, String modVersion, String minecraftVersion) {
+	def path = "libs/${modName}-${modVersion}+${minecraftVersion}.jar"
+	def provider = project.rootProject.layout.buildDirectory.file(path)
+	def regularFile = provider.orNull
+	if (regularFile == null || !regularFile.getAsFile().exists()) {
+		println "[PublishMods] [WARNING] Failed to find jar file for ${minecraftVersion} at '${path}'! Using archive file!"
+		return remapJar.archiveFile
 	}
+	return regularFile.getAsFile()
+}
+
+String getChangeLog() {
+	def file = project.rootProject.file("publish/CHANGELOG.md")
+	if (file.exists()) {
+		def text = file.getText()
+		if (!text.isBlank()) {
+			return text
+		}
+		println "[PublishMods] [WARNING] No changelog provided!"
+	}
+	println "[PublishMods] [WARNING] Failed to find changelog file at '${file.path}'!"
+	return "No changelog specified."
+}
+
+publishMods {
+	def pubProperties = getPublicationProperties()
+	if (pubProperties.isEmpty()) {
+		println "[PublishMods] [WARNING] Failed to publish.properties, configuration canceled"
+		return
+	}
+	def pubVersions = versionsWithSupportRange
+	def modrinthProjectId = pubProperties.get("modrinth_id").toString()
+	def curseForgeProjectId = pubProperties.get("curseforge_id").toString()
+	def maxJavaVersion = JavaVersion.toVersion(pubProperties.get("max_java_version"))
+	def isClient = Boolean.parseBoolean(pubProperties.get("is_for_client").toString())
+	def isTesting = Boolean.parseBoolean(pubProperties.get("test_publish").toString())
+	def isServer = Boolean.parseBoolean(pubProperties.get("is_for_server").toString())
+	def requiresDepends = pubProperties.get("requires").toString().split(" ")
+	def optionalDepends = pubProperties.get("optional").toString().split(" ")
+	def incompatibleDepends = pubProperties.get("incompatible").toString().split(" ")
+	def embedsDepends = pubProperties.get("embeds").toString().split(" ")
+	def loaders = pubProperties.get("loaders").toString().split(" ")
+
+	def versionTypeProperty = pubProperties.get("version_type").toString()
+	def versionType
+	if (versionTypeProperty == "RELEASE") {
+		versionType = STABLE
+	} else if (versionTypeProperty == "BETA") {
+		versionType = BETA
+	} else if (versionTypeProperty == "ALPHA") {
+		versionType = ALPHA
+	} else {
+		return
+	}
+
+	VersionWithSupportRange pubVersion = null
+	def publish = pubVersions.any {
+		def bl = it.projectVersion == mcVersion
+		if (bl) {
+			pubVersion = it
+		}
+		return bl
+	}
+
+	if (publish) {
+		def versionName = "[${supportedMinecraftVersionRange}] ${modName} ${modVersion}"
+		displayName = versionName
+		println "[PublishMods] [INFO] Configuring '${versionName}' for publishing"
+		file = getBuildedModFileOrDefault(modName, modVersion, mcVersion)
+		changelog = getChangeLog()
+		type = versionType
+		modLoaders.addAll(loaders)
+
+		def bl = providers.environmentVariable("CURSEFORGE_API_KEY").getOrNull() == null
+		def bl2 = providers.environmentVariable("MODRINTH_API_KEY").getOrNull() == null
+		def bl3 = isTesting || bl || bl2
+		dryRun = bl3
+		if (bl3) {
+			println "[PublishMods] [WARNING] Test Mode is Enabled!"
+		}
+
+		curseforge {
+			projectId = curseForgeProjectId
+			accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
+
+			for (i in javaVersion.ordinal()..<maxJavaVersion.ordinal() + 1) {
+				javaVersions.add(JavaVersion.values()[i])
+			}
+
+			clientRequired = isClient
+			serverRequired = isServer
+
+			if (pubVersion.minVersion != pubVersion.maxVersion) {
+				minecraftVersionRange {
+					start = pubVersion.minVersion
+					end = pubVersion.maxVersion
+				}
+			} else {
+				minecraftVersions.add(mcVersion)
+			}
+
+			if (requiresDepends.first() != "none") {
+				requires(requiresDepends)
+			}
+			if (optionalDepends.first() != "none") {
+				optional(optionalDepends)
+			}
+			if (incompatibleDepends.first() != "none") {
+				incompatible(incompatibleDepends)
+			}
+			if (embedsDepends.first() != "none") {
+				embeds(embedsDepends)
+			}
+		}
+
+		modrinth {
+			displayName = "${modName} ${modVersion}"
+			projectId = modrinthProjectId
+			accessToken = providers.environmentVariable("MODRINTH_API_KEY")
+
+			if (pubVersion.minVersion != pubVersion.maxVersion) {
+				minecraftVersionRange {
+					start = pubVersion.minVersion
+					end = pubVersion.maxVersion
+				}
+			} else {
+				minecraftVersions.add(mcVersion)
+			}
+
+			if (requiresDepends.first() != "none") {
+				requires(requiresDepends)
+			}
+			if (optionalDepends.first() != "none") {
+				optional(optionalDepends)
+			}
+			if (incompatibleDepends.first() != "none") {
+				incompatible(incompatibleDepends)
+			}
+			if (embedsDepends.first() != "none") {
+				embeds(embedsDepends)
+			}
+		}
+	}
+}
+
+class VersionWithSupportRange {
+	String projectVersion
+	String minVersion
+	String maxVersion
+
+	String toString() {
+		if (minVersion != maxVersion) {
+			return "${projectVersion}[${minVersion}-${maxVersion}]"
+		}
+		return projectVersion
+	}
+}
+
+announceToDiscord {
+	def pubProperties = getPublicationProperties()
+	if (pubProperties.isEmpty()) {
+		return
+	}
+
+	announceMode = lastProject(mcVersion) ?
+			providers.environmentVariable("DISCORD_BOT_TOKEN") == null || Boolean.parseBoolean(pubProperties.get("test_publish").toString()) ?
+					TEST
+					:
+					ENABLE
+			:
+			DISABLE
+
+	token = providers.environmentVariable("DISCORD_BOT_TOKEN")
+	icon = project.rootProject.file("src/main/resources/icon/icon.png")
+
+	title = "${modName} v${modVersion} is out!"
+	showcaseThreadTitle = "${modName} v${modVersion} Showcase"
+	changelog = getChangeLog()
+	color = getDecimalColorFromHEX(pubProperties.get("project_color").toString())
+
+	// Links
+	modrinthLink = "https://modrinth.com/mod/${modId}"
+	curseForgeLink = "https://www.curseforge.com/minecraft/mc-mods/${modId}"
+	githubLink = "https://github.com/LopyMine/${modId}"
+
+	uploaderId = pubProperties.get("uploaderId").toString()
+	announcementChannelId = pubProperties.get("announcementChannelId").toString()
+	testAnnouncementChannelId = pubProperties.get("testAnnouncementChannelId").toString()
+	pingRoles = [modId]
+
+	showcaseImages = getShowcaseFiles(pubProperties)
+}
+
+File[] getShowcaseFiles(Properties pubProperties) {
+	def files = []
+	def string = pubProperties.get("showcase_images").toString()
+	if (string == "none") {
+		return files
+	}
+	def images = string.split(" ")
+	images.each { img ->
+		files.add(project.rootProject.file("img/showcase/${img}"))
+	}
+	return files
+}
+
+static int getDecimalColorFromHEX(String hexColor) {
+	return Integer.parseInt(hexColor, 16)
+}
+
+boolean lastProject(String mcVersion) {
+	mcVersion == versionsWithSupportRange.last().projectVersion
 }

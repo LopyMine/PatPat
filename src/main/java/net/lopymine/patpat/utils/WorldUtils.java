@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.jetbrains.annotations.*;
 
 public class WorldUtils {
+
 	private WorldUtils() {
 		throw new IllegalStateException("Utility class");
 	}

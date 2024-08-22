@@ -2,7 +2,6 @@ package net.lopymine.patpat.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.session.Session;
 import net.minecraft.entity.*;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.*;
@@ -21,6 +20,11 @@ import net.lopymine.patpat.packet.PatEntityC2SPacket;
 
 import org.jetbrains.annotations.Nullable;
 
+//? <=1.19.3 {
+/*import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.network.PacketByteBuf;
+*///?}
+
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
 
@@ -36,7 +40,13 @@ public abstract class MinecraftClientMixin {
 	private int itemUseCooldown;
 
 	@Shadow
-	public abstract Session getSession();
+	public abstract
+		//? >=1.20.2 {
+		net.minecraft.client.session.Session
+		 //?} else {
+	/*net.minecraft.client.util.Session
+	*///?}
+	getSession();
 
 	@Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
 	private void onRightClickMouse(CallbackInfo ci) {
@@ -58,19 +68,24 @@ public abstract class MinecraftClientMixin {
 			return;
 		}
 
-		boolean donor = PatPatClientDonorManager.getInstance().isAmDonor() && config.isUseDonorAnimationEnabled();
-		ClientPlayNetworking.send(new PatEntityC2SPacket(livingEntity, donor));
+		//? >=1.19.4 {
+		ClientPlayNetworking.send(new PatEntityC2SPacket(livingEntity));
+		//?} else {
+		/*PatEntityC2SPacket packet = new PatEntityC2SPacket(livingEntity);
+		PacketByteBuf buf = PacketByteBufs.create();
+		packet.write(buf);
+		ClientPlayNetworking.send(PatEntityC2SPacket.PACKET_ID ,buf);
+		*///?}
 
-		Session session = this.getSession();
-		PlayerConfig whoPatted = PlayerConfig.of(session.getUsername(), session.getUuidOrNull());
-		PatEntity patEntity = PatPatClientManager.pat(livingEntity, whoPatted, donor);
-
-		if (config.isSoundsEnabled()) {
-			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsVolume());
-		}
-		if (config.isSwingHandEnabled()) {
-			this.player.swingHand(Hand.MAIN_HAND);
-		}
+//		PlayerConfig whoPatted = PlayerConfig.of(this.getSession().getUsername(), this.getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/);
+//		PatEntity patEntity = PatPatClientManager.pat(livingEntity, whoPatted);
+//
+//		if (config.isSoundsEnabled()) {
+//			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsVolume());
+//		}
+//		if (config.isSwingHandEnabled()) {
+//			this.player.swingHand(Hand.MAIN_HAND);
+//		}
 
 		this.itemUseCooldown = 4;
 		ci.cancel();

@@ -1,48 +1,58 @@
 package net.lopymine.patpat.packet;
 
 import lombok.Getter;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.*;
+import net.minecraft.util.Identifier;
 
-import net.fabricmc.fabric.api.networking.v1.*;
-
+//? <=1.20.4 && >=1.19.4
+/*import net.fabricmc.fabric.api.networking.v1.*;*/
+//? >=1.20.5
+import net.minecraft.network.packet.CustomPayload;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
 import java.util.UUID;
 
 @Getter
-public class PatEntityS2CPacket implements FabricPacket {
-	public static final PacketType<PatEntityS2CPacket> TYPE = PacketType.create(IdentifierUtils.id("pat_entity_s2c_packet"), PatEntityS2CPacket::new);
+public class PatEntityS2CPacket /*? >=1.20.5 {*/implements CustomPayload /*?} elif >=1.19.4 {*/ /*implements FabricPacket *//*?}*/ {
+
+	public static final Identifier PACKET_ID = IdentifierUtils.id("pat_entity_s2c_packet");
+
+	//? >=1.20.5 {
+	public static final Id<PatEntityS2CPacket> TYPE = new Id<>(PACKET_ID);
+	public static final net.minecraft.network.codec.PacketCodec<RegistryByteBuf, PatEntityS2CPacket> CODEC = net.minecraft.network.packet.CustomPayload.codecOf(PatEntityS2CPacket::write, PatEntityS2CPacket::new);
+	//?} elif >=1.19.4 {
+	/*public static final PacketType<PatEntityS2CPacket> TYPE = PacketType.create(PACKET_ID, PatEntityS2CPacket::new);
+	*///?}
 
 	private final UUID pattedEntityUuid;
 	private final UUID playerUuid;
-	private final String playerName;
-	private final boolean donor;
 
-	public PatEntityS2CPacket(UUID pattedEntityUuid, UUID playerUuid, String playerName, boolean donor) {
+	public PatEntityS2CPacket(UUID pattedEntityUuid, UUID playerUuid) {
 		this.pattedEntityUuid = pattedEntityUuid;
-		this.playerUuid = playerUuid;
-		this.playerName = playerName;
-		this.donor = donor;
+		this.playerUuid       = playerUuid;
 	}
 
-	public PatEntityS2CPacket(PacketByteBuf buf) {
+	public PatEntityS2CPacket(/*? if >=1.20.5 {*/RegistryByteBuf/*} else {*//*PacketByteBuf*//*}*/ buf) {
 		this.pattedEntityUuid = buf.readUuid();
-		this.playerUuid = buf.readUuid();
-		this.playerName = buf.readString();
-		this.donor = buf.readBoolean();
+		this.playerUuid       = buf.readUuid();
 	}
 
-	@Override
-	public void write(PacketByteBuf buf) {
+	//? <=1.20.4 && >=1.19.4
+	/*@Override*/
+	public void write(/*? if >=1.20.5 {*/RegistryByteBuf/*} else {*//*PacketByteBuf*//*}*/ buf) {
 		buf.writeUuid(this.pattedEntityUuid);
 		buf.writeUuid(this.playerUuid);
-		buf.writeString(this.playerName);
-		buf.writeBoolean(this.donor);
 	}
 
+	//? >=1.20.5 {
 	@Override
+	public Id<? extends CustomPayload> getId() {
+		return TYPE;
+	}
+	//?} elif >=1.19.4 {
+	/*@Override
 	public PacketType<?> getType() {
 		return TYPE;
 	}
-
+	*///?}
 }

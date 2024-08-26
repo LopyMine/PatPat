@@ -13,8 +13,9 @@ import net.lopymine.patpat.config.resourcepack.ListMode;
 import net.lopymine.patpat.config.server.PatPatServerConfig;
 import net.lopymine.patpat.packet.*;
 
-//? <=1.19.3
+//? <=1.19.3 {
 /*import net.minecraft.network.PacketByteBuf;*/
+//?}
 
 public class PatPatServerPacketManager {
 
@@ -26,18 +27,12 @@ public class PatPatServerPacketManager {
 		//? >=1.20.5 {
 		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playC2S().register(PatEntityC2SPacket.TYPE, PatEntityC2SPacket.CODEC);
 		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C().register(PatEntityS2CPacket.TYPE, PatEntityS2CPacket.CODEC);
+		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C().register(PatEntityForReplayModS2CPacket.TYPE, PatEntityForReplayModS2CPacket.CODEC);
 		//?}
 
 		ServerPlayNetworking.registerGlobalReceiver(PatEntityC2SPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
-				//? >=1.20.5 {
-				(packet, context) -> {
-					ServerPlayerEntity sender = context.player();
-					//?} elif <=1.20.4 && >=1.19.4 {
-					/*(packet, sender, responseSender) -> {
-					 *///?} else {
-				/*(server, sender, handler, buf, responseSender) -> {
-					PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);
-				*///?}
+				/*? >=1.20.5 {*/(packet, context) -> {
+					ServerPlayerEntity sender = context.player();/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, handler, buf, responseSender) -> { PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);*//*?}*/
 					PatPatServerConfig config = PatPat.getConfig();
 					GameProfile senderProfile = sender.getGameProfile();
 					if ((config.getListMode() == ListMode.WHITELIST && !config.getList().containsKey(senderProfile.getId())) || (config.getListMode() == ListMode.BLACKLIST && config.getList().containsKey(senderProfile.getId()))) {
@@ -50,9 +45,9 @@ public class PatPatServerPacketManager {
 					}
 					ChunkPos chunkPos = /*? >=1.17 {*/sender.getChunkPos()/*?} else {*//*serverWorld.getChunk(sender.getBlockPos()).getPos()*//*?}*/;
 					for (ServerPlayerEntity player : PlayerLookup.tracking(serverWorld, chunkPos)) {
-//						if (player.equals(sender)) {
-//							continue;
-//						}
+						if (player.equals(sender)) {
+							continue;
+						}
 
 						//? >=1.19.4 {
 						ServerPlayNetworking.send(player, new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderProfile.getId()));

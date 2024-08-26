@@ -13,26 +13,26 @@ import net.lopymine.patpat.utils.IdentifierUtils;
 import java.util.UUID;
 
 @Getter
-public class PatEntityS2CPacket /*? >=1.20.5 {*/implements CustomPayload /*?} elif >=1.19.4 {*/ /*implements FabricPacket *//*?}*/ {
+public class PatEntityForReplayModS2CPacket /*? >=1.20.5 {*/implements CustomPayload /*?} elif >=1.19.4 {*/ /*implements FabricPacket *//*?}*/ {
 
-	public static final Identifier PACKET_ID = IdentifierUtils.id("pat_entity_s2c_packet");
+	public static final Identifier PACKET_ID = IdentifierUtils.id("pat_entity_for_replay_s2c_packet");
 
 	//? >=1.20.5 {
-	public static final Id<PatEntityS2CPacket> TYPE = new Id<>(PACKET_ID);
-	public static final net.minecraft.network.codec.PacketCodec<RegistryByteBuf, PatEntityS2CPacket> CODEC = net.minecraft.network.packet.CustomPayload.codecOf(PatEntityS2CPacket::write, PatEntityS2CPacket::new);
+	public static final Id<PatEntityForReplayModS2CPacket> TYPE = new Id<>(PACKET_ID);
+	public static final net.minecraft.network.codec.PacketCodec<RegistryByteBuf, PatEntityForReplayModS2CPacket> CODEC = net.minecraft.network.packet.CustomPayload.codecOf(PatEntityForReplayModS2CPacket::write, PatEntityForReplayModS2CPacket::new);
 	//?} elif >=1.19.4 {
-	/*public static final PacketType<PatEntityS2CPacket> TYPE = PacketType.create(PACKET_ID, PatEntityS2CPacket::new);
-	*///?}
+	/*public static final PacketType<PatEntityForReplayModS2CPacket> TYPE = PacketType.create(PACKET_ID, PatEntityForReplayModS2CPacket::new);
+	 *///?}
 
 	private final UUID pattedEntityUuid;
 	private final UUID whoPattedUuid;
 
-	public PatEntityS2CPacket(UUID pattedEntityUuid, UUID whoPattedUuid) {
+	public PatEntityForReplayModS2CPacket(UUID pattedEntityUuid, UUID whoPattedUuid) {
 		this.pattedEntityUuid = pattedEntityUuid;
 		this.whoPattedUuid    = whoPattedUuid;
 	}
 
-	public PatEntityS2CPacket(/*? if >=1.20.5 {*/RegistryByteBuf/*?} else {*//*PacketByteBuf*//*?}*/ buf) {
+	public PatEntityForReplayModS2CPacket(/*? if >=1.20.5 {*/RegistryByteBuf/*?} else {*//*PacketByteBuf*//*?}*/ buf) {
 		this.pattedEntityUuid = buf.readUuid();
 		this.whoPattedUuid    = buf.readUuid();
 	}

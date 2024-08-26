@@ -12,7 +12,7 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.client.PatPatClientConfig;
 import net.lopymine.patpat.config.resourcepack.*;
 import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.packet.PatEntityS2CPacket;
+import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.WorldUtils;
 
 import java.util.UUID;
@@ -24,53 +24,51 @@ public class PatPatClientPacketManager {
 	}
 
 	public static void register() {
-		ClientPlayNetworking.registerGlobalReceiver(PatEntityS2CPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
-				//? >=1.20.5 {
-					(packet, context) -> {
-					ClientPlayerEntity player = context.player();
-					ClientWorld clientWorld = player.clientWorld;
-				//?} elif <=1.20.4 && >=1.19.4 {
-				/*(packet, player, responseSender) -> {
-					ClientWorld clientWorld = player.clientWorld;
-					*///?} else {
-					/*(client, handler, buf, responseSender) -> {
-						PatEntityS2CPacket packet = new PatEntityS2CPacket(buf);
-						ClientPlayerEntity player = client.player;
-						if (player == null) {
-							return;
-						}
+		ClientPlayNetworking.registerGlobalReceiver(
+				PatEntityForReplayModS2CPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
+				/*? >=1.20.5 {*/(packet, context) -> {/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, player, responseSender) -> {*//*?} else {*//*(client, handler, buf, responseSender) -> { PatEntityS2CPacket packet = new PatEntityS2CPacket(buf);*//*?}*/
+					PatPatClientPacketManager.handlePatting(packet.getWhoPattedUuid(), packet.getPattedEntityUuid(), true);
+				}
+		);
 
-						ClientWorld clientWorld = player.clientWorld;
-						*///?}
-					PatPatClientConfig config = PatPatClient.getConfig();
-					if (!config.isModEnabled()) {
-						return;
-					}
-					if (clientWorld == null) {
-						return;
-					}
-					UUID playerUuid = packet.getPlayerUuid();
-					UUID pattedEntityUuid = packet.getPattedEntityUuid();
-					boolean pattedMe = pattedEntityUuid.equals(MinecraftClient.getInstance().getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/);
-					if (pattedMe && !config.isPatMeEnabled()) {
-						return;
-					}
-					if (isBlocked(config, playerUuid)) {
-						return;
-					}
-					Entity pattedEntity = WorldUtils.getEntity(clientWorld, pattedEntityUuid);
-					if (!(pattedEntity instanceof LivingEntity livingEntity)) {
-						return;
-					}
-					Entity playerEntity = WorldUtils.getEntity(clientWorld, playerUuid);
-					if (!(playerEntity instanceof PlayerEntity)) {
-						return;
-					}
-					PatEntity patEntity = PatPatClientManager.pat(livingEntity, PlayerConfig.of(playerEntity.getName().getString(), playerUuid));
-					if (config.isSoundsEnabled()) {
-						PatPatClientSoundManager.playSound(patEntity, player, config.getSoundsVolume());
-					}
-				});
+		ClientPlayNetworking.registerGlobalReceiver(
+				PatEntityS2CPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
+				/*? >=1.20.5 {*/(packet, context) -> {/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, player, responseSender) -> {*//*?} else {*//*(client, handler, buf, responseSender) -> { PatEntityS2CPacket packet = new PatEntityS2CPacket(buf);*//*?}*/
+					PatPatClientPacketManager.handlePatting(packet.getWhoPattedUuid(), packet.getPattedEntityUuid(), false);
+				}
+		);
+	}
+
+	private static void handlePatting(UUID whoPattedUuid, UUID pattedEntityUuid, boolean replayModPacket) {
+		ClientWorld clientWorld = MinecraftClient.getInstance().world;
+		ClientPlayerEntity player = MinecraftClient.getInstance().player;
+		PatPatClientConfig config = PatPatClient.getConfig();
+		if (!config.isModEnabled()) {
+			return;
+		}
+		if (clientWorld == null) {
+			return;
+		}
+		boolean pattedMe = pattedEntityUuid.equals(MinecraftClient.getInstance().getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/);
+		if (pattedMe && !config.isPatMeEnabled()) {
+			return;
+		}
+		if (isBlocked(config, whoPattedUuid)) {
+			return;
+		}
+		Entity pattedEntity = WorldUtils.getEntity(clientWorld, pattedEntityUuid);
+		if (!(pattedEntity instanceof LivingEntity livingEntity)) {
+			return;
+		}
+		Entity playerEntity = WorldUtils.getEntity(clientWorld, whoPattedUuid);
+		if (!(playerEntity instanceof PlayerEntity)) {
+			return;
+		}
+		PatEntity patEntity = PatPatClientManager.pat(livingEntity, PlayerConfig.of(playerEntity.getName().getString(), whoPattedUuid));
+		if (config.isSoundsEnabled() && !replayModPacket) {
+			PatPatClientSoundManager.playSound(patEntity, player, config.getSoundsVolume());
+		}
+
 	}
 
 	private static boolean isBlocked(PatPatClientConfig config, UUID playerUuid) {

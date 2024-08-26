@@ -1,18 +1,18 @@
 package net.lopymine.patpat;
 
 import lombok.Getter;
-
-//? >=1.17
-import org.slf4j.*;
+import net.minecraft.text.MutableText;
 
 import net.fabricmc.api.ModInitializer;
 
 import net.lopymine.patpat.config.server.PatPatServerConfig;
-import net.lopymine.patpat.manager.*;
+import net.lopymine.patpat.manager.PatPatConfigManager;
 import net.lopymine.patpat.manager.server.*;
 import net.lopymine.patpat.utils.TextUtils;
 
-import net.minecraft.text.MutableText;
+//? >=1.17 {
+import org.slf4j.*;
+//?}
 
 public class PatPat implements ModInitializer {
 

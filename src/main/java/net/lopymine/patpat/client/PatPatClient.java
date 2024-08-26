@@ -7,6 +7,7 @@ import org.slf4j.*;
 
 import net.fabricmc.api.ClientModInitializer;
 
+import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.config.client.PatPatClientConfig;
 import net.lopymine.patpat.manager.client.*;
 
@@ -49,6 +50,7 @@ public class PatPatClient implements ClientModInitializer {
 		PatPatClientCommandManager.register();
 		PatPatClientPacketManager.register();
 		PatPatClientReloadListener.register();
+		LoadedMods.onInitialize();
 
 		info("PatPat Client Initialized");
 	}

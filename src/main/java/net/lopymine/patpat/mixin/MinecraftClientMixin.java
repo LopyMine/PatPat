@@ -1,7 +1,7 @@
 package net.lopymine.patpat.mixin;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.*;
 import net.minecraft.entity.*;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.*;
@@ -12,12 +12,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.compat.replaymod.ReplayModCompat;
 import net.lopymine.patpat.config.client.PatPatClientConfig;
 import net.lopymine.patpat.config.resourcepack.PlayerConfig;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.manager.client.*;
-import net.lopymine.patpat.packet.PatEntityC2SPacket;
+import net.lopymine.patpat.packet.*;
 
+import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
 
 //? <=1.19.3 {
@@ -42,10 +44,10 @@ public abstract class MinecraftClientMixin {
 	@Shadow
 	public abstract
 		//? >=1.20.2 {
-		net.minecraft.client.session.Session
-		 //?} else {
+	net.minecraft.client.session.Session
+	//?} else {
 	/*net.minecraft.client.util.Session
-	*///?}
+	 *///?}
 	getSession();
 
 	@Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
@@ -77,15 +79,20 @@ public abstract class MinecraftClientMixin {
 		ClientPlayNetworking.send(PatEntityC2SPacket.PACKET_ID ,buf);
 		*///?}
 
-//		PlayerConfig whoPatted = PlayerConfig.of(this.getSession().getUsername(), this.getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/);
-//		PatEntity patEntity = PatPatClientManager.pat(livingEntity, whoPatted);
-//
-//		if (config.isSoundsEnabled()) {
-//			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsVolume());
-//		}
-//		if (config.isSwingHandEnabled()) {
-//			this.player.swingHand(Hand.MAIN_HAND);
-//		}
+		UUID currentUuid = this.getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/;
+		PlayerConfig whoPatted = PlayerConfig.of(this.getSession().getUsername(), currentUuid);
+
+		PatEntity patEntity = PatPatClientManager.pat(livingEntity, whoPatted);
+
+		ReplayModCompat.onPat(livingEntity.getUuid(), currentUuid);
+
+		if (config.isSoundsEnabled()) {
+			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsVolume());
+		}
+
+		if (config.isSwingHandEnabled()) {
+			this.player.swingHand(Hand.MAIN_HAND);
+		}
 
 		this.itemUseCooldown = 4;
 		ci.cancel();

@@ -31,13 +31,13 @@ public class PatEntityC2SPacket /*? >=1.20.5 {*/ implements CustomPayload /*?} e
 		this.pattedEntityUuid = pattedEntity.getUuid();
 	}
 
-	public PatEntityC2SPacket(/*? if >=1.20.5 {*/RegistryByteBuf/*} else {*//*PacketByteBuf*//*}*/ buf) {
+	public PatEntityC2SPacket(/*? if >=1.20.5 {*/RegistryByteBuf/*?} else {*//*PacketByteBuf*//*?}*/ buf) {
 		this.pattedEntityUuid = buf.readUuid();
 	}
 
 	//? <=1.20.4 && >=1.19.4
 	/*@Override*/
-	public void write(/*? if >=1.20.5 {*/RegistryByteBuf/*} else {*//*PacketByteBuf*//*}*/ buf) {
+	public void write(/*? if >=1.20.5 {*/RegistryByteBuf/*?} else {*//*PacketByteBuf*//*?}*/ buf) {
 		buf.writeUuid(this.pattedEntityUuid);
 	}
 

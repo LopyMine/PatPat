@@ -53,10 +53,9 @@ public class EntityRendererMixin {
 		RenderSystem.enableBlend();
 
 		matrices.push();
-		matrices.translate(0.0F, nameLabelHeight - 0.55F, 0.0F);
+		matrices.translate(0.0F, nameLabelHeight - 0.55F - frameConfig.offsetY() - config.getAnimationOffsetY(), 0.0F);
 		matrices.multiply(dispatcher.getRotation());
 		matrices.scale(0.85F * numberToMirrorTexture, -0.85F, 0.85F);
-		matrices.translate(0.0F, -(frameConfig.offsetY() + config.getAnimationOffsetY()), 0.0F);
 
 		int frameWidth = animation.getTextureWidth() / frameConfig.totalFrames();
 		int frameHeight = animation.getTextureHeight();
@@ -74,7 +73,7 @@ public class EntityRendererMixin {
 
 		float x1 = -(scaleX / 2F) + frameConfig.offsetX() + config.getAnimationOffsetX();
 		float x2 = x1 + scaleX;
-		float y1 = -(scaleY / 2F) + frameConfig.offsetY() + config.getAnimationOffsetY();
+		float y1 = -(scaleY / 2F);
 		float y2 = y1 + scaleY;
 		float z = -(frameConfig.offsetZ() + config.getAnimationOffsetZ());
 

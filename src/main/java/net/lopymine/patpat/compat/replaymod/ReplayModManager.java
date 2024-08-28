@@ -1,9 +1,9 @@
 package net.lopymine.patpat.compat.replaymod;
 
+import net.lopymine.patpat.client.PatPatClient;
+
 //? >=1.19.4 {
 import net.minecraft.network.packet.Packet;
-
-import net.lopymine.patpat.client.PatPatClient;
 //?} else {
 /*import net.minecraft.network.Packet;
  *///?}

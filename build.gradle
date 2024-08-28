@@ -164,13 +164,8 @@ processResources {
 		}
 	}
 
-	filesMatching("mixins/*.mixins.json5") {
-		def fileName = it.getName().toString()
-		if (substringBefore(fileName, "-") == mcVersion) {
-			expand(props)
-		} else {
-			it.exclude()
-		}
+	filesMatching("${modId}.mixins.json5") {
+		expand(props)
 	}
 }
 

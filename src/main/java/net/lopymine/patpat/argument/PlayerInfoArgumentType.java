@@ -11,6 +11,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.*;
 
 import net.lopymine.patpat.argument.PlayerInfoArgumentType.PlayerInfo;
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.utils.CommandTextBuilder;
 
 import java.util.*;
@@ -38,6 +39,10 @@ public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 	public PlayerInfo parse(@NotNull StringReader reader) throws CommandSyntaxException {
 		try {
 			String s = reader.readUnquotedString();
+
+			if (PatPatClient.getConfig().isDebugLogEnabled()) {
+				PatPatClient.info("Parted PlayerInfo from PlayerInfoArgumentType: {}",s);
+			}
 
 			ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
 			if (networkHandler == null) {

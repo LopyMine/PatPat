@@ -2,6 +2,8 @@ package net.lopymine.patpat.compat.replaymod;
 
 //? >=1.19.4 {
 import net.minecraft.network.packet.Packet;
+
+import net.lopymine.patpat.client.PatPatClient;
 //?} else {
 /*import net.minecraft.network.Packet;
  *///?}
@@ -20,6 +22,9 @@ public class ReplayModManager {
 	public static void sendDummyPacket(Packet<?> packet) {
 		//? !(=1.20.5) {
 		if (com.replaymod.recording.ReplayModRecording.instance.getConnectionEventHandler() != null) {
+			if (PatPatClient.getConfig().isDebugLogEnabled()) {
+				PatPatClient.info("Sent dummy packet for Replay Mod");
+			}
 			com.replaymod.recording.ReplayModRecording.instance.getConnectionEventHandler().getPacketListener().save(packet);
 		}
 		//?}

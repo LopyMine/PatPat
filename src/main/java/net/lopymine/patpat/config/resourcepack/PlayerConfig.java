@@ -5,6 +5,7 @@ import lombok.Getter;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.utils.VersionedThings;
 
 import java.util.*;
@@ -43,7 +44,12 @@ public class PlayerConfig {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof PlayerConfig that)) return false;
-		return (that.name == null || Objects.equals(this.name, that.name)) && (that.uuid == null || Objects.equals(this.uuid, that.uuid));
+		boolean b = that.name == null || Objects.equals(this.name, that.name);
+		boolean b1 = that.uuid == null || Objects.equals(this.uuid, that.uuid);
+		if (PatPatClient.getConfig().isDebugLogEnabled()) {
+			PatPatClient.info("Comparing PlayerConfigs: [{} and {}] [{} and {}] - {}",this.name, that.name, this.uuid, that.uuid, b && b1);
+		}
+		return b && b1;
 	}
 
 	@Override

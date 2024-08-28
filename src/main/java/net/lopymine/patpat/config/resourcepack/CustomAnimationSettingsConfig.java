@@ -33,7 +33,6 @@ public final class CustomAnimationSettingsConfig {
 			FrameConfig.DEFAULT_FRAME,
 			SoundConfig.PATPAT_SOUND
 	);
-	;
 
 	private final Identifier texture;
 	private final int duration;

@@ -51,6 +51,10 @@
 	"patpat.modmenu.server.option.pat_me_enabled.description": "Если включено, другие игроки смогут вас похлопать; если отключено, не смогут.",
 	"patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled": "Включить обход серверного ресурс-пака",
 	"patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled.description": "Если включено, приоритет сервеного ресурс-пака будет обходиться; если отключено, не будет.",
+	"patpat.modmenu.debugging": "§lОткладка",
+	"patpat.modmenu.debugging.description": "Настройки для лучшей откладки PatPat мода",
+	"patpat.modmenu.debugging.option.debug_log_enabled": "§6Включить дополнительный журнал откладки мода",
+	"patpat.modmenu.debugging.option.debug_log_enabled.description": "Если включено, в консоль игры будет выведена допольнительная информация о моде; если отключено, не будет.",
 	"patpat.modmenu.formatter.enable_or_disable.true": "Включено",
 	"patpat.modmenu.formatter.enable_or_disable.false": "Отключено"
 }

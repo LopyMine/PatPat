@@ -35,7 +35,7 @@ public class PatPatClientConfig {
 			Codec.FLOAT.fieldOf("offsetX").forGetter(PatPatClientConfig::getAnimationOffsetX),
 			Codec.FLOAT.fieldOf("offsetY").forGetter(PatPatClientConfig::getAnimationOffsetY),
 			Codec.FLOAT.fieldOf("offsetZ").forGetter(PatPatClientConfig::getAnimationOffsetZ),
-			Codec.BOOL.fieldOf("useDonorAnimationEnabled").forGetter(PatPatClientConfig::isUseDonorAnimationEnabled),
+			Codec.BOOL.fieldOf("debugLogEnabled").forGetter(PatPatClientConfig::isDebugLogEnabled),
 			Codec.BOOL.fieldOf("skipOldAnimationsEnabled").forGetter(PatPatClientConfig::isSkipOldAnimationsEnabled)
 	).apply(instance, PatPatClientConfig::new));
 
@@ -55,7 +55,7 @@ public class PatPatClientConfig {
 	private float animationOffsetX;
 	private float animationOffsetY;
 	private float animationOffsetZ;
-	private boolean useDonorAnimationEnabled;
+	private boolean debugLogEnabled;
 	private boolean skipOldAnimationsEnabled;
 
 	public PatPatClientConfig() {
@@ -70,12 +70,12 @@ public class PatPatClientConfig {
 		this.players                         = new HashMap<>();
 		this.animationOffsetX                = 0.0F;
 		this.animationOffsetY                = 0.0F;
-		this.animationOffsetZ                = 0.0F;
-		this.useDonorAnimationEnabled        = false;
-		this.skipOldAnimationsEnabled        = true;
+		this.animationOffsetZ         = 0.0F;
+		this.debugLogEnabled          = false;
+		this.skipOldAnimationsEnabled = true;
 	}
 
-	public PatPatClientConfig(boolean bypassServerResourcePackEnabled, boolean nicknameHidingEnabled, boolean swingHandEnabled, boolean soundsEnabled, boolean patMeEnabled, boolean modEnabled, float soundsVolume, ListMode listMode, Map<UUID, String> players, float animationOffsetX, float animationOffsetY, float animationOffsetZ, boolean useDonorAnimationEnabled, boolean skipOldAnimationsEnabled) {
+	public PatPatClientConfig(boolean bypassServerResourcePackEnabled, boolean nicknameHidingEnabled, boolean swingHandEnabled, boolean soundsEnabled, boolean patMeEnabled, boolean modEnabled, float soundsVolume, ListMode listMode, Map<UUID, String> players, float animationOffsetX, float animationOffsetY, float animationOffsetZ, boolean debugLogEnabled, boolean skipOldAnimationsEnabled) {
 		this.bypassServerResourcePackEnabled = bypassServerResourcePackEnabled;
 		this.nicknameHidingEnabled           = nicknameHidingEnabled;
 		this.swingHandEnabled                = swingHandEnabled;
@@ -88,7 +88,7 @@ public class PatPatClientConfig {
 		this.animationOffsetX                = animationOffsetX;
 		this.animationOffsetY                = animationOffsetY;
 		this.animationOffsetZ                = animationOffsetZ;
-		this.useDonorAnimationEnabled        = useDonorAnimationEnabled;
+		this.debugLogEnabled                 = debugLogEnabled;
 		this.skipOldAnimationsEnabled        = skipOldAnimationsEnabled;
 	}
 
@@ -123,11 +123,17 @@ public class PatPatClientConfig {
 	public void save() {
 		PatPatClient.setConfig(this);
 		CompletableFuture.runAsync(() -> {
+			if (PatPatClient.getConfig().isDebugLogEnabled()) {
+				PatPatClient.info("Saving PatPat Client Config...");
+			}
 			try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
 				String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPatClient::error));*/
 				writer.write(json);
 			} catch (Exception e) {
 				PatPatClient.error("Failed to save config", e);
+			}
+			if (PatPatClient.getConfig().isDebugLogEnabled()) {
+				PatPatClient.info("Saved PatPat Client Config");
 			}
 		});
 	}
@@ -139,6 +145,7 @@ public class PatPatClientConfig {
 				/*? <=1.20.4 {*//*.getEnabledNames()
 				*//*?} else {*/.getEnabledIds()/*?}*/
 				.stream().anyMatch(s -> s.startsWith("server/"));
+
 		if (bl) {
 			client.reloadResources();
 		}

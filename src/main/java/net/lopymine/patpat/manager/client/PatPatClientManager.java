@@ -2,6 +2,7 @@ package net.lopymine.patpat.manager.client;
 
 import net.minecraft.entity.LivingEntity;
 
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.resourcepack.PlayerConfig;
 import net.lopymine.patpat.entity.PatEntity;
 
@@ -33,6 +34,9 @@ public class PatPatClientManager {
 	}
 
 	public static PatEntity pat(@NotNull LivingEntity entity, @NotNull PlayerConfig whoPatted) {
+		if (PatPatClient.getConfig().isDebugLogEnabled()) {
+			PatPatClient.info("{} patted {}", whoPatted.getName(), entity.getName());
+		}
 		UUID uuid = entity.getUuid();
 		PatEntity patEntity = PAT_ENTITIES.get(uuid);
 		if (patEntity == null) {

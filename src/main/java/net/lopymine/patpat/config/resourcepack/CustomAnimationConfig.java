@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.extension.EntityExtension;
 
 import java.util.*;
@@ -51,6 +52,10 @@ public final class CustomAnimationConfig implements Comparable<CustomAnimationCo
 			return !this.blacklist;
 		}
 		for (EntityConfig entityConfig : this.entities) {
+			if (PatPatClient.getConfig().isDebugLogEnabled()) {
+				PatPatClient.info("Comparing Entity Config: " + entityConfig.toString());
+				PatPatClient.info("with {}, {}, {}, {}", entityTypeId, entityName, entityUuid, whoPatted.toString());
+			}
 			if (entityConfig.is(entityTypeId, entityName, entityUuid) && (entityConfig.getEntitiesFrom() == null || entityConfig.getEntitiesFrom().contains(whoPatted))) {
 				return !this.blacklist;
 			}

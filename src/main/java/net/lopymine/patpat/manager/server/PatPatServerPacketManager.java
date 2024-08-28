@@ -1,6 +1,6 @@
 package net.lopymine.patpat.manager.server;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
@@ -9,6 +9,7 @@ import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.resourcepack.ListMode;
 import net.lopymine.patpat.config.server.PatPatServerConfig;
 import net.lopymine.patpat.packet.*;
@@ -40,10 +41,15 @@ public class PatPatServerPacketManager {
 					}
 					ServerWorld serverWorld = (ServerWorld) sender./*? >=1.18 {*/getWorld()/*?} else {*//*world*//*?}*/;
 					Entity entity = serverWorld.getEntity(packet.getPattedEntityUuid());
-					if (entity == null) {
+					if (!(entity instanceof LivingEntity)) {
 						return;
 					}
-					ChunkPos chunkPos = /*? >=1.17 {*/sender.getChunkPos()/*?} else {*//*serverWorld.getChunk(sender.getBlockPos()).getPos()*//*?}*/;
+					if (entity.isInvisible()) {
+						PatPat.warn("Received packet from client, {} patted {}, but patted entity is invisible! This shouldn't happens because it should checks at client-side!", sender.getName(), entity.getName());
+						return;
+					}
+
+					ChunkPos chunkPos = /*? >=1.17 {*/entity.getChunkPos()/*?} else {*//*serverWorld.getChunk(entity.getBlockPos()).getPos()*//*?}*/;
 					for (ServerPlayerEntity player : PlayerLookup.tracking(serverWorld, chunkPos)) {
 						if (player.equals(sender)) {
 							continue;

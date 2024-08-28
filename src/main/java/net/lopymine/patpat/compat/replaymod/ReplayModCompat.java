@@ -2,6 +2,7 @@ package net.lopymine.patpat.compat.replaymod;
 
 import net.fabricmc.fabric.api.networking.v1.*;
 
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.PatEntityForReplayModS2CPacket;
 
@@ -14,6 +15,9 @@ import java.util.UUID;
 public class ReplayModCompat {
 
 	public static void onPat(UUID pattedEntity, UUID whoPatted) {
+		if (PatPatClient.getConfig().isDebugLogEnabled()) {
+			PatPatClient.info("Sending dummy packet for Replay Mod. [Patted: {} and Who: {}]", pattedEntity, whoPatted);
+		}
 		if (LoadedMods.REPLAY_MOD_LOADED) {
 			PatEntityForReplayModS2CPacket packet = new PatEntityForReplayModS2CPacket(pattedEntity, whoPatted);
 			//? >=1.20.2 {
@@ -23,6 +27,10 @@ public class ReplayModCompat {
 			packet.write(buf);
 			ReplayModManager.sendDummyPacket(ServerPlayNetworking.createS2CPacket(PatEntityForReplayModS2CPacket.PACKET_ID, buf));
 			*///?}
+			return;
+		}
+		if (PatPatClient.getConfig().isDebugLogEnabled()) {
+			PatPatClient.info("Replay Mod not Installed!");
 		}
 	}
 }

@@ -8,6 +8,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.suggestion.*;
 
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.resourcepack.ListMode;
 import net.lopymine.patpat.utils.CommandTextBuilder;
 
@@ -32,7 +33,11 @@ public class ListModeArgumentType implements ArgumentType<ListMode> {
 
 	@Override
 	public ListMode parse(StringReader reader) throws CommandSyntaxException {
-		ListMode listMode = ListMode.getById(reader.readUnquotedString());
+		String modeId = reader.readUnquotedString();
+		if (PatPatClient.getConfig().isDebugLogEnabled()) {
+			PatPatClient.info("Parted modeId from ListModeArgumentType: {}", modeId);
+		}
+		ListMode listMode = ListMode.getById(modeId);
 		if (listMode == null) {
 			throw FAILED_PARSING.createWithContext(reader, reader.getString());
 		}

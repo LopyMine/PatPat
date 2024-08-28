@@ -54,7 +54,7 @@ public class EntityRendererMixin {
 
 		matrices.push();
 		matrices.translate(0.0F, nameLabelHeight - 0.55F - frameConfig.offsetY() - config.getAnimationOffsetY(), 0.0F);
-		matrices.multiply(dispatcher.getRotation());
+		matrices.multiply(this.dispatcher.getRotation());
 		matrices.scale(0.85F * numberToMirrorTexture, -0.85F, 0.85F);
 
 		int frameWidth = animation.getTextureWidth() / frameConfig.totalFrames();

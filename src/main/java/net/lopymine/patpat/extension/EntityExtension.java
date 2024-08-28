@@ -1,7 +1,9 @@
 package net.lopymine.patpat.extension;
 
 import net.minecraft.entity.*;
+import net.minecraft.util.Identifier;
 
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.utils.VersionedThings;
 
 public class EntityExtension {
@@ -15,6 +17,11 @@ public class EntityExtension {
 	}
 
 	public static String getId(EntityType<?> entityType) {
-		return VersionedThings.ENTITY_TYPE.getId(entityType).toString();
+		Identifier id = VersionedThings.ENTITY_TYPE.getId(entityType);
+		if (id == null) {
+			PatPatClient.warn("Failed to find entity type {}", entityType.getName());
+			return "null";
+		}
+		return id.toString();
 	}
 }

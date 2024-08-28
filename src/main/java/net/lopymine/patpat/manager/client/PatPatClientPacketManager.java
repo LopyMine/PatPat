@@ -40,6 +40,10 @@ public class PatPatClientPacketManager {
 	}
 
 	private static void handlePatting(UUID whoPattedUuid, UUID pattedEntityUuid, boolean replayModPacket) {
+		if (PatPatClient.getConfig().isDebugLogEnabled()) {
+			PatPatClient.info("Received packet from server, {} patted {}, replayModPacket: {}", whoPattedUuid, pattedEntityUuid, replayModPacket);
+		}
+
 		ClientWorld clientWorld = MinecraftClient.getInstance().world;
 		ClientPlayerEntity player = MinecraftClient.getInstance().player;
 		PatPatClientConfig config = PatPatClient.getConfig();
@@ -68,7 +72,6 @@ public class PatPatClientPacketManager {
 		if (config.isSoundsEnabled() && !replayModPacket) {
 			PatPatClientSoundManager.playSound(patEntity, player, config.getSoundsVolume());
 		}
-
 	}
 
 	private static boolean isBlocked(PatPatClientConfig config, UUID playerUuid) {

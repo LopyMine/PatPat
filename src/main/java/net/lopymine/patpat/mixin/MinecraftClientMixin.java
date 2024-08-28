@@ -70,6 +70,10 @@ public abstract class MinecraftClientMixin {
 			return;
 		}
 
+		if (livingEntity.isInvisible()) {
+			return;
+		}
+
 		//? >=1.19.4 {
 		ClientPlayNetworking.send(new PatEntityC2SPacket(livingEntity));
 		//?} else {

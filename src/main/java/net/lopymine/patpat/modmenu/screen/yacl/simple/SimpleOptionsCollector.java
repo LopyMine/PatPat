@@ -56,7 +56,7 @@ public class SimpleOptionsCollector {
 
 		Builder descriptionBuilder = OptionDescription.createBuilder().text(Text.translatable(optionDescription));
 		if (content == SimpleContent.IMAGE) {
-			descriptionBuilder.image(ModMenuUtils.getContentId(content, optionId), 600, 600);
+			descriptionBuilder.image(ModMenuUtils.getContentId(content, optionId), 400, 400);
 		}
 		if (content == SimpleContent.WEBP) {
 			descriptionBuilder.webpImage(ModMenuUtils.getContentId(content, optionId));

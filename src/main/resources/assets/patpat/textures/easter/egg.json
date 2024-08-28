@@ -1,0 +1,18 @@
+{
+	"version": "1.0.0",
+	"priority": 1,
+	"animation": {
+		"texture": "patpat:textures/default/patpat.png",
+		"duration": 350,
+		"frame": {
+			"totalFrames": 5,
+			"frameWidth": 112,
+			"frameHeight": 112
+		},
+		"sound": "patpat:lopi"
+	},
+	"entities": {
+		"id": "minecraft:goat",
+		"name": "Снежа"
+	}
+}

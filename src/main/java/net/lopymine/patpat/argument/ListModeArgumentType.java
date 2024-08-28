@@ -35,7 +35,7 @@ public class ListModeArgumentType implements ArgumentType<ListMode> {
 	public ListMode parse(StringReader reader) throws CommandSyntaxException {
 		String modeId = reader.readUnquotedString();
 		if (PatPatClient.getConfig().isDebugLogEnabled()) {
-			PatPatClient.info("Parted modeId from ListModeArgumentType: {}", modeId);
+			PatPatClient.info("Parsed modeId from ListModeArgumentType: {}", modeId);
 		}
 		ListMode listMode = ListMode.getById(modeId);
 		if (listMode == null) {

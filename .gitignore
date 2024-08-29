@@ -30,7 +30,8 @@ bin/
 
 # fabric
 
-run/
+runs/
+player/
 
 # java
 

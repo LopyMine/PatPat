@@ -1,0 +1,19 @@
+plugins {
+    id "dev.kikugie.stonecutter"
+}
+stonecutter.active "1.21" /* [SC] DO NOT EDIT */
+
+stonecutter.registerChiseled tasks.register("chiseledBuildAndCollect", stonecutter.chiseled) {
+	setGroup "project"
+	ofTask "buildAndCollect"
+}
+
+stonecutter.registerChiseled tasks.register("chiseledPublish", stonecutter.chiseled) {
+	setGroup("project")
+	ofTask("publishMods")
+}
+
+stonecutter.registerChiseled tasks.register("chisheledAnnounceToDiscord", stonecutter.chiseled) {
+	setGroup("project")
+	ofTask("announceToDiscord")
+}

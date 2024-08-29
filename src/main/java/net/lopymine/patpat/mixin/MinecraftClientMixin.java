@@ -1,23 +1,31 @@
 package net.lopymine.patpat.mixin;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.manager.PatPatSoundManager;
-import net.lopymine.patpat.packet.PatEntityC2SPacket;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.session.Session;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
+import net.minecraft.client.network.*;
+import net.minecraft.entity.*;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.*;
+import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.compat.replaymod.ReplayModCompat;
+import net.lopymine.patpat.config.client.PatPatClientConfig;
+import net.lopymine.patpat.config.resourcepack.PlayerConfig;
+import net.lopymine.patpat.entity.PatEntity;
+import net.lopymine.patpat.manager.client.*;
+import net.lopymine.patpat.packet.*;
+
+import java.util.UUID;
+import org.jetbrains.annotations.Nullable;
+
+//? <=1.19.3 {
+/*import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.network.PacketByteBuf;
+*///?}
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
@@ -34,10 +42,20 @@ public abstract class MinecraftClientMixin {
 	private int itemUseCooldown;
 
 	@Shadow
-	public abstract Session getSession();
+	public abstract
+		//? >=1.20.2 {
+	net.minecraft.client.session.Session
+	//?} else {
+	/*net.minecraft.client.util.Session
+	 *///?}
+	getSession();
 
 	@Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
 	private void onRightClickMouse(CallbackInfo ci) {
+		PatPatClientConfig config = PatPatClient.getConfig();
+		if (!config.isModEnabled()) {
+			return;
+		}
 		if (!(this.crosshairTarget instanceof EntityHitResult hitResult)) {
 			return;
 		}
@@ -46,15 +64,40 @@ public abstract class MinecraftClientMixin {
 		}
 		Entity entity = hitResult.getEntity();
 		if (!(entity instanceof LivingEntity livingEntity)
-			|| this.player.isSpectator()
-			|| !this.player.getMainHandStack().isEmpty()
-			|| !this.player.isSneaking()) {
+				|| this.player.isSpectator()
+				|| !this.player.getMainHandStack().isEmpty()
+				|| !this.player.isSneaking()) {
 			return;
 		}
 
-		ClientPlayNetworking.send(new PatEntityC2SPacket(this.player, entity));
-		PatEntity patEntity = PatPatClient.pat(livingEntity, this.getSession().getUuidOrNull());
-		PatPatSoundManager.playSound(patEntity, this.player);
+		if (livingEntity.isInvisible()) {
+			return;
+		}
+
+		//? >=1.19.4 {
+		ClientPlayNetworking.send(new PatEntityC2SPacket(livingEntity));
+		//?} else {
+		/*PatEntityC2SPacket packet = new PatEntityC2SPacket(livingEntity);
+		PacketByteBuf buf = PacketByteBufs.create();
+		packet.write(buf);
+		ClientPlayNetworking.send(PatEntityC2SPacket.PACKET_ID ,buf);
+		*///?}
+
+		UUID currentUuid = this.getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/;
+		PlayerConfig whoPatted = PlayerConfig.of(this.getSession().getUsername(), currentUuid);
+
+		PatEntity patEntity = PatPatClientManager.pat(livingEntity, whoPatted);
+
+		ReplayModCompat.onPat(livingEntity.getUuid(), currentUuid);
+
+		if (config.isSoundsEnabled()) {
+			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsVolume());
+		}
+
+		if (config.isSwingHandEnabled()) {
+			this.player.swingHand(Hand.MAIN_HAND);
+		}
+
 		this.itemUseCooldown = 4;
 		ci.cancel();
 	}

@@ -1,15 +1,18 @@
 {
 	"schemaVersion": 1,
-	"id": "patpat",
+	"id": "${mod_id}",
 	"version": "${version}",
-	"name": "PatPat",
-	"description": "Simple PatPat Fabric mod for patting any mobs!",
+	"name": "${mod_name}",
+	"description": "${mod_description}",
 	"authors": [
-		"nikita51 [Author]",
-		"LopyMine"
+		"${mod_authors}"
 	],
-	"license": "MIT",
-	"icon": "assets/patpat/icon/icon.png",
+	"contact": {
+		"homepage": "https://modrinth.com/mod/${mod_id}",
+		"issues": "https://github.com/LopyMine/${mod_id}"
+	},
+	"license": "${mod_license}",
+	"icon": "icon/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
@@ -17,15 +20,19 @@
 		],
 		"client": [
 			"net.lopymine.patpat.client.PatPatClient"
+		],
+		"modmenu": [
+			"net.lopymine.patpat.modmenu.ModMenuIntegration"
 		]
 	},
-	"mixins": [
-		"patpat.mixins.json"
-	],
 	"depends": {
-		"fabricloader": ">=0.15.11",
-		"minecraft": "~1.20.4",
-		"java": ">=17",
-		"fabric-api": "*"
-	}
+		"fabricloader": ">=${fabric_loader}",
+		"minecraft": ">=${minecraft}",
+		"java": ">=${java}",
+		"${fabric_api_id}": ">=${fabric_api}"
+	},
+	"accessWidener": "aws/${minecraft}.accesswidener",
+	"mixins": [
+		"${mod_id}.mixins.json"
+	]
 }

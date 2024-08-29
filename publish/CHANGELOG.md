@@ -1,0 +1,5 @@
+- Added pizza (with pineapples)
+- Removed Herobrine
+- Added little mob which will hunting for you everywhere
+- Bumped to every minecraft version from INDEV to 1.21
+- Little fixes

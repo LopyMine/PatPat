@@ -1,19 +1,31 @@
 package net.lopymine.patpat.entity;
 
-import lombok.Getter;
+import lombok.*;
 import net.minecraft.entity.LivingEntity;
+
+import net.lopymine.patpat.config.resourcepack.*;
 
 import java.util.*;
 
 @Getter
 public class PatEntity {
+
 	private final LivingEntity entity;
-	private final PatAnimation animation;
+	private final CustomAnimationSettingsConfig animation;
+	@Setter
+	private int currentFrame;
+	private long timeOfStart;
 
-	public PatEntity(LivingEntity entity, boolean isAuthor) {
-		this.entity = entity;
-		this.animation = PatAnimation.of(entity, isAuthor);
+	public PatEntity(LivingEntity entity, PlayerConfig whoPatted) {
+		this.entity       = entity;
+		this.animation    = CustomAnimationSettingsConfig.of(entity, whoPatted);
+		this.timeOfStart  = System.currentTimeMillis();
+		this.currentFrame = 0;
+	}
 
+	public void resetAnimation() {
+		this.timeOfStart  = System.currentTimeMillis();
+		this.currentFrame = 0;
 	}
 
 	public boolean is(LivingEntity entity) {

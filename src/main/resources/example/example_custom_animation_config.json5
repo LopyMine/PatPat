@@ -1,5 +1,6 @@
 // no j52j
-// The comment above is important, see https://github.com/LopyMine/Mossy?tab=readme-ov-file#about-json5-files
+// The comment above is important FOR MOD DEVELOPERS!
+// See https://github.com/LopyMine/Mossy?tab=readme-ov-file#about-json5-files
 {
 	"version": "1.0.0",
 	"priority": 1,

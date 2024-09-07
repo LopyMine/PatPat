@@ -38,6 +38,7 @@ base {
 }
 
 repositories {
+	mavenCentral()
 	maven { url "https://maven.quiltmc.org/repository/release/" } // Stil for YACL
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" } // Stil for YACL
 	maven {
@@ -80,7 +81,7 @@ dependencies {
 	modImplementation "com.terraformersmc:modmenu:${findProperty("dep.modmenu")}"
 
 	// YACL
-	if (stonecutter.compare("1.20", mcVersion) != 1) {
+	if (stonecutter.compare("1.20.1", mcVersion) != 1) {
 		def minecraftVersionsWithOldYACLMaven = Set.of("1.19.4", "1.20", "1.20.2", "1.20.3")
 		def yaclVersion = findProperty("dep.yacl")
 		if (minecraftVersionsWithOldYACLMaven.contains(mcVersion)) {

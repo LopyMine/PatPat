@@ -13,7 +13,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
 	@Override
 	public ConfigScreenFactory<?> getModConfigScreenFactory() {
-		//? >=1.20 {
+		//? >=1.20.1 {
 		if (FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")) {
 			return YACLConfigurationScreen::createScreen;
 		}

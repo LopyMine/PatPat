@@ -8,8 +8,8 @@
 	"client": [
 		"EntityRendererMixin",
 		"LivingEntityRendererMixin",
-		/*? =1.16.5 */
-		"TitleScreenMixin",
+		/*? =1.16.5*/
+		/*"TitleScreenMixin",*/
 		"MinecraftClientMixin"
 	],
 	"injectors": {

@@ -1,5 +1,5 @@
 {
-	"modmenu.descriptionTranslation.patpat": "Simple Fabric mod for patting any mobs!",
+	"modmenu.descriptionTranslation.patpat": "Simple Client and (Optional) Server side Fabric mod for patting any (living) mobs!",
 	"patpat.title": "§lPatPat",
 	"patpat.title.client": "§lPatPat Client",
 	"patpat.command.argument.player_info.exception.failed_parsing": "Failed parsing: %s",

@@ -1,2 +1,4 @@
 accessWidener v2 named
 # 1.21 AW
+
+extendable class net/minecraft/client/model/ModelPart

@@ -12,8 +12,3 @@ stonecutter.registerChiseled tasks.register("chiseledPublish", stonecutter.chise
 	setGroup("project")
 	ofTask("publishMods")
 }
-
-stonecutter.registerChiseled tasks.register("chisheledAnnounceToDiscord", stonecutter.chiseled) {
-	setGroup("project")
-	ofTask("announceToDiscord")
-}

@@ -1,5 +1,5 @@
 {
-	"modmenu.descriptionTranslation.patpat": "Простой Fabric мод для похлопывания мобов!",
+	"modmenu.descriptionTranslation.patpat": "Простой клиентский и (опционально) серверный Fabric мод для похлопывания любых (живых) мобов!",
 	"patpat.title": "§lPatPat",
 	"patpat.title.client": "§lPatPat Клиент",
 	"patpat.command.argument.player_info.exception.failed_parsing": "Ошибка получения данных: %s",

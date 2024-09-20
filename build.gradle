@@ -1,10 +1,9 @@
 import java.awt.Desktop
 
 plugins {
-	id "fabric-loom" version "1.7-SNAPSHOT"
-	id "dev.kikugie.j52j" version "1.0.2"
-	id "me.modmuss50.mod-publish-plugin" version "0.6.3"
-	id "net.lopymine.discord-mod-announcer" version "1.0.0"
+	id("fabric-loom") version "1.7-SNAPSHOT"
+	id("dev.kikugie.j52j") version "1.0.2"
+	id("me.modmuss50.mod-publish-plugin") version "0.7.4"
 }
 
 def modId = project.mod_id
@@ -148,7 +147,6 @@ processResources {
 	props.put("fabric_loader", findProperty("build.fabric_loader").toString())
 	props.put("minecraft", mcVersion.toString())
 	props.put("java", javaVersionAsInt.toString())
-	props.put("fabric_api", substringBefore(findProperty("build.fabric_api").toString(), "+"))
 	props.put("fabric_api_id", stonecutter.compare("1.19.1", mcVersion) >= 0 ? "fabric" : "fabric-api")
 
 	props.each { key, value ->
@@ -352,7 +350,7 @@ def getBuildedModFileOrDefault(String modName, String modVersion, String minecra
 	def provider = project.rootProject.layout.buildDirectory.file(path)
 	def regularFile = provider.orNull
 	if (regularFile == null || !regularFile.getAsFile().exists()) {
-		println "[PublishMods] [WARNING] Failed to find jar file for ${minecraftVersion} at '${path}'! Using archive file!"
+		println "[PublishMods] Failed to find jar file at '${path}'! Using archive file!"
 		return remapJar.archiveFile
 	}
 	return regularFile.getAsFile()
@@ -365,9 +363,7 @@ String getChangeLog() {
 		if (!text.isBlank()) {
 			return text
 		}
-		println "[PublishMods] [WARNING] No changelog provided!"
 	}
-	println "[PublishMods] [WARNING] Failed to find changelog file at '${file.path}'!"
 	return "No changelog specified."
 }
 
@@ -503,60 +499,4 @@ class VersionWithSupportRange {
 		}
 		return projectVersion
 	}
-}
-
-announceToDiscord {
-	def pubProperties = getPublicationProperties()
-	if (pubProperties.isEmpty()) {
-		return
-	}
-
-	announceMode = lastProject(mcVersion) ?
-			providers.environmentVariable("DISCORD_BOT_TOKEN") == null || Boolean.parseBoolean(pubProperties.get("test_publish").toString()) ?
-					TEST
-					:
-					ENABLE
-			:
-			DISABLE
-
-	token = providers.environmentVariable("DISCORD_BOT_TOKEN")
-	icon = project.rootProject.file("src/main/resources/icon/icon.png")
-
-	title = "${modName} v${modVersion} is out!"
-	showcaseThreadTitle = "${modName} v${modVersion} Showcase"
-	changelog = getChangeLog()
-	color = getDecimalColorFromHEX(pubProperties.get("project_color").toString())
-
-	// Links
-	modrinthLink = "https://modrinth.com/mod/${modId}"
-	curseForgeLink = "https://www.curseforge.com/minecraft/mc-mods/${modId}"
-	githubLink = "https://github.com/LopyMine/${modId}"
-
-	uploaderId = pubProperties.get("uploaderId").toString()
-	announcementChannelId = pubProperties.get("announcementChannelId").toString()
-	testAnnouncementChannelId = pubProperties.get("testAnnouncementChannelId").toString()
-	pingRoles = [modId]
-
-	showcaseImages = getShowcaseFiles(pubProperties)
-}
-
-File[] getShowcaseFiles(Properties pubProperties) {
-	def files = []
-	def string = pubProperties.get("showcase_images").toString()
-	if (string == "none") {
-		return files
-	}
-	def images = string.split(" ")
-	images.each { img ->
-		files.add(project.rootProject.file("img/showcase/${img}"))
-	}
-	return files
-}
-
-static int getDecimalColorFromHEX(String hexColor) {
-	return Integer.parseInt(hexColor, 16)
-}
-
-boolean lastProject(String mcVersion) {
-	mcVersion == versionsWithSupportRange.last().projectVersion
 }

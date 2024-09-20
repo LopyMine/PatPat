@@ -1,7 +1,7 @@
 package net.lopymine.patpat.modmenu.screen.yacl;
 
 import net.minecraft.client.gui.screen.Screen;
-//? >=1.20 {
+//? >=1.20.1 {
 import dev.isxander.yacl3.api.*;
 import net.minecraft.text.Text;
 
@@ -90,7 +90,7 @@ public class YACLConfigurationScreen {
 	}
 
 	public static Screen createScreen(Screen parent) {
-		throw new IllegalStateException("YACL Screen for PatPat mod available only since 1.20!");
+		throw new IllegalStateException("YACL Screen for PatPat mod available only since 1.20.1!");
 	}
 }
 *///?}

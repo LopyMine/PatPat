@@ -16,6 +16,7 @@ import net.lopymine.patpat.utils.IdentifierUtils;
 
 import java.io.*;
 import java.util.*;
+import org.jetbrains.annotations.Nullable;
 
 @Getter
 public final class CustomAnimationSettingsConfig {
@@ -24,28 +25,29 @@ public final class CustomAnimationSettingsConfig {
 			Codec.STRING.fieldOf("texture").xmap(IdentifierUtils::textureId, Identifier::toString).forGetter(CustomAnimationSettingsConfig::getTexture),
 			Codec.INT.fieldOf("duration").forGetter(CustomAnimationSettingsConfig::getDuration),
 			FrameConfig.CODEC.fieldOf("frame").forGetter(CustomAnimationSettingsConfig::getFrameConfig),
-			SoundConfig.STRINGED_CODEC.fieldOf("sound").forGetter(CustomAnimationSettingsConfig::getSoundConfig)
+			SoundConfig.STRINGED_CODEC.optionalFieldOf("sound").forGetter(CustomAnimationSettingsConfig::getOptionalSoundConfig)
 	).apply(instance, CustomAnimationSettingsConfig::new));
 
 	public static final CustomAnimationSettingsConfig DEFAULT_PATPAT_ANIMATION = new CustomAnimationSettingsConfig(
 			IdentifierUtils.textureId("default/patpat.png"),
 			240,
 			FrameConfig.DEFAULT_FRAME,
-			SoundConfig.PATPAT_SOUND
+			Optional.of(SoundConfig.PATPAT_SOUND)
 	);
 
 	private final Identifier texture;
 	private final int duration;
 	private final FrameConfig frameConfig;
+	@Nullable
 	private final SoundConfig soundConfig;
 	private int textureWidth;
 	private int textureHeight;
 
-	public CustomAnimationSettingsConfig(Identifier texture, int duration, FrameConfig frameConfig, SoundConfig soundConfig) {
+	public CustomAnimationSettingsConfig(Identifier texture, int duration, FrameConfig frameConfig, Optional<SoundConfig> soundConfig) {
 		this.texture     = texture;
 		this.duration    = duration;
 		this.frameConfig = frameConfig;
-		this.soundConfig = soundConfig;
+		this.soundConfig = soundConfig.orElse(null);
 		this.loadSize();
 	}
 
@@ -100,5 +102,9 @@ public final class CustomAnimationSettingsConfig {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private Optional<SoundConfig> getOptionalSoundConfig() {
+		return Optional.ofNullable(this.soundConfig);
 	}
 }

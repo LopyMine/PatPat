@@ -1,6 +1,6 @@
 package net.lopymine.patpat.modmenu.screen.yacl.simple;
 
-//? >=1.20 {
+//? >=1.20.1 {
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.OptionDescription.Builder;
 import dev.isxander.yacl3.api.controller.*;

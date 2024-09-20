@@ -28,7 +28,7 @@ public class PatPat implements ModInitializer {
 		//? >=1.17 {
 		LOGGER.info(text, args);
 		//?} else {
-		/*System.out.println("[PatPat/INFO] " + text.replace("{}", "%s").formatted(args));
+		/*System.out.println("[%s/INFO].formatted(MOD_NAME) " + text.replace("{}", "%s").formatted(args));
 		 *///?}
 	}
 
@@ -36,7 +36,7 @@ public class PatPat implements ModInitializer {
 		//? >=1.17 {
 		LOGGER.warn(text, args);
 		//?} else {
-		/*System.out.println("[PatPat/WARN] " + text.replace("{}", "%s").formatted(args));
+		/*System.out.println("[%s/WARN].formatted(MOD_NAME) " + text.replace("{}", "%s").formatted(args));
 		 *///?}
 	}
 
@@ -44,7 +44,7 @@ public class PatPat implements ModInitializer {
 		//? >=1.17 {
 		LOGGER.error(text, args);
 		//?} else {
-		/*System.out.println("[PatPat/ERROR] " + text.replace("{}", "%s").formatted(args));
+		/*System.out.println("[%s/ERROR] ".formatted(MOD_NAME) + text.replace("{}", "%s").formatted(args));
 		 *///?}
 	}
 

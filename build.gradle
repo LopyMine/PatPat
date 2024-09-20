@@ -114,11 +114,11 @@ loom {
 
 	def playerProperties = getPlayerProperties()
 
-	def playerNicknameProperty = playerProperties.get("player_nickname").toString() // Your in-game nickname
+	def playerNicknameProperty = playerProperties.get("player_nickname") // Your in-game nickname
 	def playerNickname = getNickname(playerNicknameProperty)
 
-	def playerUuidProperty = playerProperties.get("player_uuid").toString() // Your in-game uuid
-	def playerUuid = getUUID(playerUuidProperty, playerUuidProperty.indexOf("-") == -1)
+	def playerUuidProperty = playerProperties.get("player_uuid") // Your in-game uuid
+	def playerUuid = getUUID(playerUuidProperty)
 
 	runConfigs.configureEach { config ->
 		config.setIdeConfigGenerated(true) // generate IDE tasks for running client, server and testmod, datagen if those are present
@@ -255,26 +255,26 @@ static String getSupportedMinecraftVersionRange(VersionWithSupportRange[] versio
 	return result == null ? currentMinecraftVersion : result
 }
 
-String getNickname(String nickname) {
-	if (nickname == null) {
+String getNickname(Object nickname) {
+	if (nickname == null || nickname == "null" || nickname == "none") {
 		return null
 	}
-	if (!nickname.matches('^[a-zA-Z0-9_]{2,16}$')) {
+	if (!nickname.toString().matches('^[a-zA-Z0-9_]{2,16}$')) {
 		println "WARNING — Your nickname is wrong, using default nickname 'Player'"
 		return "Player"
 	}
-	return nickname
+	return nickname.toString()
 }
 
-UUID getUUID(String uuid, boolean undashed) {
-	if (uuid == null) {
+UUID getUUID(Object uuid) {
+	if (uuid == null || uuid.toString() == "null" || uuid.toString() == "none") {
 		return null
 	}
 	try {
-		if (undashed) {
-			return UUID.fromString(uuid.replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", '$1-$2-$3-$4-$5'))
+		if (uuid.toString().indexOf("-") == -1) {
+			return UUID.fromString(uuid.toString().replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", '$1-$2-$3-$4-$5'))
 		}
-		return UUID.fromString(uuid)
+		return UUID.fromString(uuid.toString())
 	} catch (Exception e) {
 		e.printStackTrace()
 	}

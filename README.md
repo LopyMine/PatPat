@@ -2,24 +2,41 @@
 
 [![CurseForge Link-Banner](https://cdn.modrinth.com/data/cached_images/c39affcb732c8b1a4fe189e79898c686da3d63e2.png)](https://www.curseforge.com/minecraft/mc-mods/patpat) [![Modrinth Link-Banner](https://cdn.modrinth.com/data/cached_images/9991553f6a20e5105b9b153b8d817bc3630c18a8.png)](https://modrinth.com/mod/patpat)
 
-<img src="https://cdn.modrinth.com/data/cached_images/da8941a941917d438a8d2606cac7a3f8fd563cf1.webp" width="800px" alt="Banner"/>
+<img src="img/banner.webp" width="800px" alt="Banner"/>
 
 
 # 💬 Description
 Simple in-use client side Fabric mod for patting any (living) mobs! If you have ever wanted to pet your pet, this mod is for you!
 
-<img src="https://cdn.modrinth.com/data/cached_images/241f2e2d59483053ded36c5fd41ba80a038258bb.webp" width="800px" alt="Showcase"/>
+<img src="img/showcase.webp" width="800px" alt="Showcase"/>
 
 # 🔥 Custom Animations
-You can create your OWN animations, and then upload them to Modrinth or CurseForge, because they can be created by using resource packs! Read [Wiki](https://github.com/LopyMine/PatPat/wiki/) for more information.
+You can create your OWN animations, and then upload them to Modrinth or CurseForge, because they can be created by using resource packs! Read [**Wiki**](https://github.com/LopyMine/PatPat/wiki/) for more information.
 
 Below you can see some of the custom animations that were made during the DEV period :D
 
-<img src="https://cdn.modrinth.com/data/cached_images/5407cbbee00cc38c36ae6cbee0ae16697d0df8d1.webp" width="800px" alt="Showcase"/>
+<img src="img/custom_animations.webp" width="800px" alt="Showcase"/>
 
 # 🎮 Multiplayer Support
 Also this mod supports multiplayer, just by adding this mod at the server you can patting together with friends!
 
-If you have non-Fabric server, you can install [PatPat Plugin](https://modrinth.com/project/patpat-plugin) on your Bukkit/Spigot/Paper server!
+<img src="img/multiplayer_showcase.webp" width="800px" alt="Showcase"/>
 
-<img src="https://raw.githubusercontent.com/LopyMine/PatPat/master/img/multiplayer_showcase.webp" width="800px" alt="Showcase"/>
+<img src="img/network_showcase.png" width="800px" alt="Showcase"/>
+
+# ⚡ PatPat Plugin
+
+If you have non-Fabric server, you can install PatPat Plugin on your Bukkit/Spigot/Paper server! This Plugin just provides the server-side functionality of the PatPat for non-Fabric Servers.
+
+For now, the PatPat Plugin should support most of the currently available server cores, such as Bukkit, Spigot, Paper and on other their forks. I recommend just to test it on your server.
+
+**If you see that this plugin doesn't work at your server, please open issue about it at [**Github Issues**](https://github.com/LopyMine/PatPat-Plugin/issues) page.** Currently, in plans to add support for Velocity servers.
+
+# 📔 Open Source
+
+All code of PatPat Mod and Plugin is open source. Anyone can read and verify it!
+
+| PatPat | Link |
+| ------- | ------- |
+| Mod | [**Github**](https://github.com/LopyMine/PatPat) |
+| Plugin | [**Github**](https://github.com/LopyMine/PatPat-Plugin) |

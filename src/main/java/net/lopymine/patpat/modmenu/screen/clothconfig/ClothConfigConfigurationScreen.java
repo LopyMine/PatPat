@@ -54,6 +54,14 @@ public class ClothConfigConfigurationScreen {
 						.setSaveConsumer(config::setModEnabled)
 						.build()
 		);
+		subcategory.add(
+				entryBuilder.startBooleanToggle(PatPat.text("modmenu.main.option.debug_log_enabled"), config.isDebugLogEnabled())
+						.setTooltip(PatPat.text("modmenu.main.option.debug_log_enabled.description"))
+						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.isDebugLogEnabled())
+						.setSaveConsumer(config::setDebugLogEnabled)
+						.build()
+		);
 		subcategory.setExpanded(true);
 		return subcategory.build();
 	}
@@ -61,7 +69,7 @@ public class ClothConfigConfigurationScreen {
 	private static SubCategoryListEntry getResourcePackGroup(ConfigEntryBuilder entryBuilder, PatPatClientConfig config) {
 		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(PatPat.text("modmenu.resource_packs"));
 		subcategory.add(
-				entryBuilder.startBooleanToggle(PatPat.text("modmenu.resource_packs.option.skip_outdated_animations_enabled"), config.isModEnabled())
+				entryBuilder.startBooleanToggle(PatPat.text("modmenu.resource_packs.option.skip_outdated_animations_enabled"), config.isSkipOldAnimationsEnabled())
 						.setTooltip(PatPat.text("modmenu.resource_packs.option.skip_outdated_animations_enabled.description"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
 						.setDefaultValue(PatPatClientConfig.DEFAULT.isSkipOldAnimationsEnabled())
@@ -97,14 +105,6 @@ public class ClothConfigConfigurationScreen {
 
 	private static SubCategoryListEntry getVisualGroup(ConfigEntryBuilder entryBuilder, PatPatClientConfig config) {
 		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(PatPat.text("modmenu.visual"));
-//		subcategory.add(
-//				entryBuilder.startBooleanToggle(PatPat.text("modmenu.visual.option.lowering_animation_enabled"), config.isLoweringAnimationEnabled())
-//						.setTooltip(PatPat.text("modmenu.visual.option.lowering_animation_enabled.description"))
-//						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
-//						.setDefaultValue(PatPatClientConfig.DEFAULT.isLoweringAnimationEnabled())
-//						.setSaveConsumer(config::setLoweringAnimationEnabled)
-//						.build()
-//		);
 		subcategory.add(
 				entryBuilder.startBooleanToggle(PatPat.text("modmenu.visual.option.hiding_nickname_enabled"), config.isNicknameHidingEnabled())
 						.setTooltip(PatPat.text("modmenu.visual.option.hiding_nickname_enabled.description"))
@@ -146,6 +146,23 @@ public class ClothConfigConfigurationScreen {
 						.setMin(-5)
 						.setMax(5)
 						.setSaveConsumer(value -> config.setAnimationOffsetZ(Math.round(value * 100) / 100f))
+						.build()
+		);
+		subcategory.add(
+				entryBuilder.startBooleanToggle(PatPat.text("modmenu.visual.option.camera_shacking"), config.isCameraShackingEnabled())
+						.setTooltip(PatPat.text("modmenu.visual.option.camera_shacking.description"))
+						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.isCameraShackingEnabled())
+						.setSaveConsumer(config::setCameraShackingEnabled)
+						.build()
+		);
+		subcategory.add(
+				entryBuilder.startFloatField(PatPat.text("modmenu.visual.option.pat_weight"), config.getPatWeight())
+						.setTooltip(PatPat.text("modmenu.visual.option.pat_weight.description"))
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getPatWeight())
+						.setMin(0)
+						.setMax(1)
+						.setSaveConsumer(value -> config.setPatWeight(Math.round(value * 100) / 100f))
 						.build()
 		);
 		subcategory.setExpanded(true);

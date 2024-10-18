@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "${mod_group}.mixin",
+	"package": "net.lopymine.patpat.mixin",
 	"refmap": "${mod_id}.refmap.json",
 	"compatibilityLevel": "JAVA_${java}",
 	"mixins": [
@@ -10,7 +10,8 @@
 		"LivingEntityRendererMixin",
 		/*? =1.16.5*/
 		/*"TitleScreenMixin",*/
-		"MinecraftClientMixin"
+		"MinecraftClientMixin",
+		"CameraMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

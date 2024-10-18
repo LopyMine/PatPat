@@ -1,5 +1,7 @@
 package net.lopymine.patpat.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.*;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -7,7 +9,6 @@ import net.minecraft.client.util.math.MatrixStack.Entry;
 import net.minecraft.entity.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -24,18 +25,20 @@ public class EntityRendererMixin {
 	@Final
 	protected EntityRenderDispatcher dispatcher;
 
-	@Inject(at = @At("HEAD"), method = "render", cancellable = true)
-	private void render(Entity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
+	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRenderer;hasLabel(Lnet/minecraft/entity/Entity;)Z"), method = "render")
+	private boolean render(EntityRenderer<?> instance, Entity entity, Operation<Boolean> original, @Local(argsOnly = true) MatrixStack matrices, @Local(argsOnly = true) VertexConsumerProvider provider, @Local(argsOnly = true) int light, @Local(argsOnly = true, ordinal = 1) float tickDelta) {
+		boolean bl = original.call(instance, entity);
+
 		PatPatClientConfig config = PatPatClient.getConfig();
 		if (!config.isModEnabled()) {
-			return;
+			return bl;
 		}
 		if (!(entity instanceof LivingEntity livingEntity)) {
-			return;
+			return bl;
 		}
 		PatEntity patEntity = PatPatClientManager.getPatEntity(livingEntity);
 		if (patEntity == null) {
-			return;
+			return bl;
 		}
 
 		//? <=1.20.4 {
@@ -85,7 +88,7 @@ public class EntityRendererMixin {
 
 		Entry peek = matrices.peek();
 		/*? >=1.19.3 {*/org.joml.Matrix4f/*?} else {*/ /*net.minecraft.util.math.Matrix4f*//*?}*/ matrix4f = peek./*? <=1.17.1 {*//*getModel()*//*?} else {*/getPositionMatrix()/*?}*/;
-		VertexConsumer buffer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(animation.getTexture()));
+		VertexConsumer buffer = provider.getBuffer(RenderLayer.getEntityTranslucent(animation.getTexture()));
 
 		buffer.vertex(matrix4f, x1, y1, z).color(255, 255, 255, 255).texture(u1, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
 		buffer.vertex(matrix4f, x1, y2, z).color(255, 255, 255, 255).texture(u1, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
@@ -94,8 +97,6 @@ public class EntityRendererMixin {
 
 		matrices.pop();
 		RenderSystem.disableBlend();
-		if (config.isNicknameHidingEnabled()) {
-			ci.cancel();
-		}
+		return !config.isNicknameHidingEnabled();
 	}
 }

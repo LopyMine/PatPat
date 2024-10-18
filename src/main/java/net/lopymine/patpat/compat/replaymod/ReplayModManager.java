@@ -25,7 +25,10 @@ public class ReplayModManager {
 			if (PatPatClient.getConfig().isDebugLogEnabled()) {
 				PatPatClient.info("Sent dummy packet for Replay Mod");
 			}
-			com.replaymod.recording.ReplayModRecording.instance.getConnectionEventHandler().getPacketListener().save(packet);
+			com.replaymod.recording.packet.PacketListener packetListener = com.replaymod.recording.ReplayModRecording.instance.getConnectionEventHandler().getPacketListener();
+			if (packetListener != null) {
+				packetListener.save(packet);
+			}
 		}
 		//?}
 	}

@@ -24,7 +24,7 @@ public class PatPat implements ModInitializer {
 	@Getter
 	private static PatPatServerConfig config = PatPatServerConfig.getInstance();
 
-	public static void info(String text, Object... args) {
+	public static void info(String text, Object... args) { // TODO
 		//? >=1.17 {
 		LOGGER.info(text, args);
 		//?} else {

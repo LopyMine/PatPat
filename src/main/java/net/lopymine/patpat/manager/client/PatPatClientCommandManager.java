@@ -71,7 +71,7 @@ public class PatPatClientCommandManager {
 		UUID uuid = playerInfo.getUuid();
 		String name = playerInfo.getNickname();
 
-		boolean success = (add && players.put(uuid, name) == null) || players.remove(uuid) != null;
+		boolean success = add ? !players.containsKey(uuid) && players.put(uuid, name) == null : players.containsKey(uuid) && players.remove(uuid) != null;
 
 		String action = add ? "add" : "remove";
 		String result = success ? "success" : "failed";
@@ -83,12 +83,6 @@ public class PatPatClientCommandManager {
 				.build();
 
 		context.getSource().sendFeedback(PATPAT_ID.copy().append(text));
-		if (success) {
-			PatPatClient.info(text.asString());
-		} else {
-			PatPatClient.warn(text.asString());
-		}
-
 		config.save();
 		return Command.SINGLE_SUCCESS;
 	}
@@ -102,7 +96,6 @@ public class PatPatClientCommandManager {
 		Text text = CommandTextBuilder.startBuilder("list.mode.success", mode.getText()).build();
 
 		context.getSource().sendFeedback(PATPAT_ID.copy().append(text));
-		PatPatClient.info(text.asString());
 		return Command.SINGLE_SUCCESS;
 	}
 }

@@ -4,6 +4,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.PandaEntity;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
@@ -23,25 +24,11 @@ public class LivingEntityRendererMixin {
 			return;
 		}
 
-		CustomAnimationSettingsConfig animationConfig = patEntity.getAnimation();
-		int duration = animationConfig.getDuration();
-		long time = patEntity.getTimeOfStart();
-		long timeNow = System.currentTimeMillis();
-		if (timeNow >= (time + duration)) {
+		if (PatPatClientManager.expired(patEntity)) {
 			PatPatClientManager.removePatEntity(patEntity);
 			return;
 		}
 
-		float animationProgress = MathHelper.clamp((float) (timeNow - time) / duration, 0.0F, 1.0F);
-		animationProgress = (float) (1 - Math.pow(1 - animationProgress, 2));
-		int totalFrames = animationConfig.getFrameConfig().totalFrames();
-
-		int frame = MathHelper.clamp((int) Math.floor(totalFrames * animationProgress), 0, totalFrames - 1);
-		patEntity.setCurrentFrame(frame);
-
-		float range = 0.425F / livingEntity.getHeight();
-		float animation = ((float) ((1 - range) + range * (1 - Math.sin(animationProgress * Math.PI))));
-
-		matrixStack.scale(1, animation, 1);
+		matrixStack.scale(1F, PatPatClientManager.getAnimationProgress(patEntity), 1F);
 	}
 }

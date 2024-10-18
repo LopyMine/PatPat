@@ -1,9 +1,10 @@
 package net.lopymine.patpat.manager.client;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.MathHelper;
 
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.config.resourcepack.PlayerConfig;
+import net.lopymine.patpat.config.resourcepack.*;
 import net.lopymine.patpat.entity.PatEntity;
 
 import java.util.*;
@@ -46,6 +47,31 @@ public class PatPatClientManager {
 			patEntity.resetAnimation();
 		}
 		return patEntity;
+	}
+
+	public static boolean expired(PatEntity patEntity) {
+		CustomAnimationSettingsConfig animationConfig = patEntity.getAnimation();
+		int duration = animationConfig.getDuration();
+		long time = patEntity.getTimeOfStart();
+		long timeNow = System.currentTimeMillis();
+		return timeNow >= (time + duration);
+	}
+
+	public static float getAnimationProgress(PatEntity patEntity) {
+		CustomAnimationSettingsConfig animationConfig = patEntity.getAnimation();
+		int duration = animationConfig.getDuration();
+		long time = patEntity.getTimeOfStart();
+		long timeNow = System.currentTimeMillis();
+
+		float animationProgress = MathHelper.clamp((float) (timeNow - time) / duration, 0.0F, 1.0F);
+		animationProgress = (float) (1 - Math.pow(1 - animationProgress, 2));
+		int totalFrames = animationConfig.getFrameConfig().totalFrames();
+
+		int frame = MathHelper.clamp((int) Math.floor(totalFrames * animationProgress), 0, totalFrames - 1);
+		patEntity.setCurrentFrame(frame);
+
+		float range = PatPatClient.getConfig().getPatWeight() / patEntity.getEntity().getHeight();
+		return ((float) ((1 - range) + range * (1 - Math.sin(animationProgress * Math.PI))));
 	}
 
 	public static void reloadPatEntities() {

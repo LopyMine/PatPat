@@ -75,7 +75,7 @@ public class PatPatServerCommandManager {
 			String name = gameProfile.getName();
 			UUID uuid = gameProfile.getId();
 
-			boolean success = (add && players.put(uuid, name) == null) || players.remove(uuid) != null;
+			boolean success = add ? !players.containsKey(uuid) && players.put(uuid, name) == null : players.containsKey(uuid) && players.remove(uuid) != null;
 
 			String action = add ? "add" : "remove";
 			String result = success ? "success" : "failed";

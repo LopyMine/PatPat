@@ -1,14 +1,45 @@
 plugins {
-    id "dev.kikugie.stonecutter"
+	id "dev.kikugie.stonecutter"
 }
 stonecutter.active "1.21" /* [SC] DO NOT EDIT */
 
-stonecutter.registerChiseled tasks.register("chiseledBuildAndCollect", stonecutter.chiseled) {
-	setGroup "project"
-	ofTask "buildAndCollect"
+stonecutter.registerChiseled tasks.register("chiseledBuildAndCollectAll", stonecutter.chiseled) {
+	setGroup("project")
+	ofTask("buildAndCollect")
 }
 
-stonecutter.registerChiseled tasks.register("chiseledPublish", stonecutter.chiseled) {
+stonecutter.registerChiseled tasks.register("chiseledPublishAll", stonecutter.chiseled) {
 	setGroup("project")
 	ofTask("publishMods")
+}
+
+stonecutter.registerChiseled tasks.register("chiseledPublishSpecified", stonecutter.chiseled) {
+	def list = getPublicationVersions()
+	versions = stonecutter.versions.findAll { list.contains(it.project) }
+	setGroup("project")
+	ofTask("publishMods")
+}
+
+for (ver in stonecutter.versions) {
+	stonecutter.registerChiseled tasks.register("chiseledBuildAndCollect+${ver.project}", stonecutter.chiseled) {
+		versions = [ver]
+		setGroup("project")
+		ofTask("buildAndCollect")
+	}
+
+	stonecutter.registerChiseled tasks.register("chiseledPublish+${ver.project}", stonecutter.chiseled) {
+		versions = [ver]
+		setGroup("project")
+		ofTask("publishMods")
+	}
+}
+
+String[] getPublicationVersions() {
+	return publication_versions.toString().split(" ").collect { s ->
+		def index = s.indexOf("[")
+		if (index == -1) {
+			return s
+		}
+		return s.substring(0, index)
+	}
 }

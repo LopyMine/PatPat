@@ -11,6 +11,7 @@
 		/*? =1.16.5*/
 		/*"TitleScreenMixin",*/
 		"MinecraftClientMixin",
+		"EntityRenderStateMixin",
 		"CameraMixin"
 	],
 	"injectors": {

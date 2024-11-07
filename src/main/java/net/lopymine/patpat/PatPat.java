@@ -16,7 +16,7 @@ import org.slf4j.*;
 
 public class PatPat implements ModInitializer {
 
-	public static final String MOD_VERSION = /*$ mod_version*/ "1.0.0";
+	public static final String MOD_VERSION = /*$ mod_version*/ "1.0.1";
 	public static final String MOD_NAME = /*$ mod_name*/ "PatPat";
 	public static final String MOD_ID = /*$ mod_id*/ "patpat";
 	//? >=1.17

@@ -32,7 +32,7 @@ public class SoundConfig {
 		return null;
 	}, soundConfig -> {
 		if ((soundConfig.getMinPitch() == 1.0F) && (soundConfig.getMaxPitch() == 1.0F) && (soundConfig.getVolume() == 1.0F)) {
-			return Either.right(soundConfig.getSound().getId().toString());
+			return Either.right(soundConfig.getSound().id().toString());
 		}
 		return Either.left(soundConfig);
 	});

@@ -19,6 +19,6 @@ public class SoundUtils {
 
 	@NotNull
 	public static String getTypeId(@NotNull SoundEvent sound) {
-		return sound.getId().toString();
+		return sound.id().toString();
 	}
 }

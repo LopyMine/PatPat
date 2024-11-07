@@ -95,7 +95,7 @@ def createGradleProperties(String version, ArrayList<String> additionalDepends) 
     writer.write("# Fabric Properties, check https://fabricmc.net/develop/\n")
     writer.write("build.yarn=${getYarnVersion(version)}\n")
 //    writer.write("build.fabric_loader=${getFabricLoaderVersion(version)}\n")
-//    writer.write("build.fabric_api=${getDependVersion("fabric-api", version)}")
+    writer.write("build.fabric_api=${getDependVersion("fabric-api", version)}")
     if (!additionalDepends.isEmpty()) {
         writer.write("\n")
         writer.write("\n")

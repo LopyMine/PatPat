@@ -8,8 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.manager.client.PatPatClientManager;
+import net.lopymine.patpat.renderer.PatAnimationRenderer;
 
 //? >=1.21.2 {
 import net.minecraft.entity.Entity;
@@ -31,16 +30,6 @@ public class LivingEntityRendererMixin {
 			return;
 		}
 	//?}
-		PatEntity patEntity = PatPatClientManager.getPatEntity(livingEntity);
-		if (patEntity == null) {
-			return;
-		}
-
-		if (PatPatClientManager.expired(patEntity)) {
-			PatPatClientManager.removePatEntity(patEntity);
-			return;
-		}
-
-		matrixStack.scale(1F, PatPatClientManager.getAnimationProgress(patEntity), 1F);
+		PatAnimationRenderer.scaleEntityIfPatted(livingEntity, matrixStack);
 	}
 }

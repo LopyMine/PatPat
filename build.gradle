@@ -58,6 +58,15 @@ repositories {
 		name "Modrinth"
 		url "https://api.modrinth.com/maven"
 	} // Needs for Replay Mod
+
+	maven {
+		name = 'GeckoLib'
+		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+		content {
+			includeGroupByRegex("software\\.bernie.*")
+			includeGroup("com.eliotlash.mclib")
+		}
+	}
 }
 
 dependencies {
@@ -91,6 +100,8 @@ dependencies {
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${stonecutter.compare("1.19", mcVersion) == 1 ? clothConfigVersion : substringBefore(clothConfigVersion, "+")}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
+
+	modImplementation("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${prop("dep.geckolib")}")
 
 	if (!(stonecutter.compare("1.20.5", mcVersion) == 0)) {
 		// Replay Mod

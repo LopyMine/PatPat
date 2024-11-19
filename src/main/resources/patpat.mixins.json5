@@ -10,8 +10,9 @@
 		"LivingEntityRendererMixin",
 		/*? =1.16.5*/
 		/*"TitleScreenMixin",*/
-		"MinecraftClientMixin",
+		/*? >=1.21.2*/
 		"EntityRenderStateMixin",
+		"MinecraftClientMixin",
 		"CameraMixin"
 	],
 	"injectors": {

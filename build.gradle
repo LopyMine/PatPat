@@ -118,7 +118,8 @@ loom {
 		config.setIdeConfigGenerated(true) // generate IDE tasks for running client, server and testmod, datagen if those are present
 		config.setRunDir("../../runs/${config.environment}") // use different run directory for all environments
 
-		if (config.getEnvironment() == "client") { // setting player properties from "./players/personal.properties" file
+		if (config.getEnvironment() == "client") {
+			// setting player properties from "./players/personal.properties" file
 			if (playerNickname != null && pathToSpongeMixin.toString() != "none") {
 				config.programArgs("--username", playerNickname.toString())
 			}
@@ -267,9 +268,9 @@ publishMods {
 	def isTesting = Boolean.parseBoolean(prop("test_publish)").toString())
 	def isServer = Boolean.parseBoolean(prop("is_for_server)").toString())
 	def versionName = "[${currentMultiVersion.toVersionRange()}] ${prop("mod_name")} v${prop("mod_version")}"
-	def bl = providers.environmentVariable("CURSEFORGE_API_KEY").getOrNull() == null
-	def bl2 = providers.environmentVariable("MODRINTH_API_KEY").getOrNull() == null
-	def bl3 = isTesting || bl || bl2
+	def curseForgeApiKeyIsPresent = providers.environmentVariable("CURSEFORGE_API_KEY").getOrNull() == null
+	def modrinthApiKeyIsPresent = providers.environmentVariable("MODRINTH_API_KEY").getOrNull() == null
+	def bl3 = isTesting || curseForgeApiKeyIsPresent || modrinthApiKeyIsPresent
 
 	println "[PublishMods] Configuring '${versionName}' for publishing"
 	displayName = versionName
@@ -395,7 +396,7 @@ UUID getUUID(Object uuid) {
 int getJavaVersionAsInteger(String minecraftVersion) {
 	return stonecutter.compare("1.20.5", minecraftVersion) == 1 ?
 			stonecutter.compare("1.18", minecraftVersion) == 1 ?
-					stonecutter.compare("1.17", minecraftVersion) == 1 ?
+					stonecutter.compare("1.16.5", minecraftVersion) == 1 ?
 							8
 							:
 							16
@@ -416,7 +417,7 @@ Properties getPersonalProperties() {
 		for (line in personalPropertiesFile.readLines()) {
 			def key = "absolute_path_to_sponge_mixin"
 			if (line.startsWith(key)) {
-				def substring = line.substring(key.length()+1)
+				def substring = line.substring(key.length() + 1)
 				if (!substring.isEmpty()) {
 					personalProperties.setProperty(key, substring)
 				}
@@ -430,7 +431,7 @@ Properties getPersonalProperties() {
 MultiVersion getCurrentMultiVersion(String minecraftVersion) {
 	def versions = prop("publication_versions").toString().split(" ")
 	for (version in versions) {
-		def split = version.substring(0, version.length()-1).split("\\[")
+		def split = version.substring(0, version.length() - 1).split("\\[")
 		def project = split[0]
 		if (project == minecraftVersion) {
 			def supportedVersionsString = split[1]

@@ -19,6 +19,6 @@ public class SoundUtils {
 
 	@NotNull
 	public static String getTypeId(@NotNull SoundEvent sound) {
-		return sound.id().toString();
+		return sound./*? <1.21.2 {*//*getId()*//*?} else {*/id()/*?}*/.toString();
 	}
 }

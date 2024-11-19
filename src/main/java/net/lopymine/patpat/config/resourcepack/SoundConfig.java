@@ -2,7 +2,6 @@ package net.lopymine.patpat.config.resourcepack;
 
 import lombok.Getter;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
@@ -13,7 +12,6 @@ import net.lopymine.patpat.utils.*;
 @Getter
 public class SoundConfig {
 	public static final SoundConfig PATPAT_SOUND = new SoundConfig("patpat");
-	public static final SoundConfig LOPI_SOUND = new SoundConfig("lopi");
 
 	public static final Codec<SoundConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.STRING.xmap(SoundUtils::getSoundEvent, SoundUtils::getTypeId).fieldOf("id").forGetter(SoundConfig::getSound),
@@ -32,7 +30,7 @@ public class SoundConfig {
 		return null;
 	}, soundConfig -> {
 		if ((soundConfig.getMinPitch() == 1.0F) && (soundConfig.getMaxPitch() == 1.0F) && (soundConfig.getVolume() == 1.0F)) {
-			return Either.right(soundConfig.getSound().id().toString());
+			return Either.right(soundConfig.getSound()./*? <1.21.2 {*//*getId()*//*?} else {*/id()/*?}*/.toString());
 		}
 		return Either.left(soundConfig);
 	});

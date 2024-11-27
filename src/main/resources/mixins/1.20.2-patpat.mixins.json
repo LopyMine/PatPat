@@ -1,0 +1,18 @@
+{
+    "required": true,
+    "package": "net.lopymine.patpat.mixin",
+    "refmap": "${mod_id}.refmap.json",
+    "compatibilityLevel": "JAVA_${java}",
+    "mixins": [
+        
+    ],
+    "client": [
+	    "EntityRendererMixin",
+	    "LivingEntityRendererMixin",
+	    "MinecraftClientMixin",
+	    "CameraMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

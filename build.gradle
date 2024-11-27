@@ -75,7 +75,7 @@ dependencies {
 		def minecraftVersionsWithOldYACLMaven = Set.of("1.19.4", "1.20", "1.20.2", "1.20.3")
 		def yaclVersion = prop("dep.yacl")
 		if (minecraftVersionsWithOldYACLMaven.contains(mcVersion)) {
-			modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${substringBefore(yaclVersion.toString(), "-")}"
+			modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${substringBeforeLast(yaclVersion.toString(), "-")}"
 		} else {
 			modImplementation "dev.isxander:yet-another-config-lib:${yaclVersion}"
 		}
@@ -394,6 +394,19 @@ static String substringBefore(Object o, String ch) {
 	}
 	def string = o.toString()
 	def i = string.indexOf(ch)
+	if (i == -1) {
+		return string
+	} else {
+		return string.substring(0, i)
+	}
+}
+
+static String substringBeforeLast(Object o, String ch) {
+	if (o == null) {
+		return "null"
+	}
+	def string = o.toString()
+	def i = string.lastIndexOf(ch)
 	if (i == -1) {
 		return string
 	} else {

@@ -20,16 +20,16 @@ stonecutter.registerChiseled tasks.register("chiseledPublishSpecified", stonecut
 	ofTask("publishMods")
 }
 
-for (minecraftVersions in stonecutter.versions) {
-	def ver = minecraftVersions
-	stonecutter.registerChiseled tasks.register("chiseledBuildAndCollect+${ver.project}", stonecutter.chiseled) {
-		versions = [ver]
+for (ver in stonecutter.versions) {
+	def current = ver
+	stonecutter.registerChiseled tasks.register("chiseledBuildAndCollect+${current.project}", stonecutter.chiseled) {
+		versions = [current]
 		setGroup("project")
 		ofTask("buildAndCollect")
 	}
 
-	stonecutter.registerChiseled tasks.register("chiseledPublish+${ver.project}", stonecutter.chiseled) {
-		versions = [ver]
+	stonecutter.registerChiseled tasks.register("chiseledPublish+${current.project}", stonecutter.chiseled) {
+		versions = [current]
 		setGroup("project")
 		ofTask("publishMods")
 	}

@@ -48,7 +48,7 @@ public class PatPatServerCommandManager {
 			}
 			*///?}
 			dispatcher.register(literal("patpat")
-					.requires((context) -> context.hasPermissionLevel(2))
+					.requires(context -> context.hasPermissionLevel(2))
 					.then(literal("list")
 							.then(literal("set")
 									.then(argument("mode", StringArgumentType.word())
@@ -88,9 +88,9 @@ public class PatPatServerCommandManager {
 
 			context.getSource().sendFeedback(/*? >=1.20 {*/() -> PATPAT_ID.copy().append(text)/*?} else {*//*PATPAT_ID.copy().append(text)*//*?}*/, true);
 			if (success) {
-				PatPat.info(text.asString());
+				PatPat.LOGGER.info(text.asString());
 			} else {
-				PatPat.info(text.asString());
+				PatPat.LOGGER.warn(text.asString());
 			}
 		}
 
@@ -119,9 +119,9 @@ public class PatPatServerCommandManager {
 		Text text = builder.build();
 		context.getSource().sendFeedback(/*? >=1.20 {*/() -> PATPAT_ID.copy().append(text)/*?} else {*//*PATPAT_ID.copy().append(text)*//*?}*/, true);
 		if (success) {
-			PatPat.info(text.asString());
+			PatPat.LOGGER.info(text.asString());
 		} else {
-			PatPat.info(text.asString());
+			PatPat.LOGGER.warn(text.asString());
 		}
 		return success ? Command.SINGLE_SUCCESS : 0;
 	}

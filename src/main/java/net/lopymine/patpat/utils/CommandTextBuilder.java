@@ -4,8 +4,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.text.*;
 import net.minecraft.text.HoverEvent.*;
 
-import net.lopymine.patpat.PatPat;
-
 import java.util.UUID;
 
 public class CommandTextBuilder {
@@ -26,7 +24,7 @@ public class CommandTextBuilder {
 			}
 		}
 
-		return TextUtils.literal(PatPat.text(key, args).getString().replace("&", "§"));
+		return TextUtils.literal(TextUtils.text(key, args).getString().replace("&", "§"));
 	}
 
 	private static boolean isPrimitive(Object object) {

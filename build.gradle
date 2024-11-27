@@ -1,6 +1,5 @@
 plugins {
-	id("fabric-loom") version "1.7-SNAPSHOT"
-	id("dev.kikugie.j52j") version "1.0.2"
+	id("fabric-loom") version "1.8-SNAPSHOT"
 	id("me.modmuss50.mod-publish-plugin") version "0.7.4"
 }
 
@@ -24,10 +23,6 @@ println "[${mcVersion}] Using Java: ${javaVersion.toString()}"
 
 version = "${modVersion}+${currentMultiVersion.projectVersion}"
 group = modMavenGroup
-
-j52j {
-	sources(sourceSets["main"])
-}
 
 base {
 	archivesName = modName
@@ -57,7 +52,7 @@ repositories {
 	maven {
 		name "Modrinth"
 		url "https://api.modrinth.com/maven"
-	} // Needs for Replay Mod
+	} // Replay Mod
 }
 
 dependencies {
@@ -110,7 +105,7 @@ loom {
 
 	def personalProperties = getPersonalProperties()
 	def pathToSpongeMixin = personalProperties.get("absolute_path_to_sponge_mixin")
-	def quickPlay = getNickname(personalProperties.get("quick_play"))
+	def quickPlay = personalProperties.get("quick_play")
 	def playerNickname = getNickname(personalProperties.get("player_nickname"))
 	def playerUuid = getUUID(personalProperties.get("player_uuid"))
 
@@ -118,15 +113,11 @@ loom {
 		config.setIdeConfigGenerated(true) // generate IDE tasks for running client, server and testmod, datagen if those are present
 		config.setRunDir("../../runs/${config.environment}") // use different run directory for all environments
 
-		if (config.getEnvironment() == "client") {
-			// setting player properties from "./players/personal.properties" file
-			if (playerNickname != null && pathToSpongeMixin.toString() != "none") {
+		if (config.getEnvironment() == "client") { // setting player properties from "./personal/personal.properties" file
+			if (playerNickname != null && playerNickname.toString() != "none") {
 				config.programArgs("--username", playerNickname.toString())
 			}
-			if (playerUuid != null && pathToSpongeMixin.toString() != "none") {
-				config.programArgs("--uuid", playerUuid.toString())
-			}
-			if (playerUuid != null && pathToSpongeMixin.toString() != "none") {
+			if (playerUuid != null && playerUuid.toString() != "none") {
 				config.programArgs("--uuid", playerUuid.toString())
 			}
 			if (quickPlay != null && quickPlay.toString() != "none") {
@@ -158,14 +149,22 @@ processResources {
 		inputs.property key, value
 	}
 
-
-	filesMatching(["fabric.mod.json", "${modId}.mixins.json5".toString(), "assets/${modId}/lang/*.json".toString()]) {
+	filesMatching(["fabric.mod.json", "assets/${modId}/lang/*.json".toString()]) {
 		expand(props)
 	}
 
 	filesMatching("aws/*.accesswidener") {
 		if (!it.getName().startsWith(mcVersion)) {
 			it.exclude()
+		}
+	}
+
+	filesMatching("mixins/*.mixins.json") {
+		def name = substringBefore(it.getName(), "-")
+		if (name != mcVersion) {
+			it.exclude()
+		} else {
+			expand(props)
 		}
 	}
 }
@@ -176,17 +175,54 @@ stonecutter {
 	swap("mod_name", "\"${prop("mod_name")}\";")
 }
 
-configurations.all {
-	resolutionStrategy {
-		force("net.fabricmc:fabric-loader:${findProperty("build.fabric_loader").toString()}")
-	}
-}
-
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = (javaVersionAsInt as int)
 }
 
-tasks.register('createPersonalProperties') {
+tasks.register('generatePublishWorkflowsForEachVersion') {
+	group = 'project'
+	doFirst {
+		def workflowsFolder = project.rootProject.file(".github/workflows/generated/")
+		if (!workflowsFolder.exists() && !workflowsFolder.mkdirs()) {
+			return
+		}
+		def versions = prop("multi_versions").split(" ")
+		versions.each { version ->
+			def publishVersionWorkflow = workflowsFolder.toPath().resolve("publish_${version.toString()}.yml").toFile()
+			if (!publishVersionWorkflow.exists()) {
+				publishVersionWorkflow.createNewFile()
+				publishVersionWorkflow.text =
+						"""
+					# Generated workflow by task
+
+					name: Publish ${version.toString()} Version
+					on: [workflow_dispatch] # Manual trigger
+					
+					permissions:
+					  contents: write
+					
+					jobs:
+					  build:
+					    runs-on: ubuntu-22.04
+					    container:
+					      image: mcr.microsoft.com/openjdk/jdk:21-ubuntu
+					      options: --user root
+					    steps:
+					      - uses: actions/checkout@v4
+					      - name: make gradle wrapper executable
+					        run: chmod +x ./gradlew
+					      - name: Publish ${version.toString()} Mod Version
+					        run: ./gradlew chiseledBuildAndCollect+${version.toString()} chiseledPublish+${version.toString()}
+					        env:
+					          CURSEFORGE_API_KEY: \${{ secrets.CURSEFORGE_API_KEY }}
+					          MODRINTH_API_KEY: \${{ secrets.MODRINTH_API_KEY }}
+					""".stripIndent().strip()
+			}
+		}
+	}
+}
+
+tasks.register('generatePersonalProperties') {
 	group = 'project'
 
 	doFirst {
@@ -417,7 +453,7 @@ Properties getPersonalProperties() {
 		for (line in personalPropertiesFile.readLines()) {
 			def key = "absolute_path_to_sponge_mixin"
 			if (line.startsWith(key)) {
-				def substring = line.substring(key.length() + 1)
+				def substring = line.substring(key.length()+1)
 				if (!substring.isEmpty()) {
 					personalProperties.setProperty(key, substring)
 				}
@@ -431,17 +467,26 @@ Properties getPersonalProperties() {
 MultiVersion getCurrentMultiVersion(String minecraftVersion) {
 	def versions = prop("publication_versions").toString().split(" ")
 	for (version in versions) {
-		def split = version.substring(0, version.length() - 1).split("\\[")
+		def split = version.substring(0, version.length()-1).split("\\[")
 		def project = split[0]
 		if (project == minecraftVersion) {
 			def supportedVersionsString = split[1]
 			if (supportedVersionsString.contains("-")) {
 				def supportedVersions = supportedVersionsString.split("-")
 				return new MultiVersion(projectVersion: minecraftVersion, minVersion: supportedVersions[0], maxVersion: supportedVersions[1])
+			} else if (supportedVersionsString.contains(".")) {
+				return new MultiVersion(projectVersion: minecraftVersion, minVersion: minecraftVersion, maxVersion: supportedVersionsString)
+			} else {
+				def a = project.indexOf(".")
+				def i = project.lastIndexOf(".")
+				if (a == i) {
+					i = project.length()
+				}
+				def p = project.substring(0, i)
+				def supportedMaxVersion = "${p}.${supportedVersionsString}"
+				return new MultiVersion(projectVersion: minecraftVersion, minVersion: minecraftVersion, maxVersion: supportedMaxVersion)
 			}
-			return new MultiVersion(projectVersion: minecraftVersion, minVersion: minecraftVersion, maxVersion: supportedVersionsString)
 		}
-
 	}
 	return new MultiVersion(projectVersion: minecraftVersion, minVersion: minecraftVersion, maxVersion: minecraftVersion)
 }
@@ -459,10 +504,27 @@ class MultiVersion {
 	}
 
 	String toVersionRange() {
-		if (minVersion != maxVersion) {
-			return "${minVersion}-${maxVersion}"
+		if (minVersion == maxVersion) {
+			return maxVersion
 		}
-		return maxVersion
+		def aMin = minVersion.indexOf(".")
+		def bMin = minVersion.lastIndexOf(".")
+		if (aMin == bMin) {
+			bMin = minVersion.length()
+		}
+		def minMain = minVersion.substring(0, bMin)
+
+		def aMax = maxVersion.indexOf(".")
+		def bMax = maxVersion.lastIndexOf(".")
+		if (aMax == bMax) {
+			bMax = maxVersion.length()
+		}
+		def maxMain = maxVersion.substring(0, bMax)
+		def maxMinor = maxVersion.substring(bMax+1, maxVersion.length())
+		if (minMain == maxMain) {
+			return "${minVersion}-${maxMinor}"
+		}
+		return "${minVersion}-${maxVersion}"
 	}
 }
 
@@ -472,13 +534,13 @@ def getVerifiedOrDefaultJar(String modName, String modVersion, String minecraftV
 	def regularFile = provider.orNull
 	if (regularFile == null || !regularFile.getAsFile().exists()) {
 		println "[PublishMods] Failed to find jar file at '${path}'! Using archive file!"
-		return jar.archiveFile
+		return remapJar.archiveFile
 	}
 	return regularFile.getAsFile()
 }
 
 String getChangeLog() {
-	def file = project.rootProject.file("publish/CHANGELOG.md")
+	def file = project.rootProject.file("CHANGELOG.md")
 	if (file.exists()) {
 		def text = file.getText()
 		if (!text.isBlank()) {

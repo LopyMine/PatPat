@@ -1,0 +1,21 @@
+name: Publish All Versions
+on: [workflow_dispatch] # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    container:
+      image: mcr.microsoft.com/openjdk/jdk:21-ubuntu
+      options: --user root
+    steps:
+      - uses: actions/checkout@v4
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: Publish mods
+        run: ./gradlew chiseledBuildAndCollectAll chiseledPublishAll
+        env:
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+          MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}

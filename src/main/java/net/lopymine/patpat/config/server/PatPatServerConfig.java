@@ -48,10 +48,10 @@ public class PatPatServerConfig {
 	private static @NotNull PatPatServerConfig create() {
 		PatPatServerConfig config = new PatPatServerConfig();
 		try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
-			String json = GSON.toJson(CODEC.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPat::error));*/
+			String json = GSON.toJson(CODEC.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPat.LOGGER::error));*/
 			writer.write(json);
 		} catch (Exception e) {
-			PatPat.error("Failed to create config", e);
+			PatPat.LOGGER.error("Failed to create config", e);
 		}
 		return config;
 	}
@@ -62,9 +62,9 @@ public class PatPatServerConfig {
 		}
 
 		try (FileReader reader = new FileReader(CONFIG_FILE, StandardCharsets.UTF_8)) {
-			return CODEC.decode(JsonOps.INSTANCE, /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, PatPat::error)*//*?}*/.getFirst();
+			return CODEC.decode(JsonOps.INSTANCE, /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, PatPat.LOGGER::error)*//*?}*/.getFirst();
 		} catch (Exception e) {
-			PatPat.error("Failed to read config", e);
+			PatPat.LOGGER.error("Failed to read config", e);
 		}
 		return PatPatServerConfig.create();
 	}
@@ -72,10 +72,10 @@ public class PatPatServerConfig {
 	public void save() {
 		CompletableFuture.runAsync(() -> {
 			try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
-				String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPat::error));*/
+				String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPat.LOGGER::error));*/
 				writer.write(json);
 			} catch (Exception e) {
-				PatPat.error("Failed to save config", e);
+				PatPat.LOGGER.error("Failed to save config", e);
 			}
 		});
 	}

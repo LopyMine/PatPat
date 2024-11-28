@@ -21,14 +21,15 @@ stonecutter.registerChiseled tasks.register("chiseledPublishSpecified", stonecut
 }
 
 for (ver in stonecutter.versions) {
-	stonecutter.registerChiseled tasks.register("chiseledBuildAndCollect+${ver.project}", stonecutter.chiseled) {
-		versions = [ver]
+	def current = ver
+	stonecutter.registerChiseled tasks.register("chiseledBuildAndCollect+${current.project}", stonecutter.chiseled) {
+		versions = [current]
 		setGroup("project")
 		ofTask("buildAndCollect")
 	}
 
-	stonecutter.registerChiseled tasks.register("chiseledPublish+${ver.project}", stonecutter.chiseled) {
-		versions = [ver]
+	stonecutter.registerChiseled tasks.register("chiseledPublish+${current.project}", stonecutter.chiseled) {
+		versions = [current]
 		setGroup("project")
 		ofTask("publishMods")
 	}

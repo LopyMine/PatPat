@@ -2,6 +2,8 @@ package net.lopymine.patpat.utils;
 
 import net.minecraft.text.*;
 
+import net.lopymine.patpat.PatPat;
+
 public class TextUtils {
 
 	private TextUtils() {
@@ -26,5 +28,9 @@ public class TextUtils {
 
 	public static Text of(String key) {
 		return Text.of(key);
+	}
+
+	public static MutableText text(String path, Object... args) {
+		return TextUtils.translatable(String.format("%s.%s", PatPat.MOD_ID, path), args);
 	}
 }

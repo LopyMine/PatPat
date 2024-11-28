@@ -9,8 +9,8 @@ import net.lopymine.patpat.packet.PatEntityForReplayModS2CPacket;
 import java.util.UUID;
 
 //? <=1.20.1 {
-/*import net.minecraft.network.PacketByteBuf;*/
-//?}
+/*import net.minecraft.network.PacketByteBuf;
+*///?}
 
 public class ReplayModCompat {
 

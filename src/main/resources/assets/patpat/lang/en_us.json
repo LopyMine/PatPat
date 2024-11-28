@@ -45,7 +45,7 @@
 	"patpat.modmenu.visual.option.hand_offset_y.description": "Transfer the hand along Y axis relative to default pos.",
 	"patpat.modmenu.visual.option.hand_offset_z": "Hand Offset Z",
 	"patpat.modmenu.visual.option.hand_offset_z.description": "Transfer the hand along Z axis relative to default pos.",
-	"patpat.modmenu.visual.option.camera_shacking": "Camera Shacking",
+	"patpat.modmenu.visual.option.camera_shacking": "Camera Shaking",
 	"patpat.modmenu.visual.option.camera_shacking.description": "If enabled, your camera will shake when someone pat you; if disabled, won't.",
 	"patpat.modmenu.visual.option.pat_weight": "Pat Weight",
 	"patpat.modmenu.visual.option.pat_weight.description": "The power of patting. The more, the stronger mob's squeeze effect will be.",

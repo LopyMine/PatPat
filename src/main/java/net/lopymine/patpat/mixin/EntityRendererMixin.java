@@ -46,7 +46,7 @@ public class EntityRendererMixin {
 	//?}
 		PatPatClientConfig config = PatPatClient.getConfig();
 		if (!config.isModEnabled()) {
-			return/*? <1.21.2 {*//* bl*//*?}*/;
+			return/*? <1.21.2 {*/ /*bl*//*?}*/;
 		}
 		//? >=1.21.2 {
 		EntityRenderStateWithParent stateWithParent = (EntityRenderStateWithParent) state;
@@ -54,11 +54,11 @@ public class EntityRendererMixin {
 		float tickDelta = stateWithParent.patPat$getTickDelta();
 		 //?}
 		if (!(entity instanceof LivingEntity livingEntity)) {
-			return/*? <1.21.2 {*//* bl*//*?}*/;
+			return/*? <1.21.2 {*/ /*bl*//*?}*/;
 		}
 		PatEntity patEntity = PatPatClientManager.getPatEntity(livingEntity);
 		if (patEntity == null) {
-			return/*? <1.21.2 {*//* bl*//*?}*/;
+			return/*? <1.21.2 {*/ /*bl*//*?}*/;
 		}
 
 		//? <=1.20.4 {

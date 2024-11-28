@@ -9,14 +9,13 @@ import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.resourcepack.ListMode;
 import net.lopymine.patpat.config.server.PatPatServerConfig;
 import net.lopymine.patpat.packet.*;
 
 //? <=1.19.3 {
-/*import net.minecraft.network.PacketByteBuf;*/
-//?}
+/*import net.minecraft.network.PacketByteBuf;
+*///?}
 
 public class PatPatServerPacketManager {
 
@@ -45,7 +44,7 @@ public class PatPatServerPacketManager {
 						return;
 					}
 					if (entity.isInvisible()) {
-						PatPat.warn("Received packet from client, {} patted {}, but patted entity is invisible! This shouldn't happens because it should checks at client-side!", sender.getName(), entity.getName());
+						PatPat.LOGGER.warn("Received packet from client, {} patted {}, but patted entity is invisible! This shouldn't happens because it should checks at client-side!", sender.getName(), entity.getName());
 						return;
 					}
 

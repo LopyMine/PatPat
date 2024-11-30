@@ -4,11 +4,13 @@
 	"refmap": "${mod_id}.refmap.json",
 	"compatibilityLevel": "JAVA_${java}",
 	"mixins": [
-
 	],
 	"client": [
 		"EntityRendererMixin",
 		"LivingEntityRendererMixin",
+		/*? =1.16.5*/
+		/*"TitleScreenMixin",*/
+		/*? >=1.21.2*/
 		"EntityRenderStateMixin",
 		"MinecraftClientMixin",
 		"GeoEntityRendererMixin",

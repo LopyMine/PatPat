@@ -1,3 +1,5 @@
+import groovy.json.*
+
 plugins {
 	id("fabric-loom") version "1.8-SNAPSHOT"
 	id("me.modmuss50.mod-publish-plugin") version "0.7.4"
@@ -145,6 +147,7 @@ processResources {
 	def props = [:]
 	props.put("mod_id", modId.toString())
 	props.put("mod_authors", modAuthors.toString())
+	props.put("mod_version", modVersion)
 	props.put("mod_group", modGroup)
 	props.put("mod_description", modDescription.toString())
 	props.put("mod_name", modName.toString())
@@ -160,22 +163,13 @@ processResources {
 		inputs.property key, value
 	}
 
-	filesMatching(["fabric.mod.json", "assets/${modId}/lang/*.json".toString()]) {
+	filesMatching(["fabric.mod.json", "${modId}.mixins.json5".toString(), "assets/${modId}/lang/*.json".toString(), "assets/${modId}/textures/easter/egg.json".toString()]) {
 		expand(props)
 	}
 
 	filesMatching("aws/*.accesswidener") {
 		if (!it.getName().startsWith(mcVersion)) {
 			it.exclude()
-		}
-	}
-
-	filesMatching("mixins/*.mixins.json") {
-		def name = substringBefore(it.getName(), "-")
-		if (name != mcVersion) {
-			it.exclude()
-		} else {
-			expand(props)
 		}
 	}
 }
@@ -188,6 +182,52 @@ stonecutter {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = (javaVersionAsInt as int)
+}
+
+tasks.named("processResources") {
+	doLast {
+		//println "[Json5 Converter] Converting Started..."
+		def versionedResourceFolder = project.rootDir.toPath().resolve("versions").resolve(mcVersion).resolve("build").resolve("resources").resolve("main")
+
+		fileTree(versionedResourceFolder).getFiles().collect { it.toPath() }.findAll { it.toString().endsWith(".json5") }.forEach { path ->
+			def fileName = path.getFileName()
+			if (fileName == null) {
+				//println "[Json5 Converter] Failed to get json5 file name at: ${path}"
+				return
+			}
+			def name = fileName.toString()
+
+			def parent = path.getParent()
+			def json5Path = parent.resolve(name).toString()
+			def json5File = file(json5Path)
+			if (!json5File.exists()) {
+				//println "[Json5 Converter] Failed to get json5 file at: ${json5Path}"
+				return
+			}
+
+			def json5Text = json5File.text
+			if (json5Text.startsWith("// no j52j")) {
+				//println "[Json5 Converter] Skipped ${json5Path}"
+				return
+			}
+
+			def parser = new JsonSlurper()
+			parser.type = JsonParserType.LAX
+			def obj = parser.parseText(json5Text)
+			def json = JsonOutput.toJson(obj)
+
+			def jsonPath = parent.resolve(substringBeforeLast(name, ".") + ".json").toString()
+			def jsonFile = new File(jsonPath)
+
+			jsonFile.parentFile.mkdirs()
+			jsonFile.write(json)
+
+			json5File.delete()
+			//println "[Json5 Converter] Converted ${json5Path}"
+		}
+
+		//println "[Json5 Converter] Converting Finished"
+	}
 }
 
 tasks.register('generatePublishWorkflowsForEachVersion') {

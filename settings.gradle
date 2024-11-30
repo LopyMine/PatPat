@@ -56,37 +56,37 @@ stonecutter {
 	multiVersions.each { multiVersion ->
 		createGradleProperties(multiVersion, additionalDepends)
 		createAW(multiVersion)
-		createMixin(multiVersion)
+//		createMixin(multiVersion)
 	}
 }
 
 rootProject.name = mod_name
 
-def createMixin(String version) {
-	def mixinsFolder = file("src/main/resources/mixins/")
-	if (!mixinsFolder.exists() && !mixinsFolder.mkdirs()) {
-		return
-	}
-	def mixinsFile = file("src/main/resources/mixins/${version}-${mod_id}.mixins.json")
-	if (mixinsFile.exists() || !mixinsFile.createNewFile()) {
-		return
-	}
-
-	def mixinContent = [
-			required: true,
-			package: "${mod_group}.mixin",
-			refmap: '${mod_id}.refmap.json',
-			compatibilityLevel: 'JAVA_${java}',
-			mixins: [],
-			client: [],
-			injectors: [
-					defaultRequire: 1
-			]
-	]
-
-	mixinsFile.text = new JsonBuilder(mixinContent).toPrettyString()
-	println "Successfully created Mixin for ${version}"
-}
+//def createMixin(String version) {
+//	def mixinsFolder = file("src/main/resources/mixins/")
+//	if (!mixinsFolder.exists() && !mixinsFolder.mkdirs()) {
+//		return
+//	}
+//	def mixinsFile = file("src/main/resources/mixins/${version}-${mod_id}.mixins.json")
+//	if (mixinsFile.exists() || !mixinsFile.createNewFile()) {
+//		return
+//	}
+//
+//	def mixinContent = [
+//			required: true,
+//			package: "${mod_group}.mixin",
+//			refmap: '${mod_id}.refmap.json',
+//			compatibilityLevel: 'JAVA_${java}',
+//			mixins: [],
+//			client: [],
+//			injectors: [
+//					defaultRequire: 1
+//			]
+//	]
+//
+//	mixinsFile.text = new JsonBuilder(mixinContent).toPrettyString()
+//	println "Successfully created Mixin for ${version}"
+//}
 
 def createAW(String version) {
 	def awsFolder = file("src/main/resources/aws/")

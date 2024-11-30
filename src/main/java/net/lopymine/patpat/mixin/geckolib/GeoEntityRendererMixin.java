@@ -1,17 +1,21 @@
-package net.lopymine.patpat.mixin;
+package net.lopymine.patpat.mixin.geckolib;
 
-// TODO Отключить класс из версий, в которых GeckoLib не создан (например 1.21.2)
-
+//? !(=1.17 || =1.18 || =1.18.1 || =1.19 || =1.21.2) {
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import net.lopymine.patpat.renderer.PatAnimationRenderer;
-
+//? =1.16.5 {
+/*import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer;
+*///?} elif >=1.17.1 && <=1.19.2 {
+/*import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+*///?} else {
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
+//?}
 
 //? >=1.21.2 {
 import net.minecraft.client.render.entity.state.EntityRenderState;
@@ -35,3 +39,5 @@ public abstract class GeoEntityRendererMixin {
 		PatAnimationRenderer.scaleEntityIfPatted(livingEntity, matrixStack);
 	}
 }
+
+//?}

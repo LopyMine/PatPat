@@ -62,6 +62,7 @@ repositories {
 		content {
 			includeGroupByRegex("software\\.bernie.*")
 			includeGroup("com.eliotlash.mclib")
+			includeGroup("com.eliotlash.molang")
 		}
 	}
 }
@@ -98,7 +99,21 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
-	modImplementation("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${prop("dep.geckolib")}")
+	// GeckoLib
+	def geckoLibVersion = prop("dep.geckolib")
+	if (geckoLibVersion != "unknown") {
+		if (mcVersion == "1.17.1") {
+			modImplementation("software.bernie.geckolib:geckolib-fabric-1.17:${geckoLibVersion}")
+		} else if (mcVersion == "1.18.2") {
+			modImplementation("software.bernie.geckolib:geckolib-fabric-1.18:${geckoLibVersion}")
+		} else if (mcVersion == "1.19.1" || mcVersion == "1.19.2") {
+			modImplementation("software.bernie.geckolib:geckolib-fabric-1.19:${geckoLibVersion}")
+		} else if (mcVersion == "1.20") {
+			modImplementation("software.bernie.geckolib:geckolib-fabric-1.20.1:${geckoLibVersion}")
+		} else {
+			modImplementation("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
+		}
+	}
 
 	if (!(stonecutter.compare("1.20.5", mcVersion) == 0)) {
 		// Replay Mod
@@ -163,7 +178,7 @@ processResources {
 		inputs.property key, value
 	}
 
-	filesMatching(["fabric.mod.json", "${modId}.mixins.json5".toString(), "assets/${modId}/lang/*.json".toString(), "assets/${modId}/textures/easter/egg.json".toString()]) {
+	filesMatching(["fabric.mod.json", "${modId}.mixins.json5".toString(), "${modId}-geckolib.mixins.json5".toString(), "assets/${modId}/lang/*.json".toString(), "assets/${modId}/textures/easter/egg.json".toString()]) {
 		expand(props)
 	}
 

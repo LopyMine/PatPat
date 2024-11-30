@@ -13,7 +13,6 @@
 		/*? >=1.21.2*/
 		"EntityRenderStateMixin",
 		"MinecraftClientMixin",
-		"GeoEntityRendererMixin",
 		"CameraMixin"
 	],
 	"injectors": {

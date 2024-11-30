@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "net.lopymine.patpat.mixin.geckolib",
+	"refmap": "${mod_id}.refmap.json",
+	"plugin": "net.lopymine.patpat.compat.geckolib.GeckoLibCompatPlugin",
+	"compatibilityLevel": "JAVA_${java}",
+	"mixins": [
+	],
+	"client": [
+		"GeoEntityRendererMixin",
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

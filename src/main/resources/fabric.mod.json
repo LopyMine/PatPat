@@ -33,6 +33,7 @@
 	},
 	"accessWidener": "aws/${minecraft}.accesswidener",
 	"mixins": [
-		"${mod_id}.mixins.json"
+		"${mod_id}.mixins.json",
+		"${mod_id}-geckolib.mixins.json"
 	]
 }

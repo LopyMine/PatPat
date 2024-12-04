@@ -9,7 +9,8 @@ import org.jetbrains.annotations.NotNull;
 public record Version(int major, int minor, int patch) {
 
 	public static final Codec<Version> CODEC = Codec.STRING.xmap(Version::of, Version::toString);
-	public static final Version DEFAULT = Version.of(PatPat.MOD_VERSION);
+	public static final Version SUPPORT_VERSION = Version.of(PatPat.MOD_VERSION);
+	public static final Version MIN_SUPPORT_VERSION = Version.of("1.0.0");
 
 	public static Version of(@NotNull String version) {
 		String[] numbers = version.split("\\.");

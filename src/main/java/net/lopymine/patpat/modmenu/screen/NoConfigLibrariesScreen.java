@@ -59,7 +59,7 @@ public class NoConfigLibrariesScreen {
 			}
 			Util.getOperatingSystem().open(link);
 		} catch (URISyntaxException e) {
-			PatPatClient.error("Can't open {} Modrinth page: ", (bl ? "YACL" : "Cloth Config API"), e);
+			PatPatClient.LOGGER.error("Can't open {} Modrinth page: ", (bl ? "YACL" : "Cloth Config API"), e);
 		}
 	}
 }

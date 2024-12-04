@@ -1,4 +1,15 @@
-import groovy.json.*
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'de.marhali:json5-java:2.0.0'
+	}
+}
+
+// TODO Move methods with j5tj in buildSrc and use kotlin lang
+import de.marhali.json5.Json5
+import de.marhali.json5.Json5Element
 
 plugins {
 	id("fabric-loom") version "1.8-SNAPSHOT"
@@ -55,6 +66,16 @@ repositories {
 		name "Modrinth"
 		url "https://api.modrinth.com/maven"
 	} // Replay Mod
+
+	maven {
+		name = 'GeckoLib'
+		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+		content {
+			includeGroupByRegex("software\\.bernie.*")
+			includeGroup("com.eliotlash.mclib")
+			includeGroup("com.eliotlash.molang")
+		}
+	}
 }
 
 dependencies {
@@ -87,6 +108,22 @@ dependencies {
 	def clothConfigVersion = findProperty("dep.cloth-config")
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${stonecutter.compare("1.19", mcVersion) == 1 ? clothConfigVersion : substringBefore(clothConfigVersion, "+")}") {
 		exclude(group: "net.fabricmc.fabric-api")
+	}
+
+	// GeckoLib
+	def geckoLibVersion = prop("dep.geckolib")
+	if (geckoLibVersion != "unknown") {
+		if (mcVersion == "1.17.1") {
+			modImplementation("software.bernie.geckolib:geckolib-fabric-1.17:${geckoLibVersion}")
+		} else if (mcVersion == "1.18.2") {
+			modImplementation("software.bernie.geckolib:geckolib-fabric-1.18:${geckoLibVersion}")
+		} else if (mcVersion == "1.19.1" || mcVersion == "1.19.2") {
+			modImplementation("software.bernie.geckolib:geckolib-fabric-1.19:${geckoLibVersion}")
+		} else if (mcVersion == "1.20") {
+			modImplementation("software.bernie.geckolib:geckolib-fabric-1.20.1:${geckoLibVersion}")
+		} else {
+			modImplementation("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
+		}
 	}
 
 	if (!(stonecutter.compare("1.20.5", mcVersion) == 0)) {
@@ -152,7 +189,7 @@ processResources {
 		inputs.property key, value
 	}
 
-	filesMatching(["fabric.mod.json", "${modId}.mixins.json5".toString(), "assets/${modId}/lang/*.json".toString(), "assets/${modId}/textures/easter/egg.json".toString()]) {
+	filesMatching(["fabric.mod.json", "${modId}.mixins.json5".toString(), "${modId}-geckolib.mixins.json5".toString(), "assets/${modId}/lang/*.json".toString(), "assets/${modId}/textures/easter/egg.json".toString()]) {
 		expand(props)
 	}
 
@@ -167,6 +204,7 @@ stonecutter {
 	swap("mod_version", "\"${prop("mod_version")}\";")
 	swap("mod_id", "\"${prop("mod_id")}\";")
 	swap("mod_name", "\"${prop("mod_name")}\";")
+	stonecutter.const("geckolib", prop("dep.geckolib") != "unknown")
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -200,13 +238,12 @@ tasks.named("processResources") {
 				return
 			}
 
-			def parser = new JsonSlurper()
-			parser.type = JsonParserType.LAX
-			def obj = parser.parseText(json5Text)
-			def json = JsonOutput.toJson(obj)
+			Json5 json5 = Json5.builder(options -> options.allowInvalidSurrogate().build());
+			Json5Element obj = json5.parse(json5Text)
+			String json = json5.serialize(obj)
 
-			def jsonPath = parent.resolve(substringBeforeLast(name, ".") + ".json").toString()
-			def jsonFile = new File(jsonPath)
+			String jsonPath = parent.resolve(substringBeforeLast(name, ".") + ".json").toString()
+			File jsonFile = new File(jsonPath)
 
 			jsonFile.parentFile.mkdirs()
 			jsonFile.write(json)
@@ -387,16 +424,16 @@ publishMods {
 		}
 
 		if (requiresDepends.first() != "none") {
-			requires(requiresDepends)
+			requires = requiresDepends
 		}
 		if (optionalDepends.first() != "none") {
-			optional(optionalDepends)
+			optional = optionalDepends
 		}
 		if (incompatibleDepends.first() != "none") {
-			incompatible(incompatibleDepends)
+			incompatible = incompatibleDepends
 		}
 		if (embedsDepends.first() != "none") {
-			embeds(embedsDepends)
+			embeds = embedsDepends
 		}
 	}
 
@@ -414,16 +451,16 @@ publishMods {
 		}
 
 		if (requiresDepends.first() != "none") {
-			requires(requiresDepends)
+			requires = requiresDepends
 		}
 		if (optionalDepends.first() != "none") {
-			optional(optionalDepends)
+			optional = optionalDepends
 		}
 		if (incompatibleDepends.first() != "none") {
-			incompatible(incompatibleDepends)
+			incompatible = incompatibleDepends
 		}
 		if (embedsDepends.first() != "none") {
-			embeds(embedsDepends)
+			embeds = embedsDepends
 		}
 	}
 }
@@ -481,7 +518,7 @@ UUID getUUID(Object uuid) {
 	return null
 }
 
-// Cannot be static!
+@SuppressWarnings('GrMethodMayBeStatic') // Method cannot be static
 int getJavaVersionAsInteger(String minecraftVersion) {
 	return stonecutter.compare("1.20.5", minecraftVersion) == 1 ?
 			stonecutter.compare("1.18", minecraftVersion) == 1 ?
@@ -506,7 +543,7 @@ Properties getPersonalProperties() {
 		for (line in personalPropertiesFile.readLines()) {
 			def key = "absolute_path_to_sponge_mixin"
 			if (line.startsWith(key)) {
-				def substring = line.substring(key.length()+1)
+				def substring = line.substring(key.length() + 1)
 				if (!substring.isEmpty()) {
 					personalProperties.setProperty(key, substring)
 				}
@@ -520,7 +557,7 @@ Properties getPersonalProperties() {
 MultiVersion getCurrentMultiVersion(String minecraftVersion) {
 	def versions = prop("publication_versions").toString().split(" ")
 	for (version in versions) {
-		def split = version.substring(0, version.length()-1).split("\\[")
+		def split = version.substring(0, version.length() - 1).split("\\[")
 		def project = split[0]
 		if (project == minecraftVersion) {
 			def supportedVersionsString = split[1]
@@ -573,7 +610,7 @@ class MultiVersion {
 			bMax = maxVersion.length()
 		}
 		def maxMain = maxVersion.substring(0, bMax)
-		def maxMinor = maxVersion.substring(bMax+1, maxVersion.length())
+		def maxMinor = maxVersion.substring(bMax + 1, maxVersion.length())
 		if (minMain == maxMain) {
 			return "${minVersion}-${maxMinor}"
 		}

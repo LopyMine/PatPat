@@ -424,16 +424,16 @@ publishMods {
 		}
 
 		if (requiresDepends.first() != "none") {
-			requires = requiresDepends
+			requires(requiresDepends)
 		}
 		if (optionalDepends.first() != "none") {
-			optional = optionalDepends
+			optional(optionalDepends)
 		}
 		if (incompatibleDepends.first() != "none") {
-			incompatible = incompatibleDepends
+			incompatible(incompatibleDepends)
 		}
 		if (embedsDepends.first() != "none") {
-			embeds = embedsDepends
+			embeds(embedsDepends)
 		}
 	}
 
@@ -451,16 +451,16 @@ publishMods {
 		}
 
 		if (requiresDepends.first() != "none") {
-			requires = requiresDepends
+			requires(requiresDepends)
 		}
 		if (optionalDepends.first() != "none") {
-			optional = optionalDepends
+			optional(optionalDepends)
 		}
 		if (incompatibleDepends.first() != "none") {
-			incompatible = incompatibleDepends
+			incompatible(incompatibleDepends)
 		}
 		if (embedsDepends.first() != "none") {
-			embeds = embedsDepends
+			embeds(embedsDepends)
 		}
 	}
 }

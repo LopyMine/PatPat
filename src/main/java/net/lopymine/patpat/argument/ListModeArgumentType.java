@@ -35,7 +35,7 @@ public class ListModeArgumentType implements ArgumentType<ListMode> {
 	public ListMode parse(StringReader reader) throws CommandSyntaxException {
 		String modeId = reader.readUnquotedString();
 		if (PatPatClient.getConfig().isDebugLogEnabled()) {
-			PatPatClient.info("Parsed modeId from ListModeArgumentType: {}", modeId);
+			PatPatClient.LOGGER.info("Parsed modeId from ListModeArgumentType: {}", modeId);
 		}
 		ListMode listMode = ListMode.getById(modeId);
 		if (listMode == null) {
@@ -46,11 +46,11 @@ public class ListModeArgumentType implements ArgumentType<ListMode> {
 
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-		return CommandSource.suggestMatching(Arrays.stream(ListMode.values()).flatMap((listMode) -> Stream.of(listMode.name())).toList(), builder);
+		return CommandSource.suggestMatching(Arrays.stream(ListMode.values()).flatMap(listMode -> Stream.of(listMode.name())).toList(), builder);
 	}
 
 	@Override
 	public Collection<String> getExamples() {
-		return Arrays.stream(ListMode.values()).flatMap((listMode) -> Stream.of(listMode.name())).toList();
+		return Arrays.stream(ListMode.values()).flatMap(listMode -> Stream.of(listMode.name())).toList();
 	}
 }

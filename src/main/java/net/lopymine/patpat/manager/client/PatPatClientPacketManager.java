@@ -41,7 +41,7 @@ public class PatPatClientPacketManager {
 
 	private static void handlePatting(UUID whoPattedUuid, UUID pattedEntityUuid, boolean replayModPacket) {
 		if (PatPatClient.getConfig().isDebugLogEnabled()) {
-			PatPatClient.info("Received packet from server, {} patted {}, replayModPacket: {}", whoPattedUuid, pattedEntityUuid, replayModPacket);
+			PatPatClient.LOGGER.info("Received packet from server, {} patted {}, replayModPacket: {}", whoPattedUuid, pattedEntityUuid, replayModPacket);
 		}
 
 		ClientWorld clientWorld = MinecraftClient.getInstance().world;

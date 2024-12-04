@@ -13,7 +13,7 @@ public final class LoadedMods {
 
 	private static void sendDebugLog(boolean modLoaded, String modId) {
 		if (PatPatClient.getConfig().isDebugLogEnabled()) {
-			PatPatClient.info("{} Loaded: {}", modId, modLoaded);
+			PatPatClient.LOGGER.info("{} Loaded: {}", modId, modLoaded);
 		}
 	}
 }

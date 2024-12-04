@@ -47,7 +47,7 @@ public class PlayerConfig {
 		boolean b = that.name == null || Objects.equals(this.name, that.name);
 		boolean b1 = that.uuid == null || Objects.equals(this.uuid, that.uuid);
 		if (PatPatClient.getConfig().isDebugLogEnabled()) {
-			PatPatClient.info("Comparing PlayerConfigs: [{} and {}] [{} and {}] - {}",this.name, that.name, this.uuid, that.uuid, b && b1);
+			PatPatClient.LOGGER.info("Comparing PlayerConfigs: [{} and {}] [{} and {}] - {}",this.name, that.name, this.uuid, that.uuid, b && b1);
 		}
 		return b && b1;
 	}

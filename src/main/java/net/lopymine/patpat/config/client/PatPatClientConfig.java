@@ -89,10 +89,10 @@ public class PatPatClientConfig {
 	private static @NotNull PatPatClientConfig create() {
 		PatPatClientConfig config = new PatPatClientConfig();
 		try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
-			String json = GSON.toJson(CODEC.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPatClient::error));*/
+			String json = GSON.toJson(CODEC.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPatClient.LOGGER::error));*/
 			writer.write(json);
 		} catch (Exception e) {
-			PatPatClient.error("Failed to create config", e);
+			PatPatClient.LOGGER.error("Failed to create config", e);
 		}
 		return config;
 	}
@@ -103,9 +103,9 @@ public class PatPatClientConfig {
 		}
 
 		try (FileReader reader = new FileReader(CONFIG_FILE, StandardCharsets.UTF_8)) {
-			return CODEC.decode(JsonOps.INSTANCE, /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, PatPatClient::error)*//*?}*/.getFirst();
+			return CODEC.decode(JsonOps.INSTANCE, /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, PatPatClient.LOGGER::error)*//*?}*/.getFirst();
 		} catch (Exception e) {
-			PatPatClient.error("Failed to read config", e);
+			PatPatClient.LOGGER.error("Failed to read config", e);
 		}
 		return PatPatClientConfig.create();
 	}
@@ -114,16 +114,16 @@ public class PatPatClientConfig {
 		PatPatClient.setConfig(this);
 		CompletableFuture.runAsync(() -> {
 			if (PatPatClient.getConfig().isDebugLogEnabled()) {
-				PatPatClient.info("Saving PatPat Client Config...");
+				PatPatClient.LOGGER.info("Saving PatPat Client Config...");
 			}
 			try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
-				String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPatClient::error));*/
+				String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPatClient.LOGGER::error));*/
 				writer.write(json);
 			} catch (Exception e) {
-				PatPatClient.error("Failed to save config", e);
+				PatPatClient.LOGGER.error("Failed to save config", e);
 			}
 			if (PatPatClient.getConfig().isDebugLogEnabled()) {
-				PatPatClient.info("Saved PatPat Client Config");
+				PatPatClient.LOGGER.info("Saved PatPat Client Config");
 			}
 		});
 	}

@@ -53,8 +53,8 @@ public final class CustomAnimationConfig implements Comparable<CustomAnimationCo
 		}
 		for (EntityConfig entityConfig : this.entities) {
 			if (PatPatClient.getConfig().isDebugLogEnabled()) {
-				PatPatClient.info("Comparing Entity Config: " + entityConfig.toString());
-				PatPatClient.info("with {}, {}, {}, {}", entityTypeId, entityName, entityUuid, whoPatted.toString());
+				PatPatClient.LOGGER.info("Comparing Entity Config: " + entityConfig.toString());
+				PatPatClient.LOGGER.info("with {}, {}, {}, {}", entityTypeId, entityName, entityUuid, whoPatted.toString());
 			}
 			if (entityConfig.is(entityTypeId, entityName, entityUuid) && (entityConfig.getEntitiesFrom() == null || entityConfig.getEntitiesFrom().contains(whoPatted))) {
 				return !this.blacklist;

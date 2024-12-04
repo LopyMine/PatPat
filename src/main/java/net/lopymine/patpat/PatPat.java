@@ -16,12 +16,12 @@ public class PatPat implements ModInitializer {
 
 	public static final PatLogger LOGGER = new PatLogger(MOD_NAME);
 	@Getter
-	private static PatPatServerConfig config = PatPatServerConfig.getInstance();
+	private static PatPatServerConfig config;
 
 	@Override
 	public void onInitialize() {
-		PatPat.config = PatPatServerConfig.getInstance();
 		PatPatConfigManager.onInitialize();
+		PatPat.config = PatPatServerConfig.getInstance();
 		PatPatServerCommandManager.register();
 		PatPatServerPacketManager.register();
 		PatPat.LOGGER.info("PatPat Initialized");

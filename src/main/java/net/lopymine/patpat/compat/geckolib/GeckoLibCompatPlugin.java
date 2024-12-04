@@ -6,7 +6,7 @@ public class GeckoLibCompatPlugin extends CompatPlugin {
 
 	@Override
 	protected String getCompatModId() {
-		//? <= 1.19.3 {
+		//? <=1.19.3 {
 		/*return "geckolib3";
 		*///?} else {
 		return "geckolib";

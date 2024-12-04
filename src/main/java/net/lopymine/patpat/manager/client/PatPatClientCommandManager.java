@@ -60,6 +60,8 @@ public class PatPatClientCommandManager {
 												.suggests((context, builder) -> CommandSource.suggestMatching(ClientNetworkUtils.getOnlinePlayersFromUuids(context.getSource().getClient().getNetworkHandler(), PatPatClient.getConfig()), builder))
 												.executes(context -> PatPatClientCommandManager.onListChange(context, false))))
 						)
+						.then(literal("off").executes(context -> PatPatClientCommandManager.switchPatPatState(context, false)))
+						.then(literal("on").executes(context -> PatPatClientCommandManager.switchPatPatState(context, true)))
 				)
 				/*? >=1.19 {*/))/*?}*/;
 	}
@@ -95,6 +97,20 @@ public class PatPatClientCommandManager {
 
 		Text text = CommandTextBuilder.startBuilder("list.mode.success", mode.getText()).build();
 
+		context.getSource().sendFeedback(PATPAT_ID.copy().append(text));
+		return Command.SINGLE_SUCCESS;
+	}
+
+	private static int switchPatPatState(CommandContext<FabricClientCommandSource> context, boolean state) {
+		PatPatClientConfig config = PatPatClient.getConfig();
+		Text text;
+		if (config.isModEnabled() != state) {
+			config.setModEnabled(state);
+			config.save();
+			text = CommandTextBuilder.startBuilder(state ? "on.success" : "off.success").build();
+		} else {
+			text = CommandTextBuilder.startBuilder(state ? "on.already" : "off.already").build();
+		}
 		context.getSource().sendFeedback(PATPAT_ID.copy().append(text));
 		return Command.SINGLE_SUCCESS;
 	}

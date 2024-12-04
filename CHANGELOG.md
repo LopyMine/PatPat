@@ -2,5 +2,5 @@
 - Added camera shaking when someone pat you
 - Added option to customize the squeezing effect weight (pat weight)
 - Added support for GeckoLib mobs
-- Added support for never MC versions
+- Added support for newer MC versions
 - Other boring stuff

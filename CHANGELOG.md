@@ -3,4 +3,5 @@
 - Added option to customize the squeezing effect weight (pat weight)
 - Added support for GeckoLib mobs
 - Added support for newer MC versions
+- Added command `/patpat-client <on/off>`
 - Other boring stuff

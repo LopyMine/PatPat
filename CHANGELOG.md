@@ -1,3 +1,6 @@
-- Fixed crash with Replay Mod
-- Added camera shaking
-- Little bug fix
+- Fixed crashes with Replay Mod
+- Added camera shaking when someone pat you
+- Added option to customize the squeezing effect weight (pat weight)
+- Added support for GeckoLib mobs
+- Added support for never MC versions
+- Other boring stuff

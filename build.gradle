@@ -94,7 +94,7 @@ dependencies {
 	modImplementation "com.terraformersmc:modmenu:${prop("dep.modmenu")}"
 
 	// YACL
-	if (stonecutter.compare("1.20.1", mcVersion) != 1) {
+	if (true) {
 		def minecraftVersionsWithOldYACLMaven = Set.of("1.19.4", "1.20", "1.20.2", "1.20.3")
 		def yaclVersion = prop("dep.yacl")
 		if (minecraftVersionsWithOldYACLMaven.contains(mcVersion)) {
@@ -106,7 +106,7 @@ dependencies {
 
 	// Cloth Config
 	def clothConfigVersion = findProperty("dep.cloth-config")
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${stonecutter.compare("1.19", mcVersion) == 1 ? clothConfigVersion : substringBefore(clothConfigVersion, "+")}") {
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${false ? clothConfigVersion : substringBefore(clothConfigVersion, "+")}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
@@ -126,7 +126,7 @@ dependencies {
 		}
 	}
 
-	if (!(stonecutter.compare("1.20.5", mcVersion) == 0)) {
+	if (!(false)) {
 		// Replay Mod
 		modImplementation("maven.modrinth:replaymod:${findProperty("dep.replaymod")}")
 	}
@@ -183,7 +183,7 @@ processResources {
 	props.put("minecraft", mcVersion.toString())
 	props.put("java", javaVersionAsInt.toString())
 //	props.put("fabric_api", substringBefore(prop("build.fabric_api").toString(), "+"))
-	props.put("fabric_api_id", stonecutter.compare("1.19.1", mcVersion) >= 0 ? "fabric" : "fabric-api")
+	props.put("fabric_api_id", false  ? "fabric" : "fabric-api")
 
 	props.each { key, value ->
 		inputs.property key, value
@@ -520,16 +520,17 @@ UUID getUUID(Object uuid) {
 
 @SuppressWarnings('GrMethodMayBeStatic') // Method cannot be static
 int getJavaVersionAsInteger(String minecraftVersion) {
-	return stonecutter.compare("1.20.5", minecraftVersion) == 1 ?
-			stonecutter.compare("1.18", minecraftVersion) == 1 ?
-					stonecutter.compare("1.16.5", minecraftVersion) == 1 ?
-							8
-							:
-							16
-					:
-					17
-			:
-			21
+	return 21
+//	return stonecutter.compare("1.20.5", minecraftVersion) == 1 ?
+//			stonecutter.compare("1.18", minecraftVersion) == 1 ?
+//					stonecutter.compare("1.16.5", minecraftVersion) == 1 ?
+//							8
+//							:
+//							16
+//					:
+//					17
+//			:
+//			21
 }
 
 Properties getPersonalProperties() {

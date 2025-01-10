@@ -88,15 +88,15 @@ public class PatPatClientResourcePackManager {
 					PatPatClient.LOGGER.error("Failed to read custom animation at {} from {}", id.toString(), resourcePackName);
 				}
 			});//?} else {
-			/*Collection<Identifier> customAnimationIds = pack.findResources(ResourceType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures",/^? <=1.18.2 {^//^0,^//^?}^/ (identifier) -> {
+			/*Collection<Identifier> customAnimationIds = pack.findResources(ResourceType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures",/^? <=1.18.2 {^/0,/^?}^/ (identifier) -> {
 				//? >=1.19 {
-				return identifier.getPath().endsWith(".json") || identifier.getPath().endsWith(".json5");
-				//?} else {
-				/^return identifier.endsWith(".json") || identifier.endsWith(".json5");
-				^///?}
+				/^return identifier.getPath().endsWith(".json") || identifier.getPath().endsWith(".json5");
+				^///?} else {
+				return identifier.endsWith(".json") || identifier.endsWith(".json5");
+				//?}
 			});
 			for (Identifier customAnimationId : customAnimationIds) {
-				try (InputStream inputStream = /^? >=1.19 {^/manager.open(customAnimationId)/^?} else {^//^manager.getResource(customAnimationId).getInputStream()^//^?}^/) {
+				try (InputStream inputStream = /^? >=1.19 {^//^manager.open(customAnimationId)^//^?} else {^/manager.getResource(customAnimationId).getInputStream()/^?}^/) {
 					PatPatClientResourcePackManager.parseConfig(resourcePackName, customAnimationId, () -> inputStream, animationConfigs, config);
 				} catch (Exception e) {
 					PatPatClient.LOGGER.error("Failed to read custom animation at {} from {}", customAnimationId.toString(), resourcePackName);

@@ -16,7 +16,7 @@
 	"patpat.command.off.success": "PatPat мод &cвыключен&f",
 	"patpat.command.off.already": "PatPat мод уже был &cвыключен&f",
 	"patpat.modmenu.title": "§lКлиентские настройки PatPat мода",
-	"patpat.modmenu.no_config_libraries_screen.message": "Вам нужно установить §6§lYet Another Config Lib [YACL]§f или §6§lCloth Config API§f , чтобы открыть экран настроек PatPat клиента.\n\n§7[Esc] чтобы вернуться",
+	"patpat.modmenu.no_config_libraries_screen.message": "Вам нужно установить §6§lYet Another Config Lib [YACL]§f или §6§lCloth Config API§f, чтобы открыть экран настроек PatPat клиента.\n\n§7[Esc] чтобы вернуться",
 	"patpat.modmenu.no_config_libraries_screen.open_yacl_page": "Открыть страницу YACL",
 	"patpat.modmenu.no_config_libraries_screen.open_cloth_config_page": "Открыть страницу Cloth Config",
 	"patpat.modmenu.main": "§lОсновные",

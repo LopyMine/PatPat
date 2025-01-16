@@ -8,17 +8,17 @@ import net.lopymine.patpat.manager.client.PatPatClientManager;
 
 public class PatAnimationRenderer {
 
-	public static void scaleEntityIfPatted(LivingEntity livingEntity, MatrixStack matrixStack){
+	public static void scaleEntityIfPatted(LivingEntity livingEntity, MatrixStack matrixStack, float tickDelta){
 		PatEntity patEntity = PatPatClientManager.getPatEntity(livingEntity);
 		if (patEntity == null) {
 			return;
 		}
 
-		if (PatPatClientManager.expired(patEntity)) {
+		if (PatPatClientManager.expired(patEntity, tickDelta)) {
 			PatPatClientManager.removePatEntity(patEntity);
 			return;
 		}
 
-		matrixStack.scale(1F, PatPatClientManager.getAnimationProgress(patEntity), 1F);
+		matrixStack.scale(1F, PatPatClientManager.getAnimationProgress(patEntity, tickDelta), 1F);
 	}
 }

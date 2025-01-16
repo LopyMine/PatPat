@@ -23,6 +23,10 @@ public class PatPatClientManager {
 		return PAT_ENTITIES.get(entity.getUuid());
 	}
 
+	public static void tickEntities() {
+		PAT_ENTITIES.forEach((uuid, patEntity) -> patEntity.tick());
+	}
+
 	public static void removePatEntity(@NotNull LivingEntity entity) {
 		PAT_ENTITIES.remove(entity.getUuid());
 	}
@@ -35,9 +39,7 @@ public class PatPatClientManager {
 	}
 
 	public static PatEntity pat(@NotNull LivingEntity entity, @NotNull PlayerConfig whoPatted) {
-		if (PatPatClient.getConfig().isDebugLogEnabled()) {
-			PatPatClient.LOGGER.info("{} patted {}", whoPatted.getName(), entity.getName());
-		}
+		PatPatClient.LOGGER.debug("{} patted {}", whoPatted.getName(), entity.getName());
 		UUID uuid = entity.getUuid();
 		PatEntity patEntity = PAT_ENTITIES.get(uuid);
 		if (patEntity == null) {
@@ -49,21 +51,17 @@ public class PatPatClientManager {
 		return patEntity;
 	}
 
-	public static boolean expired(PatEntity patEntity) {
+	public static boolean expired(PatEntity patEntity, float tickDelta) {
 		CustomAnimationSettingsConfig animationConfig = patEntity.getAnimation();
 		int duration = animationConfig.getDuration();
-		long time = patEntity.getTimeOfStart();
-		long timeNow = System.currentTimeMillis();
-		return timeNow >= (time + duration);
+		return patEntity.getProgress(tickDelta) > duration;
 	}
 
-	public static float getAnimationProgress(PatEntity patEntity) {
+	public static float getAnimationProgress(PatEntity patEntity, float tickDelta) {
 		CustomAnimationSettingsConfig animationConfig = patEntity.getAnimation();
 		int duration = animationConfig.getDuration();
-		long time = patEntity.getTimeOfStart();
-		long timeNow = System.currentTimeMillis();
 
-		float animationProgress = MathHelper.clamp((float) (timeNow - time) / duration, 0.0F, 1.0F);
+		float animationProgress = patEntity.getProgress(tickDelta) / duration;
 		animationProgress = (float) (1 - Math.pow(1 - animationProgress, 2));
 		int totalFrames = animationConfig.getFrameConfig().totalFrames();
 

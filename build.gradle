@@ -93,6 +93,12 @@ dependencies {
 	// Mod Menu
 	modImplementation "com.terraformersmc:modmenu:${prop("dep.modmenu")}"
 
+	// Flashback
+	def flashbackLibVersion = prop("dep.flashback")
+	if(flashbackLibVersion != "unknown"){
+		modCompileOnly("maven.modrinth:flashback:${flashbackLibVersion}")
+	}
+
 	// YACL
 	if (stonecutter.compare("1.20.1", mcVersion) != 1) {
 		def minecraftVersionsWithOldYACLMaven = Set.of("1.19.4", "1.20", "1.20.2", "1.20.3")
@@ -128,7 +134,7 @@ dependencies {
 
 	if (!(stonecutter.compare("1.20.5", mcVersion) == 0)) {
 		// Replay Mod
-		modImplementation("maven.modrinth:replaymod:${findProperty("dep.replaymod")}")
+		modCompileOnly("maven.modrinth:replaymod:${findProperty("dep.replaymod")}")
 	}
 }
 
@@ -205,6 +211,7 @@ stonecutter {
 	swap("mod_id", "\"${prop("mod_id")}\";")
 	swap("mod_name", "\"${prop("mod_name")}\";")
 	stonecutter.const("geckolib", prop("dep.geckolib") != "unknown")
+	stonecutter.const("flashback", prop("dep.flashback") != "unknown")
 }
 
 tasks.withType(JavaCompile).configureEach {

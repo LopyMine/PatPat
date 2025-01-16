@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.*;
 import net.minecraft.util.math.MathHelper;
 
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.resourcepack.SoundConfig;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.utils.*;
@@ -39,6 +40,10 @@ public class PatPatClientSoundManager {
 			return;
 		}
 		SoundConfig soundConfig = patEntity.getAnimation().getSoundConfig();
+		if (soundConfig == null) {
+			PatPatClient.LOGGER.debug("SoundConfig not found in animation: {}", patEntity.getAnimation());
+			return;
+		}
 		SoundEvent soundEvent = soundConfig.getSound();
 		world.playSound(player,
 				patEntity.getEntity().getBlockPos(),

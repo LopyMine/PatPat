@@ -34,9 +34,7 @@ public class ListModeArgumentType implements ArgumentType<ListMode> {
 	@Override
 	public ListMode parse(StringReader reader) throws CommandSyntaxException {
 		String modeId = reader.readUnquotedString();
-		if (PatPatClient.getConfig().isDebugLogEnabled()) {
-			PatPatClient.LOGGER.info("Parsed modeId from ListModeArgumentType: {}", modeId);
-		}
+		PatPatClient.LOGGER.debug("Parsed modeId from ListModeArgumentType: {}", modeId);
 		ListMode listMode = ListMode.getById(modeId);
 		if (listMode == null) {
 			throw FAILED_PARSING.createWithContext(reader, reader.getString());

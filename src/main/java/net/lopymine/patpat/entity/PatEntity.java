@@ -3,9 +3,16 @@ package net.lopymine.patpat.entity;
 import lombok.*;
 import net.minecraft.entity.LivingEntity;
 
+import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.config.resourcepack.*;
 
 import java.util.*;
+
+//? >1.20.2 {
+import net.minecraft.world.tick.TickManager;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
+//?}
 
 @Getter
 public class PatEntity {
@@ -14,18 +21,46 @@ public class PatEntity {
 	private final CustomAnimationSettingsConfig animation;
 	@Setter
 	private int currentFrame;
-	private long timeOfStart;
+
+	private int tickProgress;
 
 	public PatEntity(LivingEntity entity, PlayerConfig whoPatted) {
 		this.entity       = entity;
 		this.animation    = CustomAnimationSettingsConfig.of(entity, whoPatted);
-		this.timeOfStart  = System.currentTimeMillis();
 		this.currentFrame = 0;
+		this.tickProgress = -1;
 	}
 
 	public void resetAnimation() {
-		this.timeOfStart  = System.currentTimeMillis();
 		this.currentFrame = 0;
+		this.tickProgress = -1;
+	}
+
+	public void tick() {
+		this.tickProgress += 1;
+		if (tickProgress == Integer.MAX_VALUE) {
+			tickProgress = 0;
+		}
+	}
+
+	public float getProgress(float tickDelta) {
+		//? >1.20.2 {
+		ClientWorld world = MinecraftClient.getInstance().world;
+		if (world == null) {
+			return 0;
+		}
+
+		TickManager tickManager = world.getTickManager();
+		float tickMillis = tickManager.getTickRate() > 20 ? (2500F / tickManager.getMillisPerTick()) : 50F;
+		float v = Math.max(this.tickProgress, 0) * tickMillis;
+		float v1 = tickManager.isFrozen() ? 0 : tickDelta * tickMillis;
+		PatPat.LOGGER.info("v={},v1={}", v, v1);
+		//?} else {
+		/*float v = Math.max(this.tickProgress, 0) * 50F;
+		float v1 = tickDelta * 50F;
+		*///?}
+		PatPat.LOGGER.info("v={},v1={}", v, v1);
+		return v + v1;
 	}
 
 	public boolean is(LivingEntity entity) {

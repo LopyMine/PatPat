@@ -113,18 +113,14 @@ public class PatPatClientConfig {
 	public void save() {
 		PatPatClient.setConfig(this);
 		CompletableFuture.runAsync(() -> {
-			if (PatPatClient.getConfig().isDebugLogEnabled()) {
-				PatPatClient.LOGGER.info("Saving PatPat Client Config...");
-			}
+			PatPatClient.LOGGER.debug("Saving PatPat Client Config...");
 			try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
 				String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPatClient.LOGGER::error));*/
 				writer.write(json);
 			} catch (Exception e) {
 				PatPatClient.LOGGER.error("Failed to save config", e);
 			}
-			if (PatPatClient.getConfig().isDebugLogEnabled()) {
-				PatPatClient.LOGGER.info("Saved PatPat Client Config");
-			}
+			PatPatClient.LOGGER.debug("Saved PatPat Client Config");
 		});
 	}
 

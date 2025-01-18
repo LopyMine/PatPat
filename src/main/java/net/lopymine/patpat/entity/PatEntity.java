@@ -54,12 +54,10 @@ public class PatEntity {
 		float tickMillis = tickManager.getTickRate() > 20 ? (2500F / tickManager.getMillisPerTick()) : 50F;
 		float v = Math.max(this.tickProgress, 0) * tickMillis;
 		float v1 = tickManager.isFrozen() ? 0 : tickDelta * tickMillis;
-		PatPat.LOGGER.info("v={},v1={}", v, v1);
 		//?} else {
 		/*float v = Math.max(this.tickProgress, 0) * 50F;
 		float v1 = tickDelta * 50F;
 		*///?}
-		PatPat.LOGGER.info("v={},v1={}", v, v1);
 		return v + v1;
 	}
 

@@ -17,6 +17,7 @@ public class ReplayModCompat {
 	public static void onPat(UUID pattedEntity, UUID whoPatted) {
 		PatPatClient.LOGGER.debug("Sending dummy packet for Replay Mod. [Patted: {} and Who: {}]", pattedEntity, whoPatted);
 		if (!LoadedMods.REPLAY_MOD_LOADED) {
+			PatPatClient.LOGGER.debug("Replay Mod not loaded");
 			return;
 		}
 		PatEntityForReplayModS2CPacket packet = new PatEntityForReplayModS2CPacket(pattedEntity, whoPatted);

@@ -1,7 +1,5 @@
 package net.lopymine.patpat.compat.flashback;
 
-import com.moulberry.flashback.Flashback;
-import com.moulberry.flashback.record.Recorder;
 //? >1.20.4 {
 import net.minecraft.network.NetworkPhase;
 //?} else {
@@ -20,6 +18,11 @@ import net.fabricmc.fabric.api.networking.v1.*;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.PatEntityForReplayModS2CPacket;
+
+//? flashback {
+import com.moulberry.flashback.Flashback;
+import com.moulberry.flashback.record.Recorder;
+//?}
 
 import java.util.UUID;
 

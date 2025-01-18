@@ -27,9 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.network.PacketByteBuf;
 *///?}
 
-//? flashback {
 import net.lopymine.patpat.compat.flashback.FlashbackCompat;
-//?}
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {

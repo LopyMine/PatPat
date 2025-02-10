@@ -13,7 +13,8 @@
 		/*? >=1.21.2*/
 		"EntityRenderStateMixin",
 		"MinecraftClientMixin",
-		"CameraMixin"
+		"CameraMixin",
+		"AbstractClientPlayerEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

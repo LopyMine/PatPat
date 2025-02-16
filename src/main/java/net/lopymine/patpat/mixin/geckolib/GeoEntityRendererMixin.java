@@ -27,7 +27,7 @@ public abstract class GeoEntityRendererMixin {
 
 	@Inject(at=@At(value = "HEAD"), method = "render")
 	//? if <=1.16.5 {
-	/*private void render(LivingEntity livingEntity, float entityYaw, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider bufferIn, int packedLightIn, CallbackInfo ci){
+	/*private void render(LivingEntity livingEntity, float entityYaw, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider bufferIn, int packedLightIn, CallbackInfo ci) {
 	*///?} elif <1.21.2 {
 	/*private void render(Entity entity, float entityYaw, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider bufferSource, int packedLight, CallbackInfo ci) {
 		*///?} else {

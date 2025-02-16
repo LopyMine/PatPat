@@ -1,5 +1,4 @@
 import groovy.json.JsonSlurper
-import groovy.json.JsonBuilder
 
 pluginManagement {
 	repositories {

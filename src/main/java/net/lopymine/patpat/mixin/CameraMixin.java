@@ -5,6 +5,10 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.entity.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
+//? <=1.20.2 {
+/*import net.minecraft.world.BlockView;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+*///?}
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.entity.PatEntity;
@@ -17,11 +21,11 @@ public class CameraMixin {
 	@Shadow
 	private float lastTickDelta;
 	//?} else {
-	/*private float lastTickDelta=0;
+	/*private float lastTickDelta = 0;
 
-	@Inject(at=@At("HEAD"), method = "update")
-	private void onUpdate(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci){
-		this.lastTickDelta=tickDelta;
+	@Inject(at = @At("HEAD"), method = "update")
+	private void onUpdate(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
+		this.lastTickDelta = tickDelta;
 	}
 	*///?}
 

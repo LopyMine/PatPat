@@ -13,7 +13,7 @@ import de.marhali.json5.Json5Element
 
 plugins {
 	id("fabric-loom") version "1.8-SNAPSHOT"
-	id("me.modmuss50.mod-publish-plugin") version "0.7.4"
+	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
 def modId = prop("mod_id")

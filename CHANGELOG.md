@@ -1,7 +1,3 @@
-- Fixed crashes with Replay Mod
-- Added camera shaking when someone pat you
-- Added option to customize the squeezing effect weight (pat weight)
-- Added support for GeckoLib mobs
-- Added support for newer MC versions
-- Added command `/patpat-client <on/off>`
-- Other boring stuff
+# v1.1.0 Update
+- Added Flashback support
+- Added cape for authors

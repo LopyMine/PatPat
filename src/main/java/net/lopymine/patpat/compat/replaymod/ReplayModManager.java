@@ -22,9 +22,7 @@ public class ReplayModManager {
 	public static void sendDummyPacket(Packet<?> packet) {
 		//? !(=1.20.5) {
 		if (com.replaymod.recording.ReplayModRecording.instance.getConnectionEventHandler() != null) {
-			if (PatPatClient.getConfig().isDebugLogEnabled()) {
-				PatPatClient.LOGGER.info("Sent dummy packet for Replay Mod");
-			}
+			PatPatClient.LOGGER.debug("Sent dummy packet for Replay Mod");
 			com.replaymod.recording.packet.PacketListener packetListener = com.replaymod.recording.ReplayModRecording.instance.getConnectionEventHandler().getPacketListener();
 			if (packetListener != null) {
 				packetListener.save(packet);

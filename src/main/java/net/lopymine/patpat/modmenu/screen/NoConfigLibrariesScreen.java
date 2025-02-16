@@ -1,6 +1,5 @@
 package net.lopymine.patpat.modmenu.screen;
 
-import com.google.common.collect.Sets;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.*;
@@ -23,7 +22,7 @@ public class NoConfigLibrariesScreen {
 	private static final Text MESSAGE = TextUtils.translatable("patpat.modmenu.no_config_libraries_screen.message");
 	private static final Text OPEN_YACL_PAGE = TextUtils.translatable("patpat.modmenu.no_config_libraries_screen.open_yacl_page");
 	private static final Text OPEN_CLOTH_CONFIG_PAGE = TextUtils.translatable("patpat.modmenu.no_config_libraries_screen.open_cloth_config_page");
-	private static final Set<String> ALLOWED_PROTOCOLS = Sets.newHashSet("http", "https");
+	private static final Set<String> ALLOWED_PROTOCOLS = Set.of("http", "https");
 	private static final String YACL_MODRINTH_LINK = "https://modrinth.com/mod/yacl?version=%s&loader=fabric#download";
 	private static final String CLOTH_CONFIG_API_MODRINTH_LINK = "https://modrinth.com/mod/cloth-config?version=%s&loader=fabric#download";
 
@@ -54,7 +53,7 @@ public class NoConfigLibrariesScreen {
 			if (string == null) {
 				throw new URISyntaxException(url, "Missing protocol");
 			}
-			if (!NoConfigLibrariesScreen.ALLOWED_PROTOCOLS.contains(string.toLowerCase(Locale.ROOT))) {
+			if (!ALLOWED_PROTOCOLS.contains(string.toLowerCase(Locale.ROOT))) {
 				throw new URISyntaxException(url, "Unsupported protocol: " + string.toLowerCase(Locale.ROOT));
 			}
 			Util.getOperatingSystem().open(link);

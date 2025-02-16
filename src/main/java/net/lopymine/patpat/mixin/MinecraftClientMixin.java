@@ -27,6 +27,8 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.network.PacketByteBuf;
 *///?}
 
+import net.lopymine.patpat.compat.flashback.FlashbackCompat;
+
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
 
@@ -74,11 +76,11 @@ public abstract class MinecraftClientMixin {
 			return;
 		}
 
+		PatEntityC2SPacket packet = new PatEntityC2SPacket(livingEntity);
 		//? >=1.19.4 {
-		ClientPlayNetworking.send(new PatEntityC2SPacket(livingEntity));
+		ClientPlayNetworking.send(packet);
 		//?} else {
-		/*PatEntityC2SPacket packet = new PatEntityC2SPacket(livingEntity);
-		PacketByteBuf buf = PacketByteBufs.create();
+		/*PacketByteBuf buf = PacketByteBufs.create();
 		packet.write(buf);
 		ClientPlayNetworking.send(PatEntityC2SPacket.PACKET_ID ,buf);
 		*///?}
@@ -89,6 +91,9 @@ public abstract class MinecraftClientMixin {
 		PatEntity patEntity = PatPatClientManager.pat(livingEntity, whoPatted);
 
 		ReplayModCompat.onPat(livingEntity.getUuid(), currentUuid);
+		//? flashback {
+		FlashbackCompat.onPat(livingEntity.getUuid(), currentUuid);
+		//?}
 
 		if (config.isSoundsEnabled()) {
 			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsVolume());

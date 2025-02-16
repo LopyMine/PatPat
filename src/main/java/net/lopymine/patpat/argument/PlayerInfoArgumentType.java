@@ -40,9 +40,7 @@ public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 		try {
 			String s = reader.readUnquotedString();
 
-			if (PatPatClient.getConfig().isDebugLogEnabled()) {
-				PatPatClient.LOGGER.info("Parsed PlayerInfo from PlayerInfoArgumentType: {}",s);
-			}
+			PatPatClient.LOGGER.debug("Parsed PlayerInfo from PlayerInfoArgumentType: {}", s);
 
 			ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
 			if (networkHandler == null) {

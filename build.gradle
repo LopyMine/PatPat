@@ -95,7 +95,7 @@ dependencies {
 
 	// Flashback
 	def flashbackLibVersion = prop("dep.flashback")
-	if(flashbackLibVersion != "unknown"){
+	if (flashbackLibVersion != "unknown") {
 		modCompileOnly("maven.modrinth:flashback:${flashbackLibVersion}")
 	}
 
@@ -377,16 +377,23 @@ jar {
 publishMods {
 	def loaders = prop("loaders").toString().split(" ")
 	def modrinthProjectId = prop("modrinth_id").toString()
-	def embedsDepends = prop("embeds_depends").toString().split(" ")
 	def curseForgeProjectId = prop("curseforge_id").toString()
-	def requiresDepends = prop("requires").toString().split(" ")
-	def optionalDepends = prop("optional").toString().split(" ")
-	def incompatibleDepends = prop("incompatible_depends").toString().split(" ")
+
+	def curseforgeRequiresDepends = prop("curseforge_requires").toString().split(" ")
+	def curseforgeOptionalDepends = prop("curseforge_optional").toString().split(" ")
+	def curseforgeIncompatibleDepends = prop("curseforge_incompatible").toString().split(" ")
+	def curseforgeEmbedsDepends = prop("curseforge_embeds").toString().split(" ")
+
+	def modrinthRequiresDepends = prop("modrinth_requires").toString().split(" ")
+	def modrinthOptionalDepends = prop("modrinth_optional").toString().split(" ")
+	def modrinthIncompatibleDepends = prop("modrinth_incompatible").toString().split(" ")
+	def modrinthEmbedsDepends = prop("modrinth_embeds").toString().split(" ")
+
 	def versionTypeProperty = prop("version_type").toString()
 	def maxJavaVersion = JavaVersion.toVersion(prop("max_java_version"))
-	def isClient = Boolean.parseBoolean(prop("is_for_client)").toString())
-	def isTesting = Boolean.parseBoolean(prop("test_publish)").toString())
-	def isServer = Boolean.parseBoolean(prop("is_for_server)").toString())
+	def isClient = Boolean.parseBoolean(prop("is_for_client").toString())
+	def isTesting = Boolean.parseBoolean(prop("test_publish").toString())
+	def isServer = Boolean.parseBoolean(prop("is_for_server").toString())
 	def versionName = "[${currentMultiVersion.toVersionRange()}] ${prop("mod_name")} v${prop("mod_version")}"
 	def curseForgeApiKeyIsPresent = providers.environmentVariable("CURSEFORGE_API_KEY").getOrNull() != null
 	def modrinthApiKeyIsPresent = providers.environmentVariable("MODRINTH_API_KEY").getOrNull() != null
@@ -430,17 +437,17 @@ publishMods {
 			minecraftVersions.add(currentMultiVersion.maxVersion)
 		}
 
-		if (requiresDepends.first() != "null") {
-			requires(requiresDepends)
+		if (curseforgeRequiresDepends.first() != "none") {
+			requires(curseforgeRequiresDepends)
 		}
-		if (optionalDepends.first() != "null") {
-			optional(optionalDepends)
+		if (curseforgeOptionalDepends.first() != "none") {
+			optional(curseforgeOptionalDepends)
 		}
-		if (incompatibleDepends.first() != "null") {
-			incompatible(incompatibleDepends)
+		if (curseforgeIncompatibleDepends.first() != "none") {
+			incompatible(curseforgeIncompatibleDepends)
 		}
-		if (embedsDepends.first() != "null") {
-			embeds(embedsDepends)
+		if (curseforgeEmbedsDepends.first() != "none") {
+			embeds(curseforgeEmbedsDepends)
 		}
 	}
 
@@ -457,17 +464,17 @@ publishMods {
 			minecraftVersions.add(currentMultiVersion.maxVersion)
 		}
 
-		if (requiresDepends.first() != "null") {
-			requires(requiresDepends)
+		if (modrinthRequiresDepends.first() != "none") {
+			requires(modrinthRequiresDepends)
 		}
-		if (optionalDepends.first() != "null") {
-			optional(optionalDepends)
+		if (modrinthOptionalDepends.first() != "none") {
+			optional(modrinthOptionalDepends)
 		}
-		if (incompatibleDepends.first() != "null") {
-			incompatible(incompatibleDepends)
+		if (modrinthIncompatibleDepends.first() != "none") {
+			incompatible(modrinthIncompatibleDepends)
 		}
-		if (embedsDepends.first() != "null") {
-			embeds(embedsDepends)
+		if (modrinthEmbedsDepends.first() != "none") {
+			embeds(modrinthEmbedsDepends)
 		}
 	}
 }

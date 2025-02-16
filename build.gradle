@@ -379,8 +379,8 @@ publishMods {
 	def modrinthProjectId = prop("modrinth_id").toString()
 	def embedsDepends = prop("embeds_depends").toString().split(" ")
 	def curseForgeProjectId = prop("curseforge_id").toString()
-	def requiresDepends = prop("requires_depends").toString().split(" ")
-	def optionalDepends = prop("optional_depends").toString().split(" ")
+	def requiresDepends = prop("requires").toString().split(" ")
+	def optionalDepends = prop("optional").toString().split(" ")
 	def incompatibleDepends = prop("incompatible_depends").toString().split(" ")
 	def versionTypeProperty = prop("version_type").toString()
 	def maxJavaVersion = JavaVersion.toVersion(prop("max_java_version"))
@@ -388,9 +388,9 @@ publishMods {
 	def isTesting = Boolean.parseBoolean(prop("test_publish)").toString())
 	def isServer = Boolean.parseBoolean(prop("is_for_server)").toString())
 	def versionName = "[${currentMultiVersion.toVersionRange()}] ${prop("mod_name")} v${prop("mod_version")}"
-	def curseForgeApiKeyIsPresent = providers.environmentVariable("CURSEFORGE_API_KEY").getOrNull() == null
-	def modrinthApiKeyIsPresent = providers.environmentVariable("MODRINTH_API_KEY").getOrNull() == null
-	def bl3 = isTesting || curseForgeApiKeyIsPresent || modrinthApiKeyIsPresent
+	def curseForgeApiKeyIsPresent = providers.environmentVariable("CURSEFORGE_API_KEY").getOrNull() != null
+	def modrinthApiKeyIsPresent = providers.environmentVariable("MODRINTH_API_KEY").getOrNull() != null
+	def bl3 = isTesting || !curseForgeApiKeyIsPresent || !modrinthApiKeyIsPresent
 
 	println "[PublishMods] Configuring '${versionName}' for publishing"
 	displayName = versionName
@@ -430,16 +430,16 @@ publishMods {
 			minecraftVersions.add(currentMultiVersion.maxVersion)
 		}
 
-		if (requiresDepends.first() != "none") {
+		if (requiresDepends.first() != "null") {
 			requires(requiresDepends)
 		}
-		if (optionalDepends.first() != "none") {
+		if (optionalDepends.first() != "null") {
 			optional(optionalDepends)
 		}
-		if (incompatibleDepends.first() != "none") {
+		if (incompatibleDepends.first() != "null") {
 			incompatible(incompatibleDepends)
 		}
-		if (embedsDepends.first() != "none") {
+		if (embedsDepends.first() != "null") {
 			embeds(embedsDepends)
 		}
 	}
@@ -457,16 +457,16 @@ publishMods {
 			minecraftVersions.add(currentMultiVersion.maxVersion)
 		}
 
-		if (requiresDepends.first() != "none") {
+		if (requiresDepends.first() != "null") {
 			requires(requiresDepends)
 		}
-		if (optionalDepends.first() != "none") {
+		if (optionalDepends.first() != "null") {
 			optional(optionalDepends)
 		}
-		if (incompatibleDepends.first() != "none") {
+		if (incompatibleDepends.first() != "null") {
 			incompatible(incompatibleDepends)
 		}
-		if (embedsDepends.first() != "none") {
+		if (embedsDepends.first() != "null") {
 			embeds(embedsDepends)
 		}
 	}

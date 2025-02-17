@@ -95,7 +95,7 @@ dependencies {
 
 	// Flashback
 	def flashbackLibVersion = prop("dep.flashback")
-	if (flashbackLibVersion != "unknown") {
+	if(flashbackLibVersion != "unknown"){
 		modCompileOnly("maven.modrinth:flashback:${flashbackLibVersion}")
 	}
 
@@ -377,27 +377,20 @@ jar {
 publishMods {
 	def loaders = prop("loaders").toString().split(" ")
 	def modrinthProjectId = prop("modrinth_id").toString()
+	def embedsDepends = prop("embeds").toString().split(" ")
 	def curseForgeProjectId = prop("curseforge_id").toString()
-
-	def curseforgeRequiresDepends = prop("curseforge_requires").toString().split(" ")
-	def curseforgeOptionalDepends = prop("curseforge_optional").toString().split(" ")
-	def curseforgeIncompatibleDepends = prop("curseforge_incompatible").toString().split(" ")
-	def curseforgeEmbedsDepends = prop("curseforge_embeds").toString().split(" ")
-
-	def modrinthRequiresDepends = prop("modrinth_requires").toString().split(" ")
-	def modrinthOptionalDepends = prop("modrinth_optional").toString().split(" ")
-	def modrinthIncompatibleDepends = prop("modrinth_incompatible").toString().split(" ")
-	def modrinthEmbedsDepends = prop("modrinth_embeds").toString().split(" ")
-
+	def requiresDepends = prop("requires").toString().split(" ")
+	def optionalDepends = prop("optional").toString().split(" ")
+	def incompatibleDepends = prop("incompatible").toString().split(" ")
 	def versionTypeProperty = prop("version_type").toString()
 	def maxJavaVersion = JavaVersion.toVersion(prop("max_java_version"))
 	def isClient = Boolean.parseBoolean(prop("is_for_client").toString())
 	def isTesting = Boolean.parseBoolean(prop("test_publish").toString())
 	def isServer = Boolean.parseBoolean(prop("is_for_server").toString())
 	def versionName = "[${currentMultiVersion.toVersionRange()}] ${prop("mod_name")} v${prop("mod_version")}"
-	def curseForgeApiKeyIsPresent = providers.environmentVariable("CURSEFORGE_API_KEY").getOrNull() != null
-	def modrinthApiKeyIsPresent = providers.environmentVariable("MODRINTH_API_KEY").getOrNull() != null
-	def bl3 = isTesting || !curseForgeApiKeyIsPresent || !modrinthApiKeyIsPresent
+	def curseForgeApiKeyIsPresent = providers.environmentVariable("CURSEFORGE_API_KEY").getOrNull() == null
+	def modrinthApiKeyIsPresent = providers.environmentVariable("MODRINTH_API_KEY").getOrNull() == null
+	def bl3 = isTesting || curseForgeApiKeyIsPresent || modrinthApiKeyIsPresent
 
 	println "[PublishMods] Configuring '${versionName}' for publishing"
 	displayName = versionName
@@ -437,17 +430,17 @@ publishMods {
 			minecraftVersions.add(currentMultiVersion.maxVersion)
 		}
 
-		if (curseforgeRequiresDepends.first() != "none") {
-			requires(curseforgeRequiresDepends)
+		if (requiresDepends.first() != "none") {
+			requires(requiresDepends)
 		}
-		if (curseforgeOptionalDepends.first() != "none") {
-			optional(curseforgeOptionalDepends)
+		if (optionalDepends.first() != "none") {
+			optional(optionalDepends)
 		}
-		if (curseforgeIncompatibleDepends.first() != "none") {
-			incompatible(curseforgeIncompatibleDepends)
+		if (incompatibleDepends.first() != "none") {
+			incompatible(incompatibleDepends)
 		}
-		if (curseforgeEmbedsDepends.first() != "none") {
-			embeds(curseforgeEmbedsDepends)
+		if (embedsDepends.first() != "none") {
+			embeds(embedsDepends)
 		}
 	}
 
@@ -464,17 +457,17 @@ publishMods {
 			minecraftVersions.add(currentMultiVersion.maxVersion)
 		}
 
-		if (modrinthRequiresDepends.first() != "none") {
-			requires(modrinthRequiresDepends)
+		if (requiresDepends.first() != "none") {
+			requires(requiresDepends)
 		}
-		if (modrinthOptionalDepends.first() != "none") {
-			optional(modrinthOptionalDepends)
+		if (optionalDepends.first() != "none") {
+			optional(optionalDepends)
 		}
-		if (modrinthIncompatibleDepends.first() != "none") {
-			incompatible(modrinthIncompatibleDepends)
+		if (incompatibleDepends.first() != "none") {
+			incompatible(incompatibleDepends)
 		}
-		if (modrinthEmbedsDepends.first() != "none") {
-			embeds(modrinthEmbedsDepends)
+		if (embedsDepends.first() != "none") {
+			embeds(embedsDepends)
 		}
 	}
 }

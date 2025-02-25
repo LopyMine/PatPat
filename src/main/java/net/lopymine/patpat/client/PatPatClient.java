@@ -3,6 +3,7 @@ package net.lopymine.patpat.client;
 import lombok.*;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.compat.LoadedMods;
@@ -27,6 +28,15 @@ public class PatPatClient implements ClientModInitializer {
 		PatPatClientPacketManager.register();
 		PatPatClientReloadListener.register();
 		LoadedMods.onInitialize();
+
+		ClientTickEvents.END_WORLD_TICK.register(client -> {
+			//? >1.20.2 {
+			if (client.getTickManager().isFrozen()) {
+				return;
+			}
+			//?}
+			PatPatClientManager.tickEntities();
+		});
 
 		LOGGER.info("PatPat Client Initialized");
 	}

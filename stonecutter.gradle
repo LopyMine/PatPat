@@ -1,46 +1,5 @@
 plugins {
 	id "dev.kikugie.stonecutter"
+	id "net.lopymine.mossy-plugin-stonecutter"
 }
 stonecutter.active "1.21.4" /* [SC] DO NOT EDIT */
-
-stonecutter.registerChiseled tasks.register("chiseledBuildAndCollectAll", stonecutter.chiseled) {
-	setGroup("project")
-	ofTask("buildAndCollect")
-}
-
-stonecutter.registerChiseled tasks.register("chiseledPublishAll", stonecutter.chiseled) {
-	setGroup("project")
-	ofTask("publishMods")
-}
-
-stonecutter.registerChiseled tasks.register("chiseledPublishSpecified", stonecutter.chiseled) {
-	def list = getPublicationVersions()
-	versions = stonecutter.versions.findAll { list.contains(it.project) }
-	setGroup("project")
-	ofTask("publishMods")
-}
-
-for (ver in stonecutter.versions) {
-	def current = ver
-	stonecutter.registerChiseled tasks.register("chiseledBuildAndCollect+${current.project}", stonecutter.chiseled) {
-		versions = [current]
-		setGroup("project")
-		ofTask("buildAndCollect")
-	}
-
-	stonecutter.registerChiseled tasks.register("chiseledPublish+${current.project}", stonecutter.chiseled) {
-		versions = [current]
-		setGroup("project")
-		ofTask("publishMods")
-	}
-}
-
-String[] getPublicationVersions() {
-	return publication_versions.toString().split(" ").collect { s ->
-		def index = s.indexOf("[")
-		if (index == -1) {
-			return s
-		}
-		return s.substring(0, index)
-	}
-}

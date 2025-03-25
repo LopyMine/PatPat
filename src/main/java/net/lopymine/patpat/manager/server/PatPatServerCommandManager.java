@@ -13,11 +13,13 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.config.resourcepack.ListMode;
-import net.lopymine.patpat.config.server.PatPatServerConfig;
-import net.lopymine.patpat.extension.TextExtension;
+import net.lopymine.patpat.config.server.*;
+import net.lopymine.patpat.extension.*;
+import net.lopymine.patpat.manager.PatPatConfigManager;
 import net.lopymine.patpat.utils.*;
 
 import java.util.*;
@@ -29,9 +31,10 @@ import static net.minecraft.server.command.CommandManager.literal;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 //?} else {
 /*import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
-*///?}
+ *///?}
 
-@ExtensionMethod(TextExtension.class)
+
+@ExtensionMethod({TextExtension.class, CommandExtenstion.class})
 public class PatPatServerCommandManager {
 
 	private static final MutableText PATPAT_ID = TextUtils.literal("[§aPatPat§f] ");
@@ -49,6 +52,15 @@ public class PatPatServerCommandManager {
 			*///?}
 			dispatcher.register(literal("patpat")
 					.requires(context -> context.hasPermissionLevel(2))
+					.then(literal("reload").executes(context -> {
+						PatPatConfigManager.reload();
+						Text text = CommandTextBuilder.startBuilder("reload.success").build();
+						context.getSource().sendPatPatFeedback(PATPAT_ID.copy().append(text), false);
+						PatPat.LOGGER.info(text.asString());
+						return Command.SINGLE_SUCCESS;
+					}))
+
+
 					.then(literal("list")
 							.then(literal("set")
 									.then(argument("mode", StringArgumentType.word())
@@ -60,48 +72,76 @@ public class PatPatServerCommandManager {
 											.executes(context -> PatPatServerCommandManager.onListChange(context, true))))
 							.then(literal("remove")
 									.then(argument("profile", GameProfileArgumentType.gameProfile())
-											.suggests((context, builder) -> CommandSource.suggestMatching(ServerNetworkUtils.getPlayersFromList(context.getSource()./*? <=1.17 {*//*getMinecraftServer()*//*?} else {*/getServer()/*?}*/.getPlayerManager(), PatPat.getConfig()), builder))
+											.suggests((context, builder) -> CommandSource.suggestMatching(context.getSource().getPlayerNames(), builder))
 											.executes(context -> PatPatServerCommandManager.onListChange(context, false))))
+					)
+
+//(enable | disable | set | info)
+					.then(literal("ratelimit")
+							.then(literal("enable"))
+							.then(literal("disable"))
+							.then(literal("info")
+									.then(argument("profile", GameProfileArgumentType.gameProfile())
+											.suggests((context, builder) -> CommandSource.suggestMatching(context.getSource().getPlayerNames(), builder))
+											.executes(context -> PatPatServerCommandManager.onListChange(context, false)))
+
+							)
+							.then(literal("set"))
+
+
 					)
 			);
 		}));
 	}
 
 	private static int onListChange(CommandContext<ServerCommandSource> context, boolean add) throws CommandSyntaxException {
-		PatPatServerConfig config = PatPat.getConfig();
-		Map<UUID, String> players = config.getList();
+		PlayerListConfig config = PlayerListConfig.getInstance();
+		Set<UUID> uuids = config.getUuids();
 		Collection<GameProfile> profile = GameProfileArgumentType.getProfileArgument(context, "profile");
+		String action = add ? "add" : "remove";
+		boolean modify = false;
 		for (GameProfile gameProfile : profile) {
-			String name = gameProfile.getName();
 			UUID uuid = gameProfile.getId();
+			boolean success = false;
+			if (add && !uuids.contains(uuid)) {
+				uuids.add(uuid);
+				success = true;
+				modify  = true;
+			} else if (!add && uuids.contains(uuid)) {
+				uuids.remove(uuid);
+				success = true;
+				modify  = true;
+			}
 
-			boolean success = add ? !players.containsKey(uuid) && players.put(uuid, name) == null : players.containsKey(uuid) && players.remove(uuid) != null;
-
-			String action = add ? "add" : "remove";
 			String result = success ? "success" : "failed";
 			String key = String.format("list.%s.%s", action, result);
-
-			Text text = CommandTextBuilder.startBuilder(key, name)
-					.withShowEntity(EntityType.PLAYER, uuid, name)
+			Text text = CommandTextBuilder.startBuilder(key, gameProfile.getName())
+					.withShowEntity(EntityType.PLAYER, uuid, gameProfile.getName())
 					.withClickEvent(Action.COPY_TO_CLIPBOARD, uuid)
 					.build();
 
-			context.getSource().sendFeedback(/*? >=1.20 {*/() -> PATPAT_ID.copy().append(text)/*?} else {*//*PATPAT_ID.copy().append(text)*//*?}*/, true);
+			context.getSource().sendPatPatFeedback(PATPAT_ID.copy().append(text), true);
 			if (success) {
 				PatPat.LOGGER.info(text.asString());
 			} else {
 				PatPat.LOGGER.warn(text.asString());
 			}
 		}
-
-		config.save();
+		if (modify) {
+			config.save();
+		}
 		return Command.SINGLE_SUCCESS;
 	}
 
 	private static int onSetListMode(CommandContext<ServerCommandSource> context) {
 		String modeId = StringArgumentType.getString(context, "mode");
-		PatPatServerConfig config = PatPat.getConfig();
+		PatPatServerConfig config = PatPatServerConfig.getInstance();
 		ListMode listMode = ListMode.getById(modeId);
+		if (config.getListMode() == listMode) {
+			Text text = CommandTextBuilder.startBuilder("list.mode.already", listMode).build();
+			context.getSource().sendPatPatFeedback(PATPAT_ID.copy().append(text), true);
+			return 0;
+		}
 
 		boolean success = listMode != null;
 		if (success) {
@@ -117,7 +157,7 @@ public class PatPatServerCommandManager {
 			builder.withHoverText(Arrays.stream(ListMode.values()).map(ListMode::getText).toArray());
 		}
 		Text text = builder.build();
-		context.getSource().sendFeedback(/*? >=1.20 {*/() -> PATPAT_ID.copy().append(text)/*?} else {*//*PATPAT_ID.copy().append(text)*//*?}*/, true);
+		context.getSource().sendPatPatFeedback(PATPAT_ID.copy().append(text), true);
 		if (success) {
 			PatPat.LOGGER.info(text.asString());
 		} else {

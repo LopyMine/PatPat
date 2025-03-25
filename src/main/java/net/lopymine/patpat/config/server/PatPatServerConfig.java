@@ -9,40 +9,40 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.config.resourcepack.ListMode;
 import net.lopymine.patpat.manager.PatPatConfigManager;
-import net.lopymine.patpat.utils.VersionedThings;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
 public class PatPatServerConfig {
 
-	public static final Codec<PatPatServerConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final Codec<PatPatServerConfig> CODEC = RecordCodecBuilder.create(inst -> inst.group(
 			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatServerConfig::getListMode),
-			Codec.unboundedMap(VersionedThings.UUID_CODEC, Codec.STRING).fieldOf("list").forGetter(PatPatServerConfig::getList)
-	).apply(instance, PatPatServerConfig::new));
+			RateLimitConfig.CODEC.fieldOf("rateLimit").forGetter(PatPatServerConfig::getRateLimitConfig)
+	).apply(inst, PatPatServerConfig::new));
 
-	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat.json5").toFile();
+	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("config.json").toFile();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	private final Map<UUID, String> list;
+	@Getter
+	private static PatPatServerConfig instance;
 	@Setter
 	private ListMode listMode;
+	private RateLimitConfig rateLimitConfig;
 
 	private PatPatServerConfig() {
-		this.listMode = ListMode.DISABLED;
-		this.list     = new HashMap<>();
+		this.listMode        = ListMode.DISABLED;
+		this.rateLimitConfig = new RateLimitConfig();
 	}
 
-	public PatPatServerConfig(ListMode listMode, Map<UUID, String> list) {
-		this.listMode = listMode;
-		this.list     = new HashMap<>(list);
+	public PatPatServerConfig(ListMode listMode, RateLimitConfig rateLimitConfig) {
+		this.listMode        = listMode;
+		this.rateLimitConfig = rateLimitConfig;
 	}
 
-	public static PatPatServerConfig getInstance() {
-		return PatPatServerConfig.read();
+	public static void reload() {
+		instance = PatPatServerConfig.read();
 	}
 
 	private static @NotNull PatPatServerConfig create() {

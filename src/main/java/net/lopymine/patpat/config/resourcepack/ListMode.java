@@ -14,13 +14,8 @@ public enum ListMode {
 	BLACKLIST(Formatting.DARK_GREEN),
 	DISABLED(Formatting.DARK_RED);
 
-	public static final Codec<ListMode> CODEC = Codec.STRING.xmap((string) -> {
-		ListMode listMode = ListMode.getById(string);
-		if (listMode == null) {
-			listMode = DISABLED;
-		}
-		return listMode;
-	}, Enum::name);
+	public static final Codec<ListMode> CODEC = Codec.STRING
+			.xmap(string -> ListMode.getByIdOrDefault(string, DISABLED), Enum::name);
 
 	private final Formatting formatting;
 
@@ -35,6 +30,12 @@ public enum ListMode {
 		} catch (IllegalArgumentException ignored) {
 			return null;
 		}
+	}
+
+	@Nullable
+	public static ListMode getByIdOrDefault(String modeId, ListMode listMode) {
+		@Nullable ListMode value = getById(modeId);
+		return value == null ? listMode : value;
 	}
 
 	public Text getText() {

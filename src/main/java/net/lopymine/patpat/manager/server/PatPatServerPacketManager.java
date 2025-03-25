@@ -10,12 +10,12 @@ import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.config.resourcepack.ListMode;
-import net.lopymine.patpat.config.server.PatPatServerConfig;
+import net.lopymine.patpat.config.server.*;
 import net.lopymine.patpat.packet.*;
 
 //? <=1.19.3 {
 /*import net.minecraft.network.PacketByteBuf;
-*///?}
+ *///?}
 
 public class PatPatServerPacketManager {
 
@@ -33,11 +33,16 @@ public class PatPatServerPacketManager {
 		ServerPlayNetworking.registerGlobalReceiver(PatEntityC2SPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
 				/*? >=1.20.5 {*/(packet, context) -> {
 					ServerPlayerEntity sender = context.player();/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, handler, buf, responseSender) -> { PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);*//*?}*/
-					PatPatServerConfig config = PatPat.getConfig();
+					PatPatServerConfig config = PatPatServerConfig.getInstance();
+					PlayerListConfig playerListConfig = PlayerListConfig.getInstance();
 					GameProfile senderProfile = sender.getGameProfile();
-					if ((config.getListMode() == ListMode.WHITELIST && !config.getList().containsKey(senderProfile.getId())) || (config.getListMode() == ListMode.BLACKLIST && config.getList().containsKey(senderProfile.getId()))) {
+					if (config.getListMode() == ListMode.WHITELIST && !playerListConfig.contains(senderProfile.getId())) {
 						return;
 					}
+					if (config.getListMode() == ListMode.BLACKLIST && playerListConfig.contains(senderProfile.getId())) {
+						return;
+					}
+
 					ServerWorld serverWorld = (ServerWorld) sender./*? >=1.18 {*/getWorld()/*?} else {*//*world*//*?}*/;
 					Entity entity = serverWorld.getEntity(packet.getPattedEntityUuid());
 					if (!(entity instanceof LivingEntity)) {

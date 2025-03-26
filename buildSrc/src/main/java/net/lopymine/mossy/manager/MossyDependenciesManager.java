@@ -43,13 +43,17 @@ public class MossyDependenciesManager {
 				return;
 			}
 
+			if (version.equals("unknown")) {
+				return;
+			}
+
 			AdditionalDependencyOverride override = overrides.get(modId);
 			String configurationName = override != null ? override.configurationName() : "modImplementation";
 			dependencies.add(configurationName, "maven.modrinth:%s:%s".formatted(modId, version));
 		});
 
 		String yaclVersion = properties.get("yacl");
-		if (yaclVersion != null) {
+		if (yaclVersion != null && !yaclVersion.equals("unknown")) {
 			dependencies.add("modImplementation", "dev.isxander:yet-another-config-lib:%s".formatted(yaclVersion));
 		}
 	}

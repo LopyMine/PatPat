@@ -31,7 +31,7 @@ public class MigrateVersion0 implements MigrateHandler {
 		}
 		boolean success = false;
 		try (FileReader reader = new FileReader(oldFile)) {
-			JsonObject rootObj = JsonParser.parseReader(reader).getAsJsonObject();
+			JsonObject rootObj = /*? <=1.17.1 {*//*new JsonParser().parse*//*?} else {*/JsonParser.parseReader/*?}*/(reader).getAsJsonObject();
 
 			String listModeStr = rootObj.get("listMode").getAsString();
 			PatPatServerConfig config = PatPatServerConfig.getInstance();
@@ -41,7 +41,14 @@ public class MigrateVersion0 implements MigrateHandler {
 			PlayerListConfig playerListConfig = PlayerListConfig.getInstance();
 			Set<UUID> uuids = playerListConfig.getUuids();
 			Set<UUID> uuidsFromOldConfig = new HashSet<>();
-			rootObj.getAsJsonObject("list").asMap().keySet().forEach(s -> {
+			JsonObject jsonObject = rootObj.getAsJsonObject("list");
+			jsonObject.
+			//? <=1.17.1 {
+			/*entrySet().forEach(entry->{
+				String s = entry.getKey();
+			*//*?} else {*/
+			asMap().keySet().forEach(s -> {
+			//?}
 				try {
 					String uuidString = new StringBuilder(s)
 							.insert(8, "-")

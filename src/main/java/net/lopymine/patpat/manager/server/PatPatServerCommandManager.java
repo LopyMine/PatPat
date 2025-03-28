@@ -1,6 +1,12 @@
 package net.lopymine.patpat.manager.server;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.manager.server.command.ratelimit.InfoCommand;
+import net.lopymine.patpat.manager.server.command.ratelimit.ToggleCommand;
+import net.lopymine.patpat.manager.server.command.ratelimit.set.IncrementCommand;
+import net.lopymine.patpat.manager.server.command.ratelimit.set.IntervalCommand;
+import net.lopymine.patpat.manager.server.command.ratelimit.set.LimitCommand;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.GameProfileArgumentType;
 import net.minecraft.entity.EntityType;
@@ -13,7 +19,6 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.config.resourcepack.ListMode;
@@ -31,19 +36,20 @@ import static net.minecraft.server.command.CommandManager.literal;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 //?} else {
 /*import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
- *///?}
+*///?}
 
 
-@ExtensionMethod({TextExtension.class, CommandExtenstion.class})
+@ExtensionMethod({TextExtension.class, CommandExtension.class})
 public class PatPatServerCommandManager {
 
-	private static final MutableText PATPAT_ID = TextUtils.literal("[§aPatPat§f] ");
+	public static final MutableText PATPAT_ID = TextUtils.literal("[§aPatPat§f] ");
 
 	private PatPatServerCommandManager() {
 		throw new IllegalStateException("Manager class");
 	}
 
 	public static void register() {
+		// TODO: В идеале разделить это на несколько классов
 		CommandRegistrationCallback.EVENT.register((/*? >=1.19 {*/(dispatcher, registryAccess, environment)/*?} else {*//*(dispatcher, dedicated)*//*?}*/ -> {
 			//? <=1.18.2 {
 			/*if (!dedicated) {
@@ -55,7 +61,7 @@ public class PatPatServerCommandManager {
 					.then(literal("reload").executes(context -> {
 						PatPatConfigManager.reload();
 						Text text = CommandTextBuilder.startBuilder("reload.success").build();
-						context.getSource().sendPatPatFeedback(PATPAT_ID.copy().append(text), false);
+						context.getSource().sendPatPatFeedback(text, false);
 						PatPat.LOGGER.info(text.asString());
 						return Command.SINGLE_SUCCESS;
 					}))
@@ -76,17 +82,49 @@ public class PatPatServerCommandManager {
 											.executes(context -> PatPatServerCommandManager.onListChange(context, false))))
 					)
 
-//(enable | disable | set | info)
 					.then(literal("ratelimit")
-							.then(literal("enable"))
-							.then(literal("disable"))
+							.then(literal("enable")
+									.requires(context -> context.hasPermission(getPermission("ratelimit.toggle")))
+									.executes(ToggleCommand::enable)
+							)
+							.then(literal("disable")
+									.requires(context -> context.hasPermission(getPermission("ratelimit.toggle")))
+									.executes(ToggleCommand::disable)
+							)
 							.then(literal("info")
+									.requires(context -> context.hasPermission(getPermission("ratelimit.info")))
+									.executes(InfoCommand::info)
 									.then(argument("profile", GameProfileArgumentType.gameProfile())
 											.suggests((context, builder) -> CommandSource.suggestMatching(context.getSource().getPlayerNames(), builder))
-											.executes(context -> PatPatServerCommandManager.onListChange(context, false)))
+											.executes(InfoCommand::infoWithUser)
+									)
 
 							)
-							.then(literal("set"))
+							.then(literal("set")
+									.requires(context -> context.hasPermission(getPermission("ratelimit.set")))
+									.then(literal("interval")
+											.requires(context -> context.hasPermission(getPermission("ratelimit.set.interval")))
+											.executes(IntervalCommand::info)
+											.then(argument("value", StringArgumentType.word())
+													.executes(IntervalCommand::set)
+											)
+									)
+									.then(literal("increment")
+											.requires(context -> context.hasPermission(getPermission("ratelimit.set.increment")))
+											.executes(IncrementCommand::info)
+											.then(argument("value", IntegerArgumentType.integer(1))
+													.executes(IncrementCommand::set)
+											)
+									)
+									.then(literal("limit")
+											.requires(context -> context.hasPermission(getPermission("ratelimit.set.limit")))
+											.executes(LimitCommand::info)
+											.then(argument("value", IntegerArgumentType.integer(1))
+													.executes(LimitCommand::set)
+											)
+									)
+
+							)
 
 
 					)
@@ -106,11 +144,11 @@ public class PatPatServerCommandManager {
 			if (add && !uuids.contains(uuid)) {
 				uuids.add(uuid);
 				success = true;
-				modify  = true;
+				modify = true;
 			} else if (!add && uuids.contains(uuid)) {
 				uuids.remove(uuid);
 				success = true;
-				modify  = true;
+				modify = true;
 			}
 
 			String result = success ? "success" : "failed";
@@ -120,7 +158,7 @@ public class PatPatServerCommandManager {
 					.withClickEvent(Action.COPY_TO_CLIPBOARD, uuid)
 					.build();
 
-			context.getSource().sendPatPatFeedback(PATPAT_ID.copy().append(text), true);
+			context.getSource().sendPatPatFeedback(text, true);
 			if (success) {
 				PatPat.LOGGER.info(text.asString());
 			} else {
@@ -139,7 +177,7 @@ public class PatPatServerCommandManager {
 		ListMode listMode = ListMode.getById(modeId);
 		if (config.getListMode() == listMode) {
 			Text text = CommandTextBuilder.startBuilder("list.mode.already", listMode).build();
-			context.getSource().sendPatPatFeedback(PATPAT_ID.copy().append(text), true);
+			context.getSource().sendPatPatFeedback(text, true);
 			return 0;
 		}
 
@@ -157,12 +195,16 @@ public class PatPatServerCommandManager {
 			builder.withHoverText(Arrays.stream(ListMode.values()).map(ListMode::getText).toArray());
 		}
 		Text text = builder.build();
-		context.getSource().sendPatPatFeedback(PATPAT_ID.copy().append(text), true);
+		context.getSource().sendPatPatFeedback(text, true);
 		if (success) {
 			PatPat.LOGGER.info(text.asString());
 		} else {
 			PatPat.LOGGER.warn(text.asString());
 		}
 		return success ? Command.SINGLE_SUCCESS : 0;
+	}
+
+	public static String getPermission(String permission) {
+		return "%s.%s".formatted(PatPat.MOD_ID, permission);
 	}
 }

@@ -1,6 +1,6 @@
 package net.lopymine.patpat.manager.server.command;
 
-import net.minecraft.server.ServerTask;
+import net.lopymine.patpat.PatPat;
 
 import net.lopymine.patpat.config.server.*;
 
@@ -12,8 +12,7 @@ public class RateLimitManager {
 		throw new IllegalStateException("Manager class");
 	}
 
-	// TODO: Создать асинхронную таску на пополнение токенов
-	private static ServerTask task;
+	private static Timer timer;
 
 	private static final Map<UUID, Integer> uuidToPat = new HashMap<>();
 
@@ -51,7 +50,7 @@ public class RateLimitManager {
 	}
 
 	public static void runTask() {
-		if (task != null) {
+		if (timer != null) {
 			return;
 		}
 		RateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
@@ -59,25 +58,21 @@ public class RateLimitManager {
 			return;
 		}
 		Time configInterval = config.getTokenIncrementInterval();
-		long period = configInterval.getValue() * configInterval.getUnit().getMultiplier() * 20L;
-		task = Bukkit.getScheduler().runTaskTimerAsynchronously(
-				PatPatPlugin.getInstance(),
-				() -> RateLimitManager.addPats(config.getTokenIncrement()),
-				0,
-				period
-		);
+		long period = configInterval.getValue() * configInterval.getUnit().getMultiplier() * 1000L;
+		timer = new Timer(PatPat.MOD_ID+"/RateLimitTask");
+		timer.scheduleAtFixedRate(new RateLimitTask(),0, period);
+	}
+
+	public static void closeTask() {
+		if (timer == null) {
+			return;
+		}
+		timer.cancel();
+		timer = null;
 	}
 
 	public static void reloadTask() {
 		closeTask();
 		runTask();
-	}
-
-	public static void closeTask() {
-		if (task == null) {
-			return;
-		}
-		task.stop();
-		task = null;
 	}
 }

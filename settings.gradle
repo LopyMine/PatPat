@@ -6,16 +6,16 @@ pluginManagement {
 		mavenCentral()
 		gradlePluginPortal()
 		maven {
-			name "Fabric"
-			url "https://maven.fabricmc.net/"
+			name = "Fabric"
+			url = "https://maven.fabricmc.net/"
 		}
 		maven {
-			name "Kiku Snapshots"
-			url "https://maven.kikugie.dev/snapshots"
+			name = "Kiku Snapshots"
+			url = "https://maven.kikugie.dev/snapshots"
 		}
 		maven {
-			name "Kiku Releases"
-			url "https://maven.kikugie.dev/releases"
+			name = "Kiku Releases"
+			url = "https://maven.kikugie.dev/releases"
 		}
 	}
 }
@@ -203,12 +203,12 @@ File createAWFile(String version) {
 }
 
 File getOrCreateGradlePropertiesFile(String version) {
-	def folderFile = file("/versions/${version}")
+	def folderFile = file("versions/${version}")
 	if (!folderFile.exists() && !folderFile.mkdirs()) {
 		println("Failed to get or create folder for " + version)
 		return null
 	}
-	def gradlePropertiesFile = file("/versions/${version}/gradle.properties")
+	def gradlePropertiesFile = file("versions/${version}/gradle.properties")
 	if (!gradlePropertiesFile.exists() && !gradlePropertiesFile.createNewFile()) {
 		println("Failed to get or create gradle.properties for " + version)
 		return null

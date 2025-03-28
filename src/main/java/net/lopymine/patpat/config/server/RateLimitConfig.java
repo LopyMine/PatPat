@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class RateLimitConfig {
 

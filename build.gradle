@@ -47,18 +47,18 @@ mossyResources {
 
 repositories {
 	maven {
-		name "Cloth Config"
-		url "https://maven.shedaniel.me/"
+		name = "Cloth Config"
+		url = "https://maven.shedaniel.me/"
 	} // Cloth Config
 
 	maven {
-		name "Modrinth"
-		url "https://api.modrinth.com/maven"
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
 	} // Replay Mod
 
 	maven {
 		name = 'GeckoLib'
-		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
 		content {
 			includeGroupByRegex("software\\.bernie.*")
 			includeGroup("com.eliotlash.mclib")
@@ -69,6 +69,10 @@ repositories {
 
 dependencies {
 	def mcVersion = stonecutter.current.version.toString()
+
+	// Fabric permission api
+	def fpaVersion = prop("dep.fabric-permissions-api")
+	include(modImplementation('me.lucko:fabric-permissions-api:' + fpaVersion))
 
 	// Cloth Config
 	def clothConfigVersion = prop("dep.cloth-config")

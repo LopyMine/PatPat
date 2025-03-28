@@ -1,5 +1,6 @@
 package net.lopymine.patpat.manager.server;
 
+import net.lopymine.patpat.manager.server.command.RateLimitManager;
 import net.minecraft.entity.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -33,6 +34,9 @@ public class PatPatServerPacketManager {
 		ServerPlayNetworking.registerGlobalReceiver(PatEntityC2SPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
 				/*? >=1.20.5 {*/(packet, context) -> {
 					ServerPlayerEntity sender = context.player();/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, handler, buf, responseSender) -> { PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);*//*?}*/
+					if (!RateLimitManager.canPat(sender.getUuid())) {
+						return;
+					}
 					PatPatServerConfig config = PatPatServerConfig.getInstance();
 					PlayerListConfig playerListConfig = PlayerListConfig.getInstance();
 					GameProfile senderProfile = sender.getGameProfile();

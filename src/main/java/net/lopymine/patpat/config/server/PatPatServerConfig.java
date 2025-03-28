@@ -18,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public class PatPatServerConfig {
 
+	// TODO: Добавить статичное поле с версией конфига (Сейчас 1.0, или 1.0.0)
+
 	public static final Codec<PatPatServerConfig> CODEC = RecordCodecBuilder.create(inst -> inst.group(
 			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatServerConfig::getListMode),
 			RateLimitConfig.CODEC.fieldOf("rateLimit").forGetter(PatPatServerConfig::getRateLimitConfig)

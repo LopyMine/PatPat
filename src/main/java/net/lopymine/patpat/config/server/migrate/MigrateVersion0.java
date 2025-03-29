@@ -43,7 +43,7 @@ public class MigrateVersion0 implements MigrateHandler {
 			Set<UUID> uuidsFromOldConfig = new HashSet<>();
 			JsonObject jsonObject = rootObj.getAsJsonObject("list");
 			jsonObject.
-			//? <=1.17.1 {
+			//? <=1.19.2 {
 			/*entrySet().forEach(entry->{
 				String s = entry.getKey();
 			*//*?} else {*/

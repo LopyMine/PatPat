@@ -43,6 +43,7 @@ public class MossyProcessResourcesManager {
 		properties.put("java", String.valueOf(plugin.getJavaVersionIndex()));
 		properties.put("minecraft", mcVersion);
 		properties.put("fabric_api_id", project.getStonecutter().compare("1.19.1", mcVersion) >= 0 ? "fabric" : "fabric-api");
+		properties.put("mod_version", project.getVersion().toString());
 
 		properties.forEach(inputs::property);
 

@@ -16,22 +16,18 @@ mossyDependencies {
 		// - By default, every additional project dependency ("dep.modId" from gradle.properties) will use
 		// - Modrinth Maven and "modImplementation" configuration name
 		// - If you want to override mod configuration name, you can do this:
-
-		//override("modCompileOnly", "just_mod_id")
-
+		// override("modCompileOnly", "just_mod_id")
 		// - It will do this:
 		// - modImplementation("maven.modrinth:modId:version") -> modCompileOnly("maven.modrinth:modId:version")
-
 		// - Or if you want to disable it and handle by yourself, just disable it auto handling:
+		// disable("just_mod_id")
 
-		//disable("just_mod_id")
-
+		// Fabric Permissions Ap
+		disable("fabric-permissions-api")
 		// Cloth-Config
 		disable("cloth-config")
-
 		// GeckoLib
 		disable("geckolib")
-
 		// Replay Mod
 		if (stonecutter.compare("1.20.5", mcVersion) == 0) {
 			disable("replaymod")

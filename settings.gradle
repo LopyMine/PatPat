@@ -6,16 +6,16 @@ pluginManagement {
 		mavenCentral()
 		gradlePluginPortal()
 		maven {
-			name = "Fabric"
-			url = "https://maven.fabricmc.net/"
+			name "Fabric"
+			url "https://maven.fabricmc.net/"
 		}
 		maven {
-			name = "Kiku Snapshots"
-			url = "https://maven.kikugie.dev/snapshots"
+			name "Kiku Snapshots"
+			url "https://maven.kikugie.dev/snapshots"
 		}
 		maven {
-			name = "Kiku Releases"
-			url = "https://maven.kikugie.dev/releases"
+			name "Kiku Releases"
+			url "https://maven.kikugie.dev/releases"
 		}
 	}
 }
@@ -68,19 +68,71 @@ def createGradleProperties(String version, ArrayList<String> additionalDepends) 
 	if (file == null) {
 		return
 	}
-	def isEmpty = file.text.isBlank() || file.text.isEmpty()
-	def update = file.text.replace(" ", "").contains("=[UPDATE]")
-	if (!isEmpty && !update) {
-		return
-	}
 
 	def gradleProperties = new Properties()
 	gradleProperties.load(new FileInputStream(file))
 
+	def isEmpty = file.text.isBlank() || file.text.isEmpty()
+
+	// add dep
+	def missingDepends = additionalDepends.findAll { id ->
+		def key = "dep.${id}".toString()
+		if (properties.get(key).toString() != "[VERSIONED]") {
+			return null
+		}
+		if (!gradleProperties.containsKey(key)) {
+			return id
+		}
+		return null
+	}
+
+	// remove dep
+	def oldDepends = gradleProperties.keySet().findAll { id ->
+		if (!id.toString().startsWith("dep.")) {
+			return null
+		}
+		if (properties.containsKey(id) && properties.get(id).toString() != "[VERSIONED]") {
+			return id.toString()
+		}
+		if (!additionalDepends.contains(substringSince(id.toString(), ".").toString())) {
+			return id.toString()
+		}
+		return null
+	}
+
+	def update = file.text.replace(" ", "").contains("=[UPDATE]")
+	if (!isEmpty && !update && missingDepends.isEmpty() && oldDepends.isEmpty()) {
+		return
+	}
+
+	if (isEmpty) {
+		def writer = new FileWriter(file)
+		writer.write("# Versioned Properties\n")
+		writer.write("# Tip: You can set any dependency value to \"[UPDATE]\"\n")
+		writer.write("# and reload Gradle to update only it's value.\n")
+		writer.write("\n")
+		writer.write("# Fabric Properties, check https://fabricmc.net/develop/\n")
+		writer.write("build.yarn=${getYarnVersion(version)}\n")
+		// writer.write("build.fabric_loader=${getFabricLoaderVersion(version)}\n")
+		writer.write("build.fabric_api=${getDependVersion("fabric-api", version)}")
+		if (!additionalDepends.isEmpty()) {
+			writer.write("\n")
+			writer.write("\n")
+			writer.write("# Additional Dependencies Properties\n")
+			additionalDepends.each { depend ->
+				def dep = depend.toString()
+				writer.write("# ${dep}, check https://modrinth.com/mod/${dep}/versions?g=${version}&l=fabric\n")
+				writer.write("dep.${dep}=${getDependVersion(dep, version)}\n")
+			}
+		}
+		writer.close()
+		println "Successfully created gradle.properties for ${version}"
+		return
+	}
+
 	if (update) {
 		def text = new String(file.text).replace(" ", "\u3164").trim()
 		gradleProperties.forEach { key, value ->
-			println "${key} = ${value}"
 			if (value.toString() != "[UPDATE]") {
 				return
 			}
@@ -109,28 +161,32 @@ def createGradleProperties(String version, ArrayList<String> additionalDepends) 
 		}
 		file.text = text.replace("\u3164", " ")
 		println "Successfully updated gradle.properties for ${version}"
-	} else {
-		def writer = new FileWriter(file)
-		writer.write("# Versioned Properties\n")
-		writer.write("# Tip: You can set any dependency value to \"[UPDATE]\"\n")
-		writer.write("# and reload Gradle to update only it's value.\n")
-		writer.write("\n")
-		writer.write("# Fabric Properties, check https://fabricmc.net/develop/\n")
-		writer.write("build.yarn=${getYarnVersion(version)}\n")
-		// writer.write("build.fabric_loader=${getFabricLoaderVersion(version)}\n")
-		writer.write("build.fabric_api=${getDependVersion("fabric-api", version)}")
-		if (!additionalDepends.isEmpty()) {
-			writer.write("\n")
-			writer.write("\n")
-			writer.write("# Additional Dependencies Properties\n")
-			additionalDepends.each { depend ->
-				def dep = depend.toString()
-				writer.write("# ${dep}, check https://modrinth.com/mod/${dep}/versions?g=${version}&l=fabric\n")
-				writer.write("dep.${dep}=${getDependVersion(dep, version)}\n")
-			}
+	}
+
+	if (!missingDepends.isEmpty()) {
+		def text = file.text.toString()
+		if (!text.endsWith("\n")) {
+			text = text + "\n"
 		}
-		writer.close()
-		println "Successfully created gradle.properties for ${version}"
+		missingDepends.each { depend ->
+			def dep = depend.toString()
+			text = text + "# ${dep}, check https://modrinth.com/mod/${dep}/versions?g=${version}&l=fabric\n"
+			text = text + "dep.${dep}=${getDependVersion(dep, version)}\n"
+		}
+		file.text = text
+		println "Successfully added new depends ${missingDepends} to gradle.properties for ${version}"
+	}
+
+	if (!oldDepends.isEmpty()) {
+		def removed = []
+		oldDepends.each { depend ->
+			def text = file.text
+			def dep = substringSince(depend.toString(), ".").toString()
+			def replace = "# ${dep}, check https://modrinth.com/mod/${dep}/versions?g=${version}&l=fabric\ndep.${dep}=${gradleProperties.get(depend)}\n".toString()
+			file.text = text.replace(replace, "")
+			removed.add(dep)
+		}
+		println "Successfully removed old depends ${removed} from gradle.properties for ${version}"
 	}
 }
 
@@ -203,12 +259,12 @@ File createAWFile(String version) {
 }
 
 File getOrCreateGradlePropertiesFile(String version) {
-	def folderFile = file("versions/${version}")
+	def folderFile = file("/versions/${version}")
 	if (!folderFile.exists() && !folderFile.mkdirs()) {
 		println("Failed to get or create folder for " + version)
 		return null
 	}
-	def gradlePropertiesFile = file("versions/${version}/gradle.properties")
+	def gradlePropertiesFile = file("/versions/${version}/gradle.properties")
 	if (!gradlePropertiesFile.exists() && !gradlePropertiesFile.createNewFile()) {
 		println("Failed to get or create gradle.properties for " + version)
 		return null

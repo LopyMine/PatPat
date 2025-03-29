@@ -52,13 +52,30 @@ public class MossyDependenciesManager {
 			dependencies.add(configurationName, "maven.modrinth:%s:%s".formatted(modId, version));
 		});
 
+		project.getConfigurations().forEach((configuration) -> {
+			configuration.resolutionStrategy((strategy) -> {
+				strategy.force("com.twelvemonkeys.common:common-io:3.10.0");
+				strategy.force("com.twelvemonkeys.common:common-lang:3.10.0");
+				strategy.force("com.twelvemonkeys.common:common-image:3.10.0");
+				strategy.force("com.twelvemonkeys.imageio:imageio-metadata:3.10.0");
+				strategy.force("com.twelvemonkeys.imageio:imageio-webp:3.10.0");
+				strategy.force("com.twelvemonkeys.imageio:imageio-core:3.10.0");
+			});
+		});
+
 		String yaclVersion = properties.get("yacl");
 		if (yaclVersion != null && !yaclVersion.equals("unknown")) {
-			dependencies.add("modImplementation", "dev.isxander:yet-another-config-lib:%s".formatted(yaclVersion));
+			Set<String> oldMavenVersions = Set.of("1.19.4", "1.20", "1.20.2", "1.20.3");
+			if (oldMavenVersions.contains(minecraft)) {
+				dependencies.add("modImplementation", "dev.isxander.yacl:yet-another-config-lib-fabric:%s".formatted(MossyPlugin.substringBeforeLast(yaclVersion, "-")));
+			} else {
+				dependencies.add("modImplementation", "dev.isxander:yet-another-config-lib:%s".formatted(yaclVersion));
+			}
 		}
 	}
 
 	private static void addRepositories(Project project) {
+		project.getRepositories().mavenCentral();
 		addRepository(project, "Quilt", "https://maven.quiltmc.org/repository/release/");
 		addRepository(project, "Sonatype", "https://oss.sonatype.org/content/repositories/snapshots/");
 		addRepository(project, "Terraformers", "https://maven.terraformersmc.com/");
@@ -69,6 +86,7 @@ public class MossyDependenciesManager {
 				descriptor.includeGroup("maven.modrinth");
 			});
 		});
+
 	}
 
 	private static void addRepository(Project project, String name, String url) {

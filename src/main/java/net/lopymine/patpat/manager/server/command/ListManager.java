@@ -1,5 +1,7 @@
 package net.lopymine.patpat.manager.server.command;
 
+import net.minecraft.server.network.ServerPlayerEntity;
+
 import net.lopymine.patpat.config.resourcepack.ListMode;
 import net.lopymine.patpat.config.server.*;
 
@@ -9,6 +11,10 @@ public class ListManager {
 
 	private ListManager() {
 		throw new IllegalStateException("Manager class");
+	}
+
+	public static boolean canPat(ServerPlayerEntity player) {
+		return canPat(player.getUuid());
 	}
 
 	public static boolean canPat(UUID uuid) {

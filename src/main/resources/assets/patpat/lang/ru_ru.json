@@ -12,11 +12,36 @@
 	"patpat.command.list.mode.already": "Режим списка уже установлен на %s",
 	"patpat.command.list.mode.failed": "&cНе удалось получить режим списка из &7'&f%s&7'&f",
 	"patpat.command.list.mode.failed.hover_text": "&7Доступные режимы списка:\n  %s,\n  %s,\n  %s.",
+
 	"patpat.command.reload.success": "Конфиг успешно перезагружен",
+
 	"patpat.command.on.success": "PatPat мод &aвключен&f",
 	"patpat.command.on.already": "PatPat мод уже был &6включен&f",
 	"patpat.command.off.success": "PatPat мод &cвыключен&f",
 	"patpat.command.off.already": "PatPat мод уже был &cвыключен&f",
+
+	"patpat.command.ratelimit.info": "Статус: %s\nЛимит токенов: %d\nКоличество выдаваемых токенов в интервал: %d\nИнтервал токенов: %s\nПраво игнорирующее лимит запросов: %s",
+	"patpat.command.ratelimit.info.only_one_player": "Эта команда может иметь аргумент только одного игрока",
+	"patpat.command.ratelimit.info.player": "Информация '%s'\nТокены: %s",
+	"patpat.command.ratelimit.info.player.not_online": "Игрок '%s' не онлайн",
+
+	"patpat.command.ratelimit.enable": "Лимит запросов включен",
+	"patpat.command.ratelimit.enable.already": "Лимит запросов уже включен",
+
+	"patpat.command.ratelimit.disable": "Лимит запросов выключен",
+	"patpat.command.ratelimit.disable.already": "Лимит запросов уже выключен",
+
+	"patpat.command.ratelimit.set.increment": "Установлено количество выдаваемых токенов в интервал: %d",
+	"patpat.command.ratelimit.set.increment.info": "Количество выдаваемых токенов в интервал: %d",
+
+	"patpat.command.ratelimit.set.limit": "Установлен лимит токенов: %d",
+	"patpat.command.ratelimit.set.limit.info": "Лимит токенов: %d",
+
+	"patpat.command.ratelimit.set.interval": "Установлен интервал токенов: %s",
+	"patpat.command.ratelimit.set.interval.value_less_one": "Время '%s' не может быть меньше 1",
+	"patpat.command.ratelimit.set.interval.wrong_type": "'%s' не является временным значением (примеры: 1sec, 5s, 5min...)",
+	"patpat.command.ratelimit.set.interval.info": "Интервал токенов: %s",
+
 	"patpat.modmenu.title": "§lКлиентские настройки PatPat мода",
 	"patpat.modmenu.no_config_libraries_screen.message": "Вам нужно установить §6§lYet Another Config Lib [YACL]§f или §6§lCloth Config API§f, чтобы открыть экран настроек PatPat клиента.\n\n§7[Esc] чтобы вернуться",
 	"patpat.modmenu.no_config_libraries_screen.open_yacl_page": "Открыть страницу YACL",

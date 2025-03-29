@@ -12,6 +12,8 @@ public record Version(int major, int minor, int patch) {
 	public static final Version SUPPORT_VERSION = Version.of(PatPat.MOD_VERSION);
 	public static final Version MIN_SUPPORT_VERSION = Version.of("1.0.0");
 
+	public static final Version SERVER_CONFIG_VERSION = Version.of("1.0.0");
+
 	public static Version of(@NotNull String version) {
 		String[] numbers = version.split("\\.");
 		int major = 0;
@@ -22,6 +24,7 @@ public record Version(int major, int minor, int patch) {
 			minor = Integer.parseInt(numbers[1]);
 			patch = Integer.parseInt(numbers[2]);
 		} catch (Exception ignored) {
+			// Use default values
 		}
 		return new Version(major, minor, patch);
 	}
@@ -58,6 +61,12 @@ public record Version(int major, int minor, int patch) {
 
 	public boolean isLesserOrEqualThan(Version version) {
 		return !this.isMoreThan(version);
+	}
+
+	public boolean is(Version version) {
+		return this.major == version.major &&
+				this.minor == version.minor &&
+				this.patch == version.patch;
 	}
 
 	@Override

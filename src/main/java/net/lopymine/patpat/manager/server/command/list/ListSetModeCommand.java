@@ -36,6 +36,7 @@ public class ListSetModeCommand {
 		boolean success = listMode != null;
 		if (success) {
 			config.setListMode(listMode);
+			config.save();
 		}
 
 		String result = success ? "success" : "failed";

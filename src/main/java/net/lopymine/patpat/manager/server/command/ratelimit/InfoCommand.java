@@ -11,13 +11,13 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.lopymine.patpat.config.server.*;
-import net.lopymine.patpat.extension.CommandExtension;
+import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.manager.server.command.RateLimitManager;
 import net.lopymine.patpat.utils.CommandTextBuilder;
 
 import java.util.Collection;
 
-@ExtensionMethod(CommandExtension.class)
+@ExtensionMethod({CommandExtension.class, PlayerExtension.class})
 public class InfoCommand {
 
 	private InfoCommand() {
@@ -44,18 +44,23 @@ public class InfoCommand {
 			Text text = CommandTextBuilder.startBuilder("ratelimit.info.only_one_player").build();
 			context.getSource().sendPatPatFeedback(text);
 		}
-
 		RateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
 		GameProfile profile = profiles.iterator().next();
-		context.getSource().sendPatPatFeedback("Info '%s'".formatted(profile.getName()), false);
+		if (!context.getSource().getPlayerNames().contains(profile.getName())) {
+			Text text = CommandTextBuilder.startBuilder("ratelimit.info.player.not_online", profile.getName()).build();
+			context.getSource().sendPatPatFeedback(text);
+			return 0;
+		}
 
 		int availablePats = RateLimitManager.getAvailablePats(profile.getId());
-		String message = String.valueOf(availablePats);
-		if (context.getSource().hasPermission(config.getPermissionBypass(), 2)) {
-			message = "bypass";
-		}
-		Text text = CommandTextBuilder.startBuilder("ratelimit.info.player", message).build();
-		context.getSource().sendPatPatFeedback(text);
+		profile.hasPermission(config.getPermissionBypass(), context).thenAcceptAsync(result -> {
+			String message = String.valueOf(availablePats);
+			if (result) {
+				message = "bypass";
+			}
+			Text text = CommandTextBuilder.startBuilder("ratelimit.info.player", profile.getName(), message).build();
+			context.getSource().sendPatPatFeedback(text);
+		});
 		return Command.SINGLE_SUCCESS;
 	}
 }

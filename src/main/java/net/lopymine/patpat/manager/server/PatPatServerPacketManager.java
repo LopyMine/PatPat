@@ -24,12 +24,12 @@ public class PatPatServerPacketManager {
 		throw new IllegalStateException("Manager class");
 	}
 
-	private static final List<Predicate<UUID>> HANDLERS = new ArrayList<>();
+	private static final List<Predicate<ServerPlayerEntity>> HANDLERS = new ArrayList<>();
 
 	public static void register() {
 		HANDLERS.clear();
-		HANDLERS.add(RateLimitManager::canPat);
 		HANDLERS.add(ListManager::canPat);
+		HANDLERS.add(RateLimitManager::canPat);
 
 		//? >=1.20.5 {
 		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playC2S().register(PatEntityC2SPacket.TYPE, PatEntityC2SPacket.CODEC);
@@ -40,9 +40,8 @@ public class PatPatServerPacketManager {
 		ServerPlayNetworking.registerGlobalReceiver(PatEntityC2SPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
 				/*? >=1.20.5 {*/(packet, context) -> {
 					ServerPlayerEntity sender = context.player();/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);*//*?}*/
-					UUID senderUUID = sender.getUuid();
-					for (Predicate<UUID> handler : HANDLERS) {
-						if (!handler.test(sender.getUuid())) {
+					for (Predicate<ServerPlayerEntity> handler : HANDLERS) {
+						if (!handler.test(sender)) {
 							return;
 						}
 					}
@@ -64,9 +63,9 @@ public class PatPatServerPacketManager {
 						}
 
 						//? >=1.19.4 {
-						ServerPlayNetworking.send(player, new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderUUID));
+						ServerPlayNetworking.send(player, new PatEntityS2CPacket(packet.getPattedEntityUuid(), sender.getUuid()));
 						//?} else {
-						/*PatEntityS2CPacket response = new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderUUID);
+						/*PatEntityS2CPacket response = new PatEntityS2CPacket(packet.getPattedEntityUuid(), sender.getUuid());
 						PacketByteBuf responseBuf = PacketByteBufs.create();
 						response.write(responseBuf);
 						ServerPlayNetworking.send(player, PatEntityS2CPacket.PACKET_ID, responseBuf);

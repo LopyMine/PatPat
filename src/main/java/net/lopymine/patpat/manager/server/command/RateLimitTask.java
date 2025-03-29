@@ -1,7 +1,6 @@
 package net.lopymine.patpat.manager.server.command;
 
-import net.lopymine.patpat.config.server.PatPatServerConfig;
-import net.lopymine.patpat.config.server.RateLimitConfig;
+import net.lopymine.patpat.config.server.*;
 
 import java.util.TimerTask;
 
@@ -11,7 +10,6 @@ public class RateLimitTask extends TimerTask {
 
 	public RateLimitTask() {
 		this.config = PatPatServerConfig.getInstance().getRateLimitConfig();
-
 	}
 
 	@Override

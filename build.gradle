@@ -22,7 +22,7 @@ mossyDependencies {
 		// - Or if you want to disable it and handle by yourself, just disable it auto handling:
 		// disable("just_mod_id")
 
-		// Fabric Permissions Ap
+		// Fabric Permissions Api
 		disable("fabric-permissions-api")
 		// Cloth-Config
 		disable("cloth-config")
@@ -96,6 +96,7 @@ dependencies {
 stonecutter {
 	stonecutter.const("geckolib", prop("dep.geckolib") != "unknown")
 	stonecutter.const("flashback", prop("dep.flashback") != "unknown")
+	stonecutter.swap("server_config_version", prop("data.server_config_version"))
 }
 
 String prop(String key) {

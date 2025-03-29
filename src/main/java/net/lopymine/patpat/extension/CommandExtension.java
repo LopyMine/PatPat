@@ -29,8 +29,16 @@ public class CommandExtension {
 		source.sendFeedback(/*? >=1.20 {*/() -> /*?}*/ PatPatServerCommandManager.PATPAT_ID.copy().append(text), broadcastToOps);
 	}
 
+	public static boolean hasPatPatPermission(ServerCommandSource context, String permission) {
+		return hasPermission(context, PatPatServerCommandManager.getPermission(permission));
+	}
+
 	public static boolean hasPermission(ServerCommandSource context, String permission) {
 		return hasPermission(context, permission, 2);
+	}
+
+	public static boolean hasPatPatPermission(ServerCommandSource context, String permission, int defaultLevel) {
+		return hasPermission(context, PatPatServerCommandManager.getPermission(permission), defaultLevel);
 	}
 
 	public static boolean hasPermission(ServerCommandSource context, String permission, int defaultLevel) {

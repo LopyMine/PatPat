@@ -20,8 +20,9 @@ public class ConfigReloadCommand {
 
 	public static int reload(CommandContext<ServerCommandSource> context) {
 		PatPatConfigManager.reload();
+		RateLimitManager.reloadTask();
 		Text text = CommandTextBuilder.startBuilder("reload.success").build();
-		context.getSource().sendPatPatFeedback(text, false);
+		context.getSource().sendPatPatFeedback(text);
 		return Command.SINGLE_SUCCESS;
 	}
 }

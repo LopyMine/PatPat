@@ -20,9 +20,10 @@
 	"patpat.command.off.success": "PatPat mode &cdisabled&f",
 	"patpat.command.off.already": "PatPat mode was already &cdisabled&f",
 
-	"patpat.command.ratelimit.info": "Enabled: %s\nToken limit: %d\nToken increment: %d\nToken increment interval: %s\nPermission bypass: %s",
+	"patpat.command.ratelimit.info": "Enabled: %s\nToken limit: %d\nToken increment: %d\nToken interval: %s\nPermission bypass: %s",
 	"patpat.command.ratelimit.info.only_one_player": "This command can have only one player in argument",
 	"patpat.command.ratelimit.info.player": "Info '%s'\nTokens: %s",
+	"patpat.command.ratelimit.info.player.not_online": "Player '%s' not online",
 
 	"patpat.command.ratelimit.enable": "RateLimit enabled",
 	"patpat.command.ratelimit.enable.already": "RateLimit is already enabled",

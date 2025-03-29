@@ -1,7 +1,5 @@
 package net.lopymine.patpat;
 
-import lombok.Getter;
-
 import net.fabricmc.api.ModInitializer;
 
 import net.lopymine.patpat.manager.PatPatConfigManager;

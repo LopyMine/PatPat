@@ -1,11 +1,15 @@
 package net.lopymine.patpat.manager.server.command;
 
-import net.lopymine.patpat.PatPat;
+import lombok.experimental.ExtensionMethod;
+import net.minecraft.server.network.ServerPlayerEntity;
 
+import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.config.server.*;
+import net.lopymine.patpat.extension.PlayerExtension;
 
 import java.util.*;
 
+@ExtensionMethod(PlayerExtension.class)
 public class RateLimitManager {
 
 	private RateLimitManager() {
@@ -20,8 +24,12 @@ public class RateLimitManager {
 		return uuidToPat.getOrDefault(uuid, PatPatServerConfig.getInstance().getRateLimitConfig().getTokenLimit());
 	}
 
-	public static boolean canPat(UUID uuid) {
+	public static boolean canPat(ServerPlayerEntity player) {
 		RateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
+		if (player.hasPermission(config.getPermissionBypass())) {
+			return true;
+		}
+		UUID uuid = player.getUuid();
 		if (!config.isEnabled()) {
 			return true;
 		}
@@ -59,20 +67,19 @@ public class RateLimitManager {
 		}
 		Time configInterval = config.getTokenIncrementInterval();
 		long period = configInterval.getValue() * configInterval.getUnit().getMultiplier() * 1000L;
-		timer = new Timer(PatPat.MOD_ID+"/RateLimitTask");
-		timer.scheduleAtFixedRate(new RateLimitTask(),0, period);
+		timer = new Timer(PatPat.MOD_ID + "/RateLimitTask");
+		timer.scheduleAtFixedRate(new RateLimitTask(), 0, period);
 	}
 
-	public static void closeTask() {
-		if (timer == null) {
-			return;
+	public static void stopTask() {
+		if (timer != null) {
+			timer.cancel();
 		}
-		timer.cancel();
 		timer = null;
 	}
 
 	public static void reloadTask() {
-		closeTask();
+		stopTask();
 		runTask();
 	}
 }

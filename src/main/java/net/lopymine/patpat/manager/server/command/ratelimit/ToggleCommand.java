@@ -33,7 +33,7 @@ public class ToggleCommand {
 		if (rateLimitConfig.isEnabled() == toggle) {
 			Text text = CommandTextBuilder.startBuilder("ratelimit.%s.already".formatted(toggle ? "enable" : "disable")).build();
 			context.getSource().sendPatPatFeedback(text, false);
-			return Command.SINGLE_SUCCESS; // TODO: Стоит ли здесь возвращать 1 или переделать на 0?
+			return 0;
 		}
 		rateLimitConfig.setEnabled(toggle);
 		config.save();

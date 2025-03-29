@@ -58,7 +58,6 @@ public class PatPatServerConfig {
 	private static @NotNull PatPatServerConfig create() {
 		PatPatServerConfig config = new PatPatServerConfig();
 		try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
-			// String json = GSON.toJson(CODEC.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPat.LOGGER::error));*/
 			String json = GSON.toJson(CODEC.encode(config));
 			writer.write(json);
 		} catch (Exception e) {
@@ -100,7 +99,6 @@ public class PatPatServerConfig {
 
 	public void saveSync() {
 		try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
-			// String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPat.LOGGER::error));*/
 			String json = GSON.toJson(CODEC.encode(this));
 			writer.write(json);
 		} catch (Exception e) {

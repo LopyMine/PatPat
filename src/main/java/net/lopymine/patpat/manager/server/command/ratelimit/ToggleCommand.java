@@ -1,13 +1,16 @@
 package net.lopymine.patpat.manager.server.command.ratelimit;
 
+import lombok.experimental.ExtensionMethod;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
-import lombok.experimental.ExtensionMethod;
-import net.lopymine.patpat.config.server.PatPatServerConfig;
-import net.lopymine.patpat.config.server.RateLimitConfig;
+
+import net.lopymine.patpat.config.server.*;
 import net.lopymine.patpat.extension.CommandExtension;
 import net.lopymine.patpat.manager.server.command.RateLimitManager;
-import net.minecraft.server.command.ServerCommandSource;
+import net.lopymine.patpat.utils.CommandTextBuilder;
 
 @ExtensionMethod(CommandExtension.class)
 public class ToggleCommand {
@@ -28,13 +31,15 @@ public class ToggleCommand {
 		PatPatServerConfig config = PatPatServerConfig.getInstance();
 		RateLimitConfig rateLimitConfig = config.getRateLimitConfig();
 		if (rateLimitConfig.isEnabled() == toggle) {
-			context.getSource().sendPatPatFeedback("RateLimit is already " + (toggle ? "enabled" : "disabled"), false);
+			Text text = CommandTextBuilder.startBuilder("ratelimit.%s.already".formatted(toggle ? "enable" : "disable")).build();
+			context.getSource().sendPatPatFeedback(text, false);
 			return Command.SINGLE_SUCCESS; // TODO: Стоит ли здесь возвращать 1 или переделать на 0?
 		}
 		rateLimitConfig.setEnabled(toggle);
 		config.save();
 		RateLimitManager.reloadTask();
-		context.getSource().sendPatPatFeedback("RateLimit " + (toggle ? "enabled" : "disabled"), false);
+		Text text = CommandTextBuilder.startBuilder("ratelimit." + (toggle ? "enable" : "disable")).build();
+		context.getSource().sendPatPatFeedback(text, false);
 		return Command.SINGLE_SUCCESS;
 	}
 }

@@ -1,18 +1,18 @@
 package net.lopymine.patpat.manager.server;
 
-import net.lopymine.patpat.manager.server.command.RateLimitManager;
 import net.minecraft.entity.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
 
-import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.config.resourcepack.ListMode;
-import net.lopymine.patpat.config.server.*;
+import net.lopymine.patpat.manager.server.command.*;
 import net.lopymine.patpat.packet.*;
+
+import java.util.*;
+import java.util.function.Predicate;
 
 //? <=1.19.3 {
 /*import net.minecraft.network.PacketByteBuf;
@@ -24,7 +24,13 @@ public class PatPatServerPacketManager {
 		throw new IllegalStateException("Manager class");
 	}
 
+	private static final List<Predicate<UUID>> HANDLERS = new ArrayList<>();
+
 	public static void register() {
+		HANDLERS.clear();
+		HANDLERS.add(RateLimitManager::canPat);
+		HANDLERS.add(ListManager::canPat);
+
 		//? >=1.20.5 {
 		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playC2S().register(PatEntityC2SPacket.TYPE, PatEntityC2SPacket.CODEC);
 		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C().register(PatEntityS2CPacket.TYPE, PatEntityS2CPacket.CODEC);
@@ -33,18 +39,12 @@ public class PatPatServerPacketManager {
 
 		ServerPlayNetworking.registerGlobalReceiver(PatEntityC2SPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
 				/*? >=1.20.5 {*/(packet, context) -> {
-					ServerPlayerEntity sender = context.player();/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, handler, buf, responseSender) -> { PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);*//*?}*/
-					if (!RateLimitManager.canPat(sender.getUuid())) {
-						return;
-					}
-					PatPatServerConfig config = PatPatServerConfig.getInstance();
-					PlayerListConfig playerListConfig = PlayerListConfig.getInstance();
-					GameProfile senderProfile = sender.getGameProfile();
-					if (config.getListMode() == ListMode.WHITELIST && !playerListConfig.contains(senderProfile.getId())) {
-						return;
-					}
-					if (config.getListMode() == ListMode.BLACKLIST && playerListConfig.contains(senderProfile.getId())) {
-						return;
+					ServerPlayerEntity sender = context.player();/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);*//*?}*/
+					UUID senderUUID = sender.getUuid();
+					for (Predicate<UUID> handler : HANDLERS) {
+						if (!handler.test(sender.getUuid())) {
+							return;
+						}
 					}
 
 					ServerWorld serverWorld = (ServerWorld) sender./*? >=1.18 {*/getWorld()/*?} else {*//*world*//*?}*/;
@@ -64,9 +64,9 @@ public class PatPatServerPacketManager {
 						}
 
 						//? >=1.19.4 {
-						ServerPlayNetworking.send(player, new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderProfile.getId()));
+						ServerPlayNetworking.send(player, new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderUUID));
 						//?} else {
-						/*PatEntityS2CPacket response = new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderProfile.getId());
+						/*PatEntityS2CPacket response = new PatEntityS2CPacket(packet.getPattedEntityUuid(), senderUUID);
 						PacketByteBuf responseBuf = PacketByteBufs.create();
 						response.write(responseBuf);
 						ServerPlayNetworking.send(player, PatEntityS2CPacket.PACKET_ID, responseBuf);

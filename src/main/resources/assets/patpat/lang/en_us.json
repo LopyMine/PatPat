@@ -12,11 +12,35 @@
 	"patpat.command.list.mode.already": "List mode already is %s",
 	"patpat.command.list.mode.failed": "&cFailed to get list mode from &7'&f%s&7'&f",
 	"patpat.command.list.mode.failed.hover_text": "&7Available list modes:\n  %s,\n  %s,\n  %s.",
+
 	"patpat.command.reload.success": "Config reloaded successfully",
+
 	"patpat.command.on.success": "PatPat mode &aenabled&f",
 	"patpat.command.on.already": "PatPat mode was already &6enabled&f",
 	"patpat.command.off.success": "PatPat mode &cdisabled&f",
 	"patpat.command.off.already": "PatPat mode was already &cdisabled&f",
+
+	"patpat.command.ratelimit.info": "Enabled: %s\nToken limit: %d\nToken increment: %d\nToken increment interval: %s\nPermission bypass: %s",
+	"patpat.command.ratelimit.info.only_one_player": "This command can have only one player in argument",
+	"patpat.command.ratelimit.info.player": "Info '%s'\nTokens: %s",
+
+	"patpat.command.ratelimit.enable": "RateLimit enabled",
+	"patpat.command.ratelimit.enable.already": "RateLimit is already enabled",
+
+	"patpat.command.ratelimit.disable": "RateLimit disabled",
+	"patpat.command.ratelimit.disable.already": "RateLimit is already disabled",
+
+	"patpat.command.ratelimit.set.increment": "Set token increment: %d",
+	"patpat.command.ratelimit.set.increment.info": "Token Increment: %d",
+
+	"patpat.command.ratelimit.set.limit": "Set token limit: %d",
+	"patpat.command.ratelimit.set.limit.info": "Token Limit: %d",
+
+	"patpat.command.ratelimit.set.interval": "Set token interval: %s",
+	"patpat.command.ratelimit.set.interval.value_less_one": "Time '%s' can't be less than 1",
+	"patpat.command.ratelimit.set.interval.wrong_type": "'%s' is not time value (examples: 1sec, 5s, 5min...)",
+	"patpat.command.ratelimit.set.interval.info": "Token Interval: %s",
+
 	"patpat.modmenu.title": "§lPatPat Client-side Configuration",
 	"patpat.modmenu.no_config_libraries_screen.message": "You need to install §6§lYet Another Config Lib [YACL]§f or §6§lCloth Config API§f to open PatPat Client Configuration Screen.\n\n§7[Esc] to close",
 	"patpat.modmenu.no_config_libraries_screen.open_yacl_page": "Open YACL page",

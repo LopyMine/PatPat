@@ -1,13 +1,16 @@
 package net.lopymine.patpat.manager.server.command.ratelimit.set;
 
+import lombok.experimental.ExtensionMethod;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import lombok.experimental.ExtensionMethod;
-import net.lopymine.patpat.config.server.PatPatServerConfig;
-import net.lopymine.patpat.config.server.RateLimitConfig;
+
+import net.lopymine.patpat.config.server.*;
 import net.lopymine.patpat.extension.CommandExtension;
-import net.minecraft.server.command.ServerCommandSource;
+import net.lopymine.patpat.utils.CommandTextBuilder;
 
 @ExtensionMethod(CommandExtension.class)
 public class IncrementCommand {
@@ -19,7 +22,8 @@ public class IncrementCommand {
 	public static int info(CommandContext<ServerCommandSource> context) {
 		ServerCommandSource sender = context.getSource();
 		RateLimitConfig rateLimitConfig = PatPatServerConfig.getInstance().getRateLimitConfig();
-		sender.sendPatPatFeedback("Token Increment: " + rateLimitConfig.getTokenIncrement(), false);
+		Text text = CommandTextBuilder.startBuilder("ratelimit.set.increment.info", rateLimitConfig.getTokenIncrement()).build();
+		sender.sendPatPatFeedback(text);
 		return Command.SINGLE_SUCCESS;
 	}
 
@@ -28,13 +32,10 @@ public class IncrementCommand {
 		PatPatServerConfig config = PatPatServerConfig.getInstance();
 		RateLimitConfig rateLimitConfig = config.getRateLimitConfig();
 		int value = IntegerArgumentType.getInteger(context, "value");
-		if (value <= 0) {
-			sender.sendPatPatFeedback("Increment '%s' can't be less than 1".formatted(value), false);
-			return 0;
-		}
 		rateLimitConfig.setTokenIncrement(value);
 		config.save();
-		sender.sendPatPatFeedback("Set token increment: " + value, false);
+		Text text = CommandTextBuilder.startBuilder("ratelimit.set.increment", value).build();
+		sender.sendPatPatFeedback(text);
 		return Command.SINGLE_SUCCESS;
 	}
 

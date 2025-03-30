@@ -18,6 +18,7 @@ public class MossyStonecutterManager {
 		String mcVersion = plugin.getProjectMultiVersion().projectVersion();
 		Map<String, String> properties = project.getMossyProperties("data");
 		properties.putAll(project.getMossyProperties("build"));
+		properties.putAll(project.getMossyProperties("dep"));
 		properties.put("java", String.valueOf(plugin.getJavaVersionIndex()));
 		properties.put("minecraft", mcVersion);
 		properties.put("fabric_api_id", project.getStonecutter().compare("1.19.1", mcVersion) >= 0 ? "fabric" : "fabric-api");

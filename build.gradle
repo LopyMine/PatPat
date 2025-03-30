@@ -22,6 +22,8 @@ mossyDependencies {
 		// - Or if you want to disable it and handle by yourself, just disable it auto handling:
 		// disable("just_mod_id")
 
+		override("modCompileOnly", "flashback")
+
 		// Fabric Permissions Api
 		disable("fabric-permissions-api")
 		// Cloth-Config
@@ -80,15 +82,15 @@ dependencies {
 	def geckoLibVersion = prop("dep.geckolib")
 	if (geckoLibVersion != "unknown") {
 		if (mcVersion == "1.17.1") {
-			modImplementation("software.bernie.geckolib:geckolib-fabric-1.17:${geckoLibVersion}")
+			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.17:${geckoLibVersion}")
 		} else if (mcVersion == "1.18.2") {
-			modImplementation("software.bernie.geckolib:geckolib-fabric-1.18:${geckoLibVersion}")
+			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.18:${geckoLibVersion}")
 		} else if (mcVersion == "1.19.1" || mcVersion == "1.19.2") {
-			modImplementation("software.bernie.geckolib:geckolib-fabric-1.19:${geckoLibVersion}")
+			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.19:${geckoLibVersion}")
 		} else if (mcVersion == "1.20") {
-			modImplementation("software.bernie.geckolib:geckolib-fabric-1.20.1:${geckoLibVersion}")
+			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.20.1:${geckoLibVersion}")
 		} else {
-			modImplementation("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
+			modCompileOnly("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
 		}
 	}
 }
@@ -96,7 +98,6 @@ dependencies {
 stonecutter {
 	stonecutter.const("geckolib", prop("dep.geckolib") != "unknown")
 	stonecutter.const("flashback", prop("dep.flashback") != "unknown")
-	stonecutter.swap("server_config_version", prop("data.server_config_version"))
 }
 
 String prop(String key) {

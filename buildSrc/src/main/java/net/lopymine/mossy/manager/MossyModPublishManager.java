@@ -39,7 +39,7 @@ public class MossyModPublishManager {
 		String curseForgeApiKey = project.getProviders().environmentVariable("CURSEFORGE_API_KEY").getOrNull();
 		String modrinthApiKey = project.getProviders().environmentVariable("MODRINTH_API_KEY").getOrNull();
 
-		boolean cannotUpload = testPublish || curseForgeApiKey == null || modrinthApiKey == null;
+		boolean cannotUpload = testPublish || ((curseForgeApiKey == null && !curseForgeId.equals("none")) || (modrinthApiKey == null && !modrinthId.equals("none")));
 
 		mpe.getDisplayName().set(name);
 		mpe.getFile().set(getModFile(project));
@@ -48,66 +48,70 @@ public class MossyModPublishManager {
 		mpe.getModLoaders().set(Arrays.asList(loaders));
 		mpe.getDryRun().set(cannotUpload);
 
-		mpe.curseforge((curseforge) -> {
-			curseforge.getProjectId().set(curseForgeId);
-			curseforge.getAccessToken().set(curseForgeApiKey);
+		if (!curseForgeId.equals("none")) {
+			mpe.curseforge((curseforge) -> {
+				curseforge.getProjectId().set(curseForgeId);
+				curseforge.getAccessToken().set(curseForgeApiKey);
 
-			for (int i = 17; i < maxJavaVersion + 1; i++) {
-				curseforge.getJavaVersions().add(JavaVersion.values()[i]);
-			}
+				for (int i = 17; i < maxJavaVersion + 1; i++) {
+					curseforge.getJavaVersions().add(JavaVersion.values()[i]);
+				}
 
-			curseforge.getClientRequired().set(isForClient);
-			curseforge.getServerRequired().set(isForServer);
+				curseforge.getClientRequired().set(isForClient);
+				curseforge.getServerRequired().set(isForServer);
 
-			if (projectMultiVersion.minIsMax()) {
-				curseforge.getMinecraftVersions().add(projectMultiVersion.maxVersion());
-			} else {
-				curseforge.minecraftVersionRange((options) -> {
-					options.getStart().set(projectMultiVersion.minVersion());
-					options.getEnd().set(projectMultiVersion.maxVersion());
-				});
-			}
+				if (projectMultiVersion.minIsMax()) {
+					curseforge.getMinecraftVersions().add(projectMultiVersion.maxVersion());
+				} else {
+					curseforge.minecraftVersionRange((options) -> {
+						options.getStart().set(projectMultiVersion.minVersion());
+						options.getEnd().set(projectMultiVersion.maxVersion());
+					});
+				}
 
-			if (!dependsEmbeds[0].equals("none")) {
-				curseforge.embeds(dependsEmbeds);
-			}
-			if (!dependsRequires[0].equals("none")) {
-				curseforge.requires(dependsRequires);
-			}
-			if (!dependsOptional[0].equals("none")) {
-				curseforge.optional(dependsOptional);
-			}
-			if (!dependsIncompatible[0].equals("none")) {
-				curseforge.incompatible(dependsIncompatible);
-			}
-		});
+				if (!dependsEmbeds[0].equals("none")) {
+					curseforge.embeds(dependsEmbeds);
+				}
+				if (!dependsRequires[0].equals("none")) {
+					curseforge.requires(dependsRequires);
+				}
+				if (!dependsOptional[0].equals("none")) {
+					curseforge.optional(dependsOptional);
+				}
+				if (!dependsIncompatible[0].equals("none")) {
+					curseforge.incompatible(dependsIncompatible);
+				}
+			});
+		}
 
-		mpe.modrinth((modrinth) -> {
-			modrinth.getProjectId().set(modrinthId);
-			modrinth.getAccessToken().set(modrinthApiKey);
+		if (!modrinthId.equals("none")) {
+			mpe.modrinth((modrinth) -> {
+				modrinth.getProjectId().set(modrinthId);
+				modrinth.getAccessToken().set(modrinthApiKey);
 
-			if (projectMultiVersion.minIsMax()) {
-				modrinth.getMinecraftVersions().add(projectMultiVersion.maxVersion());
-			} else {
-				modrinth.minecraftVersionRange((options) -> {
-					options.getStart().set(projectMultiVersion.minVersion());
-					options.getEnd().set(projectMultiVersion.maxVersion());
-				});
-			}
+				if (projectMultiVersion.minIsMax()) {
+					modrinth.getMinecraftVersions().add(projectMultiVersion.maxVersion());
+				} else {
+					modrinth.minecraftVersionRange((options) -> {
+						options.getStart().set(projectMultiVersion.minVersion());
+						options.getEnd().set(projectMultiVersion.maxVersion());
+					});
+				}
 
-			if (!dependsEmbeds[0].equals("none")) {
-				modrinth.embeds(dependsEmbeds);
-			}
-			if (!dependsRequires[0].equals("none")) {
-				modrinth.requires(dependsRequires);
-			}
-			if (!dependsOptional[0].equals("none")) {
-				modrinth.optional(dependsOptional);
-			}
-			if (!dependsIncompatible[0].equals("none")) {
-				modrinth.incompatible(dependsIncompatible);
-			}
-		});
+				if (!dependsEmbeds[0].equals("none")) {
+					modrinth.embeds(dependsEmbeds);
+				}
+				if (!dependsRequires[0].equals("none")) {
+					modrinth.requires(dependsRequires);
+				}
+				if (!dependsOptional[0].equals("none")) {
+					modrinth.optional(dependsOptional);
+				}
+				if (!dependsIncompatible[0].equals("none")) {
+					modrinth.incompatible(dependsIncompatible);
+				}
+			});
+		}
 
 		MossyPlugin.LOGGER.logModule("MPP","Configuring \"%s\"", mpe.getDisplayName().get());
 		MossyPlugin.LOGGER.logModule("MPP","Dry Run: %s", mpe.getDryRun().get());

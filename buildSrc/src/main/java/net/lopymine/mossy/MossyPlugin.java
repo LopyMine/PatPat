@@ -56,7 +56,7 @@ public class MossyPlugin implements Plugin<Project> {
 		MossyProcessResourcesManager.apply(project, this);
 
 		MossyDependenciesManager.apply(project);
-		MossyStonecutterManager.apply(project);
+		MossyStonecutterManager.apply(project, this);
 
 		//
 

@@ -16,7 +16,7 @@ public class EntityExtension {
 		return getId(entity.getType());
 	}
 
-	public static String getId(EntityType<?> entityType) {
+	public static String getId(EntityType<? extends Entity> entityType) {
 		Identifier id = VersionedThings.ENTITY_TYPE.getId(entityType);
 		if (id == null) {
 			PatPatClient.LOGGER.warn("Failed to find entity type {}", entityType.getName());

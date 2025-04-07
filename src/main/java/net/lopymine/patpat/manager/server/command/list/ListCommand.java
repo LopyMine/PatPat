@@ -4,7 +4,6 @@ import lombok.experimental.ExtensionMethod;
 import net.minecraft.command.argument.GameProfileArgumentType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.ClickEvent.Action;
 import net.minecraft.text.Text;
 
 import com.mojang.authlib.GameProfile;
@@ -59,7 +58,7 @@ public class ListCommand {
 			String key = String.format("list.%s.%s", action, result);
 			Text text = CommandTextBuilder.startBuilder(key, gameProfile.getName())
 					.withShowEntity(EntityType.PLAYER, uuid, gameProfile.getName())
-					.withClickEvent(Action.COPY_TO_CLIPBOARD, uuid)
+					.withCopyToClipboard(uuid)
 					.build();
 
 			context.getSource().sendPatPatFeedback(text, true);

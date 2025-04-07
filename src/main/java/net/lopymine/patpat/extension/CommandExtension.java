@@ -42,7 +42,11 @@ public class CommandExtension {
 	}
 
 	public static boolean hasPermission(ServerCommandSource context, String permission, int defaultLevel) {
+		//? <1.17.1 {
+		/*return context.hasPermissionLevel(defaultLevel);
+		 *///?} else {
 		return Permissions.check(context, permission, defaultLevel);
+		//?}
 	}
 
 }

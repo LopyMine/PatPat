@@ -26,13 +26,13 @@ public class RateLimitManager {
 
 	public static boolean canPat(ServerPlayerEntity player) {
 		RateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
+		if (!config.isEnabled()) {
+			return true;
+		}
 		if (player.hasPermission(config.getPermissionBypass())) {
 			return true;
 		}
 		UUID uuid = player.getUuid();
-		if (!config.isEnabled()) {
-			return true;
-		}
 		int availablePats = uuidToPat.getOrDefault(
 				uuid,
 				config.getTokenLimit()

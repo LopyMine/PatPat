@@ -3,6 +3,8 @@ package net.lopymine.patpat.manager.client;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.resourcepack.*;
 import net.lopymine.patpat.entity.PatEntity;
@@ -16,6 +18,17 @@ public class PatPatClientManager {
 
 	private PatPatClientManager() {
 		throw new IllegalStateException("Manager class");
+	}
+
+	public static void register() {
+		ClientTickEvents.END_WORLD_TICK.register(client -> {
+			//? >1.20.2 {
+			if (client.getTickManager().isFrozen()) {
+				return;
+			}
+			//?}
+			PatPatClientManager.tickEntities();
+		});
 	}
 
 	@Nullable

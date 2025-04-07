@@ -81,7 +81,7 @@ public class PatPatServerConfig {
 					String backupFilename = FILENAME + ".bkp";
 					int index = 0;
 					while (configPath.resolve(backupFilename).toFile().exists()) {
-						backupFilename = FILENAME + String.valueOf(++index) + ".bkp";
+						backupFilename = FILENAME + ++index + ".bkp";
 					}
 					Files.copy(CONFIG_FILE.toPath(), configPath.resolve(backupFilename));
 				} catch (IOException ex) {

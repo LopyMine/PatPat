@@ -5,7 +5,6 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.GameProfileArgumentType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.ClickEvent.Action;
 import net.minecraft.text.*;
 
 import com.mojang.authlib.GameProfile;
@@ -83,7 +82,7 @@ public class PatPatServerCommandManager {
 
 			Text text = CommandTextBuilder.startBuilder(key, name)
 					.withShowEntity(EntityType.PLAYER, uuid, name)
-					.withClickEvent(Action.COPY_TO_CLIPBOARD, uuid)
+					.withCopyToClipboard(uuid)
 					.build();
 
 			context.getSource().sendFeedback(/*? >=1.20 {*/() -> PATPAT_ID.copy().append(text)/*?} else {*//*PATPAT_ID.copy().append(text)*//*?}*/, true);

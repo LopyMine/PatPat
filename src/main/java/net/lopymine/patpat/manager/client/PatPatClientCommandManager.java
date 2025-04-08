@@ -3,7 +3,6 @@ package net.lopymine.patpat.manager.client;
 import lombok.experimental.ExtensionMethod;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.EntityType;
-import net.minecraft.text.ClickEvent.Action;
 import net.minecraft.text.*;
 
 import com.mojang.brigadier.Command;
@@ -81,7 +80,7 @@ public class PatPatClientCommandManager {
 
 		Text text = CommandTextBuilder.startBuilder(key, name)
 				.withShowEntity(EntityType.PLAYER, uuid, name)
-				.withClickEvent(Action.COPY_TO_CLIPBOARD, uuid)
+				.withCopyToClipboard(uuid)
 				.build();
 
 		context.getSource().sendFeedback(PATPAT_ID.copy().append(text));

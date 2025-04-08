@@ -16,7 +16,7 @@ public class VersionedThings {
 
 	public static final
 			/*? >=1.19.3 {*/ net.minecraft.registry.Registry<EntityType<?>>
-			/*?} else {*//*net.minecraft.util.registry.Registry*//*?}*/
+			/*?} else {*//*net.minecraft.util.registry.Registry<EntityType<?>>*//*?}*/
 			ENTITY_TYPE =
 			/*? >=1.19.3 {*/ net.minecraft.registry.Registries
 			/*?} else {*//*net.minecraft.util.registry.Registry*//*?}*/
@@ -24,7 +24,7 @@ public class VersionedThings {
 
 	public static final
 			/*? >=1.19.3 {*/ net.minecraft.registry.Registry<SoundEvent>
-			/*?} else {*//*net.minecraft.util.registry.Registry*//*?}*/
+			/*?} else {*//*net.minecraft.util.registry.Registry<SoundEvent>*//*?}*/
 			SOUND_EVENT =
 			/*? >=1.19.3 {*/ net.minecraft.registry.Registries
 			/*?} else {*//*net.minecraft.util.registry.Registry*//*?}*/

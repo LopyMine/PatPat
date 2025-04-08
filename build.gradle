@@ -12,7 +12,7 @@ import de.marhali.json5.Json5
 import de.marhali.json5.Json5Element
 
 plugins {
-	id("fabric-loom") version "1.8-SNAPSHOT"
+	id("fabric-loom") version "1.10-SNAPSHOT"
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 

@@ -70,7 +70,9 @@ dependencies {
 
 	// Fabric permission api
 	def fpaVersion = prop("dep.fabric-permissions-api")
-	include(modImplementation('me.lucko:fabric-permissions-api:' + fpaVersion))
+	include(modImplementation('me.lucko:fabric-permissions-api:' + fpaVersion)){
+		exclude(group: "net.fabricmc.fabric-api")
+	}
 
 	// Cloth Config
 	def clothConfigVersion = prop("dep.cloth-config")
@@ -93,10 +95,10 @@ dependencies {
 			modCompileOnly("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
 		}
 	}
-	if (stonecutter.compare(mcVersion, "1.21.1") >= 0) {
+	if (stonecutter.compare(mcVersion, "1.19.4") >= 0) {
 		testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
 	}
-	// TODO: Добавить тесты на версию раньше, чеи 1.21.1 (Через стандартный JUnit)
+	// TODO: Добавить тесты на версию раньше, чем 1.19.4
 }
 
 stonecutter {
@@ -108,7 +110,7 @@ String prop(String key) {
 	return findProperty(key).toString()
 }
 
-if (stonecutter.compare(stonecutter.current.version.toString(), "1.21.1") >= 0) {
+if (stonecutter.compare(stonecutter.current.version.toString(), "1.19.4") >= 0) {
 	test {
 		useJUnitPlatform()
 	}

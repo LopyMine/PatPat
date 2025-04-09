@@ -1,4 +1,4 @@
-//? >=1.21.1 {
+//? >=1.19.4 {
 package net.lopymine.patpat.config.server.migrate;
 
 import net.lopymine.patpat.util.FileUtils;

@@ -19,20 +19,19 @@ public class PatPatConfigManager {
 	}
 
 	public static void onInitialize() {
-		ServerLifecycleEvents.SERVER_STOPPING.register(s -> PatPatServerConfig.getInstance().save());
+		ServerLifecycleEvents.SERVER_STOPPING.register(s -> PatPatServerConfig.getInstance().saveAsync());
 		File file = PatPatConfigManager.CONFIG_PATH.toFile();
-		if (file.exists()) {
-			return;
-		}
-		if (file.mkdirs()) {
+		if (!file.exists() && file.mkdirs()) {
 			PatPat.LOGGER.info("Successfully created PatPat config folder");
 		}
 	}
 
 	public static void reload() {
-		PlayerListConfig.reload();
-		PatPatServerConfig.reload();
 		MigrateServerConfigManager.onInitialize();
 		MigrateServerConfigManager.migrate();
+		PlayerListConfig.reload();
+		PatPatServerConfig config = PatPatServerConfig.reload();
+		PatPat.LOGGER.setDebugMode(config.isDebugMode());
+
 	}
 }

@@ -93,6 +93,10 @@ dependencies {
 			modCompileOnly("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
 		}
 	}
+	if (stonecutter.compare(mcVersion, "1.21.1") >= 0) {
+		testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
+	}
+	// TODO: Добавить тесты на версию раньше, чеи 1.21.1 (Через стандартный JUnit)
 }
 
 stonecutter {
@@ -102,4 +106,10 @@ stonecutter {
 
 String prop(String key) {
 	return findProperty(key).toString()
+}
+
+if (stonecutter.compare(stonecutter.current.version.toString(), "1.21.1") >= 0) {
+	test {
+		useJUnitPlatform()
+	}
 }

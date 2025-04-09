@@ -33,7 +33,7 @@ public class LimitCommand {
 		RateLimitConfig rateLimitConfig = config.getRateLimitConfig();
 		int value = IntegerArgumentType.getInteger(context, "value");
 		rateLimitConfig.setTokenLimit(value);
-		config.save();
+		config.saveAsync();
 		Text text = CommandTextBuilder.startBuilder("ratelimit.set.limit", value).build();
 		sender.sendPatPatFeedback(text);
 		return Command.SINGLE_SUCCESS;

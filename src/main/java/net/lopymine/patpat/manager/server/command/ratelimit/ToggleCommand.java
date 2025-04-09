@@ -36,7 +36,7 @@ public class ToggleCommand {
 			return 0;
 		}
 		rateLimitConfig.setEnabled(toggle);
-		config.save();
+		config.saveAsync();
 		RateLimitManager.reloadTask();
 		Text text = CommandTextBuilder.startBuilder("ratelimit." + (toggle ? "enable" : "disable")).build();
 		context.getSource().sendPatPatFeedback(text, false);

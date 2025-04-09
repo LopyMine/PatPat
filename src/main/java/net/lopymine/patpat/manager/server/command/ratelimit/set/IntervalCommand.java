@@ -41,7 +41,7 @@ public class IntervalCommand {
 				return 0;
 			}
 			rateLimitConfig.setTokenIncrementInterval(time);
-			config.save();
+			config.saveAsync();
 			RateLimitManager.reloadTask();
 			Text text = CommandTextBuilder.startBuilder("ratelimit.set.interval", time).build();
 			sender.sendPatPatFeedback(text);

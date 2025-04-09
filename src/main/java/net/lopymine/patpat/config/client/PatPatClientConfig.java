@@ -83,7 +83,9 @@ public class PatPatClientConfig {
 	}
 
 	public static PatPatClientConfig getInstance() {
-		return PatPatClientConfig.read();
+		PatPatClientConfig config = PatPatClientConfig.read();
+		PatPatClient.LOGGER.setDebugMode(config.debugLogEnabled);
+		return config;
 	}
 
 	private static @NotNull PatPatClientConfig create() {
@@ -120,6 +122,7 @@ public class PatPatClientConfig {
 			} catch (Exception e) {
 				PatPatClient.LOGGER.error("Failed to save config", e);
 			}
+			PatPatClient.LOGGER.setDebugMode(this.debugLogEnabled);
 			PatPatClient.LOGGER.debug("Saved PatPat Client Config");
 		});
 	}

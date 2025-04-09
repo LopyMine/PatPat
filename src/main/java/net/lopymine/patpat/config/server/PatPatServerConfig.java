@@ -19,10 +19,12 @@ import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
+@AllArgsConstructor
 @ExtensionMethod(GsonExtension.class)
 public class PatPatServerConfig {
 
 	public static final Codec<PatPatServerConfig> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+			Codec.BOOL.optionalFieldOf("debug", false).forGetter(PatPatServerConfig::isDebugMode),
 			Version.CODEC.fieldOf("version").forGetter(PatPatServerConfig::getVersion),
 			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatServerConfig::getListMode),
 			RateLimitConfig.CODEC.fieldOf("rateLimit").forGetter(PatPatServerConfig::getRateLimitConfig)
@@ -33,26 +35,23 @@ public class PatPatServerConfig {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	@Getter
 	private static PatPatServerConfig instance;
+
+	private boolean debugMode = false;
 	@Getter
 	private Version version;
 	@Setter
 	private ListMode listMode;
 	private RateLimitConfig rateLimitConfig;
 
-	private PatPatServerConfig() {
+	public PatPatServerConfig() {
 		this.listMode        = ListMode.DISABLED;
 		this.rateLimitConfig = new RateLimitConfig();
 		this.version         = Version.SERVER_CONFIG_VERSION;
 	}
 
-	public PatPatServerConfig(Version version, ListMode listMode, RateLimitConfig rateLimitConfig) {
-		this.listMode        = listMode;
-		this.rateLimitConfig = rateLimitConfig;
-		this.version         = version;
-	}
-
-	public static void reload() {
+	public static PatPatServerConfig reload() {
 		instance = PatPatServerConfig.read();
+		return instance;
 	}
 
 	private static @NotNull PatPatServerConfig create() {
@@ -88,16 +87,15 @@ public class PatPatServerConfig {
 					PatPat.LOGGER.error("Failed to backup config", ex);
 				}
 			}
-
 		}
 		return PatPatServerConfig.create();
 	}
 
-	public void save() {
-		CompletableFuture.runAsync(this::saveSync);
+	public void saveAsync() {
+		CompletableFuture.runAsync(this::save);
 	}
 
-	public void saveSync() {
+	public void save() {
 		try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
 			String json = GSON.toJson(CODEC.encode(this));
 			writer.write(json);

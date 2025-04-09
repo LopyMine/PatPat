@@ -33,7 +33,7 @@ public class IncrementCommand {
 		RateLimitConfig rateLimitConfig = config.getRateLimitConfig();
 		int value = IntegerArgumentType.getInteger(context, "value");
 		rateLimitConfig.setTokenIncrement(value);
-		config.save();
+		config.saveAsync();
 		Text text = CommandTextBuilder.startBuilder("ratelimit.set.increment", value).build();
 		sender.sendPatPatFeedback(text);
 		return Command.SINGLE_SUCCESS;

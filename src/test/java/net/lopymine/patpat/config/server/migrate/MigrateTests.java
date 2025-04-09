@@ -1,6 +1,7 @@
 //? >=1.21.1 {
 package net.lopymine.patpat.config.server.migrate;
 
+import net.lopymine.patpat.util.FileUtils;
 import org.junit.jupiter.api.*;
 
 import net.lopymine.patpat.config.resourcepack.ListMode;
@@ -8,7 +9,6 @@ import net.lopymine.patpat.config.server.PlayerListConfig;
 import net.lopymine.patpat.config.server.migrate.MigrateVersion0.Configs;
 
 import java.io.File;
-import java.net.URL;
 import java.util.UUID;
 
 class MigrateTests {
@@ -18,10 +18,7 @@ class MigrateTests {
 
 		@Test
 		void test1() {
-			ClassLoader classLoader = getClass().getClassLoader();
-			URL resource = classLoader.getResource("migrate/v0/test1.json5");
-			Assertions.assertNotNull(resource);
-			File file = new File(resource.getFile());
+			File file = FileUtils.getResource("migrate/v0/test1.json5");
 			Assertions.assertTrue(file.exists());
 
 			Configs configs = new MigrateVersion0().transform(file);
@@ -34,10 +31,7 @@ class MigrateTests {
 
 		@Test
 		void test2() {
-			ClassLoader classLoader = getClass().getClassLoader();
-			URL resource = classLoader.getResource("migrate/v0/test2.json5");
-			Assertions.assertNotNull(resource);
-			File file = new File(resource.getFile());
+			File file = FileUtils.getResource("migrate/v0/test2.json5");
 			Assertions.assertTrue(file.exists());
 
 			Configs configs = new MigrateVersion0().transform(file);

@@ -27,10 +27,10 @@ public class PatPatConfigManager {
 	}
 
 	public static void reload() {
-		MigrateServerConfigManager.onInitialize();
-		MigrateServerConfigManager.migrate();
 		PlayerListConfig.reload();
 		PatPatServerConfig config = PatPatServerConfig.reload();
+		MigrateServerConfigManager.onInitialize();
+		MigrateServerConfigManager.migrate();
 		PatPat.LOGGER.setDebugMode(config.isDebugMode());
 
 	}

@@ -9,7 +9,8 @@
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/${mod_id}",
-		"issues": "https://github.com/LopyMine/${mod_id}"
+		"sources": "https://github.com/LopyMine/${mod_id}",
+		"issues": "https://github.com/LopyMine/${mod_id}/issues"
 	},
 	"license": "${mod_license}",
 	"icon": "icon/icon.png",
@@ -35,5 +36,13 @@
 	"mixins": [
 		"${mod_id}.mixins.json",
 		"${mod_id}-geckolib.mixins.json"
-	]
+	],
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.discord": "https://discord.gg/NZzxdkrV4s"
+			},
+			"update_checker": true
+		}
+	}
 }

@@ -52,10 +52,10 @@ public abstract class MinecraftClientMixin {
 	 *///?}
 	getSession();
 
-	@Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "handleInputEvents", at = @At("HEAD"), cancellable = true)
 	private void onRightClickMouse(CallbackInfo ci) {
 		PatPatClientConfig config = PatPatClient.getConfig();
-		if (!config.isModEnabled()) {
+		if (!config.getMainConfig().isModEnabled()) {
 			return;
 		}
 		if (!(this.crosshairTarget instanceof EntityHitResult hitResult)) {
@@ -95,11 +95,11 @@ public abstract class MinecraftClientMixin {
 		FlashbackCompat.onPat(livingEntity.getUuid(), currentUuid);
 		//?}
 
-		if (config.isSoundsEnabled()) {
-			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsVolume());
+		if (config.getSoundsConfig().isSoundsEnabled()) {
+			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsConfig().getSoundsVolume());
 		}
 
-		if (config.isSwingHandEnabled()) {
+		if (config.getVisualConfig().isSwingHandEnabled()) {
 			this.player.swingHand(Hand.MAIN_HAND);
 		}
 

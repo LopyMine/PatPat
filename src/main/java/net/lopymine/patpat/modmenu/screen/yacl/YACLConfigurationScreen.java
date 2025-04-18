@@ -3,78 +3,135 @@ package net.lopymine.patpat.modmenu.screen.yacl;
 import net.minecraft.client.gui.screen.Screen;
 //? >=1.20.1 {
 import dev.isxander.yacl3.api.*;
-import net.minecraft.text.Text;
+import lombok.experimental.ExtensionMethod;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.client.PatPatClientConfig;
-import net.lopymine.patpat.modmenu.screen.yacl.simple.*;
+import net.lopymine.patpat.config.client.sub.*;
+import net.lopymine.patpat.modmenu.screen.yacl.custom.base.*;
+import net.lopymine.patpat.modmenu.screen.yacl.custom.extension.SimpleOptionExtension;
+import net.lopymine.patpat.modmenu.screen.yacl.custom.screen.SimpleYACLScreen;
+import net.lopymine.patpat.modmenu.screen.yacl.custom.utils.*;
 
-import java.util.function.Function;
-
+@ExtensionMethod(SimpleOptionExtension.class)
 public class YACLConfigurationScreen {
-
-	private static final Function<Boolean, Text> ENABLED_OR_DISABLE_FORMATTER = state -> Text.translatable("patpat.modmenu.formatter.enable_or_disable." + state);
 
 	private YACLConfigurationScreen() {
 		throw new IllegalStateException("Screen class");
 	}
 
 	public static Screen createScreen(Screen parent) {
-		PatPatClientConfig defConfig = PatPatClientConfig.DEFAULT;
+		PatPatClientConfig defConfig = PatPatClientConfig.getNewInstance();
 		PatPatClientConfig config = PatPatClient.getConfig();
 
-		return YetAnotherConfigLib.createBuilder()
-				.title(Text.translatable("patpat.modmenu.title"))
-				.category(ConfigCategory.createBuilder()
-						.name(Text.translatable("patpat.modmenu.title"))
-						.group(getMainGroup(defConfig, config))
-						.group(getResourcePacksGroup(defConfig, config))
-						.group(getSoundGroup(defConfig, config))
-						.group(getVisualGroup(defConfig, config))
-						.group(getServerGroup(defConfig, config))
-						.build())
-				.save(config::save)
-				.build()
-				.generateScreen(parent);
+		return SimpleYACLScreen.startBuilder(parent, config::save)
+				.categories(getGeneralCategory(defConfig, config))
+				.build();
 	}
 
-	private static OptionGroup getMainGroup(PatPatClientConfig defConfig, PatPatClientConfig config) {
-		return SimpleGroupOptionBuilder.createBuilder("main").options(collector -> collector.collect(
-				collector.getBooleanOption("enable_mod", defConfig.isModEnabled(), config::isModEnabled, config::setModEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-				collector.getBooleanOption("debug_log_enabled", defConfig.isDebugLogEnabled(), config::isDebugLogEnabled, config::setDebugLogEnabled, ENABLED_OR_DISABLE_FORMATTER::apply)
-		)).build();
+	private static ConfigCategory getGeneralCategory(PatPatClientConfig defConfig, PatPatClientConfig config) {
+		return SimpleCategory.startBuilder("general")
+				.groups(getMainGroup(defConfig.getMainConfig(), config.getMainConfig()))
+				.groups(getResourcePacksGroup(defConfig.getResourcePacksConfig(), config.getResourcePacksConfig()))
+				.groups(getSoundGroup(defConfig.getSoundsConfig(), config.getSoundsConfig()))
+				.groups(getVisualGroup(defConfig.getVisualConfig(), config.getVisualConfig()))
+				.groups(getServerGroup(defConfig.getServerConfig(), config.getServerConfig()))
+				.build();
 	}
 
-	private static OptionGroup getResourcePacksGroup(PatPatClientConfig defConfig, PatPatClientConfig config) {
-		return SimpleGroupOptionBuilder.createBuilder("resource_packs").options(collector -> collector.collect(
-				collector.getBooleanOption("skip_outdated_animations_enabled", defConfig.isSkipOldAnimationsEnabled(), config::isSkipOldAnimationsEnabled, config::setSkipOldAnimationsEnabled, ENABLED_OR_DISABLE_FORMATTER::apply)
-		)).build();
+	private static OptionGroup getMainGroup(PatPatClientMainConfig defConfig, PatPatClientMainConfig config) {
+		return SimpleGroup.startBuilder("main").options(
+				SimpleOption.<Boolean>startBuilder("enable_mod")
+						.withBinding(defConfig.isModEnabled(), config::isModEnabled, config::setModEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Boolean>startBuilder("debug_log_enabled")
+						.withBinding(defConfig.isDebugLogEnabled(), config::isDebugLogEnabled, config::setDebugLogEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build()
+		).build();
 	}
 
-	private static OptionGroup getSoundGroup(PatPatClientConfig defConfig, PatPatClientConfig config) {
-		return SimpleGroupOptionBuilder.createBuilder("sound").options(collector -> collector.collect(
-				collector.getBooleanOption("enable_sounds", defConfig.isSoundsEnabled(), config::isSoundsEnabled, config::setSoundsEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-				collector.getFloatOptionAsSlider("sounds_volume", 0F, 2F, 0.01F, defConfig.getSoundsVolume(), config::getSoundsVolume, config::setSoundsVolume)
-		)).build();
+	private static OptionGroup getResourcePacksGroup(PatPatClientResourcePacksConfig defConfig, PatPatClientResourcePacksConfig config) {
+		return SimpleGroup.startBuilder("resource_packs").options(
+				SimpleOption.<Boolean>startBuilder("skip_outdated_animations_enabled")
+						.withBinding(defConfig.isSkipOldAnimationsEnabled(), config::isSkipOldAnimationsEnabled, config::setSkipOldAnimationsEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build()
+		).build();
 	}
 
-	private static OptionGroup getVisualGroup(PatPatClientConfig defConfig, PatPatClientConfig config) {
-		return SimpleGroupOptionBuilder.createBuilder("visual").options(collector -> collector.collect(
-				collector.getBooleanOption("hiding_nickname_enabled", defConfig.isNicknameHidingEnabled(), config::isNicknameHidingEnabled, config::setNicknameHidingEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-				collector.getBooleanOption("swing_hand_enabled", defConfig.isSwingHandEnabled(), config::isSwingHandEnabled, config::setSwingHandEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-				collector.getFloatOptionAsSlider("hand_offset_x", -5F, 5F, 0.01F, defConfig.getAnimationOffsetX(), config::getAnimationOffsetX, config::setAnimationOffsetX, SimpleContent.IMAGE),
-				collector.getFloatOptionAsSlider("hand_offset_y", -5F, 5F, 0.01F, defConfig.getAnimationOffsetY(), config::getAnimationOffsetY, config::setAnimationOffsetY, SimpleContent.IMAGE),
-				collector.getFloatOptionAsSlider("hand_offset_z", -5F, 5F, 0.01F, defConfig.getAnimationOffsetZ(), config::getAnimationOffsetZ, config::setAnimationOffsetZ, SimpleContent.IMAGE),
-				collector.getBooleanOption("camera_shacking", defConfig.isCameraShackingEnabled(), config::isCameraShackingEnabled, config::setCameraShackingEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-				collector.getFloatOptionAsSlider("pat_weight", 0F, 1F, 0.01F, defConfig.getPatWeight(), config::getPatWeight, config::setPatWeight, SimpleContent.NONE)
-		)).build();
+	private static OptionGroup getSoundGroup(PatPatClientSoundsConfig defConfig, PatPatClientSoundsConfig config) {
+		return SimpleGroup.startBuilder("sound").options(
+				SimpleOption.<Boolean>startBuilder("enable_sounds")
+						.withBinding(defConfig.isSoundsEnabled(), config::isSoundsEnabled, config::setSoundsEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Float>startBuilder("sounds_volume")
+						.withBinding(defConfig.getSoundsVolume(), config::getSoundsVolume, config::setSoundsVolume, false)
+						.withController(0.0F, 2.0F, 0.01F)
+						.withDescription(SimpleContent.NONE)
+						.build()
+		).build();
 	}
 
-	private static OptionGroup getServerGroup(PatPatClientConfig defConfig, PatPatClientConfig config) {
-		return SimpleGroupOptionBuilder.createBuilder("server").options(collector -> collector.collect(
-				collector.getBooleanOption("pat_me_enabled", defConfig.isPatMeEnabled(), config::isPatMeEnabled, config::setPatMeEnabled, ENABLED_OR_DISABLE_FORMATTER::apply),
-				collector.getBooleanOption("bypass_server_resource_pack_priority_enabled", defConfig.isBypassServerResourcePackEnabled(), config::isBypassServerResourcePackEnabled, config::setBypassServerResourcePackEnabled, ENABLED_OR_DISABLE_FORMATTER::apply)
-		)).build();
+	private static OptionGroup getVisualGroup(PatPatClientVisualConfig defConfig, PatPatClientVisualConfig config) {
+		return SimpleGroup.startBuilder("visual").options(
+				SimpleOption.<Boolean>startBuilder("hiding_nickname_enabled")
+						.withBinding(defConfig.isHidingNicknameEnabled(), config::isHidingNicknameEnabled, config::setHidingNicknameEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Boolean>startBuilder("swing_hand_enabled")
+						.withBinding(defConfig.isSwingHandEnabled(), config::isSwingHandEnabled, config::setSwingHandEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Float>startBuilder("hand_offset_x")
+						.withBinding(defConfig.getAnimationOffsets().x(), config.getAnimationOffsets()::x, config.getAnimationOffsets()::setX, false)
+						.withController(-5F, 5F, 0.01F)
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Float>startBuilder("hand_offset_y")
+						.withBinding(defConfig.getAnimationOffsets().y(), config.getAnimationOffsets()::y, config.getAnimationOffsets()::setY, false)
+						.withController(-5F, 5F, 0.01F)
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Float>startBuilder("hand_offset_z")
+						.withBinding(defConfig.getAnimationOffsets().z(), config.getAnimationOffsets()::z, config.getAnimationOffsets()::setZ, false)
+						.withController(-5F, 5F, 0.01F)
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Boolean>startBuilder("camera_shacking")
+						.withBinding(defConfig.isCameraShackingEnabled(), config::isCameraShackingEnabled, config::setCameraShackingEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Float>startBuilder("pat_weight")
+						.withBinding(defConfig.getPatWeight(), config::getPatWeight, config::setPatWeight, false)
+						.withController(0.0F, 1.0F, 0.01F)
+						.withDescription(SimpleContent.NONE)
+						.build()
+		).build();
+	}
+
+	private static OptionGroup getServerGroup(PatPatClientServerConfig defConfig, PatPatClientServerConfig config) {
+		return SimpleGroup.startBuilder("server").options(
+				SimpleOption.<Boolean>startBuilder("pat_me_enabled")
+						.withBinding(defConfig.isPatMeEnabled(), config::isPatMeEnabled, config::setPatMeEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Boolean>startBuilder("bypass_server_resource_pack_priority_enabled")
+						.withBinding(defConfig.isBypassServerResourcePackPriorityEnabled(), config::isBypassServerResourcePackPriorityEnabled, config::setBypassServerResourcePackEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build()
+		).build();
 	}
 }
 //?} else {

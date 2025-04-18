@@ -29,7 +29,7 @@ public class PatPatClientReloadListener implements SimpleSynchronousResourceRelo
 			return;
 		}
 		PatPatClientConfig config = PatPatClient.getConfig();
-		if (!config.isModEnabled()) {
+		if (!config.getMainConfig().isModEnabled()) {
 			return;
 		}
 		PatPatClientResourcePackManager.INSTANCE.reload(new ArrayList<>(list), manager);

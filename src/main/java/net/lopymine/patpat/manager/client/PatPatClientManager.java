@@ -81,7 +81,7 @@ public class PatPatClientManager {
 		int frame = MathHelper.clamp((int) Math.floor(totalFrames * animationProgress), 0, totalFrames - 1);
 		patEntity.setCurrentFrame(frame);
 
-		float range = PatPatClient.getConfig().getPatWeight() / patEntity.getEntity().getHeight();
+		float range = PatPatClient.getConfig().getVisualConfig().getPatWeight() / patEntity.getEntity().getHeight();
 		return ((float) ((1 - range) + range * (1 - Math.sin(animationProgress * Math.PI))));
 	}
 

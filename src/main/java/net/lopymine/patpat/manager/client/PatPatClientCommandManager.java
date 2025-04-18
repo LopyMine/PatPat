@@ -67,7 +67,7 @@ public class PatPatClientCommandManager {
 
 	private static int onListChange(CommandContext<FabricClientCommandSource> context, boolean add) {
 		PatPatClientConfig config = PatPatClient.getConfig();
-		Map<UUID, String> players = config.getPlayers();
+		Map<UUID, String> players = config.getServerConfig().getPlayers();
 		PlayerInfo playerInfo = PlayerInfoArgumentType.getPlayerInfo(PLAYER_ARGUMENT_NAME, context);
 		UUID uuid = playerInfo.getUuid();
 		String name = playerInfo.getNickname();
@@ -91,7 +91,7 @@ public class PatPatClientCommandManager {
 	private static int onSetListMode(CommandContext<FabricClientCommandSource> context) {
 		PatPatClientConfig config = PatPatClient.getConfig();
 		ListMode mode = ListModeArgumentType.getListMode(context, "mode");
-		config.setListMode(mode);
+		config.getServerConfig().setListMode(mode);
 		config.save();
 
 		Text text = CommandTextBuilder.startBuilder("list.mode.success", mode.getText()).build();
@@ -103,8 +103,8 @@ public class PatPatClientCommandManager {
 	private static int switchPatPatState(CommandContext<FabricClientCommandSource> context, boolean state) {
 		PatPatClientConfig config = PatPatClient.getConfig();
 		Text text;
-		if (config.isModEnabled() != state) {
-			config.setModEnabled(state);
+		if (config.getMainConfig().isModEnabled() != state) {
+			config.getMainConfig().setModEnabled(state);
 			config.save();
 			text = CommandTextBuilder.startBuilder(state ? "on.success" : "off.success").build();
 		} else {

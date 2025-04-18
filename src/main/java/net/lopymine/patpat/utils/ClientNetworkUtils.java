@@ -18,7 +18,7 @@ public class ClientNetworkUtils {
 		if (networkHandler == null) {
 			return List.of();
 		}
-		return config.getPlayers().entrySet().stream().flatMap(entry -> {
+		return config.getServerConfig().getPlayers().entrySet().stream().flatMap(entry -> {
 			PlayerListEntry playerListEntry = networkHandler.getPlayerListEntry(entry.getKey());
 			if (playerListEntry == null) {
 				return Stream.of(entry.getValue());

@@ -33,7 +33,6 @@ public class PatPatServerConfig {
 	private static final String FILENAME = "config.json";
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(FILENAME).toFile();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	@Getter
 	private static PatPatServerConfig instance;
 
 	private boolean debugMode = false;
@@ -47,6 +46,13 @@ public class PatPatServerConfig {
 		this.listMode        = ListMode.DISABLED;
 		this.rateLimitConfig = new RateLimitConfig();
 		this.version         = Version.SERVER_CONFIG_VERSION;
+	}
+
+	public static PatPatServerConfig getInstance() {
+		if (instance == null) {
+			return reload();
+		}
+		return instance;
 	}
 
 	public static PatPatServerConfig reload() {

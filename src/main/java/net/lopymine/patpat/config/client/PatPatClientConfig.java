@@ -2,94 +2,60 @@ package net.lopymine.patpat.config.client;
 
 import com.google.gson.*;
 import lombok.*;
-import net.minecraft.client.MinecraftClient;
 
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.config.resourcepack.ListMode;
+import net.lopymine.patpat.config.client.sub.*;
 import net.lopymine.patpat.manager.PatPatConfigManager;
-import net.lopymine.patpat.utils.VersionedThings;
+import net.lopymine.patpat.utils.CodecUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 
+import static net.lopymine.patpat.utils.CodecUtils.option;
+
 @Getter
-@Setter
 @AllArgsConstructor
 public class PatPatClientConfig {
 
 	public static final Codec<PatPatClientConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.unboundedMap(VersionedThings.UUID_CODEC, Codec.STRING).xmap(HashMap::new, HashMap::new).fieldOf("list").forGetter(PatPatClientConfig::getPlayers),
-			Codec.BOOL.fieldOf("bypassServerResourcePackPriorityEnabled").forGetter(PatPatClientConfig::isBypassServerResourcePackEnabled),
-			Codec.BOOL.fieldOf("hidingNicknameEnabled").forGetter(PatPatClientConfig::isNicknameHidingEnabled),
-			Codec.BOOL.fieldOf("swingHandEnabled").forGetter(PatPatClientConfig::isSwingHandEnabled),
-			Codec.BOOL.fieldOf("soundsEnabled").forGetter(PatPatClientConfig::isSoundsEnabled),
-			Codec.BOOL.fieldOf("patMeEnabled").forGetter(PatPatClientConfig::isPatMeEnabled),
-			Codec.BOOL.fieldOf("cameraShackingEnabled").forGetter(PatPatClientConfig::isCameraShackingEnabled),
-			Codec.BOOL.fieldOf("modEnabled").forGetter(PatPatClientConfig::isModEnabled),
-			Codec.FLOAT.fieldOf("soundsVolume").forGetter(PatPatClientConfig::getSoundsVolume),
-			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatClientConfig::getListMode),
-			Codec.FLOAT.fieldOf("offsetX").forGetter(PatPatClientConfig::getAnimationOffsetX),
-			Codec.FLOAT.fieldOf("offsetY").forGetter(PatPatClientConfig::getAnimationOffsetY),
-			Codec.FLOAT.fieldOf("offsetZ").forGetter(PatPatClientConfig::getAnimationOffsetZ),
-			Codec.BOOL.fieldOf("debugLogEnabled").forGetter(PatPatClientConfig::isDebugLogEnabled),
-			Codec.BOOL.fieldOf("skipOldAnimationsEnabled").forGetter(PatPatClientConfig::isSkipOldAnimationsEnabled),
-			Codec.FLOAT.optionalFieldOf("patWeight").xmap(o -> o.orElse(0.425F), Optional::ofNullable).forGetter(PatPatClientConfig::getPatWeight)
+			option("main", PatPatClientMainConfig.getNewInstance(), PatPatClientMainConfig.CODEC, PatPatClientConfig::getMainConfig),
+			option("resourcePacks", PatPatClientResourcePacksConfig.getNewInstance(), PatPatClientResourcePacksConfig.CODEC, PatPatClientConfig::getResourcePacksConfig),
+			option("sounds", PatPatClientSoundsConfig.getNewInstance(), PatPatClientSoundsConfig.CODEC, PatPatClientConfig::getSoundsConfig),
+			option("visual", PatPatClientVisualConfig.getNewInstance(), PatPatClientVisualConfig.CODEC, PatPatClientConfig::getVisualConfig),
+			option("server", PatPatClientServerConfig.getNewInstance(), PatPatClientServerConfig.CODEC, PatPatClientConfig::getServerConfig)
 	).apply(instance, PatPatClientConfig::new));
 
 	public static final PatPatClientConfig DEFAULT = new PatPatClientConfig();
 
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat-client.json5").toFile();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	private final HashMap<UUID, String> players;
-	private boolean bypassServerResourcePackEnabled;
-	private boolean nicknameHidingEnabled;
-	private boolean swingHandEnabled;
-	private boolean soundsEnabled;
-	private boolean patMeEnabled;
-	private boolean cameraShackingEnabled;
-	private boolean modEnabled;
-	private float soundsVolume;
-	private ListMode listMode;
-	private float animationOffsetX;
-	private float animationOffsetY;
-	private float animationOffsetZ;
-	private boolean debugLogEnabled;
-	private boolean skipOldAnimationsEnabled;
-	private float patWeight;
 
-	public PatPatClientConfig() {
-		this.bypassServerResourcePackEnabled = false;
-		this.nicknameHidingEnabled           = true;
-		this.swingHandEnabled                = true;
-		this.soundsEnabled                   = true;
-		this.patMeEnabled                    = true;
-		this.cameraShackingEnabled           = true;
-		this.modEnabled                      = true;
-		this.soundsVolume                    = 1.0F;
-		this.listMode                        = ListMode.DISABLED;
-		this.players                         = new HashMap<>();
-		this.animationOffsetX                = 0.0F;
-		this.animationOffsetY                = 0.0F;
-		this.animationOffsetZ                = 0.0F;
-		this.debugLogEnabled                 = false;
-		this.skipOldAnimationsEnabled        = true;
-		this.patWeight                       = 0.425F;
+	private PatPatClientMainConfig mainConfig;
+	private PatPatClientResourcePacksConfig resourcePacksConfig;
+	private PatPatClientSoundsConfig soundsConfig;
+	private PatPatClientVisualConfig visualConfig;
+	private PatPatClientServerConfig serverConfig;
+
+	private PatPatClientConfig() {
 	}
 
 	public static PatPatClientConfig getInstance() {
 		PatPatClientConfig config = PatPatClientConfig.read();
-		PatPatClient.LOGGER.setDebugMode(config.debugLogEnabled);
+		PatPatClient.LOGGER.setDebugMode(config.getMainConfig().isDebugLogEnabled());
 		return config;
 	}
 
+	public static PatPatClientConfig getNewInstance() {
+		return CodecUtils.parseNewInstanceHacky(CODEC);
+	}
+
 	private static @NotNull PatPatClientConfig create() {
-		PatPatClientConfig config = new PatPatClientConfig();
+		PatPatClientConfig config = PatPatClientConfig.getNewInstance();
 		try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
 			String json = GSON.toJson(CODEC.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPatClient.LOGGER::error));*/
 			writer.write(json);
@@ -122,21 +88,8 @@ public class PatPatClientConfig {
 			} catch (Exception e) {
 				PatPatClient.LOGGER.error("Failed to save config", e);
 			}
-			PatPatClient.LOGGER.setDebugMode(this.debugLogEnabled);
+			PatPatClient.LOGGER.setDebugMode(this.mainConfig.isDebugLogEnabled());
 			PatPatClient.LOGGER.debug("Saved PatPat Client Config");
 		});
-	}
-
-	public void setBypassServerResourcePackEnabled(boolean value) {
-		this.bypassServerResourcePackEnabled = value;
-		MinecraftClient client = MinecraftClient.getInstance();
-		boolean bl = client.getResourcePackManager()
-				/*? <=1.20.4 {*//*.getEnabledNames()
-				 *//*?} else {*/.getEnabledIds()/*?}*/
-				.stream().anyMatch(s -> s.startsWith("server/"));
-
-		if (bl) {
-			client.reloadResources();
-		}
 	}
 }

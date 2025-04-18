@@ -47,19 +47,19 @@ public class ClothConfigConfigurationScreen {
 	private static SubCategoryListEntry getMainGroup(ConfigEntryBuilder entryBuilder, PatPatClientConfig config) {
 		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(TextUtils.text("modmenu.main"));
 		subcategory.add(
-				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.main.option.enable_mod"), config.isModEnabled())
+				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.main.option.enable_mod"), config.getMainConfig().isModEnabled())
 						.setTooltip(TextUtils.text("modmenu.main.option.enable_mod.description"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
-						.setDefaultValue(PatPatClientConfig.DEFAULT.isModEnabled())
-						.setSaveConsumer(config::setModEnabled)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getMainConfig().isModEnabled())
+						.setSaveConsumer(config.getMainConfig()::setModEnabled)
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.main.option.debug_log_enabled"), config.isDebugLogEnabled())
+				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.main.option.debug_log_enabled"), config.getMainConfig().isDebugLogEnabled())
 						.setTooltip(TextUtils.text("modmenu.main.option.debug_log_enabled.description"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
-						.setDefaultValue(PatPatClientConfig.DEFAULT.isDebugLogEnabled())
-						.setSaveConsumer(config::setDebugLogEnabled)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getMainConfig().isDebugLogEnabled())
+						.setSaveConsumer(config.getMainConfig()::setDebugLogEnabled)
 						.build()
 		);
 		subcategory.setExpanded(true);
@@ -69,11 +69,11 @@ public class ClothConfigConfigurationScreen {
 	private static SubCategoryListEntry getResourcePackGroup(ConfigEntryBuilder entryBuilder, PatPatClientConfig config) {
 		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(TextUtils.text("modmenu.resource_packs"));
 		subcategory.add(
-				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.resource_packs.option.skip_outdated_animations_enabled"), config.isSkipOldAnimationsEnabled())
+				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.resource_packs.option.skip_outdated_animations_enabled"), config.getResourcePacksConfig().isSkipOldAnimationsEnabled())
 						.setTooltip(TextUtils.text("modmenu.resource_packs.option.skip_outdated_animations_enabled.description"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
-						.setDefaultValue(PatPatClientConfig.DEFAULT.isSkipOldAnimationsEnabled())
-						.setSaveConsumer(config::setSkipOldAnimationsEnabled)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getResourcePacksConfig().isSkipOldAnimationsEnabled())
+						.setSaveConsumer(config.getResourcePacksConfig()::setSkipOldAnimationsEnabled)
 						.build()
 		);
 		subcategory.setExpanded(true);
@@ -83,20 +83,20 @@ public class ClothConfigConfigurationScreen {
 	private static SubCategoryListEntry getSoundGroup(ConfigEntryBuilder entryBuilder, PatPatClientConfig config) {
 		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(TextUtils.text("modmenu.sound"));
 		subcategory.add(
-				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.sound.option.enable_sounds"), config.isSoundsEnabled())
+				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.sound.option.enable_sounds"), config.getSoundsConfig().isSoundsEnabled())
 						.setTooltip(TextUtils.text("modmenu.sound.option.enable_sounds.description"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
-						.setDefaultValue(PatPatClientConfig.DEFAULT.isSoundsEnabled())
-						.setSaveConsumer(config::setSoundsEnabled)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getSoundsConfig().isSoundsEnabled())
+						.setSaveConsumer(config.getSoundsConfig()::setSoundsEnabled)
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(TextUtils.text("modmenu.sound.option.sounds_volume"), config.getSoundsVolume())
+				entryBuilder.startFloatField(TextUtils.text("modmenu.sound.option.sounds_volume"), config.getSoundsConfig().getSoundsVolume())
 						.setTooltip(TextUtils.text("modmenu.sound.option.sounds_volume.description"))
-						.setDefaultValue(PatPatClientConfig.DEFAULT.getSoundsVolume())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getSoundsConfig().getSoundsVolume())
 						.setMin(0)
 						.setMax(1)
-						.setSaveConsumer(value -> config.setSoundsVolume(Math.round(value * 100) / 100f))
+						.setSaveConsumer(value -> config.getSoundsConfig().setSoundsVolume(Math.round(value * 100) / 100f))
 						.build()
 		);
 		subcategory.setExpanded(true);
@@ -106,63 +106,63 @@ public class ClothConfigConfigurationScreen {
 	private static SubCategoryListEntry getVisualGroup(ConfigEntryBuilder entryBuilder, PatPatClientConfig config) {
 		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(TextUtils.text("modmenu.visual"));
 		subcategory.add(
-				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.visual.option.hiding_nickname_enabled"), config.isNicknameHidingEnabled())
+				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.visual.option.hiding_nickname_enabled"), config.getVisualConfig().isHidingNicknameEnabled())
 						.setTooltip(TextUtils.text("modmenu.visual.option.hiding_nickname_enabled.description"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
-						.setDefaultValue(PatPatClientConfig.DEFAULT.isNicknameHidingEnabled())
-						.setSaveConsumer(config::setNicknameHidingEnabled)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().isHidingNicknameEnabled())
+						.setSaveConsumer(config.getVisualConfig()::setHidingNicknameEnabled)
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.visual.option.swing_hand_enabled"), config.isSwingHandEnabled())
+				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.visual.option.swing_hand_enabled"), config.getVisualConfig().isSwingHandEnabled())
 						.setTooltip(TextUtils.text("modmenu.visual.option.swing_hand_enabled.description"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
-						.setDefaultValue(PatPatClientConfig.DEFAULT.isSwingHandEnabled())
-						.setSaveConsumer(config::setSwingHandEnabled)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().isSwingHandEnabled())
+						.setSaveConsumer(config.getVisualConfig()::setSwingHandEnabled)
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_x"), config.getAnimationOffsetX())
+				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_x"), config.getVisualConfig().getAnimationOffsets().x())
 						.setTooltip(TextUtils.text("modmenu.visual.option.hand_offset_x.description"))
-						.setDefaultValue(PatPatClientConfig.DEFAULT.getAnimationOffsetX())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().getAnimationOffsets().x())
 						.setMin(-5)
 						.setMax(5)
-						.setSaveConsumer(value -> config.setAnimationOffsetX(Math.round(value * 100) / 100f))
+						.setSaveConsumer(value -> config.getVisualConfig().getAnimationOffsets().x = Math.round(value * 100) / 100f)
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_y"), config.getAnimationOffsetY())
+				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_y"), config.getVisualConfig().getAnimationOffsets().y())
 						.setTooltip(TextUtils.text("modmenu.visual.option.hand_offset_y.description"))
-						.setDefaultValue(PatPatClientConfig.DEFAULT.getAnimationOffsetY())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().getAnimationOffsets().y())
 						.setMin(-5)
 						.setMax(5)
-						.setSaveConsumer(value -> config.setAnimationOffsetY(Math.round(value * 100) / 100f))
+						.setSaveConsumer(value -> config.getVisualConfig().getAnimationOffsets().y = Math.round(value * 100) / 100f)
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_z"), config.getAnimationOffsetZ())
+				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_z"), config.getVisualConfig().getAnimationOffsets().z())
 						.setTooltip(TextUtils.text("modmenu.visual.option.hand_offset_z.description"))
-						.setDefaultValue(PatPatClientConfig.DEFAULT.getAnimationOffsetZ())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().getAnimationOffsets().z())
 						.setMin(-5)
 						.setMax(5)
-						.setSaveConsumer(value -> config.setAnimationOffsetZ(Math.round(value * 100) / 100f))
+						.setSaveConsumer(value -> config.getVisualConfig().getAnimationOffsets().z = Math.round(value * 100) / 100f)
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.visual.option.camera_shacking"), config.isCameraShackingEnabled())
+				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.visual.option.camera_shacking"), config.getVisualConfig().isCameraShackingEnabled())
 						.setTooltip(TextUtils.text("modmenu.visual.option.camera_shacking.description"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
-						.setDefaultValue(PatPatClientConfig.DEFAULT.isCameraShackingEnabled())
-						.setSaveConsumer(config::setCameraShackingEnabled)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().isCameraShackingEnabled())
+						.setSaveConsumer(config.getVisualConfig()::setCameraShackingEnabled)
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.pat_weight"), config.getPatWeight())
+				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.pat_weight"), config.getVisualConfig().getPatWeight())
 						.setTooltip(TextUtils.text("modmenu.visual.option.pat_weight.description"))
-						.setDefaultValue(PatPatClientConfig.DEFAULT.getPatWeight())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().getPatWeight())
 						.setMin(0)
 						.setMax(1)
-						.setSaveConsumer(value -> config.setPatWeight(Math.round(value * 100) / 100f))
+						.setSaveConsumer(value -> config.getVisualConfig().setPatWeight(Math.round(value * 100) / 100f))
 						.build()
 		);
 		subcategory.setExpanded(true);
@@ -172,19 +172,19 @@ public class ClothConfigConfigurationScreen {
 	private static SubCategoryListEntry getServerGroup(ConfigEntryBuilder entryBuilder, PatPatClientConfig config) {
 		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(TextUtils.text("modmenu.server"));
 		subcategory.add(
-				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.server.option.pat_me_enabled"), config.isPatMeEnabled())
+				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.server.option.pat_me_enabled"), config.getServerConfig().isPatMeEnabled())
 						.setTooltip(TextUtils.text("modmenu.server.option.pat_me_enabled.description"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
-						.setDefaultValue(PatPatClientConfig.DEFAULT.isPatMeEnabled())
-						.setSaveConsumer(config::setPatMeEnabled)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getServerConfig().isPatMeEnabled())
+						.setSaveConsumer(config.getServerConfig()::setPatMeEnabled)
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.server.option.bypass_server_resource_pack_priority_enabled"), config.isBypassServerResourcePackEnabled())
+				entryBuilder.startBooleanToggle(TextUtils.text("modmenu.server.option.bypass_server_resource_pack_priority_enabled"), config.getServerConfig().isBypassServerResourcePackPriorityEnabled())
 						.setTooltip(TextUtils.text("modmenu.server.option.bypass_server_resource_pack_priority_enabled.description"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLE_FORMATTER)
-						.setDefaultValue(PatPatClientConfig.DEFAULT.isBypassServerResourcePackEnabled())
-						.setSaveConsumer(config::setBypassServerResourcePackEnabled)
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getServerConfig().isBypassServerResourcePackPriorityEnabled())
+						.setSaveConsumer(config.getServerConfig()::setBypassServerResourcePackEnabled)
 						.build()
 		);
 		subcategory.setExpanded(true);

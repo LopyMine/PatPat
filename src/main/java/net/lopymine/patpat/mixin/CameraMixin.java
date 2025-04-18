@@ -18,12 +18,12 @@ import net.lopymine.patpat.manager.client.PatPatClientManager;
 public class CameraMixin {
 
 	//? >1.21.4 {
-	@Shadow
-	private float lastTickProgress;
-	/*?} else if >1.20.2 {*/
 	/*@Shadow
+	private float lastTickProgress;
+	*//*?} else if >1.20.2 {*/
+	@Shadow
 	private float lastTickDelta;
-	*///?} else {
+	//?} else {
 	/*private float lastTickDelta = 0;
 
 	@Inject(at = @At("HEAD"), method = "update")
@@ -35,11 +35,11 @@ public class CameraMixin {
 	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getStandingEyeHeight()F"), method = "updateEyeHeight")
 	private float applyPattingEffect(Entity entity, Operation<Float> original) {
 		//? >1.21.4
-		float lastTickDelta = lastTickProgress;
+		/*float lastTickDelta = lastTickProgress;*/
 
 		Float originalHeight = original.call(entity);
 
-		if (!PatPatClient.getConfig().isCameraShackingEnabled()) {
+		if (!PatPatClient.getConfig().getVisualConfig().isCameraShackingEnabled()) {
 			return originalHeight;
 		}
 

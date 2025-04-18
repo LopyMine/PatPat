@@ -53,7 +53,7 @@ public class PatPatClientResourcePackManager {
 			if (configVersion.isMoreThan(Version.SUPPORT_VERSION)) {
 				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has unsupported new version[{} < {}], there may be errors!", packName, path, Version.SUPPORT_VERSION, configVersion);
 			} else if (configVersion.isLessThan(Version.MIN_SUPPORT_VERSION)) {
-				boolean shouldSkip = config.isSkipOldAnimationsEnabled();
+				boolean shouldSkip = config.getResourcePacksConfig().isSkipOldAnimationsEnabled();
 				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has unsupported old version[{} > {}], {}!", packName, path, Version.MIN_SUPPORT_VERSION, configVersion, (shouldSkip ? "skip" : "there may be errors"));
 				if (shouldSkip) {
 					return;
@@ -111,7 +111,7 @@ public class PatPatClientResourcePackManager {
 			animationConfigs.sort(CustomAnimationConfig::compareTo);
 			Collections.reverse(animationConfigs);
 
-			if (config.isBypassServerResourcePackEnabled() && resourcePackName.startsWith("server/")) {
+			if (config.getServerConfig().isBypassServerResourcePackPriorityEnabled() && resourcePackName.startsWith("server/")) {
 				serverResourcePacks.add(animationConfigs);
 			} else {
 				resourcePacks.add(animationConfigs);

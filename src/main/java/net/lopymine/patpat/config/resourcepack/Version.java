@@ -12,7 +12,7 @@ public record Version(int major, int minor, int patch) {
 	public static final Version SUPPORT_VERSION = Version.of(PatPat.MOD_VERSION);
 	public static final Version MIN_SUPPORT_VERSION = Version.of("1.0.0");
 
-	public static final Version SERVER_CONFIG_VERSION = Version.of("1.0.0");
+	public static final Version SERVER_CONFIG_VERSION = Version.of(PatPat.SERVER_CONFIG_VERSION);
 
 	public static Version of(@NotNull String version) {
 		String[] numbers = version.split("\\.");

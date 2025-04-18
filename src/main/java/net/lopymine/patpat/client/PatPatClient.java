@@ -5,6 +5,7 @@ import lombok.*;
 import net.fabricmc.api.ClientModInitializer;
 
 import net.lopymine.patpat.PatLogger;
+import net.lopymine.patpat.client.event.PatPatClientEvents;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.config.client.PatPatClientConfig;
 import net.lopymine.patpat.manager.client.*;
@@ -26,6 +27,7 @@ public class PatPatClient implements ClientModInitializer {
 		PatPatClientCommandManager.register();
 		PatPatClientPacketManager.register();
 		PatPatClientReloadListener.register();
+		PatPatClientEvents.register();
 		LoadedMods.onInitialize();
 		PatPatClientManager.register();
 

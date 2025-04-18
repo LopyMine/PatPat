@@ -15,10 +15,10 @@ import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.manager.client.PatPatClientManager;
 
 //? <=1.21.4 {
-/*import com.mojang.blaze3d.systems.RenderSystem;
- *//*?} else {*/
-import com.mojang.blaze3d.opengl.GlStateManager;
-/*?}*/
+import com.mojang.blaze3d.systems.RenderSystem;
+ /*?} else {*/
+/*import com.mojang.blaze3d.opengl.GlStateManager;
+*//*?}*/
 
 //? <1.21.2 {
 /*import com.llamalad7.mixinextras.injector.wrapoperation.*;
@@ -50,7 +50,7 @@ public class EntityRendererMixin {
 	private void render(EntityRenderState state, MatrixStack matrices, VertexConsumerProvider provider, int light, CallbackInfo ci) {
 	//?}
 		PatPatClientConfig config = PatPatClient.getConfig();
-		if (!config.isModEnabled()) {
+		if (!config.getMainConfig().isModEnabled()) {
 			return/*? <1.21.2 {*/ /*bl*//*?}*/;
 		}
 		//? >=1.21.2 {
@@ -80,7 +80,7 @@ public class EntityRendererMixin {
 		enableBlend();
 
 		matrices.push();
-		matrices.translate(0.0F, nameLabelHeight - 0.55F - frameConfig.offsetY() - config.getAnimationOffsetY(), 0.0F);
+		matrices.translate(0.0F, nameLabelHeight - 0.55F - frameConfig.offsetY() - config.getVisualConfig().getAnimationOffsets().y(), 0.0F);
 		matrices.multiply(this.dispatcher.getRotation());
 		matrices.scale(0.85F * numberToMirrorTexture, -0.85F, 0.85F);
 
@@ -98,11 +98,11 @@ public class EntityRendererMixin {
 		scaleX *= frameConfig.scaleX();
 		scaleY *= frameConfig.scaleY();
 
-		float x1 = -(scaleX / 2F) + frameConfig.offsetX() + config.getAnimationOffsetX();
+		float x1 = -(scaleX / 2F) + frameConfig.offsetX() + config.getVisualConfig().getAnimationOffsets().x();
 		float x2 = x1 + scaleX;
 		float y1 = -(scaleY / 2F);
 		float y2 = y1 + scaleY;
-		float z = -(frameConfig.offsetZ() + config.getAnimationOffsetZ());
+		float z = -(frameConfig.offsetZ() + config.getVisualConfig().getAnimationOffsets().z());
 
 		float framePercent = (float) 1 / frameConfig.totalFrames();
 		float u1 = patEntity.getCurrentFrame() * framePercent;
@@ -122,9 +122,9 @@ public class EntityRendererMixin {
 		matrices.pop();
 		disableBlend();
 		//? <1.21.2 {
-		/*return bl && !config.isNicknameHidingEnabled();
+		/*return bl && !config.getVisualConfig().isHidingNicknameEnabled();
 		 *///?} else {
-		if (config.isNicknameHidingEnabled()) {
+		if (config.getVisualConfig().isHidingNicknameEnabled()) {
 			ci.cancel();
 		}
 		//?}
@@ -141,18 +141,18 @@ public class EntityRendererMixin {
 	@Unique
 	private void enableBlend() {
 		//? <=1.21.4 {
-		/*RenderSystem.enableBlend();
-		 *//*?} else {*/
-		GlStateManager._enableBlend();
-		/*?}*/
+		RenderSystem.enableBlend();
+		 /*?} else {*/
+		/*GlStateManager._enableBlend();
+		*//*?}*/
 	}
 
 	@Unique
 	private void disableBlend() {
 		//? <=1.21.4 {
-		/*RenderSystem.disableBlend();
-		 *//*?} else {*/
-		GlStateManager._disableBlend();
-		/*?}*/
+		RenderSystem.disableBlend();
+		 /*?} else {*/
+		/*GlStateManager._disableBlend();
+		*//*?}*/
 	}
 }

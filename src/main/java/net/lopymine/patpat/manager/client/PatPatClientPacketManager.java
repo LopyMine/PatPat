@@ -45,14 +45,14 @@ public class PatPatClientPacketManager {
 		ClientWorld clientWorld = MinecraftClient.getInstance().world;
 		ClientPlayerEntity player = MinecraftClient.getInstance().player;
 		PatPatClientConfig config = PatPatClient.getConfig();
-		if (!config.isModEnabled()) {
+		if (!config.getMainConfig().isModEnabled()) {
 			return;
 		}
 		if (clientWorld == null) {
 			return;
 		}
 		boolean pattedMe = pattedEntityUuid.equals(MinecraftClient.getInstance().getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/);
-		if (pattedMe && !config.isPatMeEnabled()) {
+		if (pattedMe && !config.getServerConfig().isPatMeEnabled()) {
 			return;
 		}
 		if (isBlocked(config, whoPattedUuid)) {
@@ -67,15 +67,15 @@ public class PatPatClientPacketManager {
 			return;
 		}
 		PatEntity patEntity = PatPatClientManager.pat(livingEntity, PlayerConfig.of(playerEntity.getName().getString(), whoPattedUuid));
-		if (config.isSoundsEnabled() && !replayModPacket) {
-			PatPatClientSoundManager.playSound(patEntity, player, config.getSoundsVolume());
+		if (config.getSoundsConfig().isSoundsEnabled() && !replayModPacket) {
+			PatPatClientSoundManager.playSound(patEntity, player, config.getSoundsConfig().getSoundsVolume());
 		}
 	}
 
 	private static boolean isBlocked(PatPatClientConfig config, UUID playerUuid) {
 		SocialInteractionsManager socialManager = MinecraftClient.getInstance().getSocialInteractionsManager();
-		return (config.getListMode() == ListMode.WHITELIST && !config.getPlayers().containsKey(playerUuid))
-				|| (config.getListMode() == ListMode.BLACKLIST && config.getPlayers().containsKey(playerUuid))
+		return (config.getServerConfig().getListMode() == ListMode.WHITELIST && !config.getServerConfig().getPlayers().containsKey(playerUuid))
+				|| (config.getServerConfig().getListMode() == ListMode.BLACKLIST && config.getServerConfig().getPlayers().containsKey(playerUuid))
 				|| socialManager.isPlayerBlocked(playerUuid)
 				|| socialManager.isPlayerHidden(playerUuid)
 				/*? >=1.17 {*/ || socialManager.isPlayerMuted(playerUuid)/*?}*/;

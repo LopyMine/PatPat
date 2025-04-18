@@ -1,6 +1,9 @@
 package net.lopymine.patpat.modmenu.screen.yacl.custom.base;
 
+//? if >=1.20.1 {
+
 import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.Option.Builder;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.image.ImageRenderer;
 import lombok.Getter;
@@ -37,7 +40,7 @@ public class SimpleOption {
 		private final Option.Builder<T> optionBuilder;
 
 		public Builder(String optionId) {
-			this.optionId = optionId;
+			this.optionId      = optionId;
 			this.optionKey     = ModMenuUtils.getOptionKey(optionId);
 			this.optionBuilder = Option.<T>createBuilder()
 					.name(ModMenuUtils.getName(this.optionKey));
@@ -84,7 +87,7 @@ public class SimpleOption {
 		private final ButtonOption.Builder optionBuilder;
 
 		public ButtonBuilder(String optionId, BiConsumer<YACLScreen, ButtonOption> biConsumer) {
-			this.optionId = optionId;
+			this.optionId      = optionId;
 			this.optionKey     = ModMenuUtils.getOptionKey(optionId);
 			this.optionBuilder = ButtonOption.createBuilder()
 					.name(ModMenuUtils.getName(this.optionKey))
@@ -122,7 +125,7 @@ public class SimpleOption {
 		private final ListOption.Builder<T> optionBuilder;
 
 		public ListOptionBuilder(String optionId) {
-			this.optionId = optionId;
+			this.optionId      = optionId;
 			this.optionKey     = ModMenuUtils.getGroupKey(optionId);
 			this.optionBuilder = ListOption.<T>createBuilder()
 					.name(ModMenuUtils.getName(this.optionKey));
@@ -157,3 +160,4 @@ public class SimpleOption {
 		}
 	}
 }
+//?}

@@ -1,6 +1,9 @@
 package net.lopymine.patpat.modmenu.screen.yacl.custom.extension;
 
+//? if >=1.20.1 {
+
 import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.ListOption.Builder;
 
 import net.fabricmc.loader.api.*;
 import net.fabricmc.loader.impl.util.version.StringVersion;
@@ -14,7 +17,7 @@ public class YACLAPIExtension {
 
 	private static final String STATE_MANAGER_VERSION = "3.6.0";
 
-	public static <A> ListOption.Builder<A> bindingE(ListOption.Builder<A> builder, Binding<List<A>> binding, boolean instant) {
+	public static <A> Builder<A> bindingE(Builder<A> builder, Binding<List<A>> binding, boolean instant) {
 		Version currentYACLVersion = getCurrentYACLVersion();
 
 		if (currentYACLVersion.compareTo(getVersion(STATE_MANAGER_VERSION)) >= 0) {
@@ -56,3 +59,4 @@ public class YACLAPIExtension {
 		}
 	}
 }
+//?}

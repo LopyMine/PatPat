@@ -1,6 +1,8 @@
 package net.lopymine.patpat.modmenu.screen.yacl.custom.base;
+//? if >=1.20.1 {
 
 import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.OptionGroup.Builder;
 import dev.isxander.yacl3.gui.image.ImageRenderer;
 import net.minecraft.text.Text;
 
@@ -9,7 +11,7 @@ import net.lopymine.patpat.utils.ModMenuUtils;
 @SuppressWarnings("unused")
 public class SimpleGroup {
 
-	private final OptionGroup.Builder groupBuilder;
+	private final Builder groupBuilder;
 	private final OptionDescription.Builder description;
 
 	public SimpleGroup(String groupId) {
@@ -44,3 +46,4 @@ public class SimpleGroup {
 		return this.groupBuilder.description(this.description.build()).build();
 	}
 }
+//?}

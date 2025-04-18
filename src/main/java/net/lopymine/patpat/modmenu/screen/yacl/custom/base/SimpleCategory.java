@@ -1,5 +1,7 @@
 package net.lopymine.patpat.modmenu.screen.yacl.custom.base;
 
+//? if >=1.20.1 {
+
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.ConfigCategory.Builder;
 import net.minecraft.text.Text;
@@ -45,3 +47,4 @@ public class SimpleCategory {
 		return this.builder.build();
 	}
 }
+//?}

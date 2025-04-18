@@ -1,5 +1,7 @@
 package net.lopymine.patpat.modmenu.screen.yacl.custom.extension;
 
+//? if >=1.20.1 {
+
 import dev.isxander.yacl3.api.controller.*;
 import net.minecraft.text.Text;
 
@@ -24,7 +26,7 @@ public class SimpleOptionExtension {
 
 	//
 
-	public static <T extends Enum<T> & EnumWithText> Builder<T> withController(Builder<T> builder, Class<T> clazz) {
+	public static <T extends Enum<T>&EnumWithText> Builder<T> withController(Builder<T> builder, Class<T> clazz) {
 		builder.getOptionBuilder().controller((o) -> EnumControllerBuilder.create(o).enumClass(clazz).formatValue(EnumWithText::getText));
 		return builder;
 	}
@@ -118,3 +120,4 @@ public class SimpleOptionExtension {
 		return builder;
 	}
 }
+//?}

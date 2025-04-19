@@ -51,13 +51,12 @@ public class CameraMixin {
 			return originalHeight;
 		}
 
-		if (PatPatClientManager.expired(patEntity, lastTickDelta)) {
+		if (PatPatClientManager.expired(patEntity, this.lastTickDelta)) {
 			PatPatClientManager.removePatEntity(patEntity);
 			return originalHeight;
 		}
 
-
-		return originalHeight * PatPatClientManager.getAnimationProgress(patEntity, lastTickDelta);
+		return originalHeight * PatPatClientManager.getAnimationProgress(patEntity, this.lastTickDelta);
 	}
 
 }

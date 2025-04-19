@@ -34,7 +34,7 @@ public class PatPatClientPacketManager {
 				HelloPatPatPlayerS2CPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
 				/*? >=1.20.5 {*/(packet, context) -> {/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, player, responseSender) -> {*//*?} else {*//*(client, handler, buf, responseSender) -> { PatEntityS2CPacket packet = new PatEntityS2CPacket(buf);*//*?}*/
 					PatPatClient.LOGGER.debug("[PONG] Received HelloPatPatClientC2S packet! PatPat Mod/Plugin installed on the server!");
-					PatPatProxLibManager.setEnabled(true);
+					PatPatClientProxLibManager.setEnabled(true);
 				}
 		);
 

@@ -96,7 +96,7 @@ public abstract class MinecraftClientMixin {
 
 		ReplayModCompat.onPat(livingEntity.getUuid(), currentUuid);
 		FlashbackCompat.onPat(livingEntity.getUuid(), currentUuid);
-		PatPatProxLibPacketManager.onPat(packet.getPattedEntityUuid());
+		PatPatClientProxLibPacketManager.onPat(packet.getPattedEntityUuid());
 
 		if (config.getSoundsConfig().isSoundsEnabled()) {
 			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsConfig().getSoundsVolume());

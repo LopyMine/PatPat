@@ -2,7 +2,6 @@ package net.lopymine.patpat.config.client;
 
 import lombok.*;
 import net.minecraft.util.Util;
-import org.joml.*;
 
 import com.mojang.serialization.Codec;
 
@@ -11,36 +10,22 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Vec3f extends Vector3f {
+public class Vec3f {
+
+	private float x;
+	private float y;
+	private float z;
 
 	public static final Codec<Vec3f> CODEC = Codec.FLOAT.listOf()
 			.comapFlatMap(
 					(coordinates) -> Util.decodeFixedLengthList(coordinates, 3)
 							.map((list) -> new Vec3f(list.get(0), list.get(1), list.get(2))),
-					(vec) -> List.of(vec.x(), vec.y(), vec.z())
+					(vec) -> List.of(vec.getX(), vec.getY(), vec.getZ())
 			);
 
-	public Vec3f(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-
-	public Vec3f(/*? if >=1.21.4 {*/ Vector3fc /*?} else {*//* Vector3f *//*?}*/ vector3f) {
-		this.x = vector3f.x();
-		this.y = vector3f.y();
-		this.z = vector3f.z();
-	}
-
-	public void setX(float x) {
-		this.x = x;
-	}
-
-	public void setY(float y) {
-		this.y = y;
-	}
-
-	public void setZ(float z) {
-		this.z = z;
+	public Vec3f() {
+		this.x = 0;
+		this.y = 0;
+		this.z = 0;
 	}
 }

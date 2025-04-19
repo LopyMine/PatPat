@@ -92,17 +92,17 @@ public class YACLConfigurationScreen {
 						.withDescription(SimpleContent.NONE)
 						.build(),
 				SimpleOption.<Float>startBuilder("hand_offset_x")
-						.withBinding(defConfig.getAnimationOffsets().x(), config.getAnimationOffsets()::x, config.getAnimationOffsets()::setX, false)
+						.withBinding(defConfig.getAnimationOffsets().getX(), config.getAnimationOffsets()::getX, config.getAnimationOffsets()::setX, false)
 						.withController(-5F, 5F, 0.01F)
 						.withDescription(SimpleContent.NONE)
 						.build(),
 				SimpleOption.<Float>startBuilder("hand_offset_y")
-						.withBinding(defConfig.getAnimationOffsets().y(), config.getAnimationOffsets()::y, config.getAnimationOffsets()::setY, false)
+						.withBinding(defConfig.getAnimationOffsets().getY(), config.getAnimationOffsets()::getY, config.getAnimationOffsets()::setY, false)
 						.withController(-5F, 5F, 0.01F)
 						.withDescription(SimpleContent.NONE)
 						.build(),
 				SimpleOption.<Float>startBuilder("hand_offset_z")
-						.withBinding(defConfig.getAnimationOffsets().z(), config.getAnimationOffsets()::z, config.getAnimationOffsets()::setZ, false)
+						.withBinding(defConfig.getAnimationOffsets().getZ(), config.getAnimationOffsets()::getZ, config.getAnimationOffsets()::setZ, false)
 						.withController(-5F, 5F, 0.01F)
 						.withDescription(SimpleContent.NONE)
 						.build(),

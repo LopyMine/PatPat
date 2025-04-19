@@ -1,2 +1,5 @@
 accessWidener v2 named
 # 1.21.4 AW
+
+accessible field net/minecraft/client/render/Camera lastCameraY F
+accessible field net/minecraft/client/render/Camera cameraY F

@@ -1,12 +1,13 @@
 package net.lopymine.patpat.packet;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.*;
 import net.minecraft.util.Identifier;
 
+//? <=1.20.4 && >=1.19.4
+/*import net.fabricmc.fabric.api.networking.v1.*;*/
+//? >=1.20.5
+import net.minecraft.network.packet.CustomPayload;
 import net.lopymine.patpat.utils.IdentifierUtils;
-
-import java.util.UUID;
 
 public class HelloPatPatPlayerS2CPacket /*? >=1.20.5 {*/implements CustomPayload /*?} elif >=1.19.4 {*/ /*implements FabricPacket *//*?}*/ {
 

@@ -122,30 +122,30 @@ public class ClothConfigConfigurationScreen {
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_x"), config.getVisualConfig().getAnimationOffsets().x())
+				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_x"), config.getVisualConfig().getAnimationOffsets().getX())
 						.setTooltip(TextUtils.text("modmenu.visual.option.hand_offset_x.description"))
-						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().getAnimationOffsets().x())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().getAnimationOffsets().getX())
 						.setMin(-5)
 						.setMax(5)
-						.setSaveConsumer(value -> config.getVisualConfig().getAnimationOffsets().x = Math.round(value * 100) / 100f)
+						.setSaveConsumer(value -> config.getVisualConfig().getAnimationOffsets().setX(Math.round(value * 100) / 100f))
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_y"), config.getVisualConfig().getAnimationOffsets().y())
+				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_y"), config.getVisualConfig().getAnimationOffsets().getY())
 						.setTooltip(TextUtils.text("modmenu.visual.option.hand_offset_y.description"))
-						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().getAnimationOffsets().y())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().getAnimationOffsets().getY())
 						.setMin(-5)
 						.setMax(5)
-						.setSaveConsumer(value -> config.getVisualConfig().getAnimationOffsets().y = Math.round(value * 100) / 100f)
+						.setSaveConsumer(value -> config.getVisualConfig().getAnimationOffsets().setY( Math.round(value * 100) / 100f))
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_z"), config.getVisualConfig().getAnimationOffsets().z())
+				entryBuilder.startFloatField(TextUtils.text("modmenu.visual.option.hand_offset_z"), config.getVisualConfig().getAnimationOffsets().getZ())
 						.setTooltip(TextUtils.text("modmenu.visual.option.hand_offset_z.description"))
-						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().getAnimationOffsets().z())
+						.setDefaultValue(PatPatClientConfig.DEFAULT.getVisualConfig().getAnimationOffsets().getZ())
 						.setMin(-5)
 						.setMax(5)
-						.setSaveConsumer(value -> config.getVisualConfig().getAnimationOffsets().z = Math.round(value * 100) / 100f)
+						.setSaveConsumer(value -> config.getVisualConfig().getAnimationOffsets().setZ(Math.round(value * 100) / 100f))
 						.build()
 		);
 		subcategory.add(

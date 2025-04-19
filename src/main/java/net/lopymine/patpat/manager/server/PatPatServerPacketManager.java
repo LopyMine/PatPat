@@ -5,6 +5,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.PatPat;
@@ -31,15 +32,27 @@ public class PatPatServerPacketManager {
 		HANDLERS.add(ListManager::canPat);
 		HANDLERS.add(RateLimitManager::canPat);
 
+		// Register all packets
 		//? >=1.20.5 {
+		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playC2S().register(HelloPatPatServerC2SPacket.TYPE, HelloPatPatServerC2SPacket.CODEC);
+		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C().register(HelloPatPatPlayerS2CPacket.TYPE, HelloPatPatPlayerS2CPacket.CODEC);
+
 		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playC2S().register(PatEntityC2SPacket.TYPE, PatEntityC2SPacket.CODEC);
 		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C().register(PatEntityS2CPacket.TYPE, PatEntityS2CPacket.CODEC);
 		net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C().register(PatEntityForReplayModS2CPacket.TYPE, PatEntityForReplayModS2CPacket.CODEC);
 		//?}
 
+		// Register hello PatPat server packet
+		ServerPlayNetworking.registerGlobalReceiver(
+				HelloPatPatServerC2SPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
+				/*? >=1.20.5 {*/(packet, context) -> { ServerPlayerEntity sender = context.player(); /*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);*//*?}*/
+					ServerPlayNetworking.send(sender, new HelloPatPatPlayerS2CPacket());
+				}
+		);
+
+		// Register patting packet
 		ServerPlayNetworking.registerGlobalReceiver(PatEntityC2SPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
-				/*? >=1.20.5 {*/(packet, context) -> {
-					ServerPlayerEntity sender = context.player();/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);*//*?}*/
+				/*? >=1.20.5 {*/(packet, context) -> { ServerPlayerEntity sender = context.player(); /*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);*//*?}*/
 					for (Predicate<ServerPlayerEntity> handler : HANDLERS) {
 						if (!handler.test(sender)) {
 							return;

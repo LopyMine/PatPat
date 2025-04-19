@@ -32,6 +32,5 @@ public class PatPatConfigManager {
 		MigrateServerConfigManager.onInitialize();
 		MigrateServerConfigManager.migrate();
 		PatPat.LOGGER.setDebugMode(config.isDebugMode());
-
 	}
 }

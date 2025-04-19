@@ -6,7 +6,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.networking.v1.*;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.config.client.PatPatClientConfig;
@@ -24,6 +24,21 @@ public class PatPatClientPacketManager {
 	}
 
 	public static void register() {
+		// Pinging server to check on PatPat Mod/Plugin
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+			PatPatClient.LOGGER.debug("[PING] Sending HelloPatPatServerC2S packet to the server...");
+			ClientPlayNetworking.send(new HelloPatPatServerC2SPacket());
+		});
+
+		ClientPlayNetworking.registerGlobalReceiver(
+				HelloPatPatPlayerS2CPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
+				/*? >=1.20.5 {*/(packet, context) -> {/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, player, responseSender) -> {*//*?} else {*//*(client, handler, buf, responseSender) -> { PatEntityS2CPacket packet = new PatEntityS2CPacket(buf);*//*?}*/
+					PatPatClient.LOGGER.debug("[PONG] Received HelloPatPatClientC2S packet! PatPat Mod/Plugin installed on the server!");
+					PatPatProxLibManager.setEnabled(true);
+				}
+		);
+
+		// Register patting packets
 		ClientPlayNetworking.registerGlobalReceiver(
 				PatEntityForReplayModS2CPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
 				/*? >=1.20.5 {*/(packet, context) -> {/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, player, responseSender) -> {*//*?} else {*//*(client, handler, buf, responseSender) -> { PatEntityS2CPacket packet = new PatEntityS2CPacket(buf);*//*?}*/
@@ -39,7 +54,7 @@ public class PatPatClientPacketManager {
 		);
 	}
 
-	private static void handlePatting(UUID whoPattedUuid, UUID pattedEntityUuid, boolean replayModPacket) {
+	public static void handlePatting(UUID whoPattedUuid, UUID pattedEntityUuid, boolean replayModPacket) {
 		PatPatClient.LOGGER.debug("Received packet from server, {} patted {}, replayModPacket: {}", whoPattedUuid, pattedEntityUuid, replayModPacket);
 
 		ClientWorld clientWorld = MinecraftClient.getInstance().world;
@@ -72,7 +87,7 @@ public class PatPatClientPacketManager {
 		}
 	}
 
-	private static boolean isBlocked(PatPatClientConfig config, UUID playerUuid) {
+	public static boolean isBlocked(PatPatClientConfig config, UUID playerUuid) {
 		SocialInteractionsManager socialManager = MinecraftClient.getInstance().getSocialInteractionsManager();
 		return (config.getServerConfig().getListMode() == ListMode.WHITELIST && !config.getServerConfig().getPlayers().containsKey(playerUuid))
 				|| (config.getServerConfig().getListMode() == ListMode.BLACKLIST && config.getServerConfig().getPlayers().containsKey(playerUuid))

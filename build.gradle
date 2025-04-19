@@ -30,6 +30,8 @@ mossyDependencies {
 		disable("cloth-config")
 		// GeckoLib
 		disable("geckolib")
+		// ProxLib
+		disable("proxlib")
 		// Replay Mod
 		if (stonecutter.compare("1.20.5", mcVersion) == 0) {
 			disable("replaymod")
@@ -98,12 +100,12 @@ dependencies {
 	if (stonecutter.compare(mcVersion, "1.19.4") >= 0) {
 		testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
 	}
-	// TODO: Добавить тесты на версию раньше, чем 1.19.4
-}
 
-stonecutter {
-	stonecutter.const("geckolib", prop("dep.geckolib") != "unknown")
-	stonecutter.const("flashback", prop("dep.flashback") != "unknown")
+	def proxlibVersion = prop("dep.proxlib")
+	if (proxlibVersion != "unknown") {
+		include(modApi("maven.modrinth:proxlib:${proxlibVersion}"))
+	}
+	// TODO: Добавить тесты на версию раньше, чем 1.19.4
 }
 
 String prop(String key) {

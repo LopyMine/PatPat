@@ -52,7 +52,7 @@ public abstract class MinecraftClientMixin {
 	 *///?}
 	getSession();
 
-	@Inject(method = "handleInputEvents", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
 	private void onRightClickMouse(CallbackInfo ci) {
 		PatPatClientConfig config = PatPatClient.getConfig();
 		if (!config.getMainConfig().isModEnabled()) {
@@ -82,7 +82,7 @@ public abstract class MinecraftClientMixin {
 		//?} else {
 		/*PacketByteBuf buf = PacketByteBufs.create();
 		packet.write(buf);
-		ClientPlayNetworking.send(PatEntityC2SPacket.PACKET_ID ,buf);
+		ClientPlayNetworking.send(PatEntityC2SPacket.PACKET_ID, buf);
 		*///?}
 
 		UUID currentUuid = this.getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/;
@@ -90,17 +90,16 @@ public abstract class MinecraftClientMixin {
 
 		PatEntity patEntity = PatPatClientManager.pat(livingEntity, whoPatted);
 
+		if (config.getVisualConfig().isSwingHandEnabled()) {
+			this.player.swingHand(Hand.MAIN_HAND);
+		}
+
 		ReplayModCompat.onPat(livingEntity.getUuid(), currentUuid);
-		//? flashback {
 		FlashbackCompat.onPat(livingEntity.getUuid(), currentUuid);
-		//?}
+		PatPatProxLibPacketManager.onPat(packet.getPattedEntityUuid());
 
 		if (config.getSoundsConfig().isSoundsEnabled()) {
 			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsConfig().getSoundsVolume());
-		}
-
-		if (config.getVisualConfig().isSwingHandEnabled()) {
-			this.player.swingHand(Hand.MAIN_HAND);
 		}
 
 		this.itemUseCooldown = 4;

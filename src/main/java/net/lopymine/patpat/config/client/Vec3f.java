@@ -26,7 +26,7 @@ public class Vec3f extends Vector3f {
 		this.z = z;
 	}
 
-	public Vec3f(Vector3fc vector3f) {
+	public Vec3f(/*? if >=1.21.4 {*/ Vector3fc /*?} else {*//* Vector3f *//*?}*/ vector3f) {
 		this.x = vector3f.x();
 		this.y = vector3f.y();
 		this.z = vector3f.z();

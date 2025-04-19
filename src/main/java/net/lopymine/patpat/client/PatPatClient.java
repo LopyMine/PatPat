@@ -23,13 +23,14 @@ public class PatPatClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		PatPatClient.config = PatPatClientConfig.getInstance();
+		LoadedMods.onInitialize();
 		PatPatClientSoundManager.register();
 		PatPatClientCommandManager.register();
 		PatPatClientPacketManager.register();
 		PatPatClientReloadListener.register();
 		PatPatClientEvents.register();
-		LoadedMods.onInitialize();
-		PatPatClientManager.register();
+		PatPatProxLibManager.register();
+		PatPatProxLibPacketManager.register();
 
 		LOGGER.info("PatPat Client Initialized");
 	}

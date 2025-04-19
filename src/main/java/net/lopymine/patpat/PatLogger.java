@@ -19,30 +19,29 @@ public class PatLogger {
 
 	public PatLogger(String name) {
 		this.name = name;
-		logger    = /*? if >=1.17 {*/LoggerFactory/*?} else {*//*LogManager*//*?}*/.getLogger(this.name);
+		this.logger    = /*? if >=1.17 {*/LoggerFactory/*?} else {*//*LogManager*//*?}*/.getLogger(this.name);
 	}
 
 	public void debug(String text, Object... args) {
-		if (!debugMode) {
+		if (this.debugMode) {
 			text = "[%s/DEBUG]: %s".formatted(this.name, text);
-			logger.info(text, args);
+			this.logger.info(text, args);
 		}
 	}
 
 	public void info(String text, Object... args) {
 		text = prepare(text);
-		logger.info(text, args);
-
+		this.logger.info(text, args);
 	}
 
 	public void warn(String text, Object... args) {
 		text = prepare(text);
-		logger.warn(text, args);
+		this.logger.warn(text, args);
 	}
 
 	public void error(String text, Object... args) {
 		text = prepare(text);
-		logger.error(text, args);
+		this.logger.error(text, args);
 	}
 
 	private String prepare(String text) {

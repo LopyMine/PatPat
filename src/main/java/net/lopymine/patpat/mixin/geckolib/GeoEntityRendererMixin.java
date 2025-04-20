@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.lopymine.patpat.renderer.PatAnimationRenderer;
+import net.lopymine.patpat.client.render.PatPatClientRenderer;
 //? =1.16.5 {
 /*import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer;
 *///?} elif >=1.17.1 && <=1.19.2 {
@@ -41,7 +41,7 @@ public abstract class GeoEntityRendererMixin {
 			return;
 		}
 		//?}
-		PatAnimationRenderer.scaleEntityIfPatted(livingEntity, matrixStack, tickDelta);
+		PatPatClientRenderer.scaleEntityIfPatted(livingEntity, matrixStack, tickDelta);
 	}
 }
 //?}

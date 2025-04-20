@@ -2,8 +2,9 @@ package net.lopymine.patpat;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.lopymine.patpat.manager.PatPatConfigManager;
-import net.lopymine.patpat.manager.server.*;
+import net.lopymine.patpat.common.config.PatPatConfigManager;
+import net.lopymine.patpat.server.command.PatPatServerCommandManager;
+import net.lopymine.patpat.server.packet.PatPatServerPacketManager;
 
 public class PatPat implements ModInitializer {
 

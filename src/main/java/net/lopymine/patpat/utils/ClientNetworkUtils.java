@@ -2,7 +2,7 @@ package net.lopymine.patpat.utils;
 
 import net.minecraft.client.network.*;
 
-import net.lopymine.patpat.config.client.PatPatClientConfig;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 
 import java.util.List;
 import java.util.stream.Stream;

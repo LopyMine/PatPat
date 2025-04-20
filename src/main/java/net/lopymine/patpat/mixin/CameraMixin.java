@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.manager.client.PatPatClientManager;
+import net.lopymine.patpat.client.manager.PatPatClientManager;
 
 @Mixin(Camera.class)
 public class CameraMixin {

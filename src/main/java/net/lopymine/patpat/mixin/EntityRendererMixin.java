@@ -11,8 +11,9 @@ import org.spongepowered.asm.mixin.injection.*;
 /*import com.llamalad7.mixinextras.injector.wrapoperation.*;
 import com.llamalad7.mixinextras.sugar.Local;
 *///?} else {
-import net.lopymine.patpat.manager.client.PatPatClientRenderer;
-import net.lopymine.patpat.manager.client.PatPatClientRenderer.RenderResult;
+import net.lopymine.patpat.client.render.PatPatClientRenderer;
+import net.lopymine.patpat.client.render.PatPatClientRenderer.RenderResult;
+import net.lopymine.patpat.common.config.vector.Vec3f;
 import net.lopymine.patpat.utils.mixin.EntityRenderStateWithParent;
 import net.minecraft.client.render.entity.state.EntityRenderState;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -20,9 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //?}
 
 //? >1.20.4 {
-import net.minecraft.util.math.Vec3d;
 
-import java.util.Objects;
 //?}
 
 @Mixin(EntityRenderer.class)

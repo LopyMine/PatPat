@@ -3,9 +3,7 @@ package net.lopymine.patpat.utils;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.modmenu.screen.yacl.custom.utils.SimpleContent;
+import net.lopymine.patpat.modmenu.yacl.custom.utils.SimpleContent;
 
 import java.util.function.Function;
 

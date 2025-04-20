@@ -4,7 +4,7 @@ import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
-import net.lopymine.patpat.manager.server.PatPatServerCommandManager;
+import net.lopymine.patpat.server.command.PatPatServerCommandManager;
 
 public class CommandExtension {
 

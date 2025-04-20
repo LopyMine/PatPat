@@ -3,8 +3,7 @@ package net.lopymine.patpat.entity;
 import lombok.*;
 import net.minecraft.entity.LivingEntity;
 
-import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.config.resourcepack.*;
+import net.lopymine.patpat.client.config.resourcepack.*;
 
 import java.util.*;
 

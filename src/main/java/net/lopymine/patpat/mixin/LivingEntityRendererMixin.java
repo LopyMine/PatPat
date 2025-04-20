@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.lopymine.patpat.renderer.PatAnimationRenderer;
+import net.lopymine.patpat.client.render.PatPatClientRenderer;
 
 //? >=1.21.2 {
 import net.minecraft.entity.Entity;
@@ -31,6 +31,6 @@ public class LivingEntityRendererMixin {
 			return;
 		}
 	//?}
-		PatAnimationRenderer.scaleEntityIfPatted(livingEntity, matrixStack, tickDelta);
+		PatPatClientRenderer.scaleEntityIfPatted(livingEntity, matrixStack, tickDelta);
 	}
 }

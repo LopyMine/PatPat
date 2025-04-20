@@ -12,11 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.manager.*;
+import net.lopymine.patpat.client.packet.PatPatClientProxLibPacketManager;
+import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
 import net.lopymine.patpat.compat.replaymod.ReplayModCompat;
-import net.lopymine.patpat.config.client.PatPatClientConfig;
-import net.lopymine.patpat.config.resourcepack.PlayerConfig;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.resourcepack.PlayerConfig;
 import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.manager.client.*;
 import net.lopymine.patpat.packet.*;
 
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package net.lopymine.patpat.utils;
 
-import net.lopymine.patpat.config.server.RateLimitUnit;
+import net.lopymine.patpat.common.config.time.TimeUnit;
 
 import java.util.Set;
 import java.util.stream.*;
@@ -21,18 +21,18 @@ public class TimeUtils {
 			.collect(Collectors.joining(", "));
 
 
-	public static RateLimitUnit getUnit(String unit) {
+	public static TimeUnit getUnit(String unit) {
 		if (unit.isEmpty() || SECOND_ENDING.contains(unit)) {
-			return RateLimitUnit.SECONDS;
+			return TimeUnit.SECONDS;
 		}
 		if (MINUTE_ENDING.contains(unit)) {
-			return RateLimitUnit.MINUTES;
+			return TimeUnit.MINUTES;
 		}
 		if (HOUR_ENDING.contains(unit)) {
-			return RateLimitUnit.HOURS;
+			return TimeUnit.HOURS;
 		}
 		if (DAY_ENDING.contains(unit)) {
-			return RateLimitUnit.DAYS;
+			return TimeUnit.DAYS;
 		}
 		throw new IllegalArgumentException("'%s' is not unit, available units: %s".formatted(unit, UNITS));
 	}

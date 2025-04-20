@@ -107,7 +107,7 @@ public class PatPatClientRenderer {
 		matrices.push();
 		matrices.translate(
 				0.0F,
-				overrideOffset != null ? overrideOffset.getY() : (nameLabelHeight * PatPatClientManager.getAnimationProgress(patEntity, tickDelta)) - frameConfig.offsetY() - config.getVisualConfig().getAnimationOffsets().getY(),
+				overrideOffset != null ? overrideOffset.getY() : (nameLabelHeight * PatPatClientManager.getAnimationProgress(patEntity, tickDelta)) + 0.11F - frameConfig.offsetY() - config.getVisualConfig().getAnimationOffsets().getY(),
 				0.0F
 		);
 		matrices.multiply(dispatcher.getRotation());

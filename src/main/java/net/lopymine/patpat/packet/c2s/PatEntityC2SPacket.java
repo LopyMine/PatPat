@@ -37,6 +37,7 @@ public class PatEntityC2SPacket implements PatPacket<ServerWorld> {
 
 	@Override
 	public void write(/*? if >=1.20.5 {*/RegistryByteBuf/*?} else {*//*PacketByteBuf*//*?}*/ buf) {
+		buf.writeUuid(this.pattedEntityUuid);
 	}
 
 	@Override

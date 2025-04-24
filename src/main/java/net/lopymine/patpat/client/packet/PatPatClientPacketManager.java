@@ -46,6 +46,7 @@ public class PatPatClientPacketManager {
 
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
 			PatPatClientPacketManager.setUseV2PatPackets(false);
+			PatPatClient.LOGGER.debug("Disconeccting, disabling v2 packets!!");
 		});
 
 		PatPatClientNetworkManager.registerReceiver(PatEntityS2CPacket.TYPE, (packet) -> {
@@ -71,33 +72,42 @@ public class PatPatClientPacketManager {
 
 	public static void handlePatting(S2CPatPacket packet, boolean replayModPacket) {
 		PatPatClientConfig config = PatPatClient.getConfig();
+		System.out.println("0");
 		if (!config.getMainConfig().isModEnabled()) {
+			System.out.println("1");
 			return;
 		}
 
 		ClientWorld clientWorld = MinecraftClient.getInstance().world;
 		ClientPlayerEntity player = MinecraftClient.getInstance().player;
 		if (clientWorld == null || player == null) {
+			System.out.println("2");
 			return;
 		}
 
 		Entity pattedEntity = packet.getPattedEntity(clientWorld);
 		if (!(pattedEntity instanceof LivingEntity livingEntity)) {
+			System.out.println("3");
 			return;
 		}
 		Entity playerEntity = packet.getWhoPattedEntity(clientWorld);
+		System.out.println(playerEntity.getName().getString());
 		if (!(playerEntity instanceof PlayerEntity)) {
+			System.out.println("4");
 			return;
 		}
 
 		UUID pattedEntityUuid = pattedEntity.getUuid();
 		UUID whoPattedUuid = playerEntity.getUuid();
 		if (isBlocked(config, whoPattedUuid)) {
+			System.out.println("5");
 			return;
 		}
 		if (pattedEntityUuid.equals(player.getUuid()) && !config.getServerConfig().isPatMeEnabled()) {
+			System.out.println("6");
 			return;
 		}
+		System.out.println("7");
 		PatEntity patEntity = PatPatClientManager.pat(livingEntity, PlayerConfig.of(playerEntity.getName().getString(), whoPattedUuid));
 		if (config.getSoundsConfig().isSoundsEnabled() && !replayModPacket) {
 			PatPatClientSoundManager.playSound(patEntity, player, config.getSoundsConfig().getSoundsVolume());
@@ -115,8 +125,10 @@ public class PatPatClientPacketManager {
 
 	public static PatPacket<ServerWorld> getPatPacket(Entity pattedEntity) {
 		if (PatPatClientPacketManager.isUseV2PatPackets()) {
+			PatPatClient.LOGGER.debug("Using v2 packets");
 			return new PatEntityC2SPacketV2(pattedEntity);
 		} else {
+			PatPatClient.LOGGER.debug("Using v1 packets");
 			return new PatEntityC2SPacket(pattedEntity);
 		}
 	}

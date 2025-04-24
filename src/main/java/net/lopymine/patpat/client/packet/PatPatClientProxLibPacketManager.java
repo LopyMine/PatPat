@@ -41,6 +41,9 @@ public class PatPatClientProxLibPacketManager {
 		if (!LoadedMods.PROX_LIB_MOD_LOADED) {
 			return;
 		}
+		if (!PatPatClientProxLibManager.isEnabled()) {
+			return;
+		}
 		//? if proxlib {
 		try {
 			int packetsCount = me.enderkill98.proxlib.client.ProxLib.sendPacket(MinecraftClient.getInstance(), PAT_PACKET_IDENTIFIER, encodeProxyPatPacket(pattedEntityId));

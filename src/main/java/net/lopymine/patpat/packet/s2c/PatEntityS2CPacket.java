@@ -40,6 +40,8 @@ public class PatEntityS2CPacket implements S2CPatPacket {
 
 	@Override
 	public void write(/*? if >=1.20.5 {*/RegistryByteBuf/*?} else {*//*PacketByteBuf*//*?}*/ buf) {
+		buf.writeUuid(this.pattedEntityUuid);
+		buf.writeUuid(this.whoPattedUuid);
 	}
 
 	@Override
@@ -51,7 +53,7 @@ public class PatEntityS2CPacket implements S2CPatPacket {
 	@Override
 	@Nullable
 	public Entity getWhoPattedEntity(ClientWorld world) {
-		return WorldUtils.getEntity(world, this.getPattedEntityUuid());
+		return WorldUtils.getEntity(world, this.getWhoPattedUuid());
 	}
 
 	//? >=1.20.5 {

@@ -39,6 +39,8 @@ public class PatEntityForReplayModS2CPacketV2 implements S2CPatPacket {
 
 	@Override
 	public void write(/*? if >=1.20.5 {*/RegistryByteBuf/*?} else {*//*PacketByteBuf*//*?}*/ buf) {
+		buf.writeVarInt(this.pattedEntityId);
+		buf.writeVarInt(this.whoPattedId);
 	}
 
 	@Override

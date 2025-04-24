@@ -1,10 +1,12 @@
 package net.lopymine.patpat.client.packet;
 
+import lombok.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.*;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 
 import net.fabricmc.fabric.api.client.networking.v1.*;
 
@@ -14,8 +16,9 @@ import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
 import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.packet.*;
-import net.lopymine.patpat.utils.WorldUtils;
+import net.lopymine.patpat.packet.PatPacket;
+import net.lopymine.patpat.packet.c2s.*;
+import net.lopymine.patpat.packet.s2c.*;
 
 import java.util.UUID;
 
@@ -25,62 +28,74 @@ public class PatPatClientPacketManager {
 		throw new IllegalStateException("Manager class");
 	}
 
+	@Getter
+	@Setter
+	private static boolean useV2PatPackets = false;
+
 	public static void register() {
-		// Pinging server to check on PatPat Mod/Plugin
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
 			PatPatClient.LOGGER.debug("[PING] Sending HelloPatPatServerC2S packet to the server...");
 			ClientPlayNetworking.send(new HelloPatPatServerC2SPacket());
 		});
 
-		ClientPlayNetworking.registerGlobalReceiver(
-				HelloPatPatPlayerS2CPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
-				/*? >=1.20.5 {*/(packet, context) -> {/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, player, responseSender) -> {*//*?} else {*//*(client, handler, buf, responseSender) -> { PatEntityS2CPacket packet = new PatEntityS2CPacket(buf);*//*?}*/
-					PatPatClient.LOGGER.debug("[PONG] Received HelloPatPatClientC2S packet! PatPat Mod/Plugin installed on the server!");
-					PatPatClientProxLibManager.setEnabled(true);
-				}
-		);
+		PatPatClientNetworkManager.registerReceiver(HelloPatPatPlayerS2CPacket.TYPE, (packet) -> {
+			PatPatClient.LOGGER.debug("[PONG] Received HelloPatPatPlayerS2CPacket packet! PatPat Mod/Plugin installed on the server!");
+			PatPatClientProxLibManager.setEnabled(false);
+			PatPatClientPacketManager.setUseV2PatPackets(true);
+		});
 
-		// Register patting packets
-		ClientPlayNetworking.registerGlobalReceiver(
-				PatEntityForReplayModS2CPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
-				/*? >=1.20.5 {*/(packet, context) -> {/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, player, responseSender) -> {*//*?} else {*//*(client, handler, buf, responseSender) -> { PatEntityS2CPacket packet = new PatEntityS2CPacket(buf);*//*?}*/
-					PatPatClientPacketManager.handlePatting(packet.getWhoPattedUuid(), packet.getPattedEntityUuid(), true);
-				}
-		);
+		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+			PatPatClientPacketManager.setUseV2PatPackets(false);
+		});
 
-		ClientPlayNetworking.registerGlobalReceiver(
-				PatEntityS2CPacket./*? >=1.19.4 {*/TYPE/*?} else {*//*PACKET_ID*//*?}*/,
-				/*? >=1.20.5 {*/(packet, context) -> {/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, player, responseSender) -> {*//*?} else {*//*(client, handler, buf, responseSender) -> { PatEntityS2CPacket packet = new PatEntityS2CPacket(buf);*//*?}*/
-					PatPatClientPacketManager.handlePatting(packet.getWhoPattedUuid(), packet.getPattedEntityUuid(), false);
-				}
-		);
+		PatPatClientNetworkManager.registerReceiver(PatEntityS2CPacket.TYPE, (packet) -> {
+			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
+			handlePatting(packet, false);
+		});
+
+		PatPatClientNetworkManager.registerReceiver(PatEntityS2CPacketV2.TYPE, (packet) -> {
+			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
+			handlePatting(packet, false);
+		});
+
+		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacket.TYPE, (packet) -> {
+			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
+			handlePatting(packet, true);
+		});
+
+		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacketV2.TYPE, (packet) -> {
+			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
+			handlePatting(packet, true);
+		});
 	}
 
-	public static void handlePatting(UUID whoPattedUuid, UUID pattedEntityUuid, boolean replayModPacket) {
-		PatPatClient.LOGGER.debug("Received packet from server, {} patted {}, replayModPacket: {}", whoPattedUuid, pattedEntityUuid, replayModPacket);
-
-		ClientWorld clientWorld = MinecraftClient.getInstance().world;
-		ClientPlayerEntity player = MinecraftClient.getInstance().player;
+	public static void handlePatting(S2CPatPacket packet, boolean replayModPacket) {
 		PatPatClientConfig config = PatPatClient.getConfig();
 		if (!config.getMainConfig().isModEnabled()) {
 			return;
 		}
-		if (clientWorld == null) {
+
+		ClientWorld clientWorld = MinecraftClient.getInstance().world;
+		ClientPlayerEntity player = MinecraftClient.getInstance().player;
+		if (clientWorld == null || player == null) {
 			return;
 		}
-		boolean pattedMe = pattedEntityUuid.equals(MinecraftClient.getInstance().getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/);
-		if (pattedMe && !config.getServerConfig().isPatMeEnabled()) {
-			return;
-		}
-		if (isBlocked(config, whoPattedUuid)) {
-			return;
-		}
-		Entity pattedEntity = WorldUtils.getEntity(clientWorld, pattedEntityUuid);
+
+		Entity pattedEntity = packet.getPattedEntity(clientWorld);
 		if (!(pattedEntity instanceof LivingEntity livingEntity)) {
 			return;
 		}
-		Entity playerEntity = WorldUtils.getEntity(clientWorld, whoPattedUuid);
+		Entity playerEntity = packet.getWhoPattedEntity(clientWorld);
 		if (!(playerEntity instanceof PlayerEntity)) {
+			return;
+		}
+
+		UUID pattedEntityUuid = pattedEntity.getUuid();
+		UUID whoPattedUuid = playerEntity.getUuid();
+		if (isBlocked(config, whoPattedUuid)) {
+			return;
+		}
+		if (pattedEntityUuid.equals(player.getUuid()) && !config.getServerConfig().isPatMeEnabled()) {
 			return;
 		}
 		PatEntity patEntity = PatPatClientManager.pat(livingEntity, PlayerConfig.of(playerEntity.getName().getString(), whoPattedUuid));
@@ -96,5 +111,13 @@ public class PatPatClientPacketManager {
 				|| socialManager.isPlayerBlocked(playerUuid)
 				|| socialManager.isPlayerHidden(playerUuid)
 				/*? >=1.17 {*/ || socialManager.isPlayerMuted(playerUuid)/*?}*/;
+	}
+
+	public static PatPacket<ServerWorld> getPatPacket(Entity pattedEntity) {
+		if (PatPatClientPacketManager.isUseV2PatPackets()) {
+			return new PatEntityC2SPacketV2(pattedEntity);
+		} else {
+			return new PatEntityC2SPacket(pattedEntity);
+		}
 	}
 }

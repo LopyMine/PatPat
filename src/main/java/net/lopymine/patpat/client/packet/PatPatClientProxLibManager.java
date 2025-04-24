@@ -27,4 +27,13 @@ public class PatPatClientProxLibManager {
 			PatPatClient.LOGGER.debug("ProxLib Disabled");
 		}
 	}
+
+	public static void disableIfEnabledBecauseReceivedPacketFromServer() {
+		if (isEnabled()) {
+			PatPatClient.LOGGER.debug("--------------------------------------");
+			PatPatClient.LOGGER.debug("Received pat packet from server with enabled ProxLib, looks like server has old PatPat Plugin/Mod installed. Automatically disabling ProxLib to avoid packet duplication...");
+			PatPatClient.LOGGER.debug("--------------------------------------");
+			PatPatClientProxLibManager.setEnabled(false);
+		}
+	}
 }

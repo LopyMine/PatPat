@@ -1,7 +1,7 @@
 package net.lopymine.patpat.server.config.migrate;
 
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.client.config.resourcepack.Version;
+import net.lopymine.patpat.common.config.Version;
 import net.lopymine.patpat.common.migrate.MigrateHandler;
 import net.lopymine.patpat.server.config.PatPatServerConfig;
 

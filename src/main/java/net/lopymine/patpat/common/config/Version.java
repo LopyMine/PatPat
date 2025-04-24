@@ -1,4 +1,4 @@
-package net.lopymine.patpat.client.config.resourcepack;
+package net.lopymine.patpat.common.config;
 
 import com.mojang.serialization.Codec;
 

@@ -2,7 +2,9 @@ package net.lopymine.patpat.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.*;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.*;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.*;
 import org.spongepowered.asm.mixin.*;
@@ -13,13 +15,12 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.manager.*;
-import net.lopymine.patpat.client.packet.PatPatClientProxLibPacketManager;
+import net.lopymine.patpat.client.packet.*;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
 import net.lopymine.patpat.compat.replaymod.ReplayModCompat;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.PlayerConfig;
 import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.packet.*;
 
 import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +31,8 @@ import net.minecraft.network.PacketByteBuf;
 *///?}
 
 import net.lopymine.patpat.compat.flashback.FlashbackCompat;
+import net.lopymine.patpat.packet.PatPacket;
+import net.lopymine.patpat.packet.c2s.PatEntityC2SPacket;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
@@ -78,14 +81,8 @@ public abstract class MinecraftClientMixin {
 			return;
 		}
 
-		PatEntityC2SPacket packet = new PatEntityC2SPacket(livingEntity);
-		//? >=1.19.4 {
-		ClientPlayNetworking.send(packet);
-		//?} else {
-		/*PacketByteBuf buf = PacketByteBufs.create();
-		packet.write(buf);
-		ClientPlayNetworking.send(PatEntityC2SPacket.PACKET_ID, buf);
-		*///?}
+		PatPacket<ServerWorld> packet = PatPatClientPacketManager.getPatPacket(livingEntity);
+		PatPatClientNetworkManager.sendPacketToServer(packet);
 
 		UUID currentUuid = this.getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/;
 		PlayerConfig whoPatted = PlayerConfig.of(this.getSession().getUsername(), currentUuid);
@@ -96,9 +93,9 @@ public abstract class MinecraftClientMixin {
 			this.player.swingHand(Hand.MAIN_HAND);
 		}
 
-		ReplayModCompat.onPat(livingEntity.getUuid(), currentUuid);
-		FlashbackCompat.onPat(livingEntity.getUuid(), currentUuid);
-		PatPatClientProxLibPacketManager.onPat(packet.getPattedEntityUuid());
+		ReplayModCompat.onPat(livingEntity.getId(), this.player.getId());
+		FlashbackCompat.onPat(livingEntity.getId(), this.player.getId());
+		PatPatClientProxLibPacketManager.onPat(livingEntity.getId());
 
 		if (config.getSoundsConfig().isSoundsEnabled()) {
 			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsConfig().getSoundsVolume());

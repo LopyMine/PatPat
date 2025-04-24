@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.common.config.Version;
 import net.lopymine.patpat.extension.EntityExtension;
 
 import java.util.*;

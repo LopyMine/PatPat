@@ -14,6 +14,7 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
+import net.lopymine.patpat.common.config.Version;
 import net.lopymine.patpat.extension.EntityExtension;
 
 import java.io.*;

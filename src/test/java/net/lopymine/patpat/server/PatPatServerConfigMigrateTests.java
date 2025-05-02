@@ -25,7 +25,7 @@ class PatPatServerConfigMigrateTests {
 		}
 
 		@Test
-		void test1() throws IOException {
+		void test1() {
 			File file = this.getConfigFolder().resolve("test_1.json5").toFile();
 			Assertions.assertTrue(file.exists());
 
@@ -56,11 +56,14 @@ class PatPatServerConfigMigrateTests {
 			File migratedConfigListFile = migratedFilesPath.resolve("migrated_list_test_1.txt").toFile();
 			listConfig.save(migratedConfigListFile);
 
-			Desktop.getDesktop().open(this.getConfigFolder().toFile());
+			try {
+				Desktop.getDesktop().open(this.getConfigFolder().toFile());
+			} catch (Exception ignored) {
+			}
 		}
 
 		@Test
-		void test2() throws IOException {
+		void test2() {
 			File file = this.getConfigFolder().resolve("test_2.json5").toFile();
 			Assertions.assertTrue(file.exists());
 
@@ -91,7 +94,10 @@ class PatPatServerConfigMigrateTests {
 			File migratedConfigListFile = migratedFilesPath.resolve("migrated_list_test_2.txt").toFile();
 			listConfig.save(migratedConfigListFile);
 
-			Desktop.getDesktop().open(this.getConfigFolder().toFile());
+			try {
+				Desktop.getDesktop().open(this.getConfigFolder().toFile());
+			} catch (Exception ignored) {
+			}
 		}
 	}
 }

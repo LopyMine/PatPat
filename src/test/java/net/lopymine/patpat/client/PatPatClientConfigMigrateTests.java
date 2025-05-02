@@ -25,7 +25,7 @@ public class PatPatClientConfigMigrateTests {
 		}
 
 		@Test
-		void testMigrationV0() throws IOException {
+		void testMigrationV0() {
 			// PREPARE DATA
 			File file = this.getConfigFolder().resolve("test_1.json5").toFile();
 			Assertions.assertTrue(file.exists());
@@ -98,7 +98,10 @@ public class PatPatClientConfigMigrateTests {
 			File migratedFile = migratedFilesPath.resolve("migrated_test_1.json5").toFile();
 			config.save(migratedFile);
 
-			Desktop.getDesktop().open(this.getConfigFolder().toFile());
+			try {
+				Desktop.getDesktop().open(this.getConfigFolder().toFile());
+			} catch (Exception ignored) {
+			}
 		}
 	}
 }

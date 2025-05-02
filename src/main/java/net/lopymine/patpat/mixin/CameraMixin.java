@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 *///?}
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 
@@ -39,7 +41,7 @@ public class CameraMixin {
 
 		Float originalHeight = original.call(entity);
 
-		if (!PatPatClient.getConfig().getVisualConfig().isCameraShackingEnabled()) {
+		if (!PatPatClientConfig.getInstance().getVisualConfig().isCameraShackingEnabled()) {
 			return originalHeight;
 		}
 

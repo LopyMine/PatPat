@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.client.networking.v1.*;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
@@ -71,7 +72,7 @@ public class PatPatClientPacketManager {
 	}
 
 	public static void handlePatting(S2CPatPacket packet, boolean replayModPacket) {
-		PatPatClientConfig config = PatPatClient.getConfig();
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		System.out.println("0");
 		if (!config.getMainConfig().isModEnabled()) {
 			System.out.println("1");

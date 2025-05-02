@@ -12,6 +12,7 @@ import net.lopymine.patpat.client.command.argument.*;
 import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.extension.TextExtension;
 import net.lopymine.patpat.utils.*;
@@ -56,7 +57,7 @@ public class PatPatClientCommandManager {
 												.executes(context -> PatPatClientCommandManager.onListChange(context, true))))
 								.then(literal("remove")
 										.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
-												.suggests((context, builder) -> CommandSource.suggestMatching(ClientNetworkUtils.getOnlinePlayersFromUuids(context.getSource().getClient().getNetworkHandler(), PatPatClient.getConfig()), builder))
+												.suggests((context, builder) -> CommandSource.suggestMatching(ClientNetworkUtils.getOnlinePlayersFromUuids(context.getSource().getClient().getNetworkHandler(), PatPatClientConfig.getInstance()), builder))
 												.executes(context -> PatPatClientCommandManager.onListChange(context, false))))
 						)
 						.then(literal("off").executes(context -> PatPatClientCommandManager.switchPatPatState(context, false)))
@@ -66,7 +67,7 @@ public class PatPatClientCommandManager {
 	}
 
 	private static int onListChange(CommandContext<FabricClientCommandSource> context, boolean add) {
-		PatPatClientConfig config = PatPatClient.getConfig();
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		Map<UUID, String> players = config.getServerConfig().getPlayers();
 		PlayerInfo playerInfo = PlayerInfoArgumentType.getPlayerInfo(PLAYER_ARGUMENT_NAME, context);
 		UUID uuid = playerInfo.getUuid();
@@ -84,15 +85,15 @@ public class PatPatClientCommandManager {
 				.build();
 
 		context.getSource().sendFeedback(PATPAT_ID.copy().append(text));
-		config.save();
+		config.saveAsync();
 		return Command.SINGLE_SUCCESS;
 	}
 
 	private static int onSetListMode(CommandContext<FabricClientCommandSource> context) {
-		PatPatClientConfig config = PatPatClient.getConfig();
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		ListMode mode = ListModeArgumentType.getListMode(context, "mode");
 		config.getServerConfig().setListMode(mode);
-		config.save();
+		config.saveAsync();
 
 		Text text = CommandTextBuilder.startBuilder("list.mode.success", mode.getText()).build();
 
@@ -101,11 +102,11 @@ public class PatPatClientCommandManager {
 	}
 
 	private static int switchPatPatState(CommandContext<FabricClientCommandSource> context, boolean state) {
-		PatPatClientConfig config = PatPatClient.getConfig();
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		Text text;
 		if (config.getMainConfig().isModEnabled() != state) {
 			config.getMainConfig().setModEnabled(state);
-			config.save();
+			config.saveAsync();
 			text = CommandTextBuilder.startBuilder(state ? "on.success" : "off.success").build();
 		} else {
 			text = CommandTextBuilder.startBuilder(state ? "on.already" : "off.already").build();

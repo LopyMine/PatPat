@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.resource.*;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
 import java.util.*;
@@ -28,7 +29,7 @@ public class PatPatClientReloadListener implements SimpleSynchronousResourceRelo
 		if (list.isEmpty()) {
 			return;
 		}
-		PatPatClientConfig config = PatPatClient.getConfig();
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		if (!config.getMainConfig().isModEnabled()) {
 			return;
 		}

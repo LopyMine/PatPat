@@ -12,6 +12,7 @@ import com.mojang.serialization.JsonOps;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.common.config.Version;
@@ -70,7 +71,7 @@ public class PatPatClientResourcePackManager {
 	}
 
 	public void reload(List<ResourcePack> reloadPacks, ResourceManager manager) {
-		PatPatClientConfig config = PatPatClient.getConfig();
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		this.loadedAnimations.clear();
 		PatPatClientManager.reloadPatEntities();
 		List<ResourcePack> packs = reloadPacks.stream().filter(pack -> pack.getNamespaces(ResourceType.CLIENT_RESOURCES).contains(PatPat.MOD_ID)).toList();

@@ -19,6 +19,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
@@ -41,7 +42,7 @@ public class PatPatClientRenderer {
 	}
 
 	private static void renderPatOnYourself(WorldRenderContext context) {
-		if (!PatPatClient.getConfig().getVisualConfig().isCameraShackingEnabled()) {
+		if (!PatPatClientConfig.getInstance().getVisualConfig().isCameraShackingEnabled()) {
 			return;
 		}
 
@@ -72,7 +73,7 @@ public class PatPatClientRenderer {
 	}
 
 	public static RenderResult render(MatrixStack matrices, VertexConsumerProvider provider, EntityRenderDispatcher dispatcher, @Nullable PatEntity providedPatEntity, @Nullable Entity entity, @Nullable Vec3f overrideOffset, float tickDelta, int light) {
-		PatPatClientConfig config = PatPatClient.getConfig();
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		if (!config.getMainConfig().isModEnabled()) {
 			return RenderResult.FAILED;
 		}

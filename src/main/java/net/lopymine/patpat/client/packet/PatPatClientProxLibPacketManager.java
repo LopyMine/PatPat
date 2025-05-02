@@ -2,6 +2,7 @@ package net.lopymine.patpat.client.packet;
 
 import net.minecraft.client.MinecraftClient;
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.s2c.PatEntityS2CPacketV2;
 

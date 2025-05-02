@@ -7,6 +7,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.*;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.utils.TextUtils;
 
 import java.net.*;

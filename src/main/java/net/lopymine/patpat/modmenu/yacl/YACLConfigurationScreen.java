@@ -7,6 +7,7 @@ import lombok.experimental.ExtensionMethod;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.modmenu.yacl.custom.base.*;
 import net.lopymine.patpat.modmenu.yacl.custom.extension.SimpleOptionExtension;
@@ -22,9 +23,9 @@ public class YACLConfigurationScreen {
 
 	public static Screen createScreen(Screen parent) {
 		PatPatClientConfig defConfig = PatPatClientConfig.getNewInstance();
-		PatPatClientConfig config = PatPatClient.getConfig();
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
 
-		return SimpleYACLScreen.startBuilder(parent, config::save)
+		return SimpleYACLScreen.startBuilder(parent, config::saveAsync)
 				.categories(getGeneralCategory(defConfig, config))
 				.build();
 	}

@@ -5,6 +5,7 @@ import lombok.Getter;
 import net.fabricmc.fabric.api.client.networking.v1.*;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
 
 public class PatPatClientProxLibManager {

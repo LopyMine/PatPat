@@ -7,6 +7,7 @@ import net.minecraft.sound.*;
 import net.minecraft.util.math.MathHelper;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.SoundConfig;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.utils.*;

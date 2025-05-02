@@ -8,10 +8,12 @@ import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.common.config.*;
 import net.lopymine.patpat.extension.GsonExtension;
 import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
+import net.lopymine.patpat.utils.CodecUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -19,50 +21,54 @@ import java.nio.file.*;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 
+import static net.lopymine.patpat.utils.CodecUtils.option;
+
 @Getter
 @AllArgsConstructor
 @ExtensionMethod(GsonExtension.class)
 public class PatPatServerConfig {
 
 	public static final Codec<PatPatServerConfig> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-			Codec.BOOL.optionalFieldOf("debug", false).forGetter(PatPatServerConfig::isDebugMode),
-			Version.CODEC.fieldOf("version").forGetter(PatPatServerConfig::getVersion),
-			ListMode.CODEC.fieldOf("listMode").forGetter(PatPatServerConfig::getListMode),
-			PatPatServerRateLimitConfig.CODEC.fieldOf("rateLimit").forGetter(PatPatServerConfig::getRateLimitConfig)
+			option("debug", false, Codec.BOOL, PatPatServerConfig::isDebugModeEnabled),
+			option("version", Version.SERVER_CONFIG_VERSION, Version.CODEC, PatPatServerConfig::getVersion),
+			option("listMode", ListMode.DISABLED, ListMode.CODEC, PatPatServerConfig::getListMode),
+			option("rateLimit", new PatPatServerRateLimitConfig(), PatPatServerRateLimitConfig.CODEC, PatPatServerConfig::getRateLimitConfig)
 	).apply(inst, PatPatServerConfig::new));
 
-	private static final String FILENAME = "config.json";
+	private static final String FILENAME = PatPat.MOD_ID + ".json";
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(FILENAME).toFile();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	private static PatPatServerConfig instance;
+	private static PatPatServerConfig INSTANCE;
 
-	private boolean debugMode = false;
+	private boolean debugModeEnabled;
 	@Getter
 	private Version version;
 	@Setter
 	private ListMode listMode;
 	private PatPatServerRateLimitConfig rateLimitConfig;
 
-	public PatPatServerConfig() {
-		this.listMode        = ListMode.DISABLED;
-		this.rateLimitConfig = new PatPatServerRateLimitConfig();
-		this.version         = Version.SERVER_CONFIG_VERSION;
+	private PatPatServerConfig() {
+		throw new IllegalArgumentException();
+	}
+
+	public static PatPatServerConfig getNewInstance() {
+		return CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
 	public static PatPatServerConfig getInstance() {
-		if (instance == null) {
+		if (INSTANCE == null) {
 			return reload();
 		}
-		return instance;
+		return INSTANCE;
 	}
 
 	public static PatPatServerConfig reload() {
-		instance = PatPatServerConfig.read();
-		return instance;
+		INSTANCE = PatPatServerConfig.read();
+		return INSTANCE;
 	}
 
 	private static @NotNull PatPatServerConfig create() {
-		PatPatServerConfig config = new PatPatServerConfig();
+		PatPatServerConfig config = PatPatServerConfig.getNewInstance();
 		try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
 			String json = GSON.toJson(CODEC.encode(config));
 			writer.write(json);
@@ -81,7 +87,7 @@ public class PatPatServerConfig {
 			return CODEC.decode(JsonOps.INSTANCE, /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, PatPat.LOGGER::error)*//*?}*/.getFirst();
 		} catch (Exception e) {
 			PatPat.LOGGER.error("Failed to read config", e);
-			if (CONFIG_FILE.length() > 0) {
+			if (CONFIG_FILE.length() > 0) { // TODO move it to client side too
 				try {
 					Path configPath = PatPatConfigManager.CONFIG_PATH;
 					String backupFilename = FILENAME + ".bkp";
@@ -103,7 +109,11 @@ public class PatPatServerConfig {
 	}
 
 	public void save() {
-		try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
+		this.save(CONFIG_FILE);
+	}
+
+	public void save(File folder) {
+		try (FileWriter writer = new FileWriter(folder, StandardCharsets.UTF_8)) {
 			String json = GSON.toJson(CODEC.encode(this));
 			writer.write(json);
 		} catch (Exception e) {

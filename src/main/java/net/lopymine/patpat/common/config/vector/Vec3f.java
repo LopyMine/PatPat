@@ -5,7 +5,7 @@ import net.minecraft.util.Util;
 
 import com.mojang.serialization.Codec;
 
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -27,5 +27,16 @@ public class Vec3f {
 		this.x = 0;
 		this.y = 0;
 		this.z = 0;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Vec3f vec3f)) return false;
+		return Float.compare(x, vec3f.x) == 0 && Float.compare(y, vec3f.y) == 0 && Float.compare(z, vec3f.z) == 0;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(x, y, z);
 	}
 }

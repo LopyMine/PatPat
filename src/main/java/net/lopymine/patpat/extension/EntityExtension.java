@@ -4,6 +4,7 @@ import net.minecraft.entity.*;
 import net.minecraft.util.Identifier;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.utils.VersionedThings;
 
 public class EntityExtension {

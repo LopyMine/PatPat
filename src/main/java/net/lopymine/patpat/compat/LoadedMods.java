@@ -3,6 +3,7 @@ package net.lopymine.patpat.compat;
 import net.fabricmc.loader.api.FabricLoader;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 
 public final class LoadedMods {
 	public static final boolean REPLAY_MOD_LOADED = FabricLoader.getInstance().isModLoaded("replaymod");

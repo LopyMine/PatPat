@@ -3,6 +3,7 @@ package net.lopymine.patpat.compat.replaymod;
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.s2c.*;
 

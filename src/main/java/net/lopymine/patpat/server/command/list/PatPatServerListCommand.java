@@ -69,7 +69,7 @@ public class PatPatServerListCommand {
 			}
 		}
 		if (modify) {
-			config.save();
+			config.saveAsync();
 		}
 		return Command.SINGLE_SUCCESS;
 	}

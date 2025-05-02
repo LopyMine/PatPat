@@ -12,6 +12,7 @@ import com.mojang.brigadier.exceptions.*;
 
 import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.utils.CommandTextBuilder;
 
 import java.util.*;

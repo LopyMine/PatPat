@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 *///?}
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
 @Mixin(AbstractClientPlayerEntity.class)
@@ -25,7 +26,7 @@ public abstract class AbstractClientPlayerEntityMixin {
 	private SkinTextures generated(PlayerListEntry instance, Operation<SkinTextures> original) {
 		SkinTextures call = original.call(instance);
 		Identifier capeTexture = call.capeTexture();
-		if (capeTexture != null || !PatPatClient.AUTHORS_UUIDS.contains(instance.getProfile().getId())) {
+		if (capeTexture != null || !PatPatClient.AUTHORS.contains(instance.getProfile().getId())) {
 			return call;
 		}
 		Identifier patpatCapeTexture = IdentifierUtils.textureId("cape/patpat_cape_hand.png");

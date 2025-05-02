@@ -11,7 +11,7 @@ public class PatPat implements ModInitializer {
 	public static final String MOD_VERSION = /*$ mod_version*/ "1.2.0+1.21.4";
 	public static final String MOD_NAME = /*$ mod_name*/ "PatPat";
 	public static final String MOD_ID = /*$ mod_id*/ "patpat";
-	public static final String SERVER_CONFIG_VERSION = /*$ mod_version*/ "1.2.0+1.21.4";
+	public static final String SERVER_CONFIG_VERSION = /*$ server_config_version*/ "1.0.0";
 
 	public static final String ISSUE_LINK = "https://github.com/LopyMine/" + MOD_ID + "/issues";
 
@@ -20,7 +20,7 @@ public class PatPat implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		PatPatConfigManager.onInitialize();
-		PatPatConfigManager.reload();
+		PatPatConfigManager.reloadServer();
 		PatPatServerCommandManager.register();
 		PatPatServerPacketManager.register();
 		PatPat.LOGGER.info("PatPat Initialized");

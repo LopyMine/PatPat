@@ -4,6 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.entity.PatEntity;
 
@@ -69,7 +70,7 @@ public class PatPatClientManager {
 		int frame = MathHelper.clamp((int) Math.floor(totalFrames * animationProgress), 0, totalFrames - 1);
 		patEntity.setCurrentFrame(frame);
 
-		float range = PatPatClient.getConfig().getVisualConfig().getPatWeight() / patEntity.getEntity().getHeight();
+		float range = PatPatClientConfig.getInstance().getVisualConfig().getPatWeight() / patEntity.getEntity().getHeight();
 		return ((float) ((1 - range) + range * (1 - Math.sin(animationProgress * Math.PI))));
 	}
 

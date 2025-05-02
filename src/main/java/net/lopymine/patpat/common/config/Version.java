@@ -3,6 +3,8 @@ package net.lopymine.patpat.common.config;
 import com.mojang.serialization.Codec;
 
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -13,6 +15,7 @@ public record Version(int major, int minor, int patch) {
 	public static final Version MIN_SUPPORT_VERSION = Version.of("1.0.0");
 
 	public static final Version SERVER_CONFIG_VERSION = Version.of(PatPat.SERVER_CONFIG_VERSION);
+	public static final Version CLIENT_CONFIG_VERSION = Version.of(PatPatClient.CLIENT_CONFIG_VERSION);
 
 	public static Version of(@NotNull String version) {
 		String[] numbers = version.split("\\.");

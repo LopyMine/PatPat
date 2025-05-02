@@ -2,10 +2,11 @@ package net.lopymine.patpat.common.migrate;
 
 public interface MigrateHandler {
 
-	String getVersion();
+	String getMigrateVersion();
 
 	boolean needMigrate();
 
 	boolean migrate();
+
 
 }

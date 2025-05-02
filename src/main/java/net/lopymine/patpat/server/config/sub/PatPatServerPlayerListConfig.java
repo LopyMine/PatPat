@@ -12,21 +12,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 public class PatPatServerPlayerListConfig {
-
-	@Getter
-	private static PatPatServerPlayerListConfig instance;
-
-	@Getter
-	private final Set<UUID> uuids = new HashSet<>();
 
 	private static final String FILENAME = "player-list.txt";
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(FILENAME).toFile();
+	private static PatPatServerPlayerListConfig INSTANCE;
 
-	public boolean contains(UUID uuid){
-		return uuids.contains(uuid);
+	private final Set<UUID> uuids = new HashSet<>();
+
+	public static PatPatServerPlayerListConfig getInstance() {
+		return INSTANCE;
 	}
-
 
 	private static @NotNull PatPatServerPlayerListConfig create() {
 		try {
@@ -41,7 +38,7 @@ public class PatPatServerPlayerListConfig {
 
 	public static void reload() {
 		if (!CONFIG_FILE.exists()) {
-			instance = PatPatServerPlayerListConfig.create();
+			INSTANCE = PatPatServerPlayerListConfig.create();
 		}
 
 		PatPatServerPlayerListConfig config = new PatPatServerPlayerListConfig();
@@ -51,26 +48,37 @@ public class PatPatServerPlayerListConfig {
 			line = reader.readLine();
 			while (line != null) {
 				lineNumber++;
-				config.uuids.add(UUID.fromString(line));
+				config.getUuids().add(UUID.fromString(line));
 				line = reader.readLine();
 			}
-			instance = config;
+			INSTANCE = config;
 			return;
 		} catch (IllegalArgumentException e) {
 			PatPat.LOGGER.error("Error line %d: '%s' is not uuid, file %s".formatted(lineNumber, line == null ? "null" : line, FILENAME));
 		} catch (IOException e) {
 			PatPat.LOGGER.error("Failed to read " + FILENAME, e);
 		}
-		instance = PatPatServerPlayerListConfig.create();
+
+		INSTANCE = PatPatServerPlayerListConfig.create();
+	}
+
+	public boolean contains(UUID uuid){
+		return this.uuids.contains(uuid);
+	}
+
+	public void saveAsync() {
+		CompletableFuture.runAsync(this::save);
 	}
 
 	public void save() {
-		CompletableFuture.runAsync(() -> {
-			try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
-				writer.write(uuids.stream().map(UUID::toString).collect(Collectors.joining("\n")));
-			} catch (Exception e) {
-				PatPat.LOGGER.error("Failed to save " + FILENAME, e);
-			}
-		});
+		save(CONFIG_FILE);
+	}
+
+	public void save(File folder) {
+		try (FileWriter writer = new FileWriter(folder, StandardCharsets.UTF_8)) {
+			writer.write(uuids.stream().map(UUID::toString).collect(Collectors.joining("\n")));
+		} catch (Exception e) {
+			PatPat.LOGGER.error("Failed to save " + FILENAME, e);
+		}
 	}
 }

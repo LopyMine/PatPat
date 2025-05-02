@@ -9,6 +9,7 @@ import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.suggestion.*;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.utils.CommandTextBuilder;
 

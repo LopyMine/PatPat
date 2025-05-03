@@ -9,6 +9,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.common.config.Version;
 import net.lopymine.patpat.common.packet.PacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.packet.c2s.*;
@@ -24,7 +25,7 @@ public class PatPatServerPacketManager {
 		throw new IllegalStateException("Manager class");
 	}
 
-	private static final HashMap<UUID, Boolean> PLAYER_PROTOCOLS = new HashMap<>();
+	private static final HashMap<UUID, Version> PLAYER_VERSIONS = new HashMap<>();
 
 	private static final List<Predicate<ServerPlayerEntity>> HANDLERS = new ArrayList<>();
 
@@ -36,14 +37,14 @@ public class PatPatServerPacketManager {
 		ServerPlayConnectionEvents.JOIN.register((handler, packetSender, server) -> {
 			ServerPlayerEntity player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
 
-			PLAYER_PROTOCOLS.put(player.getUuid(), false);
+			PLAYER_VERSIONS.put(player.getUuid(), Version.PACKET_V1_VERSION);
 			PatPat.LOGGER.warn("Player {} just joined!", player.getName().getString());
 		});
 
 		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
 			ServerPlayerEntity player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
 
-			PLAYER_PROTOCOLS.remove(player.getUuid());
+			PLAYER_VERSIONS.remove(player.getUuid());
 			PatPat.LOGGER.warn("Player {} disconnected!", player.getName().getString());
 		});
 
@@ -53,9 +54,17 @@ public class PatPatServerPacketManager {
 		PatPatServerNetworkManager.registerReceiver(PatEntityC2SPacketV2.TYPE, PatPatServerPacketManager::handlePacket);
 
 		PatPatServerNetworkManager.registerReceiver(HelloPatPatServerC2SPacket.TYPE, (sender, packet) -> {
-			PLAYER_PROTOCOLS.put(sender.getUuid(), true);
 			PatPatServerNetworkManager.sendPacketToPlayer(sender, new HelloPatPatPlayerS2CPacket());
 			PatPat.LOGGER.warn("Received hello packet from {}!", sender.getName().getString());
+			Version version = packet.getVersion();
+			if (version.isInvalid()) {
+				PatPat.LOGGER.warn("Received invalid client version in hello packet from {}!", sender.getName().getString());
+				PLAYER_VERSIONS.put(sender.getUuid(), Version.PACKET_V2_VERSION);
+				// We started sending this packet since v2 version,
+				// so receiving this packet means that the client has at least 1.2.0 mod version (V2 Packet version)
+				return;
+			}
+			PLAYER_VERSIONS.put(sender.getUuid(), version);
 		});
 	}
 
@@ -116,7 +125,7 @@ public class PatPatServerPacketManager {
 	//?}
 
 	public static PatPacket<ClientWorld, ?> getPatPacket(Entity pattedEntity, Entity whoPattedEntity) {
-		if (PLAYER_PROTOCOLS.get(whoPattedEntity.getUuid())) {
+		if (PLAYER_VERSIONS.get(whoPattedEntity.getUuid()).isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
 			PatPat.LOGGER.warn("Using v2 packets");
 			return new PatEntityS2CPacketV2(pattedEntity, whoPattedEntity);
 		} else {

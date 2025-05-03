@@ -10,12 +10,14 @@ import net.minecraft.server.world.ServerWorld;
 
 import net.fabricmc.fabric.api.client.networking.v1.*;
 
+import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
+import net.lopymine.patpat.common.config.Version;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.packet.PatPacket;
 import net.lopymine.patpat.packet.c2s.*;
@@ -31,7 +33,7 @@ public class PatPatClientPacketManager {
 
 	@Getter
 	@Setter
-	private static boolean useV2PatPackets = false;
+	private static Version currentPatPatServerPacketVersion = Version.PACKET_V1_VERSION;
 
 	public static void register() {
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
@@ -41,12 +43,27 @@ public class PatPatClientPacketManager {
 
 		PatPatClientNetworkManager.registerReceiver(HelloPatPatPlayerS2CPacket.TYPE, (packet) -> {
 			PatPatClient.LOGGER.debug("[PONG] Received HelloPatPatPlayerS2CPacket packet! PatPat Mod/Plugin installed on the server!");
-			PatPatClientProxLibManager.setEnabled(false);
-			PatPatClientPacketManager.setUseV2PatPackets(true);
+			Version version = packet.getVersion();
+			if (version.isInvalid()) {
+				PatPatClient.LOGGER.warn("Received invalid server version in hello packet!");
+				PatPatClientProxLibManager.setEnabled(false);
+				PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
+				// we started sending this packet from server since v2 version,
+				// so receiving this packet means that the server has at least 1.2.0 mod version (V2 Packet version)
+				return;
+			}
+			// Example for the future packet versions:
+			// if (version.isGreaterOrEqualThan(Version.PACKET_V3_VERSION)) {
+			// 	 // stuff
+			// } else
+			if (version.isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
+				PatPatClientProxLibManager.setEnabled(false);
+				PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
+			}
 		});
 
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-			PatPatClientPacketManager.setUseV2PatPackets(false);
+			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V1_VERSION);
 			PatPatClient.LOGGER.debug("Disconeccting, disabling v2 packets!!");
 		});
 
@@ -125,7 +142,7 @@ public class PatPatClientPacketManager {
 	}
 
 	public static PatPacket<ServerWorld, ?> getPatPacket(Entity pattedEntity) {
-		if (PatPatClientPacketManager.isUseV2PatPackets()) {
+		if (PatPatClientPacketManager.getCurrentPatPatServerPacketVersion().isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
 			PatPatClient.LOGGER.debug("Using v2 packets");
 			return new PatEntityC2SPacketV2(pattedEntity);
 		} else {

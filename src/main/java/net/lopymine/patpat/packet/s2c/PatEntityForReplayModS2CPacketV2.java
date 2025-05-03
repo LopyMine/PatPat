@@ -5,7 +5,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.*;
 
-import net.lopymine.patpat.common.packet.PacketType;
+import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
 
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +15,7 @@ public class PatEntityForReplayModS2CPacketV2 implements S2CPatPacket<PatEntityF
 
 	public static final String PACKET_ID = "pat_entity_for_replay_s2c_packet_v2";
 
-	public static final PacketType<PatEntityForReplayModS2CPacketV2> TYPE = new PacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityForReplayModS2CPacketV2::new);
+	public static final PatPatPacketType<PatEntityForReplayModS2CPacketV2> TYPE = new PatPatPacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityForReplayModS2CPacketV2::new);
 
 	private final int pattedEntityId;
 	private final int whoPattedId;
@@ -49,7 +49,7 @@ public class PatEntityForReplayModS2CPacketV2 implements S2CPatPacket<PatEntityF
 	}
 
 	@Override
-	public PacketType<PatEntityForReplayModS2CPacketV2> getType() {
+	public PatPatPacketType<PatEntityForReplayModS2CPacketV2> getType() {
 		return TYPE;
 	}
 }

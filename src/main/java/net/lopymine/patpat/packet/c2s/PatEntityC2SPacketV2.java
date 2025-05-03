@@ -6,21 +6,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.*;
 import net.minecraft.server.world.ServerWorld;
 
-import net.lopymine.patpat.common.packet.PacketType;
+import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.extension.EntityExtension;
 import net.lopymine.patpat.packet.*;
-import net.lopymine.patpat.packet.s2c.HelloPatPatPlayerS2CPacket;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
 import org.jetbrains.annotations.Nullable;
 
 @Getter
 @ExtensionMethod(EntityExtension.class)
-public class PatEntityC2SPacketV2 implements PatPacket<ServerWorld, PatEntityC2SPacketV2> {
+public class PatEntityC2SPacketV2 implements C2SPatPacket<PatEntityC2SPacketV2> {
 
 	public static final String PACKET_ID = "pat_entity_c2s_packet_v2";
 
-	public static final PacketType<PatEntityC2SPacketV2> TYPE = new PacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityC2SPacketV2::new);
+	public static final PatPatPacketType<PatEntityC2SPacketV2> TYPE = new PatPatPacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityC2SPacketV2::new);
 
 	private final int pattedEntityId;
 
@@ -44,7 +43,7 @@ public class PatEntityC2SPacketV2 implements PatPacket<ServerWorld, PatEntityC2S
 	}
 
 	@Override
-	public PacketType<PatEntityC2SPacketV2> getType() {
+	public PatPatPacketType<PatEntityC2SPacketV2> getType() {
 		return TYPE;
 	}
 }

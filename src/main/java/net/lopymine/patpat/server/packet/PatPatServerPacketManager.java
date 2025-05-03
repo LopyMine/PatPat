@@ -10,7 +10,7 @@ import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.common.config.Version;
-import net.lopymine.patpat.common.packet.PacketType;
+import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.packet.c2s.*;
 import net.lopymine.patpat.packet.s2c.*;
@@ -116,10 +116,10 @@ public class PatPatServerPacketManager {
 	}
 
 	//? >=1.20.5 {
-	private static <T extends BasePatPatPacket<T>> void  registerC2SPacket(PacketType<T> type) {
+	private static <T extends BasePatPatPacket<T>> void  registerC2SPacket(PatPatPacketType<T> type) {
 		PayloadTypeRegistry.playC2S().register(type.getPacketId(), type.getCodec());
 	}
-	private static <T extends BasePatPatPacket<T>> void  registerS2CPacket(PacketType<T> type) {
+	private static <T extends BasePatPatPacket<T>> void  registerS2CPacket(PatPatPacketType<T> type) {
 		PayloadTypeRegistry.playS2C().register(type.getPacketId(), type.getCodec());
 	}
 	//?}

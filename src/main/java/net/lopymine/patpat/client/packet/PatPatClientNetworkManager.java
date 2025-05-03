@@ -2,7 +2,7 @@ package net.lopymine.patpat.client.packet;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
-import net.lopymine.patpat.common.packet.PacketType;
+import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
 
 //? <=1.19.3 {
@@ -11,7 +11,7 @@ import net.lopymine.patpat.packet.*;
 
 public class PatPatClientNetworkManager {
 
-	public static <T extends BasePatPatPacket<T>> void registerReceiver(PacketType<T> id, PacketListener<T> listener) {
+	public static <T extends BasePatPatPacket<T>> void registerReceiver(PatPatPacketType<T> id, PacketListener<T> listener) {
 		ClientPlayNetworking.registerGlobalReceiver(/*? if >=1.19.4 {*/ id.getPacketId(), /*?} else {*/ /*id.getId(), *//*?}*/
 				/*? >=1.20.5 {*/(packet, context) -> {/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, player, responseSender) -> {*//*?} else {*//*(client, handler, buf, responseSender) -> { T packet = id.getFactory().apply(buf); *//*?}*/
 					listener.call(packet);

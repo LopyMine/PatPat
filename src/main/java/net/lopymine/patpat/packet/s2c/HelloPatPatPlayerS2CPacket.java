@@ -4,7 +4,7 @@ import lombok.Getter;
 import net.minecraft.network.*;
 
 import net.lopymine.patpat.common.config.Version;
-import net.lopymine.patpat.common.packet.PacketType;
+import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
@@ -13,7 +13,7 @@ public class HelloPatPatPlayerS2CPacket implements BasePatPatPacket<HelloPatPatP
 
 	public static final String PACKET_ID = "hello_patpat_player_s2c_packet";
 
-	public static final PacketType<HelloPatPatPlayerS2CPacket> TYPE = new PacketType<>(IdentifierUtils.id(PACKET_ID), HelloPatPatPlayerS2CPacket::new);
+	public static final PatPatPacketType<HelloPatPatPlayerS2CPacket> TYPE = new PatPatPacketType<>(IdentifierUtils.id(PACKET_ID), HelloPatPatPlayerS2CPacket::new);
 
 	private final Version version;
 
@@ -31,7 +31,7 @@ public class HelloPatPatPlayerS2CPacket implements BasePatPatPacket<HelloPatPatP
 	}
 
 	@Override
-	public PacketType<HelloPatPatPlayerS2CPacket> getType() {
+	public PatPatPacketType<HelloPatPatPlayerS2CPacket> getType() {
 		return TYPE;
 	}
 }

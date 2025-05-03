@@ -1,9 +1,7 @@
-package net.lopymine.patpat.packet.s2c;
+package net.lopymine.patpat.packet;
 
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-
-import net.lopymine.patpat.packet.*;
 
 import org.jetbrains.annotations.Nullable;
 

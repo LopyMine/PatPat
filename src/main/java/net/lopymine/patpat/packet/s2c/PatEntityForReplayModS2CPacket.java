@@ -5,7 +5,6 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.*;
 
-import net.lopymine.patpat.common.packet.PacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
 
@@ -17,7 +16,7 @@ public class PatEntityForReplayModS2CPacket implements S2CPatPacket<PatEntityFor
 
 	public static final String PACKET_ID = "pat_entity_for_replay_s2c_packet";
 
-	public static final PacketType<PatEntityForReplayModS2CPacket> TYPE = new PacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityForReplayModS2CPacket::new);
+	public static final PatPatPacketType<PatEntityForReplayModS2CPacket> TYPE = new PatPatPacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityForReplayModS2CPacket::new);
 
 	private final UUID pattedEntityUuid;
 	private final UUID whoPattedUuid;
@@ -51,7 +50,7 @@ public class PatEntityForReplayModS2CPacket implements S2CPatPacket<PatEntityFor
 	}
 
 	@Override
-	public PacketType<PatEntityForReplayModS2CPacket> getType() {
+	public PatPatPacketType<PatEntityForReplayModS2CPacket> getType() {
 		return TYPE;
 	}
 }

@@ -3,9 +3,8 @@ package net.lopymine.patpat.packet.c2s;
 import lombok.Getter;
 import net.minecraft.network.*;
 
-import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.Version;
-import net.lopymine.patpat.common.packet.PacketType;
+import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
@@ -14,7 +13,7 @@ public class HelloPatPatServerC2SPacket implements BasePatPatPacket<HelloPatPatS
 
 	public static final String PACKET_ID = "hello_patpat_server_c2s_packet";
 
-	public static final PacketType<HelloPatPatServerC2SPacket> TYPE = new PacketType<>(IdentifierUtils.id(PACKET_ID), HelloPatPatServerC2SPacket::new);
+	public static final PatPatPacketType<HelloPatPatServerC2SPacket> TYPE = new PatPatPacketType<>(IdentifierUtils.id(PACKET_ID), HelloPatPatServerC2SPacket::new);
 
 	private final Version version;
 
@@ -32,7 +31,7 @@ public class HelloPatPatServerC2SPacket implements BasePatPatPacket<HelloPatPatS
 	}
 
 	@Override
-	public PacketType<HelloPatPatServerC2SPacket> getType() {
+	public PatPatPacketType<HelloPatPatServerC2SPacket> getType() {
 		return TYPE;
 	}
 }

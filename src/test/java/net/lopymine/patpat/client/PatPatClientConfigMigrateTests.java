@@ -91,17 +91,6 @@ public class PatPatClientConfigMigrateTests {
 			// Sounds Config
 			Assertions.assertEquals(1.2346F, soundsConfig.getSoundsVolume());
 			Assertions.assertTrue(soundsConfig.isSoundsEnabled());
-
-			Path migratedFilesPath = this.getConfigFolder().resolve("test_1/");
-			Assertions.assertTrue(migratedFilesPath.toFile().mkdirs());
-
-			File migratedFile = migratedFilesPath.resolve("migrated_test_1.json5").toFile();
-			config.save(migratedFile);
-
-			try {
-				Desktop.getDesktop().open(this.getConfigFolder().toFile());
-			} catch (Exception ignored) {
-			}
 		}
 	}
 }

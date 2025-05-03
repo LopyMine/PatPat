@@ -6,11 +6,12 @@ import lombok.*;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.config.*;
-import net.lopymine.patpat.utils.CodecUtils;
+import net.lopymine.patpat.utils.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -33,8 +34,7 @@ public class PatPatClientConfig {
 			option("server", PatPatClientServerConfig.getNewInstance(), PatPatClientServerConfig.CODEC, PatPatClientConfig::getServerConfig)
 	).apply(instance, PatPatClientConfig::new));
 
-	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("patpat-client.json5").toFile();
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(PatPat.MOD_ID + "-client.json5").toFile();
 	private static PatPatClientConfig INSTANCE;
 
 	private Version version;
@@ -49,43 +49,19 @@ public class PatPatClientConfig {
 	}
 
 	public static PatPatClientConfig getInstance() {
-		if (INSTANCE == null) {
-			return reload();
-		}
-		return INSTANCE;
+		return INSTANCE == null ? reload() : INSTANCE;
 	}
 
 	public static PatPatClientConfig reload() {
-		INSTANCE = PatPatClientConfig.read();
-		return INSTANCE;
+		return INSTANCE = PatPatClientConfig.read();
 	}
 
 	public static PatPatClientConfig getNewInstance() {
 		return CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
-	private static @NotNull PatPatClientConfig create() {
-		PatPatClientConfig config = PatPatClientConfig.getNewInstance();
-		try (FileWriter writer = new FileWriter(CONFIG_FILE, StandardCharsets.UTF_8)) {
-			String json = GSON.toJson(CODEC.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPatClient.LOGGER::error));*/
-			writer.write(json);
-		} catch (Exception e) {
-			PatPatClient.LOGGER.error("Failed to create config", e);
-		}
-		return config;
-	}
-
 	private static PatPatClientConfig read() {
-		if (!CONFIG_FILE.exists()) {
-			return PatPatClientConfig.create();
-		}
-
-		try (FileReader reader = new FileReader(CONFIG_FILE, StandardCharsets.UTF_8)) {
-			return CODEC.decode(JsonOps.INSTANCE, /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, PatPatClient.LOGGER::error)*//*?}*/.getFirst();
-		} catch (Exception e) {
-			PatPatClient.LOGGER.error("Failed to read config", e);
-		}
-		return PatPatClientConfig.create();
+		return ConfigUtils.readConfig(CODEC, CONFIG_FILE, PatPatClient.LOGGER);
 	}
 
 	public void saveAsync() {
@@ -93,17 +69,6 @@ public class PatPatClientConfig {
 	}
 
 	public void save() {
-		this.save(CONFIG_FILE);
-	}
-
-	public void save(File folder) {
-		PatPatClient.LOGGER.debug("Saving PatPat Client Config...");
-		try (FileWriter writer = new FileWriter(folder, StandardCharsets.UTF_8)) {
-			String json = GSON.toJson(CODEC.encode(this, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPatClient.LOGGER::error));*/
-			writer.write(json);
-		} catch (Exception e) {
-			PatPatClient.LOGGER.error("Failed to save config", e);
-		}
-		PatPatClient.LOGGER.debug("Saved PatPat Client Config");
+		ConfigUtils.saveConfig(this, CODEC, CONFIG_FILE, PatPatClient.LOGGER);
 	}
 }

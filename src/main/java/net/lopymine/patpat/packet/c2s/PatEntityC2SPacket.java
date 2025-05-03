@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.*;
 import net.minecraft.server.world.ServerWorld;
 
-import net.lopymine.patpat.common.packet.PacketType;
+import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
@@ -13,11 +13,11 @@ import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
-public class PatEntityC2SPacket implements PatPacket<ServerWorld, PatEntityC2SPacket> {
+public class PatEntityC2SPacket implements C2SPatPacket<PatEntityC2SPacket> {
 
 	public static final String PACKET_ID = "pat_entity_c2s_packet";
 
-	public static final PacketType<PatEntityC2SPacket> TYPE = new PacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityC2SPacket::new);
+	public static final PatPatPacketType<PatEntityC2SPacket> TYPE = new PatPatPacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityC2SPacket::new);
 
 	private final UUID pattedEntityUuid;
 
@@ -41,7 +41,7 @@ public class PatEntityC2SPacket implements PatPacket<ServerWorld, PatEntityC2SPa
 	}
 
 	@Override
-	public PacketType<PatEntityC2SPacket> getType() {
+	public PatPatPacketType<PatEntityC2SPacket> getType() {
 		return TYPE;
 	}
 }

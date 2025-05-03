@@ -10,16 +10,14 @@ import net.minecraft.server.world.ServerWorld;
 
 import net.fabricmc.fabric.api.client.networking.v1.*;
 
-import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
 import net.lopymine.patpat.common.config.Version;
 import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.packet.PatPacket;
+import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.packet.c2s.*;
 import net.lopymine.patpat.packet.s2c.*;
 

@@ -46,20 +46,6 @@ class PatPatServerConfigMigrateTests {
 			Assertions.assertEquals(ListMode.BLACKLIST, config.getListMode());
 			Assertions.assertTrue(listConfig.contains(UUID.fromString("65adfaa1-0196-053e-07ea-1260729a2e34")));
 			Assertions.assertTrue(listConfig.contains(UUID.fromString("a4369612-0487-0038-0339-1f1073297c22")));
-
-			Path migratedFilesPath = this.getConfigFolder().resolve("test_1/");
-			Assertions.assertTrue(migratedFilesPath.toFile().mkdirs());
-
-			File migratedConfigFile = migratedFilesPath.resolve("migrated_test_1.json5").toFile();
-			config.save(migratedConfigFile);
-
-			File migratedConfigListFile = migratedFilesPath.resolve("migrated_list_test_1.txt").toFile();
-			listConfig.save(migratedConfigListFile);
-
-			try {
-				Desktop.getDesktop().open(this.getConfigFolder().toFile());
-			} catch (Exception ignored) {
-			}
 		}
 
 		@Test
@@ -84,20 +70,6 @@ class PatPatServerConfigMigrateTests {
 
 			Assertions.assertEquals(ListMode.WHITELIST, config.getListMode());
 			Assertions.assertTrue(listConfig.getUuids().isEmpty());
-
-			Path migratedFilesPath = this.getConfigFolder().resolve("test_2/");
-			Assertions.assertTrue(migratedFilesPath.toFile().mkdirs());
-
-			File migratedConfigFile = migratedFilesPath.resolve("migrated_test_2.json5").toFile();
-			config.save(migratedConfigFile);
-
-			File migratedConfigListFile = migratedFilesPath.resolve("migrated_list_test_2.txt").toFile();
-			listConfig.save(migratedConfigListFile);
-
-			try {
-				Desktop.getDesktop().open(this.getConfigFolder().toFile());
-			} catch (Exception ignored) {
-			}
 		}
 	}
 }

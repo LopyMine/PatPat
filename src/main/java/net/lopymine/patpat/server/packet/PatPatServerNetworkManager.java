@@ -4,7 +4,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
-import net.lopymine.patpat.common.packet.PacketType;
+import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
 
 //? <=1.19.3 {
@@ -13,7 +13,7 @@ import net.lopymine.patpat.packet.*;
 
 public class PatPatServerNetworkManager {
 
-	public static <T extends BasePatPatPacket<T>> void registerReceiver(PacketType<T> id, PacketListener<T> listener) {
+	public static <T extends BasePatPatPacket<T>> void registerReceiver(PatPatPacketType<T> id, PacketListener<T> listener) {
 		ServerPlayNetworking.registerGlobalReceiver(/*? if >=1.19.4 {*/ id.getPacketId(), /*?} else {*/ /*id.getId(), *//*?}*/
 				/*? >=1.20.5 {*/(packet, context) -> { ServerPlayerEntity sender = context.player(); /*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { T packet = id.getFactory().apply(buf); *//*?}*/
 					listener.call(sender, packet);

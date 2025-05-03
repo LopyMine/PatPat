@@ -5,7 +5,6 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.*;
 
-import net.lopymine.patpat.common.packet.PacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
 
@@ -17,7 +16,7 @@ public class PatEntityS2CPacket implements S2CPatPacket<PatEntityS2CPacket> {
 
 	public static final String PACKET_ID = "pat_entity_s2c_packet";
 
-	public static final PacketType<PatEntityS2CPacket> TYPE = new PacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityS2CPacket::new);
+	public static final PatPatPacketType<PatEntityS2CPacket> TYPE = new PatPatPacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityS2CPacket::new);
 
 	private final UUID pattedEntityUuid;
 	private final UUID whoPattedUuid;
@@ -51,7 +50,7 @@ public class PatEntityS2CPacket implements S2CPatPacket<PatEntityS2CPacket> {
 	}
 
 	@Override
-	public PacketType<PatEntityS2CPacket> getType() {
+	public PatPatPacketType<PatEntityS2CPacket> getType() {
 		return TYPE;
 	}
 }

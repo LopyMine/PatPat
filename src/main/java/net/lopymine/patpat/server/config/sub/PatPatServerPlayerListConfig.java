@@ -28,38 +28,43 @@ public class PatPatServerPlayerListConfig {
 	private static @NotNull PatPatServerPlayerListConfig create() {
 		try {
 			if (CONFIG_FILE.createNewFile()) {
-				PatPat.LOGGER.error(FILENAME + " already exists");
+				PatPat.LOGGER.error("Invoked create player-list.txt config, but config already exists!");
 			}
-		} catch (IOException e) {
-			PatPat.LOGGER.error("Failed to create " + FILENAME, e);
+		} catch (Exception e) {
+			PatPat.LOGGER.error("Failed to create player-list.txt config!", e);
 		}
 		return new PatPatServerPlayerListConfig();
 	}
 
-	public static void reload() {
+	public static PatPatServerPlayerListConfig reload() {
+		return INSTANCE = read();
+	}
+
+	public static PatPatServerPlayerListConfig read() {
 		if (!CONFIG_FILE.exists()) {
-			INSTANCE = PatPatServerPlayerListConfig.create();
+			return PatPatServerPlayerListConfig.create();
 		}
 
 		PatPatServerPlayerListConfig config = new PatPatServerPlayerListConfig();
-		int lineNumber = 0;
-		String line = null;
+
 		try (BufferedReader reader = new BufferedReader(new FileReader(CONFIG_FILE))) {
-			line = reader.readLine();
-			while (line != null) {
-				lineNumber++;
-				config.getUuids().add(UUID.fromString(line));
-				line = reader.readLine();
+			String line;
+			int lineIndex = 0;
+
+			while ((line = reader.readLine()) != null) {
+				lineIndex++;
+				try {
+					config.getUuids().add(UUID.fromString(line.trim()));
+				} catch (Exception e) {
+					PatPat.LOGGER.error("Failed to parse line {}: '{}' is not UUID while parsing {}", lineIndex, line, FILENAME);
+				}
 			}
-			INSTANCE = config;
-			return;
-		} catch (IllegalArgumentException e) {
-			PatPat.LOGGER.error("Error line %d: '%s' is not uuid, file %s".formatted(lineNumber, line == null ? "null" : line, FILENAME));
 		} catch (IOException e) {
 			PatPat.LOGGER.error("Failed to read " + FILENAME, e);
+			return PatPatServerPlayerListConfig.create();
 		}
 
-		INSTANCE = PatPatServerPlayerListConfig.create();
+		return config;
 	}
 
 	public boolean contains(UUID uuid){
@@ -71,12 +76,12 @@ public class PatPatServerPlayerListConfig {
 	}
 
 	public void save() {
-		save(CONFIG_FILE);
+		this.save(CONFIG_FILE);
 	}
 
 	public void save(File folder) {
 		try (FileWriter writer = new FileWriter(folder, StandardCharsets.UTF_8)) {
-			writer.write(uuids.stream().map(UUID::toString).collect(Collectors.joining("\n")));
+			writer.write(this.uuids.stream().map(UUID::toString).collect(Collectors.joining("\n")));
 		} catch (Exception e) {
 			PatPat.LOGGER.error("Failed to save " + FILENAME, e);
 		}

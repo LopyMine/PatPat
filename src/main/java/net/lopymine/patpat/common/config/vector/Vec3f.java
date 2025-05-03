@@ -17,9 +17,8 @@ public class Vec3f {
 	private float z;
 
 	public static final Codec<Vec3f> CODEC = Codec.FLOAT.listOf()
-			.comapFlatMap(
-					(coordinates) -> Util.decodeFixedLengthList(coordinates, 3)
-							.map((list) -> new Vec3f(list.get(0), list.get(1), list.get(2))),
+			.xmap(
+					(coordinates) -> new Vec3f(coordinates.get(0), coordinates.get(1), coordinates.get(2)),
 					(vec) -> List.of(vec.getX(), vec.getY(), vec.getZ())
 			);
 

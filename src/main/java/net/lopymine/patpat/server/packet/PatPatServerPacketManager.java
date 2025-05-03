@@ -9,6 +9,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.common.packet.PacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.packet.c2s.*;
 import net.lopymine.patpat.packet.s2c.*;
@@ -33,13 +34,17 @@ public class PatPatServerPacketManager {
 		HANDLERS.add(PatPatServerRateLimitManager::canPat);
 
 		ServerPlayConnectionEvents.JOIN.register((handler, packetSender, server) -> {
-			PLAYER_PROTOCOLS.put(handler.getPlayer().getUuid(), false);
-			PatPat.LOGGER.warn("Player {} just joined!", handler.getPlayer().getName().getString());
+			ServerPlayerEntity player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
+
+			PLAYER_PROTOCOLS.put(player.getUuid(), false);
+			PatPat.LOGGER.warn("Player {} just joined!", player.getName().getString());
 		});
 
 		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-			PLAYER_PROTOCOLS.remove(handler.getPlayer().getUuid());
-			PatPat.LOGGER.warn("Player {} disconnected!", handler.getPlayer().getName().getString());
+			ServerPlayerEntity player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
+
+			PLAYER_PROTOCOLS.remove(player.getUuid());
+			PatPat.LOGGER.warn("Player {} disconnected!", player.getName().getString());
 		});
 
 		registerPackets();
@@ -54,7 +59,7 @@ public class PatPatServerPacketManager {
 		});
 	}
 
-	public static void handlePacket(ServerPlayerEntity sender, PatPacket<ServerWorld> packet) {
+	public static void handlePacket(ServerPlayerEntity sender, PatPacket<ServerWorld, ?> packet) {
 		PatPat.LOGGER.warn("Received pat packet from {}!", sender.getName().getString());
 		for (Predicate<ServerPlayerEntity> handler : HANDLERS) {
 			if (!handler.test(sender)) {
@@ -86,22 +91,31 @@ public class PatPatServerPacketManager {
 	private static void registerPackets() {
 		// Register all packets
 		//? >=1.20.5 {
-		PayloadTypeRegistry.playC2S().register(HelloPatPatServerC2SPacket.TYPE, HelloPatPatServerC2SPacket.CODEC);
-		PayloadTypeRegistry.playS2C().register(HelloPatPatPlayerS2CPacket.TYPE, HelloPatPatPlayerS2CPacket.CODEC);
+		registerC2SPacket(HelloPatPatServerC2SPacket.TYPE);
+		registerS2CPacket(HelloPatPatPlayerS2CPacket.TYPE);
 
 		// v2
-		PayloadTypeRegistry.playC2S().register(PatEntityC2SPacketV2.TYPE, PatEntityC2SPacketV2.CODEC);
-		PayloadTypeRegistry.playS2C().register(PatEntityS2CPacketV2.TYPE, PatEntityS2CPacketV2.CODEC);
-		PayloadTypeRegistry.playS2C().register(PatEntityForReplayModS2CPacketV2.TYPE, PatEntityForReplayModS2CPacketV2.CODEC);
+		registerC2SPacket(PatEntityC2SPacketV2.TYPE);
+		registerS2CPacket(PatEntityS2CPacketV2.TYPE);
+		registerS2CPacket(PatEntityForReplayModS2CPacketV2.TYPE);
 
 		// v1
-		PayloadTypeRegistry.playC2S().register(PatEntityC2SPacket.TYPE, PatEntityC2SPacket.CODEC);
-		PayloadTypeRegistry.playS2C().register(PatEntityS2CPacket.TYPE, PatEntityS2CPacket.CODEC);
-		PayloadTypeRegistry.playS2C().register(PatEntityForReplayModS2CPacket.TYPE, PatEntityForReplayModS2CPacket.CODEC);
+		registerC2SPacket(PatEntityC2SPacket.TYPE);
+		registerS2CPacket(PatEntityS2CPacket.TYPE);
+		registerS2CPacket(PatEntityForReplayModS2CPacket.TYPE);
 		//?}
 	}
 
-	public static PatPacket<ClientWorld> getPatPacket(Entity pattedEntity, Entity whoPattedEntity) {
+	//? >=1.20.5 {
+	private static <T extends BasePatPatPacket<T>> void  registerC2SPacket(PacketType<T> type) {
+		PayloadTypeRegistry.playC2S().register(type.getPacketId(), type.getCodec());
+	}
+	private static <T extends BasePatPatPacket<T>> void  registerS2CPacket(PacketType<T> type) {
+		PayloadTypeRegistry.playS2C().register(type.getPacketId(), type.getCodec());
+	}
+	//?}
+
+	public static PatPacket<ClientWorld, ?> getPatPacket(Entity pattedEntity, Entity whoPattedEntity) {
 		if (PLAYER_PROTOCOLS.get(whoPattedEntity.getUuid())) {
 			PatPat.LOGGER.warn("Using v2 packets");
 			return new PatEntityS2CPacketV2(pattedEntity, whoPattedEntity);

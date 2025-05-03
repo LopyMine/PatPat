@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.*;
 import net.minecraft.server.world.ServerWorld;
 
+import net.lopymine.patpat.common.packet.PacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
@@ -12,18 +13,11 @@ import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
-public class PatEntityC2SPacket implements PatPacket<ServerWorld> {
+public class PatEntityC2SPacket implements PatPacket<ServerWorld, PatEntityC2SPacket> {
 
 	public static final String PACKET_ID = "pat_entity_c2s_packet";
 
-	//? >=1.20.5 {
-	public static final Id<PatEntityC2SPacket> TYPE = new Id<>(IdentifierUtils.id(PACKET_ID));
-	public static final net.minecraft.network.codec.PacketCodec<RegistryByteBuf, PatEntityC2SPacket> CODEC = net.minecraft.network.packet.CustomPayload.codecOf(PatEntityC2SPacket::write, PatEntityC2SPacket::new);
-	//?} elif >=1.19.4 {
-	/*public static final PacketType<PatEntityC2SPacket> TYPE = PacketType.create(IdentifierUtils.id(PACKET_ID), PatEntityC2SPacket::new);
-	 *///?} else {
-	/*public static final net.minecraft.util.Identifier TYPE = IdentifierUtils.id(PACKET_ID);
-	 *///?}
+	public static final PacketType<PatEntityC2SPacket> TYPE = new PacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityC2SPacket::new);
 
 	private final UUID pattedEntityUuid;
 
@@ -31,12 +25,12 @@ public class PatEntityC2SPacket implements PatPacket<ServerWorld> {
 		this.pattedEntityUuid = pattedEntity.getUuid();
 	}
 
-	public PatEntityC2SPacket(/*? if >=1.20.5 {*/RegistryByteBuf/*?} else {*//*PacketByteBuf*//*?}*/ buf) {
+	public PatEntityC2SPacket(PacketByteBuf buf) {
 		this.pattedEntityUuid = buf.readUuid();
 	}
 
 	@Override
-	public void write(/*? if >=1.20.5 {*/RegistryByteBuf/*?} else {*//*PacketByteBuf*//*?}*/ buf) {
+	public void write(PacketByteBuf buf) {
 		buf.writeUuid(this.pattedEntityUuid);
 	}
 
@@ -46,15 +40,8 @@ public class PatEntityC2SPacket implements PatPacket<ServerWorld> {
 		return world.getEntity(this.getPattedEntityUuid());
 	}
 
-	//? >=1.20.5 {
 	@Override
-	public Id<? extends net.minecraft.network.packet.CustomPayload> getId() {
+	public PacketType<PatEntityC2SPacket> getType() {
 		return TYPE;
 	}
-	//?} elif >=1.19.4 {
-	/*@Override
-	public PacketType<?> getType() {
-		return TYPE;
-	}
-	*///?}
 }

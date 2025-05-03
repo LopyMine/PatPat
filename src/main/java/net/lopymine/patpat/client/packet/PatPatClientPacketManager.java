@@ -36,7 +36,7 @@ public class PatPatClientPacketManager {
 	public static void register() {
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
 			PatPatClient.LOGGER.debug("[PING] Sending HelloPatPatServerC2S packet to the server...");
-			ClientPlayNetworking.send(new HelloPatPatServerC2SPacket());
+			PatPatClientNetworkManager.sendPacketToServer(new HelloPatPatServerC2SPacket());
 		});
 
 		PatPatClientNetworkManager.registerReceiver(HelloPatPatPlayerS2CPacket.TYPE, (packet) -> {
@@ -71,7 +71,7 @@ public class PatPatClientPacketManager {
 		});
 	}
 
-	public static void handlePatting(S2CPatPacket packet, boolean replayModPacket) {
+	public static void handlePatting(S2CPatPacket<?> packet, boolean replayModPacket) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		System.out.println("0");
 		if (!config.getMainConfig().isModEnabled()) {
@@ -124,7 +124,7 @@ public class PatPatClientPacketManager {
 				/*? >=1.17 {*/ || socialManager.isPlayerMuted(playerUuid)/*?}*/;
 	}
 
-	public static PatPacket<ServerWorld> getPatPacket(Entity pattedEntity) {
+	public static PatPacket<ServerWorld, ?> getPatPacket(Entity pattedEntity) {
 		if (PatPatClientPacketManager.isUseV2PatPackets()) {
 			PatPatClient.LOGGER.debug("Using v2 packets");
 			return new PatEntityC2SPacketV2(pattedEntity);

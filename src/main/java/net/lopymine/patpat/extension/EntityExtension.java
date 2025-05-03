@@ -25,4 +25,8 @@ public class EntityExtension {
 		}
 		return id.toString();
 	}
+
+	public static int getEntityIntId(Entity entity) {
+		return entity./*? if >=1.21 {*/ getId /*?} else {*/ /*getEntityId *//*?}*/();
+	}
 }

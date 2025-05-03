@@ -56,7 +56,7 @@ public class PatPatClientRenderer {
 		}
 
 		EntityRenderDispatcher dispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-		float tickDelta = context.tickCounter().getTickDelta(false);
+		float tickDelta = context./*? if >=1.21 {*/ tickCounter().getTickDelta(false); /*?} else {*/ /*tickDelta(); *//*?}*/
 		int light = dispatcher.getLight(player, tickDelta);
 
 		PatEntity patEntity = PatPatClientManager.getPatEntity(player);

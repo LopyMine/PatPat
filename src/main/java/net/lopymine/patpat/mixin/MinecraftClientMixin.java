@@ -82,7 +82,7 @@ public abstract class MinecraftClientMixin {
 			return;
 		}
 
-		PatPacket<ServerWorld> packet = PatPatClientPacketManager.getPatPacket(livingEntity);
+		PatPacket<ServerWorld, ?> packet = PatPatClientPacketManager.getPatPacket(livingEntity);
 		PatPatClientNetworkManager.sendPacketToServer(packet);
 
 		UUID currentUuid = this.getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/;

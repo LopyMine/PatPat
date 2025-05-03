@@ -4,6 +4,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
+import net.lopymine.patpat.common.packet.PacketType;
 import net.lopymine.patpat.packet.*;
 
 //? <=1.19.3 {
@@ -12,21 +13,14 @@ import net.lopymine.patpat.packet.*;
 
 public class PatPatServerNetworkManager {
 
-	public static <T extends BasePatPatPacket> void registerReceiver(
-			/*? >=1.19.4 {*/
-			net.minecraft.network.packet.CustomPayload.Id<T>
-					/*?} else {*/
-					/*net.minecraft.util.Identifier*/
-					/*?}*/ id,
-			PacketListener<T> listener
-	) {
-		ServerPlayNetworking.registerGlobalReceiver(id,
-				/*? >=1.20.5 {*/(packet, context) -> { ServerPlayerEntity sender = context.player(); /*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { PatEntityC2SPacket packet = new PatEntityC2SPacket(buf);*//*?}*/
+	public static <T extends BasePatPatPacket<T>> void registerReceiver(PacketType<T> id, PacketListener<T> listener) {
+		ServerPlayNetworking.registerGlobalReceiver(/*? if >=1.19.4 {*/ id.getPacketId(), /*?} else {*/ /*id.getId(), *//*?}*/
+				/*? >=1.20.5 {*/(packet, context) -> { ServerPlayerEntity sender = context.player(); /*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { T packet = id.getFactory().apply(buf); *//*?}*/
 					listener.call(sender, packet);
 				});
 	}
 
-	public static void sendPacketToPlayer(ServerPlayerEntity player, BasePatPatPacket packet) {
+	public static void sendPacketToPlayer(ServerPlayerEntity player, BasePatPatPacket<?> packet) {
 		//? >=1.19.4 {
 		ServerPlayNetworking.send(player, packet);
 		//?} else {
@@ -35,7 +29,7 @@ public class PatPatServerNetworkManager {
 			if (!(o instanceof net.minecraft.util.Identifier id)) {
 				throw new RuntimeException("Packet ID not Identifier");
 			}
-			PacketByteBuf buf = PacketByteBufs.create();
+			PacketByteBuf buf = net.fabricmc.fabric.api.networking.v1.PacketByteBufs.create();
 			packet.write(buf);
 			ServerPlayNetworking.send(player, id, buf);
 		} catch (Exception e) {

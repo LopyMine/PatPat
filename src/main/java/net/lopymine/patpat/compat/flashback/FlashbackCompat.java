@@ -20,7 +20,7 @@ import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.s2c.*;
 
-//? >=1.26.2 {
+//? flashback {
 import com.moulberry.flashback.Flashback;
 import com.moulberry.flashback.record.Recorder;
 //?}
@@ -29,7 +29,7 @@ import com.moulberry.flashback.record.Recorder;
 public class FlashbackCompat {
 
 	public static void onPat(int pattedEntityId, int whoPattedId) {
-		//? >=1.26.2 {
+		//? flashback {
 		PatPatClient.LOGGER.debug("Sending dummy packet for Flashback mod. [Patted: {} and Who: {}]", pattedEntityId, whoPattedId);
 		if (!LoadedMods.FLASHBACK_MOD_LOADED) {
 			PatPatClient.LOGGER.debug("Flashback not loaded");

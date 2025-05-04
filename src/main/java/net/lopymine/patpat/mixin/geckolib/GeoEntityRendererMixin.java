@@ -1,6 +1,6 @@
 package net.lopymine.patpat.mixin.geckolib;
 
-//? >=1.27.2 {
+//? geckolib {
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.*;

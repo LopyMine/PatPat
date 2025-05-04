@@ -34,8 +34,8 @@ public class ConfigUtils {
 
 			Path backupPath = fileFolder.resolve(backupFileName);
 			Files.copy(file.toPath(), backupPath);
-		} catch (Exception ex) {
-			PatPat.LOGGER.error("Failed to backup config", ex);
+		} catch (Exception e) {
+			PatPat.LOGGER.error("Failed to backup config", e);
 		}
 	}
 

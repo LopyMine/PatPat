@@ -18,16 +18,16 @@ repositories {
 	mavenCentral()
 	gradlePluginPortal()
 	maven {
-		name = "Fabric"
-		url = "https://maven.fabricmc.net/"
+		name "Fabric"
+		url "https://maven.fabricmc.net/"
 	}
 	maven {
-		name = "Kiku Snapshots"
-		url = "https://maven.kikugie.dev/snapshots"
+		name "Kiku Snapshots"
+		url "https://maven.kikugie.dev/snapshots"
 	}
 	maven {
-		name = "Kiku Releases"
-		url = "https://maven.kikugie.dev/releases"
+		name "Kiku Releases"
+		url "https://maven.kikugie.dev/releases"
 	}
 }
 
@@ -44,7 +44,6 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
 gradlePlugin {
 	plugins {
 		create(mainModuleId) {

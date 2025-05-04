@@ -6,22 +6,22 @@ pluginManagement {
 		mavenCentral()
 		gradlePluginPortal()
 		maven {
-			name = "Fabric"
-			url = "https://maven.fabricmc.net/"
+			name "Fabric"
+			url "https://maven.fabricmc.net/"
 		}
 		maven {
-			name = "Kiku Snapshots"
-			url = "https://maven.kikugie.dev/snapshots"
+			name "Kiku Snapshots"
+			url "https://maven.kikugie.dev/snapshots"
 		}
 		maven {
-			name = "Kiku Releases"
-			url = "https://maven.kikugie.dev/releases"
+			name "Kiku Releases"
+			url "https://maven.kikugie.dev/releases"
 		}
 	}
 }
 
 plugins {
-	id "dev.kikugie.stonecutter" version "0.4.6"
+	id "dev.kikugie.stonecutter" version "0.7-alpha.10"
 }
 
 def multiVersions = getMultiVersions()

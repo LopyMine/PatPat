@@ -1,6 +1,7 @@
 package net.lopymine.mossy;
 
-import dev.kikugie.stonecutter.*;
+import dev.kikugie.stonecutter.controller.StonecutterControllerExtension;
+import dev.kikugie.stonecutter.data.StonecutterProject;
 import lombok.experimental.ExtensionMethod;
 import org.gradle.*;
 import org.gradle.api.*;
@@ -8,8 +9,7 @@ import org.gradle.api.initialization.Settings;
 import org.gradle.api.invocation.Gradle;
 import org.gradle.api.tasks.TaskContainer;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 @ExtensionMethod(MossyPlugin.class)
@@ -17,43 +17,58 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 
 	@Override
 	public void apply(@NotNull Project project) {
-		StonecutterController controller = project.getExtensions().getByType(StonecutterController.class);
-		BiConsumer<String, Consumer<ChiseledTask>> registerConsumer = MossyPluginStonecutter.getRegisterConsumer(project, controller);
-
-		registerConsumer.accept("chiseledBuildAndCollectAll", (chiseledTask) -> {
-			chiseledTask.setGroup("mossy-build");
-			chiseledTask.ofTask("buildAndCollect");
-		});
-
-		registerConsumer.accept("chiseledPublishAll", (chiseledTask) -> {
-			chiseledTask.setGroup("mossy-publish");
-			chiseledTask.ofTask("publishMods");
-		});
-
-		registerConsumer.accept("chiseledPublishSpecified", (chiseledTask) -> {
-			chiseledTask.setGroup("mossy-publish");
-			List<String> publicationVersions = project.getPublicationVersions();
-			List<StonecutterProject> list = chiseledTask.getVersions()
-					.get()
-					.stream()
-					.filter(stonecutterProject -> publicationVersions.contains(stonecutterProject.getProject()))
-					.toList();
-			chiseledTask.getVersions().set(list);
-			chiseledTask.ofTask("publishMods");
-		});
+		TaskContainer tasks = project.getTasks();
+		StonecutterControllerExtension controller = project.getExtensions().getByType(StonecutterControllerExtension.class);
 
 		for (StonecutterProject version : controller.getVersions()) {
-			registerConsumer.accept("chiseledBuildAndCollect+%s".formatted(version.getProject()), (chiseledTask) -> {
-				chiseledTask.setGroup("mossy-build");
-				chiseledTask.getVersions().value(List.of(version));
-				chiseledTask.ofTask("buildAndCollect");
-			});
-			registerConsumer.accept("chiseledPublish+%s".formatted(version.getProject()), (chiseledTask) -> {
-				chiseledTask.setGroup("mossy-publish");
-				chiseledTask.getVersions().value(List.of(version));
-				chiseledTask.ofTask("publishMods");
+			tasks.register("buildAndCollect+%s".formatted(version.getProject()), (task) -> {
+				task.dependsOn(":%s:buildAndCollect".formatted(version.getProject()));
+				task.setGroup("mossy-build");
 			});
 		}
+
+		for (StonecutterProject version : controller.getVersions()) {
+			tasks.register("publish+%s".formatted(version.getProject()), (task) -> {
+				task.dependsOn(":%s:publishMods".formatted(version.getProject()));
+				task.setGroup("mossy-publish");
+			});
+		}
+
+		tasks.register("buildAndCollect+All", (task) -> {
+			controller.getVersions().forEach((version) -> {
+				task.dependsOn(":%s:buildAndCollect".formatted(version.getProject()));
+			});
+			task.setGroup("mossy-build");
+		});
+
+		tasks.register("buildAndCollect+Specified", (task) -> {
+			List<String> versionsSpecifications = project.getVersionsSpecifications();
+			controller.getVersions().forEach((version) -> {
+				if (!versionsSpecifications.contains(version.getProject())) {
+					return;
+				}
+				task.dependsOn(":%s:buildAndCollect".formatted(version.getProject()));
+			});
+			task.setGroup("mossy-build");
+		});
+
+		tasks.register("publish+All", (task) -> {
+			controller.getVersions().forEach((version) -> {
+				task.dependsOn(":%s:publishModrinth".formatted(version.getProject()));
+			});
+			task.setGroup("mossy-publish");
+		});
+
+		tasks.register("publish+Specified", (task) -> {
+			List<String> versionsSpecifications = project.getVersionsSpecifications();
+			controller.getVersions().forEach((version) -> {
+				if (!versionsSpecifications.contains(version.getProject())) {
+					return;
+				}
+				task.dependsOn(":%s:publishModrinth".formatted(version.getProject()));
+			});
+			task.setGroup("mossy-publish");
+		});
 
 		project.getGradle().addBuildListener(new BuildListener() {
 			@Override
@@ -68,7 +83,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 
 			@Override
 			public void projectsEvaluated(@NotNull Gradle gradle) {
-				for (Task task : project.getTasks()) {
+				for (Task task : tasks) {
 					if (!"stonecutter".equals(task.getGroup())) {
 						continue;
 					}
@@ -81,12 +96,5 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 
 			}
 		});
-	}
-
-	private static BiConsumer<String, Consumer<ChiseledTask>> getRegisterConsumer(@NotNull Project project, StonecutterController controller) {
-		return (name, consumer) -> {
-			TaskContainer tasks = project.getTasks();
-			controller.registerChiseled(tasks.register(name, controller.getChiseled(), (consumer::accept)));
-		};
 	}
 }

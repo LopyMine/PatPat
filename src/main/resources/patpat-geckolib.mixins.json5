@@ -7,7 +7,7 @@
 	"mixins": [
 	],
 	"client": [
-		//? geckolib {
+		//? >=1.27.2 {
 		"GeoEntityRendererMixin",
 		//?}
 	],

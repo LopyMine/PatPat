@@ -1,6 +1,6 @@
 package net.lopymine.mossy;
 
-import dev.kikugie.stonecutter.*;
+import dev.kikugie.stonecutter.build.StonecutterBuildExtension;
 import lombok.Getter;
 import me.modmuss50.mpp.ModPublishExtension;
 import org.gradle.api.*;
@@ -37,6 +37,7 @@ public class MossyPlugin implements Plugin<Project> {
 		//
 
 		PluginContainer plugins = project.getPlugins();
+		plugins.apply("dev.kikugie.stonecutter");
 		plugins.apply("fabric-loom");
 		plugins.apply("me.modmuss50.mod-publish-plugin");
 		plugins.apply("dev.kikugie.j52j");
@@ -130,7 +131,7 @@ public class MossyPlugin implements Plugin<Project> {
 
 	public static int getJavaVersion(Project project) {
 		String currentMCVersion = getCurrentMCVersion(project);
-		StonecutterBuild stonecutter = getStonecutter(project);
+		StonecutterBuildExtension stonecutter = getStonecutter(project);
 		return stonecutter.compare("1.20.5", currentMCVersion) == 1 ?
 				stonecutter.compare("1.18", currentMCVersion) == 1 ?
 						stonecutter.compare("1.16.5", currentMCVersion) == 1 ?
@@ -147,7 +148,7 @@ public class MossyPlugin implements Plugin<Project> {
 	public static MultiVersion getProjectMultiVersion(@NotNull Project currentProject) {
 		String currentMCVersion = getCurrentMCVersion(currentProject);
 
-		String[] versions = getProperty(currentProject, "publication_versions").split(" ");
+		String[] versions = getProperty(currentProject, "versions_specifications").split(" ");
 		for (String version : versions) {
 			String[] split = version.substring(0, version.length()-1).split("\\[");
 			String project = split[0];
@@ -225,8 +226,8 @@ public class MossyPlugin implements Plugin<Project> {
 		return getStonecutter(project).getCurrent().getProject();
 	}
 
-	public static @NotNull StonecutterBuild getStonecutter(@NotNull Project project) {
-		return (StonecutterBuild) project.getExtensions().getByName("stonecutter");
+	public static @NotNull StonecutterBuildExtension getStonecutter(@NotNull Project project) {
+		return (StonecutterBuildExtension) project.getExtensions().getByName("stonecutter");
 	}
 
 	public static String getProperty(@NotNull Project project, String id) {
@@ -241,8 +242,8 @@ public class MossyPlugin implements Plugin<Project> {
 		return getProperty(project, "multi_versions").split(" ");
 	}
 
-	public static List<String> getPublicationVersions(@NotNull Project project) {
-		return Arrays.stream(getProperty(project, "publication_versions")
+	public static List<String> getVersionsSpecifications(@NotNull Project project) {
+		return Arrays.stream(getProperty(project, "versions_specifications")
 				.split(" "))
 				.map((version) -> substringBefore(version, "["))
 				.toList();

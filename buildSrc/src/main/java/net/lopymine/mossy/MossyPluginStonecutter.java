@@ -54,7 +54,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 
 		tasks.register("publish+All", (task) -> {
 			controller.getVersions().forEach((version) -> {
-				task.dependsOn(":%s:publishModrinth".formatted(version.getProject()));
+				task.dependsOn(":%s:publishMods".formatted(version.getProject()));
 			});
 			task.setGroup("mossy-publish");
 		});
@@ -65,7 +65,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 				if (!versionsSpecifications.contains(version.getProject())) {
 					return;
 				}
-				task.dependsOn(":%s:publishModrinth".formatted(version.getProject()));
+				task.dependsOn(":%s:publishMods".formatted(version.getProject()));
 			});
 			task.setGroup("mossy-publish");
 		});

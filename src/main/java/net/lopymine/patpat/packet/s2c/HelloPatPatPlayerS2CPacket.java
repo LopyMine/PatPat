@@ -22,12 +22,17 @@ public class HelloPatPatPlayerS2CPacket implements BasePatPatPacket<HelloPatPatP
 	}
 
 	public HelloPatPatPlayerS2CPacket(PacketByteBuf buf) {
-		this.version = Version.of(buf.readString());
+		int major = buf.readUnsignedByte();
+		int minor = buf.readUnsignedByte();
+		int patch = buf.readUnsignedByte();
+		this.version = Version.of(major, minor, patch);
 	}
 
 	@Override
 	public void write(PacketByteBuf buf) {
-		buf.writeString(this.version.toString());
+		buf.writeByte(this.version.major());
+		buf.writeByte(this.version.minor());
+		buf.writeByte(this.version.patch());
 	}
 
 	@Override

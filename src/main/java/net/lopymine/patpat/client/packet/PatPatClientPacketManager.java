@@ -34,12 +34,12 @@ public class PatPatClientPacketManager {
 	private static Version currentPatPatServerPacketVersion = Version.PACKET_V1_VERSION;
 
 	public static void register() {
-		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+		C2SPlayChannelEvents.REGISTER.register((handler, sender, minecraft, channels) -> {
 			PatPatClient.LOGGER.debug("[PING] Sending HelloPatPatServerC2S packet to the server...");
 			PatPatClientNetworkManager.sendPacketToServer(new HelloPatPatServerC2SPacket());
 		});
 
-		PatPatClientNetworkManager.registerReceiver(HelloPatPatPlayerS2CPacket.TYPE, (packet) -> {
+		PatPatClientNetworkManager.registerReceiver(HelloPatPatPlayerS2CPacket.TYPE, packet -> {
 			PatPatClient.LOGGER.debug("[PONG] Received HelloPatPatPlayerS2CPacket packet! PatPat Mod/Plugin installed on the server!");
 			Version version = packet.getVersion();
 			if (version.isInvalid()) {
@@ -62,25 +62,25 @@ public class PatPatClientPacketManager {
 
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
 			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V1_VERSION);
-			PatPatClient.LOGGER.debug("Disconeccting, disabling v2 packets!!");
+			PatPatClient.LOGGER.debug("Disconnected, disabling v2 packets!!");
 		});
 
-		PatPatClientNetworkManager.registerReceiver(PatEntityS2CPacket.TYPE, (packet) -> {
+		PatPatClientNetworkManager.registerReceiver(PatEntityS2CPacket.TYPE, packet -> {
 			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
 			handlePatting(packet, false);
 		});
 
-		PatPatClientNetworkManager.registerReceiver(PatEntityS2CPacketV2.TYPE, (packet) -> {
+		PatPatClientNetworkManager.registerReceiver(PatEntityS2CPacketV2.TYPE, packet -> {
 			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
 			handlePatting(packet, false);
 		});
 
-		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacket.TYPE, (packet) -> {
+		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacket.TYPE, packet -> {
 			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
 			handlePatting(packet, true);
 		});
 
-		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacketV2.TYPE, (packet) -> {
+		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacketV2.TYPE, packet -> {
 			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
 			handlePatting(packet, true);
 		});

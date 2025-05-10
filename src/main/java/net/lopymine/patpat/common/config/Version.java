@@ -23,6 +23,19 @@ public record Version(int major, int minor, int patch) {
 	public static final Version SERVER_CONFIG_VERSION = Version.of(PatPat.SERVER_CONFIG_VERSION);
 	public static final Version CLIENT_CONFIG_VERSION = Version.of(PatPatClient.CLIENT_CONFIG_VERSION);
 
+	public static Version of(int major, int minor, int patch) {
+		if (major < 0) {
+			throw new IllegalArgumentException("Version major cannot be less than zero");
+		}
+		if (minor < 0) {
+			throw new IllegalArgumentException("Version minor cannot be less than zero");
+		}
+		if (patch < 0) {
+			throw new IllegalArgumentException("Version patch cannot be less than zero");
+		}
+		return new Version(major, minor, patch);
+	}
+
 	public static Version of(@NotNull String version) {
 		String[] numbers = version.split("\\.");
 		int major;

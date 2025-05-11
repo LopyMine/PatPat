@@ -1,7 +1,7 @@
 package net.lopymine.patpat.common.migrate;
 
 import net.lopymine.patpat.*;
-import net.lopymine.patpat.common.config.Version;
+import net.lopymine.patpat.common.Version;
 
 import java.util.*;
 import java.util.function.Supplier;

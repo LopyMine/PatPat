@@ -8,14 +8,13 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
-import net.fabricmc.fabric.api.client.networking.v1.*;
-
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
+import net.lopymine.patpat.client.config.sub.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
-import net.lopymine.patpat.common.config.Version;
+import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.packet.c2s.*;
@@ -34,36 +33,7 @@ public class PatPatClientPacketManager {
 	private static Version currentPatPatServerPacketVersion = Version.PACKET_V1_VERSION;
 
 	public static void register() {
-		C2SPlayChannelEvents.REGISTER.register((handler, sender, minecraft, channels) -> {
-			PatPatClient.LOGGER.debug("[PING] Sending HelloPatPatServerC2S packet to the server...");
-			PatPatClientNetworkManager.sendPacketToServer(new HelloPatPatServerC2SPacket());
-		});
-
-		PatPatClientNetworkManager.registerReceiver(HelloPatPatPlayerS2CPacket.TYPE, packet -> {
-			PatPatClient.LOGGER.debug("[PONG] Received HelloPatPatPlayerS2CPacket packet! PatPat Mod/Plugin installed on the server!");
-			Version version = packet.getVersion();
-			if (version.isInvalid()) {
-				PatPatClient.LOGGER.warn("Received invalid server version in hello packet!");
-				PatPatClientProxLibManager.setEnabled(false);
-				PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
-				// we started sending this packet from server since v2 version,
-				// so receiving this packet means that the server has at least 1.2.0 mod version (V2 Packet version)
-				return;
-			}
-			// Example for the future packet versions:
-			// if (version.isGreaterOrEqualThan(Version.PACKET_V3_VERSION)) {
-			// 	 // stuff
-			// } else
-			if (version.isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
-				PatPatClientProxLibManager.setEnabled(false);
-				PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
-			}
-		});
-
-		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V1_VERSION);
-			PatPatClient.LOGGER.debug("Disconnected, disabling v2 packets!!");
-		});
+		PatPatClientNetworkManager.registerReceiver(HelloPatPatPlayerS2CPacket.TYPE, PatPatClientPacketManager::handleHelloPacket);
 
 		PatPatClientNetworkManager.registerReceiver(PatEntityS2CPacket.TYPE, packet -> {
 			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
@@ -84,6 +54,26 @@ public class PatPatClientPacketManager {
 			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
 			handlePatting(packet, true);
 		});
+	}
+
+	private static void handleHelloPacket(HelloPatPatPlayerS2CPacket packet) {
+		PatPatClient.LOGGER.debug("[PONG] Received HelloPatPatPlayerS2CPacket packet! PatPat Mod/Plugin installed on the server!");
+		Version version = packet.getVersion();
+		if (version.isInvalid()) {
+			PatPatClient.LOGGER.warn("Received invalid server version in hello packet!");
+			PatPatClientProxLibManager.setEnabled(false);
+			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
+			// Since v2 packet version we started sending hello packets
+			return;
+		}
+		// Example for the future packet versions:
+		// if (version.isGreaterOrEqualThan(Version.PACKET_V3_VERSION)) {
+		// 	 // stuff
+		// } else
+		if (version.isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
+			PatPatClientProxLibManager.setEnabled(false);
+			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
+		}
 	}
 
 	public static void handlePatting(S2CPatPacket<?> packet, boolean replayModPacket) {
@@ -115,7 +105,7 @@ public class PatPatClientPacketManager {
 
 		UUID pattedEntityUuid = pattedEntity.getUuid();
 		UUID whoPattedUuid = playerEntity.getUuid();
-		if (isBlocked(config, whoPattedUuid)) {
+		if (isBlocked(whoPattedUuid)) {
 			System.out.println("5");
 			return;
 		}
@@ -130,10 +120,14 @@ public class PatPatClientPacketManager {
 		}
 	}
 
-	public static boolean isBlocked(PatPatClientConfig config, UUID playerUuid) {
+	public static boolean isBlocked(UUID playerUuid) {
 		SocialInteractionsManager socialManager = MinecraftClient.getInstance().getSocialInteractionsManager();
-		return (config.getServerConfig().getListMode() == ListMode.WHITELIST && !config.getServerConfig().getPlayers().containsKey(playerUuid))
-				|| (config.getServerConfig().getListMode() == ListMode.BLACKLIST && config.getServerConfig().getPlayers().containsKey(playerUuid))
+
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
+		PatPatClientPlayerListConfig playerListConfig = PatPatClientPlayerListConfig.getInstance();
+
+		return (config.getServerConfig().getListMode() == ListMode.WHITELIST && !playerListConfig.getMap().containsKey(playerUuid))
+				|| (config.getServerConfig().getListMode() == ListMode.BLACKLIST && playerListConfig.getMap().containsKey(playerUuid))
 				|| socialManager.isPlayerBlocked(playerUuid)
 				|| socialManager.isPlayerHidden(playerUuid)
 				/*? >=1.17 {*/ || socialManager.isPlayerMuted(playerUuid)/*?}*/;

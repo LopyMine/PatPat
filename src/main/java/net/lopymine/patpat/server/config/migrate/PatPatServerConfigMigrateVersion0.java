@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
-import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.common.migrate.AbstractConfigMigrateHandler;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.server.config.sub.PatPatServerPlayerListConfig;
@@ -75,32 +74,29 @@ public class PatPatServerConfigMigrateVersion0 extends AbstractConfigMigrateHand
 			config.setListMode(ListMode.getByIdOrDefault(listModeStr, ListMode.DISABLED));
 
 			PatPatServerPlayerListConfig playerListConfig = this.listConfig == null ? new PatPatServerPlayerListConfig() : this.listConfig;
-			Set<UUID> uuids = playerListConfig.getUuids();
-			Set<UUID> uuidsFromOldConfig = new HashSet<>();
+			Map<UUID, String> map = playerListConfig.getMap();
+			Map<UUID, String> oldConfigMap = new HashMap<>();
 			JsonObject jsonObject = rootObj.getAsJsonObject("list");
 
-			jsonObject.
-					//? <=1.19.2 {
-					/*entrySet().forEach(entry->{
-						String s = entry.getKey();
-					*//*?} else {*/
-					asMap().keySet().forEach(s -> {
-				//?}
+			jsonObject.asMap().entrySet().forEach(entry -> {
 				try {
-					String uuidString = new StringBuilder(s)
+					String uuid = entry.getKey();
+					String nickname = entry.getValue().getAsString();
+
+					String uuidString = new StringBuilder(uuid)
 							.insert(8, "-")
 							.insert(12, "-")
 							.insert(16, "-")
 							.insert(20, "-")
 							.toString();
-					uuidsFromOldConfig.add(UUID.fromString(uuidString));
+					oldConfigMap.put(UUID.fromString(uuidString), nickname);
 				} catch (IllegalArgumentException e) {
-					PatPat.LOGGER.error("Line '%s' cannot parse uuid".formatted(s), e);
+					PatPat.LOGGER.error("Line '%s' cannot parse uuid".formatted(entry), e);
 					success.set(false);
 				}
 			});
-			uuids.clear();
-			uuids.addAll(uuidsFromOldConfig);
+			map.clear();
+			map.putAll(oldConfigMap);
 			if (success.get()) {
 				configs = new Configs(config, playerListConfig);
 			}

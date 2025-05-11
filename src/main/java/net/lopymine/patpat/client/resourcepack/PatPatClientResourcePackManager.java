@@ -14,7 +14,7 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
-import net.lopymine.patpat.common.config.Version;
+import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.extension.EntityExtension;
 
 import java.io.*;
@@ -52,8 +52,8 @@ public class PatPatClientResourcePackManager {
 
 			String string = jsonElement.getAsString();
 			Version configVersion = Version.of(string);
-			if (configVersion.isMoreThan(Version.MOD_VERSION)) {
-				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has unsupported new version[{} < {}], there may be errors!", packName, path, Version.MOD_VERSION, configVersion);
+			if (configVersion.isMoreThan(Version.CURRENT_MOD_VERSION)) {
+				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has unsupported new version[{} < {}], there may be errors!", packName, path, Version.CURRENT_MOD_VERSION, configVersion);
 			} else if (configVersion.isLessThan(Version.RESOURCE_PACKS_MIN_SUPPORT_VERSION)) {
 				boolean shouldSkip = config.getResourcePacksConfig().isSkipOldAnimationsEnabled();
 				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has unsupported old version[{} > {}], {}!", packName, path, Version.RESOURCE_PACKS_MIN_SUPPORT_VERSION, configVersion, (shouldSkip ? "skip" : "there may be errors"));

@@ -3,7 +3,8 @@ package net.lopymine.patpat.packet.s2c;
 import lombok.Getter;
 import net.minecraft.network.*;
 
-import net.lopymine.patpat.common.config.Version;
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.IdentifierUtils;
@@ -18,14 +19,22 @@ public class HelloPatPatPlayerS2CPacket implements BasePatPatPacket<HelloPatPatP
 	private final Version version;
 
 	public HelloPatPatPlayerS2CPacket() {
-		this.version = Version.MOD_VERSION;
+		this.version = Version.CURRENT_MOD_VERSION;
 	}
 
 	public HelloPatPatPlayerS2CPacket(PacketByteBuf buf) {
-		int major = buf.readUnsignedByte();
-		int minor = buf.readUnsignedByte();
-		int patch = buf.readUnsignedByte();
-		this.version = Version.of(major, minor, patch);
+		Version version = Version.INVALID;
+
+		try {
+			int major = buf.readUnsignedByte();
+			int minor = buf.readUnsignedByte();
+			int patch = buf.readUnsignedByte();
+			version = new Version(major, minor, patch);
+		} catch (Exception e) {
+			PatPatClient.LOGGER.warn("Failed to parse server packet version from hello packet:", e);
+		}
+
+		this.version = version;
 	}
 
 	@Override

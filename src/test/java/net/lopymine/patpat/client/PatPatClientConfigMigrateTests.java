@@ -10,7 +10,6 @@ import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.config.vector.Vec3f;
 import net.lopymine.patpat.util.PathUtils;
 
-import java.awt.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.*;
@@ -36,10 +35,11 @@ public class PatPatClientConfigMigrateTests {
 			mainConfig.setDebugLogEnabled(false);
 
 			PatPatClientServerConfig serverConfig = config.getServerConfig();
-			serverConfig.setPlayers(new HashMap<>());
 			serverConfig.setListMode(ListMode.DISABLED);
 			serverConfig.setBypassServerResourcePackEnabled(false);
 			serverConfig.setPatMeEnabled(false);
+
+			PatPatClientPlayerListConfig playerListConfig = new PatPatClientPlayerListConfig();
 
 			PatPatClientVisualConfig visualConfig = config.getVisualConfig();
 			visualConfig.setPatWeight(0);
@@ -61,6 +61,7 @@ public class PatPatClientConfigMigrateTests {
 			migrator.setMigrateFileName(file.getName());
 			migrator.setShouldSave(false);
 			migrator.setConfig(config);
+			migrator.setPlayerListConfig(playerListConfig);
 
 			// MIGRATE
 			PatPatClientConfigMigrateManager migrateManager = new PatPatClientConfigMigrateManager(config, migrator);
@@ -76,7 +77,7 @@ public class PatPatClientConfigMigrateTests {
 			Assertions.assertTrue(serverConfig.isPatMeEnabled());
 			Assertions.assertTrue(serverConfig.isBypassServerResourcePackPriorityEnabled());
 			Assertions.assertEquals(ListMode.WHITELIST, serverConfig.getListMode());
-			Assertions.assertEquals(Map.of(UUID.fromString("192e3748-12d5-4573-a8a5-479cd394a1dc"), "LopyMine"), serverConfig.getPlayers());
+			Assertions.assertEquals(Map.of(UUID.fromString("192e3748-12d5-4573-a8a5-479cd394a1dc"), "LopyMine"), playerListConfig.getMap());
 
 			// Visual config
 			Assertions.assertTrue(visualConfig.isCameraShackingEnabled());

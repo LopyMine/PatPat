@@ -9,7 +9,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.common.config.Version;
+import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.packet.c2s.*;
@@ -25,53 +25,38 @@ public class PatPatServerPacketManager {
 		throw new IllegalStateException("Manager class");
 	}
 
-	private static final HashMap<UUID, Version> PLAYER_VERSIONS = new HashMap<>();
+	public static final HashMap<UUID, Version> PLAYER_VERSIONS = new HashMap<>();
 
-	private static final List<Predicate<ServerPlayerEntity>> HANDLERS = new ArrayList<>();
+	private static final List<Predicate<ServerPlayerEntity>> PACKET_TESTS = new ArrayList<>();
 
 	public static void register() {
-		HANDLERS.clear();
-		HANDLERS.add(PatPatServerListManager::canPat);
-		HANDLERS.add(PatPatServerRateLimitManager::canPat);
+		PACKET_TESTS.clear();
+		PACKET_TESTS.add(PatPatServerListManager::canPat);
+		PACKET_TESTS.add(PatPatServerRateLimitManager::canPat);
 
-		ServerPlayConnectionEvents.JOIN.register((handler, packetSender, server) -> {
-			ServerPlayerEntity player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
-
-			PLAYER_VERSIONS.put(player.getUuid(), Version.PACKET_V1_VERSION);
-			PatPat.LOGGER.warn("Player {} just joined!", player.getName().getString());
-		});
-
-		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-			ServerPlayerEntity player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
-
-			PLAYER_VERSIONS.remove(player.getUuid());
-			PatPat.LOGGER.warn("Player {} disconnected!", player.getName().getString());
-		});
-
-		registerPackets();
-
+		PatPatServerPacketManager.registerPackets();
 		PatPatServerNetworkManager.registerReceiver(PatEntityC2SPacket.TYPE, PatPatServerPacketManager::handlePacket);
 		PatPatServerNetworkManager.registerReceiver(PatEntityC2SPacketV2.TYPE, PatPatServerPacketManager::handlePacket);
+		PatPatServerNetworkManager.registerReceiver(HelloPatPatServerC2SPacket.TYPE, PatPatServerPacketManager::handleHelloPacket);
+	}
 
-		PatPatServerNetworkManager.registerReceiver(HelloPatPatServerC2SPacket.TYPE, (sender, packet) -> {
-			PatPatServerNetworkManager.sendPacketToPlayer(sender, new HelloPatPatPlayerS2CPacket());
-			PatPat.LOGGER.warn("Received hello packet from {}!", sender.getName().getString());
-			Version version = packet.getVersion();
-			if (version.isInvalid()) {
-				PatPat.LOGGER.warn("Received invalid client version in hello packet from {}!", sender.getName().getString());
-				PLAYER_VERSIONS.put(sender.getUuid(), Version.PACKET_V2_VERSION);
-				// We started sending this packet since v2 version,
-				// so receiving this packet means that the client has at least 1.2.0 mod version (V2 Packet version)
-				return;
-			}
-			PLAYER_VERSIONS.put(sender.getUuid(), version);
-		});
+	private static void handleHelloPacket(ServerPlayerEntity sender, HelloPatPatServerC2SPacket packet) {
+		PatPatServerNetworkManager.sendPacketToPlayer(sender, new HelloPatPatPlayerS2CPacket());
+		PatPat.LOGGER.warn("Received hello packet from {}!", sender.getName().getString());
+		Version version = packet.getVersion();
+		if (version.isInvalid()) {
+			PatPat.LOGGER.warn("Received invalid client version in hello packet from {}!", sender.getName().getString());
+			PLAYER_VERSIONS.put(sender.getUuid(), Version.PACKET_V2_VERSION);
+			// Since v2 packet version we started sending hello packets
+			return;
+		}
+		PLAYER_VERSIONS.put(sender.getUuid(), version);
 	}
 
 	public static void handlePacket(ServerPlayerEntity sender, PatPacket<ServerWorld, ?> packet) {
 		PatPat.LOGGER.warn("Received pat packet from {}!", sender.getName().getString());
-		for (Predicate<ServerPlayerEntity> handler : HANDLERS) {
-			if (!handler.test(sender)) {
+		for (Predicate<ServerPlayerEntity> packetTest : PACKET_TESTS) {
+			if (!packetTest.test(sender)) {
 				return;
 			}
 		}

@@ -6,6 +6,7 @@ import net.minecraft.text.Text;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
 import net.lopymine.patpat.extension.CommandExtension;
@@ -15,11 +16,24 @@ import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.utils.CommandTextBuilder;
 
+import static net.lopymine.patpat.server.command.ratelimit.set.PatPatServerRateLimitSetCommand.VALUE_KEY;
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
+
 @ExtensionMethod(CommandExtension.class)
 public class PatPatServerRateLimitIntervalCommand {
 
 	private PatPatServerRateLimitIntervalCommand() {
 		throw new IllegalStateException("Command class");
+	}
+
+	public static LiteralArgumentBuilder<ServerCommandSource> get() {
+		return literal("interval")
+				.requires(context -> context.hasPatPatPermission("ratelimit.set.interval"))
+				.executes(PatPatServerRateLimitIntervalCommand::info)
+				.then(argument(VALUE_KEY, StringArgumentType.word())
+						.executes(PatPatServerRateLimitIntervalCommand::set)
+				);
 	}
 
 	public static int info(CommandContext<ServerCommandSource> context) {

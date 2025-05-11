@@ -1,6 +1,5 @@
 package net.lopymine.patpat.server.config;
 
-import com.google.gson.*;
 import lombok.*;
 import lombok.experimental.ExtensionMethod;
 
@@ -10,6 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.resourcepack.*;
+import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.common.config.*;
 import net.lopymine.patpat.extension.GsonExtension;
 import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;

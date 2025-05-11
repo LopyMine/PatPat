@@ -8,7 +8,6 @@ import com.mojang.serialization.Codec;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.config.vector.Vec3f;
@@ -31,6 +30,7 @@ public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHand
 	private static final String MIGRATE_VERSION = "0";
 
 	private PatPatClientConfig config = null;
+	private PatPatClientPlayerListConfig playerListConfig = null;
 
 	public PatPatClientConfigMigrateVersion0() {
 		super(MIGRATE_FILE_NAME, MIGRATE_VERSION, PatPatClient.LOGGER);
@@ -53,14 +53,15 @@ public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHand
 			File migrateFile = this.getMigrateFile().toFile();
 			JsonObject object = GSON.fromJson(new JsonReader(new FileReader(migrateFile)), JsonObject.class);
 			PatPatClientConfig config = this.config == null ? PatPatClientConfig.getInstance() : this.config;
-			this.migrateFields(object, config);
+			PatPatClientPlayerListConfig playerListConfig = this.playerListConfig == null ? PatPatClientPlayerListConfig.getInstance() : this.playerListConfig;
+			this.migrateFields(object, config, playerListConfig);
 			return true;
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void migrateFields(JsonObject object, PatPatClientConfig config) {
+	private void migrateFields(JsonObject object, PatPatClientConfig config, PatPatClientPlayerListConfig playerListConfig) {
 		HashMap<UUID, String> list = CodecUtils.decode("list", Codec.unboundedMap(UUID_CODEC, Codec.STRING).xmap(HashMap::new, HashMap::new), object);
 		Boolean bypassServerResourcePackPriorityEnabled = CodecUtils.decode("bypassServerResourcePackPriorityEnabled", Codec.BOOL, object);
 		Boolean hidingNicknameEnabled = CodecUtils.decode("hidingNicknameEnabled", Codec.BOOL, object);
@@ -107,7 +108,9 @@ public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHand
 			serverConfig.setListMode(listMode);
 		}
 		if (list != null) {
-			serverConfig.setPlayers(list);
+			Map<UUID, String> map = playerListConfig.getMap();
+			map.clear();
+			map.putAll(list);
 		}
 
 		// VISUAL CONFIG
@@ -136,6 +139,7 @@ public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHand
 
 		if (this.isShouldSave()) {
 			config.save();
+			playerListConfig.save();
 		}
 	}
 }

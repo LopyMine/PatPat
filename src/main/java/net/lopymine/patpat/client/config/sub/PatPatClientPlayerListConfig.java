@@ -1,31 +1,31 @@
-package net.lopymine.patpat.server.config.sub;
+package net.lopymine.patpat.client.config.sub;
 
 import lombok.Getter;
 
-import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.utils.PlayerListConfigUtils;
 
-import java.io.*;
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Getter
-public class PatPatServerPlayerListConfig {
+public class PatPatClientPlayerListConfig {
 
-	private static final String FILENAME = "player-list.txt";
+	private static final String FILENAME = "player-list-client.txt";
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(FILENAME).toFile();
-	private static PatPatServerPlayerListConfig INSTANCE;
+	private static PatPatClientPlayerListConfig INSTANCE;
 
 	private final Map<UUID, String> map = new HashMap<>();
 
-	public static PatPatServerPlayerListConfig getInstance() {
+	public static PatPatClientPlayerListConfig getInstance() {
 		return INSTANCE;
 	}
 
-	public static PatPatServerPlayerListConfig reload() {
-		PatPatServerPlayerListConfig config = new PatPatServerPlayerListConfig();
-		PlayerListConfigUtils.read(CONFIG_FILE, PatPat.LOGGER, config.getMap());
+	public static PatPatClientPlayerListConfig reload() {
+		PatPatClientPlayerListConfig config = new PatPatClientPlayerListConfig();
+		PlayerListConfigUtils.read(CONFIG_FILE, PatPatClient.LOGGER, config.getMap());
 		return INSTANCE = config;
 	}
 
@@ -42,6 +42,6 @@ public class PatPatServerPlayerListConfig {
 	}
 
 	public void save(File folder) {
-		PlayerListConfigUtils.save(folder, PatPat.LOGGER, this.map);
+		PlayerListConfigUtils.save(folder, PatPatClient.LOGGER, this.map);
 	}
 }

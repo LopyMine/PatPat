@@ -8,9 +8,7 @@ import org.junit.jupiter.api.*;
 
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.server.config.sub.PatPatServerPlayerListConfig;
-import net.lopymine.patpat.server.config.migrate.PatPatServerConfigMigrateVersion0.Configs;
 
-import java.awt.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.UUID;
@@ -56,7 +54,7 @@ class PatPatServerConfigMigrateTests {
 			PatPatServerConfig config = PatPatServerConfig.getNewInstance();
 			config.setListMode(ListMode.DISABLED);
 			PatPatServerPlayerListConfig listConfig = new PatPatServerPlayerListConfig();
-			listConfig.getUuids().add(UUID.randomUUID());
+			listConfig.getMap().put(UUID.randomUUID(), "NotLopyMine");
 
 			PatPatServerConfigMigrateVersion0 migrator = new PatPatServerConfigMigrateVersion0();
 			migrator.setConfigFolder(this.getConfigFolder());
@@ -69,7 +67,7 @@ class PatPatServerConfigMigrateTests {
 			migrateManager.migrate();
 
 			Assertions.assertEquals(ListMode.WHITELIST, config.getListMode());
-			Assertions.assertTrue(listConfig.getUuids().isEmpty());
+			Assertions.assertTrue(listConfig.getMap().isEmpty());
 		}
 	}
 }

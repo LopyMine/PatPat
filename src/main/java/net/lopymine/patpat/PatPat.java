@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.server.command.PatPatServerCommandManager;
+import net.lopymine.patpat.server.event.PatPatServerPlayerEvents;
 import net.lopymine.patpat.server.packet.PatPatServerPacketManager;
 
 public class PatPat implements ModInitializer {
@@ -22,6 +23,7 @@ public class PatPat implements ModInitializer {
 		PatPatConfigManager.onInitialize();
 		PatPatConfigManager.reloadServer();
 		PatPatServerCommandManager.register();
+		PatPatServerPlayerEvents.register();
 		PatPatServerPacketManager.register();
 		PatPat.LOGGER.info("PatPat Initialized");
 		PatPat.LOGGER.debug("Debug mode enabled");

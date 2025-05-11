@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 
 import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.command.PatPatClientCommandManager;
+import net.lopymine.patpat.client.event.PatPatClientPlayerEvents;
 import net.lopymine.patpat.client.render.*;
 import net.lopymine.patpat.client.packet.*;
 import net.lopymine.patpat.client.resourcepack.*;
@@ -24,6 +25,7 @@ public class PatPatClient implements ClientModInitializer {
 		LoadedMods.onInitialize();
 		PatPatClientSoundManager.register();
 		PatPatClientCommandManager.register();
+		PatPatClientPlayerEvents.register();
 		PatPatClientPacketManager.register();
 		PatPatClientReloadListener.register();
 		PatPatClientProxLibManager.register();

@@ -27,14 +27,12 @@ public class PatPatClientServerConfig {
 	public static final Codec<PatPatClientServerConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			option("bypassServerResourcePackPriorityEnabled", false, Codec.BOOL, PatPatClientServerConfig::isBypassServerResourcePackPriorityEnabled),
 			option("patMeEnabled", true, Codec.BOOL, PatPatClientServerConfig::isPatMeEnabled),
-			option("list", new HashMap<>(), UUID_CODEC, Codec.STRING, PatPatClientServerConfig::getPlayers),
 			option("listMode", ListMode.DISABLED, ListMode.CODEC, PatPatClientServerConfig::getListMode)
 	).apply(instance, PatPatClientServerConfig::new));
 
 	@Setter(value = AccessLevel.PRIVATE)
 	private boolean bypassServerResourcePackPriorityEnabled;
 	private boolean patMeEnabled;
-	private HashMap<UUID, String> players;
 	private ListMode listMode;
 
 	private PatPatClientServerConfig() {

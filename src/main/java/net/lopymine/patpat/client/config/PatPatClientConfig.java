@@ -1,6 +1,5 @@
 package net.lopymine.patpat.client.config;
 
-import com.google.gson.*;
 import lombok.*;
 
 import com.mojang.serialization.*;
@@ -8,16 +7,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.sub.*;
+import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.common.config.*;
 import net.lopymine.patpat.utils.*;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
-import org.jetbrains.annotations.NotNull;
 
 import static net.lopymine.patpat.utils.CodecUtils.option;
 

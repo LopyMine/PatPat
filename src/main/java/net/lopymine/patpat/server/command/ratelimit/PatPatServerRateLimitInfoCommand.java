@@ -1,12 +1,14 @@
 package net.lopymine.patpat.server.command.ratelimit;
 
 import lombok.experimental.ExtensionMethod;
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.GameProfileArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -18,13 +20,27 @@ import net.lopymine.patpat.utils.CommandTextBuilder;
 
 import java.util.Collection;
 
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
+
 @ExtensionMethod({CommandExtension.class, PlayerExtension.class})
 public class PatPatServerRateLimitInfoCommand {
+
+	public static final String PROFILE_KEY = "profile";
 
 	private PatPatServerRateLimitInfoCommand() {
 		throw new IllegalStateException("Command class");
 	}
 
+	public static LiteralArgumentBuilder<ServerCommandSource> get() {
+		return literal("info")
+				.requires(context -> context.hasPatPatPermission("ratelimit.info"))
+				.executes(PatPatServerRateLimitInfoCommand::info)
+				.then(argument(PROFILE_KEY, GameProfileArgumentType.gameProfile())
+						.suggests((context, builder) -> CommandSource.suggestMatching(context.getSource().getPlayerNames(), builder))
+						.executes(PatPatServerRateLimitInfoCommand::infoWithUser)
+				);
+	}
 
 	public static int info(CommandContext<ServerCommandSource> context) {
 		PatPatServerRateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();

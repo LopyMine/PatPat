@@ -12,10 +12,9 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.config.sub.PatPatClientPlayerListConfig;
-import net.lopymine.patpat.client.manager.PatPatClientManager;
-import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
+import net.lopymine.patpat.client.render.PatPatClientRenderer;
+import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
 import net.lopymine.patpat.common.Version;
-import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.packet.c2s.*;
 import net.lopymine.patpat.packet.s2c.*;
@@ -114,10 +113,7 @@ public class PatPatClientPacketManager {
 			return;
 		}
 		System.out.println("7");
-		PatEntity patEntity = PatPatClientManager.pat(livingEntity, PlayerConfig.of(playerEntity.getName().getString(), whoPattedUuid));
-		if (config.getSoundsConfig().isSoundsEnabled() && !replayModPacket) {
-			PatPatClientSoundManager.playSound(patEntity, player, config.getSoundsConfig().getSoundsVolume());
-		}
+		PatPatClientRenderer.packets.add(new PacketPat(livingEntity, PlayerConfig.of(playerEntity.getName().getString(), whoPattedUuid), player, replayModPacket));
 	}
 
 	public static boolean isBlocked(UUID playerUuid) {

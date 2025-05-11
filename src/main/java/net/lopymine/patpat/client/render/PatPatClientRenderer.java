@@ -18,16 +18,21 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
 
-import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
-import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
+import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
 import net.lopymine.patpat.common.config.vector.Vec3f;
 import net.lopymine.patpat.entity.PatEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jetbrains.annotations.Nullable;
 public class PatPatClientRenderer {
+
+	public static final List<PacketPat> packets = new ArrayList<>();
+
+	public record PacketPat(LivingEntity livingEntity, PlayerConfig playerConfig, ClientPlayerEntity player, boolean replayModPacket){}
 
 	public static void register() {
 		WorldRenderEvents.AFTER_ENTITIES.register(PatPatClientRenderer::renderPatOnYourself);
@@ -37,6 +42,16 @@ public class PatPatClientRenderer {
 				return;
 			}
 			//?}
+			packets.forEach(packetPat->{
+				LivingEntity livingEntity = packetPat.livingEntity();
+				PlayerConfig playerConfig = packetPat.playerConfig();
+				PatEntity patEntity = PatPatClientManager.pat(livingEntity, playerConfig);
+				PatPatClientConfig config = PatPatClientConfig.getInstance();
+				if (config.getSoundsConfig().isSoundsEnabled() && !packetPat.replayModPacket()) {
+					PatPatClientSoundManager.playSound(patEntity, packetPat.player(), config.getSoundsConfig().getSoundsVolume());
+				}
+			});
+			packets.clear();
 			PatPatClientManager.tickEntities();
 		});
 	}

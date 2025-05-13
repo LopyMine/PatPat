@@ -1,6 +1,8 @@
 //? >=1.19.4 {
 package net.lopymine.patpat.client;
 
+import net.minecraft.Bootstrap;
+import net.minecraft.SharedConstants;
 import org.junit.jupiter.api.*;
 
 import net.lopymine.patpat.client.config.PatPatClientConfig;
@@ -15,6 +17,12 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class PatPatClientConfigMigrateTests {
+
+	@BeforeAll
+	static void beforeAll() {
+		SharedConstants.createGameVersion();
+		Bootstrap.initialize();
+	}
 
 	@Nested
 	class V0 {

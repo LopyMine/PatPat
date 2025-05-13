@@ -10,20 +10,12 @@ import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.client.packet.PatPatClientProxLibManager;
 import net.lopymine.patpat.utils.*;
 
-import java.util.*;
-
 import static net.lopymine.patpat.utils.CodecUtils.option;
 
 @Getter
 @Setter
 @AllArgsConstructor
 public class PatPatClientServerConfig {
-
-	// For tests, because you can't use it from VersionedThings in this case
-	public static final Codec<UUID> UUID_CODEC =
-			/*? >=1.19.3 {*/net.minecraft.util.Uuids
-			/*?} else {*//*net.minecraft.util.dynamic.DynamicSerializableUuid*//*?}*/
-			.CODEC;
 
 	public static final Codec<PatPatClientServerConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			option("bypassServerResourcePackPriorityEnabled", false, Codec.BOOL, PatPatClientServerConfig::isBypassServerResourcePackPriorityEnabled),

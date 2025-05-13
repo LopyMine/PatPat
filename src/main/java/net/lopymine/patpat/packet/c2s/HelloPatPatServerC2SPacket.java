@@ -23,18 +23,19 @@ public class HelloPatPatServerC2SPacket implements BasePatPatPacket<HelloPatPatS
 	}
 
 	public HelloPatPatServerC2SPacket(PacketByteBuf buf) {
-		Version version = Version.INVALID;
+		this.version = readVersion(buf);
+	}
 
+	private static Version readVersion(PacketByteBuf buf){
 		try {
 			int major = buf.readUnsignedByte();
 			int minor = buf.readUnsignedByte();
 			int patch = buf.readUnsignedByte();
-			version = new Version(major, minor, patch);
+			return new Version(major, minor, patch);
 		} catch (Exception e) {
 			PatPat.LOGGER.warn("Failed to parse client packet version from hello packet:", e);
+			return Version.INVALID;
 		}
-
-		this.version = version;
 	}
 
 	@Override

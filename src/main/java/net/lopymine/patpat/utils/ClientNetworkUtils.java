@@ -16,9 +16,13 @@ public class ClientNetworkUtils {
 
 	public static List<String> getOnlinePlayersFromUuids(@Nullable ClientPlayNetworkHandler networkHandler) {
 		if (networkHandler == null) {
-			return List.of();
+			return Collections.emptyList();
 		}
-		return PatPatClientPlayerListConfig.getInstance().getMap().entrySet().stream().flatMap(entry -> {
+		PatPatClientPlayerListConfig playerListConfig = PatPatClientPlayerListConfig.getInstance();
+		if (playerListConfig == null) { // TODO: Fix, why instance is null?
+			return Collections.emptyList();
+		}
+		return playerListConfig.getMap().entrySet().stream().flatMap(entry -> {
 			PlayerListEntry playerListEntry = networkHandler.getPlayerListEntry(entry.getKey());
 			if (playerListEntry == null) {
 				return Stream.of(entry.getValue());

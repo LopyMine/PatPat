@@ -56,7 +56,7 @@ public class PatPatClientPacketManager {
 	}
 
 	private static void handleHelloPacket(HelloPatPatPlayerS2CPacket packet) {
-		PatPatClient.LOGGER.debug("[PONG] Received HelloPatPatPlayerS2CPacket packet! PatPat Mod/Plugin installed on the server!");
+		PatPatClient.LOGGER.debug("[PING] Received HelloPatPatPlayerS2CPacket packet! PatPat Mod/Plugin installed on the server!");
 		Version version = packet.getVersion();
 		if (version.isInvalid()) {
 			PatPatClient.LOGGER.warn("Received invalid server version in hello packet!");
@@ -73,46 +73,51 @@ public class PatPatClientPacketManager {
 			PatPatClientProxLibManager.setEnabled(false);
 			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
 		}
+		PatPatClient.LOGGER.debug("[PONG] Sending HelloPatPatServerC2S packet to the server...");
+		PatPatClientNetworkManager.sendPacketToServer(new HelloPatPatServerC2SPacket());
 	}
 
 	public static void handlePatting(S2CPatPacket<?> packet, boolean replayModPacket) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
-		System.out.println("0");
+		PatPatClient.LOGGER.debug("Handle patting running");
 		if (!config.getMainConfig().isModEnabled()) {
-			System.out.println("1");
+			PatPatClient.LOGGER.debug("Packet declined, because mod is disabled");
 			return;
 		}
 
 		ClientWorld clientWorld = MinecraftClient.getInstance().world;
 		ClientPlayerEntity player = MinecraftClient.getInstance().player;
 		if (clientWorld == null || player == null) {
-			System.out.println("2");
+			PatPatClient.LOGGER.debug("Packet declined, because world or player is null");
 			return;
 		}
 
 		Entity pattedEntity = packet.getPattedEntity(clientWorld);
 		if (!(pattedEntity instanceof LivingEntity livingEntity)) {
-			System.out.println("3");
+			PatPatClient.LOGGER.debug("Packet declined, because patted entity in not LivingEntity");
 			return;
 		}
 		Entity playerEntity = packet.getWhoPattedEntity(clientWorld);
-		System.out.println(playerEntity.getName().getString());
+		if(playerEntity == null) {
+			PatPatClient.LOGGER.debug("Packet declined, because who patted entity is null");
+			return;
+		}
+		PatPatClient.LOGGER.debug("Pat packet from {} player", playerEntity.getName());
 		if (!(playerEntity instanceof PlayerEntity)) {
-			System.out.println("4");
+			PatPatClient.LOGGER.debug("Packet declined, because who patted entity in not PlayerEntity");
 			return;
 		}
 
 		UUID pattedEntityUuid = pattedEntity.getUuid();
 		UUID whoPattedUuid = playerEntity.getUuid();
 		if (isBlocked(whoPattedUuid)) {
-			System.out.println("5");
+			PatPatClient.LOGGER.debug("Packet declined, because player uuid is blocked (/patpat-client list)");
 			return;
 		}
 		if (pattedEntityUuid.equals(player.getUuid()) && !config.getServerConfig().isPatMeEnabled()) {
-			System.out.println("6");
+			PatPatClient.LOGGER.debug("Packet declined, because option 'Pat Me' is disabled");
 			return;
 		}
-		System.out.println("7");
 		PatPatClientRenderer.packets.add(new PacketPat(livingEntity, PlayerConfig.of(playerEntity.getName().getString(), whoPattedUuid), player, replayModPacket));
 	}
 

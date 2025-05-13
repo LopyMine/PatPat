@@ -25,7 +25,7 @@ public class PatPatServerPacketManager {
 		throw new IllegalStateException("Manager class");
 	}
 
-	public static final HashMap<UUID, Version> PLAYER_VERSIONS = new HashMap<>();
+	public static final Map<UUID, Version> PLAYER_VERSIONS = new HashMap<>();
 
 	private static final List<Predicate<ServerPlayerEntity>> PACKET_TESTS = new ArrayList<>();
 
@@ -41,8 +41,7 @@ public class PatPatServerPacketManager {
 	}
 
 	private static void handleHelloPacket(ServerPlayerEntity sender, HelloPatPatServerC2SPacket packet) {
-		PatPatServerNetworkManager.sendPacketToPlayer(sender, new HelloPatPatPlayerS2CPacket());
-		PatPat.LOGGER.warn("Received hello packet from {}!", sender.getName().getString());
+		PatPat.LOGGER.debug("Received hello packet from {}!", sender.getName().getString());
 		Version version = packet.getVersion();
 		if (version.isInvalid()) {
 			PatPat.LOGGER.warn("Received invalid client version in hello packet from {}!", sender.getName().getString());
@@ -50,6 +49,7 @@ public class PatPatServerPacketManager {
 			// Since v2 packet version we started sending hello packets
 			return;
 		}
+		PatPat.LOGGER.debug("Player PatPat version: {}", version);
 		PLAYER_VERSIONS.put(sender.getUuid(), version);
 	}
 
@@ -77,7 +77,7 @@ public class PatPatServerPacketManager {
 			if (player.equals(sender)) {
 				continue;
 			}
-
+			PatPat.LOGGER.debug("Sending pat packet to {}", player.getName().getString());
 			PatPatServerNetworkManager.sendPacketToPlayer(player, getPatPacket(entity, player));
 		}
 	}

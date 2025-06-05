@@ -1,12 +1,7 @@
 package net.lopymine.patpat.client.config.resourcepack;
 
 import lombok.Getter;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.resource.Resource;
-import net.minecraft.util.Identifier;
-
+import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -14,7 +9,10 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.resourcepack.PatPatClientResourcePackManager;
 import net.lopymine.patpat.utils.IdentifierUtils;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.world.entity.LivingEntity;
 import java.io.*;
 import java.util.*;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 public final class CustomAnimationSettingsConfig {
 
 	public static final Codec<CustomAnimationSettingsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.STRING.fieldOf("texture").xmap(IdentifierUtils::textureId, Identifier::toString).forGetter(CustomAnimationSettingsConfig::getTexture),
+			Codec.STRING.fieldOf("texture").xmap(IdentifierUtils::textureId, ResourceLocation::toString).forGetter(CustomAnimationSettingsConfig::getTexture),
 			Codec.INT.fieldOf("duration").forGetter(CustomAnimationSettingsConfig::getDuration),
 			FrameConfig.CODEC.fieldOf("frame").forGetter(CustomAnimationSettingsConfig::getFrameConfig),
 			SoundConfig.STRINGED_CODEC.optionalFieldOf("sound").forGetter(CustomAnimationSettingsConfig::getOptionalSoundConfig)
@@ -36,7 +34,7 @@ public final class CustomAnimationSettingsConfig {
 			Optional.of(SoundConfig.PATPAT_SOUND)
 	);
 
-	private final Identifier texture;
+	private final ResourceLocation texture;
 	private final int duration;
 	private final FrameConfig frameConfig;
 	@Nullable
@@ -44,7 +42,7 @@ public final class CustomAnimationSettingsConfig {
 	private int textureWidth;
 	private int textureHeight;
 
-	public CustomAnimationSettingsConfig(Identifier texture, int duration, FrameConfig frameConfig, Optional<SoundConfig> soundConfig) {
+	public CustomAnimationSettingsConfig(ResourceLocation texture, int duration, FrameConfig frameConfig, Optional<SoundConfig> soundConfig) {
 		this.texture     = texture;
 		this.duration    = duration;
 		this.frameConfig = frameConfig;
@@ -89,14 +87,14 @@ public final class CustomAnimationSettingsConfig {
 	private void loadSize() {
 		try {
 			/*? >=1.19 {*/
-			Optional<Resource>/*?} else {*//*Resource*//*?}*/ resource = MinecraftClient.getInstance().getResourceManager().getResource(this.texture);
+			Optional<Resource>/*?} else {*//*Resource*//*?}*/ resource = Minecraft.getInstance().getResourceManager().getResource(this.texture);
 			//? >=1.19 {
 			if (resource.isEmpty()) {
 				PatPatClient.LOGGER.error("Failed to find texture at '{}'", this.texture);
 				return;
 			}
 			//?}
-			InputStream inputStream = resource/*? >=1.19 {*/.get()/*?}*/.getInputStream();
+			InputStream inputStream = resource/*? >=1.19 {*/.get()/*?}*/.open();
 			NativeImage nativeImage = NativeImage.read(inputStream);
 			this.textureWidth  = nativeImage.getWidth();
 			this.textureHeight = nativeImage.getHeight();

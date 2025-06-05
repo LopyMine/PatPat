@@ -1,8 +1,6 @@
 package net.lopymine.patpat.client.packet;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-
-import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
 
 //? <=1.19.3 {

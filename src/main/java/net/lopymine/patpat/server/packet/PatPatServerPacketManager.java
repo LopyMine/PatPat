@@ -1,16 +1,15 @@
 package net.lopymine.patpat.server.packet;
 
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.*;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.ChunkPos;
-
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.ChunkPos;
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.common.Version;
-import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.packet.c2s.*;
 import net.lopymine.patpat.packet.s2c.*;
@@ -27,7 +26,7 @@ public class PatPatServerPacketManager {
 
 	public static final Map<UUID, Version> PLAYER_VERSIONS = new HashMap<>();
 
-	private static final List<Predicate<ServerPlayerEntity>> PACKET_TESTS = new ArrayList<>();
+	private static final List<Predicate<ServerPlayer>> PACKET_TESTS = new ArrayList<>();
 
 	public static void register() {
 		PACKET_TESTS.clear();
@@ -40,28 +39,28 @@ public class PatPatServerPacketManager {
 		PatPatServerNetworkManager.registerReceiver(HelloPatPatServerC2SPacket.TYPE, PatPatServerPacketManager::handleHelloPacket);
 	}
 
-	private static void handleHelloPacket(ServerPlayerEntity sender, HelloPatPatServerC2SPacket packet) {
+	private static void handleHelloPacket(ServerPlayer sender, HelloPatPatServerC2SPacket packet) {
 		PatPat.LOGGER.debug("Received hello packet from {}!", sender.getName().getString());
 		Version version = packet.getVersion();
 		if (version.isInvalid()) {
 			PatPat.LOGGER.warn("Received invalid client version in hello packet from {}!", sender.getName().getString());
-			PLAYER_VERSIONS.put(sender.getUuid(), Version.PACKET_V2_VERSION);
+			PLAYER_VERSIONS.put(sender.getUUID(), Version.PACKET_V2_VERSION);
 			// Since v2 packet version we started sending hello packets
 			return;
 		}
 		PatPat.LOGGER.debug("Player PatPat version: {}", version);
-		PLAYER_VERSIONS.put(sender.getUuid(), version);
+		PLAYER_VERSIONS.put(sender.getUUID(), version);
 	}
 
-	public static void handlePacket(ServerPlayerEntity sender, PatPacket<ServerWorld, ?> packet) {
+	public static void handlePacket(ServerPlayer sender, PatPacket<ServerLevel, ?> packet) {
 		PatPat.LOGGER.warn("Received pat packet from {}!", sender.getName().getString());
-		for (Predicate<ServerPlayerEntity> packetTest : PACKET_TESTS) {
+		for (Predicate<ServerPlayer> packetTest : PACKET_TESTS) {
 			if (!packetTest.test(sender)) {
 				return;
 			}
 		}
 
-		ServerWorld serverWorld = (ServerWorld) sender./*? >=1.18 {*/getWorld()/*?} else {*//*world*//*?}*/;
+		ServerLevel serverWorld = (ServerLevel) sender./*? >=1.18 {*/level()/*?} else {*//*world*//*?}*/;
 		Entity entity = packet.getPattedEntity(serverWorld);
 		if (!(entity instanceof LivingEntity)) {
 			return;
@@ -72,8 +71,8 @@ public class PatPatServerPacketManager {
 			return;
 		}
 
-		ChunkPos chunkPos = /*? >=1.17 {*/entity.getChunkPos()/*?} else {*//*serverWorld.getChunk(entity.getBlockPos()).getPos()*//*?}*/;
-		for (ServerPlayerEntity player : PlayerLookup.tracking(serverWorld, chunkPos)) {
+		ChunkPos chunkPos = /*? >=1.17 {*/entity.chunkPosition()/*?} else {*//*serverWorld.getChunk(entity.getBlockPos()).getPos()*//*?}*/;
+		for (ServerPlayer player : PlayerLookup.tracking(serverWorld, chunkPos)) {
 			if (player.equals(sender)) {
 				continue;
 			}
@@ -109,8 +108,8 @@ public class PatPatServerPacketManager {
 	}
 	//?}
 
-	public static PatPacket<ClientWorld, ?> getPatPacket(Entity pattedEntity, Entity whoPattedEntity) {
-		if (PLAYER_VERSIONS.get(whoPattedEntity.getUuid()).isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
+	public static PatPacket<ClientLevel, ?> getPatPacket(Entity pattedEntity, Entity whoPattedEntity) {
+		if (PLAYER_VERSIONS.get(whoPattedEntity.getUUID()).isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
 			PatPat.LOGGER.warn("Using v2 packets");
 			return new PatEntityS2CPacketV2(pattedEntity, whoPattedEntity);
 		} else {

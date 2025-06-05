@@ -1,11 +1,10 @@
 package net.lopymine.patpat.client.packet;
 
-import net.minecraft.client.MinecraftClient;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.s2c.PatEntityS2CPacketV2;
-
+import net.minecraft.client.Minecraft;
 import java.io.*;
 
 public class PatPatClientProxLibPacketManager {
@@ -47,7 +46,7 @@ public class PatPatClientProxLibPacketManager {
 		}
 		//? if proxlib {
 		try {
-			int packetsCount = me.enderkill98.proxlib.client.ProxLib.sendPacket(MinecraftClient.getInstance(), PAT_PACKET_IDENTIFIER, encodeProxyPatPacket(pattedEntityId));
+			int packetsCount = me.enderkill98.proxlib.client.ProxLib.sendPacket(Minecraft.getInstance(), PAT_PACKET_IDENTIFIER, encodeProxyPatPacket(pattedEntityId));
 			PatPatClient.LOGGER.debug("Sent proxy packets ({}) to pat entity with id {}", packetsCount, pattedEntityId);
 		} catch (Exception e) {
 			PatPatClient.LOGGER.debug("Failed to send proxy packet, patted entity: {}, packet id: {}, data: {}", pattedEntityId, PAT_PAT_PACKETS_ID, e);

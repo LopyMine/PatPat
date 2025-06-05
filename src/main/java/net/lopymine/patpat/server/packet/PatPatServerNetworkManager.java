@@ -1,11 +1,8 @@
 package net.lopymine.patpat.server.packet;
 
-import net.minecraft.server.network.ServerPlayerEntity;
-
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-
-import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
+import net.minecraft.server.level.ServerPlayer;
 
 //? <=1.19.3 {
 /*import net.minecraft.network.PacketByteBuf;
@@ -15,12 +12,12 @@ public class PatPatServerNetworkManager {
 
 	public static <T extends BasePatPatPacket<T>> void registerReceiver(PatPatPacketType<T> id, PacketListener<T> listener) {
 		ServerPlayNetworking.registerGlobalReceiver(/*? if >=1.19.4 {*/ id.getPacketId(), /*?} else {*/ /*id.getId(), *//*?}*/
-				/*? >=1.20.5 {*/(packet, context) -> { ServerPlayerEntity sender = context.player(); /*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { T packet = id.getFactory().apply(buf); *//*?}*/
+				/*? >=1.20.5 {*/(packet, context) -> { ServerPlayer sender = context.player(); /*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { T packet = id.getFactory().apply(buf); *//*?}*/
 					listener.call(sender, packet);
 				});
 	}
 
-	public static void sendPacketToPlayer(ServerPlayerEntity player, BasePatPatPacket<?> packet) {
+	public static void sendPacketToPlayer(ServerPlayer player, BasePatPatPacket<?> packet) {
 		//? >=1.19.4 {
 		ServerPlayNetworking.send(player, packet);
 		//?} else {
@@ -39,7 +36,7 @@ public class PatPatServerNetworkManager {
 	}
 
 	public interface PacketListener<T> {
-		void call(ServerPlayerEntity sender, T packet);
+		void call(ServerPlayer sender, T packet);
 	}
 
 }

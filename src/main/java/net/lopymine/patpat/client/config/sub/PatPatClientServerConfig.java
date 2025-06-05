@@ -1,14 +1,13 @@
 package net.lopymine.patpat.client.config.sub;
 
 import lombok.*;
-import net.minecraft.client.MinecraftClient;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.client.packet.PatPatClientProxLibManager;
 import net.lopymine.patpat.utils.*;
+import net.minecraft.client.Minecraft;
 
 import static net.lopymine.patpat.utils.CodecUtils.option;
 
@@ -40,17 +39,17 @@ public class PatPatClientServerConfig {
 
 	public void setBypassServerResourcePackEnabled(boolean value) {
 		this.bypassServerResourcePackPriorityEnabled = value;
-		MinecraftClient client = MinecraftClient.getInstance();
+		Minecraft client = Minecraft.getInstance();
 		if (client == null) {
 			return;
 		}
-		boolean bl = client.getResourcePackManager()
+		boolean bl = client.getResourcePackRepository()
 				/*? <=1.20.4 {*//*.getEnabledNames()
-				 *//*?} else {*/.getEnabledIds()/*?}*/
+				 *//*?} else {*/.getSelectedIds()/*?}*/
 				.stream().anyMatch(s -> s.startsWith("server/"));
 
 		if (bl) {
-			client.reloadResources();
+			client.reloadResourcePacks();
 		}
 	}
 

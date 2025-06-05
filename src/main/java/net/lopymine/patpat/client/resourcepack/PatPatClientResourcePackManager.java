@@ -3,10 +3,11 @@ package net.lopymine.patpat.client.resourcepack;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.resource.*;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackResources;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.entity.LivingEntity;
 import com.mojang.serialization.JsonOps;
 
 import net.lopymine.patpat.PatPat;
@@ -31,7 +32,7 @@ public class PatPatClientResourcePackManager {
 	private PatPatClientResourcePackManager() {
 	}
 
-	public static void parseConfig(String packName, Identifier identifier, Supplier<InputStream> inputStreamInputSupplier, List<CustomAnimationConfig> configs, PatPatClientConfig config) {
+	public static void parseConfig(String packName, ResourceLocation identifier, Supplier<InputStream> inputStreamInputSupplier, List<CustomAnimationConfig> configs, PatPatClientConfig config) {
 		String path = identifier.getPath();
 		if (!path.endsWith(".json") && !path.endsWith(".json5")) {
 			return;
@@ -69,21 +70,21 @@ public class PatPatClientResourcePackManager {
 		}
 	}
 
-	public void reload(List<ResourcePack> reloadPacks, ResourceManager manager) {
+	public void reload(List<PackResources> reloadPacks, ResourceManager manager) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		this.loadedAnimations.clear();
 		PatPatClientManager.reloadPatEntities();
-		List<ResourcePack> packs = reloadPacks.stream().filter(pack -> pack.getNamespaces(ResourceType.CLIENT_RESOURCES).contains(PatPat.MOD_ID)).toList();
+		List<PackResources> packs = reloadPacks.stream().filter(pack -> pack.getNamespaces(PackType.CLIENT_RESOURCES).contains(PatPat.MOD_ID)).toList();
 		List<List<CustomAnimationConfig>> serverResourcePacks = new ArrayList<>();
 		List<List<CustomAnimationConfig>> resourcePacks = new ArrayList<>();
 
-		for (ResourcePack pack : packs) {
-			String resourcePackName = /*? >=1.20.5 {*/ pack.getId(); /*?} else {*//*pack.getName();*//*?}*/
+		for (PackResources pack : packs) {
+			String resourcePackName = /*? >=1.20.5 {*/ pack.packId(); /*?} else {*//*pack.getName();*//*?}*/
 			List<CustomAnimationConfig> animationConfigs = new ArrayList<>();
 
 			PatPatClient.LOGGER.info("Registering {} resource pack", resourcePackName);
 			//? >=1.19.3 {
-			pack.findResources(ResourceType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures", (id, input) -> {
+			pack.listResources(PackType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures", (id, input) -> {
 				try (InputStream inputStream = input.get()) {
 					parseConfig(resourcePackName, id, () -> inputStream, animationConfigs, config);
 				} catch (Exception e) {

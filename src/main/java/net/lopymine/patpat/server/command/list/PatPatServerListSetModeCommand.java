@@ -1,10 +1,6 @@
 package net.lopymine.patpat.server.command.list;
 
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.command.CommandSource;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -15,11 +11,13 @@ import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.server.config.PatPatServerConfig;
 import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.utils.CommandTextBuilder;
-
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 import java.util.*;
 
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod({TextExtension.class, CommandExtension.class})
 public class PatPatServerListSetModeCommand {
@@ -28,20 +26,20 @@ public class PatPatServerListSetModeCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<ServerCommandSource> get() {
+	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("set")
 				.requires(context -> context.hasPatPatPermission("list.set"))
 				.then(argument("mode", StringArgumentType.word())
-						.suggests(((context, builder) -> CommandSource.suggestMatching(List.of("WHITELIST", "BLACKLIST", "DISABLED"), builder)))
+						.suggests(((context, builder) -> SharedSuggestionProvider.suggest(List.of("WHITELIST", "BLACKLIST", "DISABLED"), builder)))
 						.executes(PatPatServerListSetModeCommand::setListMode));
 	}
 
-	public static int setListMode(CommandContext<ServerCommandSource> context) {
+	public static int setListMode(CommandContext<CommandSourceStack> context) {
 		String modeId = StringArgumentType.getString(context, "mode");
 		PatPatServerConfig config = PatPatServerConfig.getInstance();
 		ListMode listMode = ListMode.getById(modeId);
 		if (config.getListMode() == listMode) {
-			Text text = CommandTextBuilder.startBuilder("list.mode.already", listMode).build();
+			Component text = CommandTextBuilder.startBuilder("list.mode.already", listMode).build();
 			context.getSource().sendPatPatFeedback(text, true);
 			return 0;
 		}
@@ -60,7 +58,7 @@ public class PatPatServerListSetModeCommand {
 		if (!success) {
 			builder.withHoverText(Arrays.stream(ListMode.values()).map(ListMode::getText).toArray());
 		}
-		Text text = builder.build();
+		Component text = builder.build();
 		context.getSource().sendPatPatFeedback(text, true);
 		if (success) {
 			PatPat.LOGGER.info(text.asString());

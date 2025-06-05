@@ -3,10 +3,10 @@ package net.lopymine.patpat.modmenu.clothconfig;
 import me.shedaniel.clothconfig2.api.*;
 import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.*;
-import net.minecraft.util.Formatting;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
@@ -16,8 +16,8 @@ import java.util.function.Function;
 
 public class ClothConfigConfigurationScreen {
 
-	public static final Function<Boolean, Text> ENABLED_OR_DISABLE_FORMATTER = state -> TextUtils.text("modmenu.formatter.enable_or_disable." + state)
-			.setStyle(Style.EMPTY.withFormatting(Boolean.TRUE.equals(state) ? Formatting.GREEN : Formatting.RED));
+	public static final Function<Boolean, Component> ENABLED_OR_DISABLE_FORMATTER = state -> TextUtils.text("modmenu.formatter.enable_or_disable." + state)
+			.setStyle(Style.EMPTY.applyFormat(Boolean.TRUE.equals(state) ? ChatFormatting.GREEN : ChatFormatting.RED));
 
 	private ClothConfigConfigurationScreen() {
 		throw new IllegalStateException("Screen class");

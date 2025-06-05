@@ -2,11 +2,9 @@ package net.lopymine.patpat.packet.c2s;
 
 import lombok.Getter;
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.entity.Entity;
 import net.minecraft.network.*;
-import net.minecraft.server.world.ServerWorld;
-
-import net.lopymine.patpat.packet.PatPatPacketType;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.lopymine.patpat.extension.EntityExtension;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.IdentifierUtils;
@@ -27,19 +25,19 @@ public class PatEntityC2SPacketV2 implements C2SPatPacket<PatEntityC2SPacketV2> 
 		this.pattedEntityId = pattedEntity.getEntityIntId();
 	}
 
-	public PatEntityC2SPacketV2(PacketByteBuf buf) {
+	public PatEntityC2SPacketV2(FriendlyByteBuf buf) {
 		this.pattedEntityId = buf.readVarInt();
 	}
 
 	@Override
-	public void write(PacketByteBuf buf) {
+	public void write(FriendlyByteBuf buf) {
 		buf.writeVarInt(this.pattedEntityId);
 	}
 
 	@Override
 	@Nullable
-	public Entity getPattedEntity(ServerWorld world) {
-		return world.getEntityById(this.getPattedEntityId());
+	public Entity getPattedEntity(ServerLevel world) {
+		return world.getEntity(this.getPattedEntityId());
 	}
 
 	@Override

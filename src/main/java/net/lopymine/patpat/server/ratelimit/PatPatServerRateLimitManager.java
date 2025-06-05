@@ -1,12 +1,11 @@
 package net.lopymine.patpat.server.ratelimit;
 
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.server.network.ServerPlayerEntity;
-
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.extension.PlayerExtension;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
+import net.minecraft.server.level.ServerPlayer;
 import net.lopymine.patpat.common.config.time.Time;
 
 import java.util.*;
@@ -26,7 +25,7 @@ public class PatPatServerRateLimitManager {
 		return uuidToPat.getOrDefault(uuid, PatPatServerConfig.getInstance().getRateLimitConfig().getTokenLimit());
 	}
 
-	public static boolean canPat(ServerPlayerEntity player) {
+	public static boolean canPat(ServerPlayer player) {
 		PatPatServerRateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
 		if (!config.isEnabled()) {
 			return true;
@@ -34,7 +33,7 @@ public class PatPatServerRateLimitManager {
 		if (player.hasPermission(config.getPermissionBypass())) {
 			return true;
 		}
-		UUID uuid = player.getUuid();
+		UUID uuid = player.getUUID();
 		int availablePats = uuidToPat.getOrDefault(
 				uuid,
 				config.getTokenLimit()

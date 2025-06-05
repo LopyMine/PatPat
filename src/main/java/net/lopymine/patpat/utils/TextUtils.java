@@ -1,6 +1,7 @@
 package net.lopymine.patpat.utils;
 
-import net.minecraft.text.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 import net.lopymine.patpat.PatPat;
 
@@ -10,27 +11,27 @@ public class TextUtils {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static MutableText translatable(String key, Object... args) {
+	public static MutableComponent translatable(String key, Object... args) {
 		//? >=1.19 {
-		return Text.translatable(key, args);
+		return Component.translatable(key, args);
 		//?} else {
 		/*return new TranslatableText(key, args);
 		*///?}
 	}
 
-	public static MutableText literal(String key) {
+	public static MutableComponent literal(String key) {
 		//? >=1.19 {
-		return Text.literal(key);
+		return Component.literal(key);
 		//?} else {
 		/*return new LiteralText(key);
 		*///?}
 	}
 
-	public static Text of(String key) {
-		return Text.of(key);
+	public static Component of(String key) {
+		return Component.nullToEmpty(key);
 	}
 
-	public static MutableText text(String path, Object... args) {
+	public static MutableComponent text(String path, Object... args) {
 		return TextUtils.translatable(String.format("%s.%s", PatPat.MOD_ID, path), args);
 	}
 }

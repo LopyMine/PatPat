@@ -1,20 +1,25 @@
 package net.lopymine.patpat.client.render;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.*;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.MatrixStack.Entry;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.*;
-
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityAttachment;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 //? <=1.21.4 {
 import com.mojang.blaze3d.systems.RenderSystem;
 /*?} else {*/
 /*import com.mojang.blaze3d.opengl.GlStateManager;
  *//*?}*/
-
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.PoseStack.Pose;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
 
@@ -32,13 +37,13 @@ public class PatPatClientRenderer {
 
 	public static final List<PacketPat> packets = new ArrayList<>();
 
-	public record PacketPat(LivingEntity livingEntity, PlayerConfig playerConfig, ClientPlayerEntity player, boolean replayModPacket){}
+	public record PacketPat(LivingEntity livingEntity, PlayerConfig playerConfig, LocalPlayer player, boolean replayModPacket){}
 
 	public static void register() {
 		WorldRenderEvents.AFTER_ENTITIES.register(PatPatClientRenderer::renderPatOnYourself);
 		ClientTickEvents.END_WORLD_TICK.register(client -> {
 			//? >1.20.2 {
-			if (client.getTickManager().isFrozen()) {
+			if (client.tickRateManager().isFrozen()) {
 				return;
 			}
 			//?}
@@ -61,18 +66,18 @@ public class PatPatClientRenderer {
 			return;
 		}
 
-		ClientPlayerEntity player = MinecraftClient.getInstance().player;
-		VertexConsumerProvider consumers = context.consumers();
-		MatrixStack matrices = context.matrixStack();
+		LocalPlayer player = Minecraft.getInstance().player;
+		MultiBufferSource consumers = context.consumers();
+		PoseStack matrices = context.matrixStack();
 		Camera camera = context.camera();
 
-		if (player == null || matrices == null || consumers == null || camera.isThirdPerson()) {
+		if (player == null || matrices == null || consumers == null || camera.isDetached()) {
 			return;
 		}
 
-		EntityRenderDispatcher dispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-		float tickDelta = context./*? if >=1.21 {*/ tickCounter().getTickDelta(false); /*?} else {*/ /*tickDelta(); *//*?}*/
-		int light = dispatcher.getLight(player, tickDelta);
+		EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+		float tickDelta = context./*? if >=1.21 {*/ tickCounter().getGameTimeDeltaPartialTick(false); /*?} else {*/ /*tickDelta(); *//*?}*/
+		int light = dispatcher.getPackedLightCoords(player, tickDelta);
 
 		PatEntity patEntity = PatPatClientManager.getPatEntity(player);
 		if (patEntity == null) {
@@ -84,10 +89,10 @@ public class PatPatClientRenderer {
 			return;
 		}
 
-		PatPatClientRenderer.render(matrices, consumers, dispatcher, patEntity, player, new Vec3f(0.0F, MathHelper.lerp(tickDelta, camera.lastCameraY, camera.cameraY) - 0.2F, 0.0F), tickDelta, light);
+		PatPatClientRenderer.render(matrices, consumers, dispatcher, patEntity, player, new Vec3f(0.0F, Mth.lerp(tickDelta, camera.eyeHeightOld, camera.eyeHeight) - 0.2F, 0.0F), tickDelta, light);
 	}
 
-	public static RenderResult render(MatrixStack matrices, VertexConsumerProvider provider, EntityRenderDispatcher dispatcher, @Nullable PatEntity providedPatEntity, @Nullable Entity entity, @Nullable Vec3f overrideOffset, float tickDelta, int light) {
+	public static RenderResult render(PoseStack matrices, MultiBufferSource provider, EntityRenderDispatcher dispatcher, @Nullable PatEntity providedPatEntity, @Nullable Entity entity, @Nullable Vec3f overrideOffset, float tickDelta, int light) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		if (!config.getMainConfig().isModEnabled()) {
 			return RenderResult.FAILED;
@@ -116,17 +121,17 @@ public class PatPatClientRenderer {
 		//? <=1.20.4 {
 		/*float nameLabelHeight = entity.getHeight();
 		 *///?} else {
-		Vec3d vec3d = entity != null ? entity.getAttachments().getPointNullable(EntityAttachmentType.NAME_TAG, 0, entity.getYaw(tickDelta)) : null;
+		Vec3 vec3d = entity != null ? entity.getAttachments().getNullable(EntityAttachment.NAME_TAG, 0, entity.getViewYRot(tickDelta)) : null;
 		float nameLabelHeight = vec3d != null ? (float) vec3d.y: 0.0F;
 		//?}
 
-		matrices.push();
+		matrices.pushPose();
 		matrices.translate(
 				0.0F,
 				overrideOffset != null ? overrideOffset.getY() : (nameLabelHeight * PatPatClientManager.getAnimationProgress(patEntity, tickDelta)) + 0.11F - frameConfig.offsetY() - config.getVisualConfig().getAnimationOffsets().getY(),
 				0.0F
 		);
-		matrices.multiply(dispatcher.getRotation());
+		matrices.mulPose(dispatcher.cameraOrientation());
 		matrices.scale(0.85F * numberToMirrorTexture, -0.85F, 0.85F);
 
 		int frameWidth = animation.getTextureWidth() / frameConfig.totalFrames();
@@ -155,16 +160,16 @@ public class PatPatClientRenderer {
 		float v1 = 0.0F;
 		float v2 = 1.0F;
 
-		Entry peek = matrices.peek();
-		/*? >=1.19.3 {*/org.joml.Matrix4f/*?} else {*/ /*net.minecraft.util.math.Matrix4f*//*?}*/ matrix4f = peek./*? <=1.17.1 {*//*getModel()*//*?} else {*/getPositionMatrix()/*?}*/;
-		VertexConsumer buffer = provider.getBuffer(RenderLayer.getEntityTranslucent(animation.getTexture()));
+		Pose peek = matrices.last();
+		/*? >=1.19.3 {*/org.joml.Matrix4f/*?} else {*/ /*net.minecraft.util.math.Matrix4f*//*?}*/ matrix4f = peek./*? <=1.17.1 {*//*getModel()*//*?} else {*/pose()/*?}*/;
+		VertexConsumer buffer = provider.getBuffer(RenderType.entityTranslucent(animation.getTexture()));
 
-		buffer.vertex(matrix4f, x1, y1, z).color(255, 255, 255, 255).texture(u1, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
-		buffer.vertex(matrix4f, x1, y2, z).color(255, 255, 255, 255).texture(u1, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
-		buffer.vertex(matrix4f, x2, y2, z).color(255, 255, 255, 255).texture(u2, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
-		buffer.vertex(matrix4f, x2, y1, z).color(255, 255, 255, 255).texture(u2, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
+		buffer.addVertex(matrix4f, x1, y1, z).setColor(255, 255, 255, 255).setUv(u1, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
+		buffer.addVertex(matrix4f, x1, y2, z).setColor(255, 255, 255, 255).setUv(u1, v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
+		buffer.addVertex(matrix4f, x2, y2, z).setColor(255, 255, 255, 255).setUv(u2, v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
+		buffer.addVertex(matrix4f, x2, y1, z).setColor(255, 255, 255, 255).setUv(u2, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
 
-		matrices.pop();
+		matrices.popPose();
 		disableBlend();
 		if (config.getVisualConfig().isHidingNicknameEnabled()) {
 			return RenderResult.RENDERER_SHOULD_CANCEL;
@@ -172,7 +177,7 @@ public class PatPatClientRenderer {
 		return RenderResult.RENDERED;
 	}
 
-	public static void scaleEntityIfPatted(LivingEntity livingEntity, MatrixStack matrixStack, float tickDelta){
+	public static void scaleEntityIfPatted(LivingEntity livingEntity, PoseStack matrixStack, float tickDelta){
 		PatEntity patEntity = PatPatClientManager.getPatEntity(livingEntity);
 		if (patEntity == null) {
 			return;

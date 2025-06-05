@@ -1,8 +1,6 @@
 package net.lopymine.patpat.common.config.vector;
 
 import lombok.*;
-import net.minecraft.util.Util;
-
 import com.mojang.serialization.Codec;
 
 import java.util.*;

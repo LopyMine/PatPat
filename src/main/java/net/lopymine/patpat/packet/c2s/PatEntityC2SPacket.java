@@ -1,11 +1,9 @@
 package net.lopymine.patpat.packet.c2s;
 
 import lombok.Getter;
-import net.minecraft.entity.Entity;
 import net.minecraft.network.*;
-import net.minecraft.server.world.ServerWorld;
-
-import net.lopymine.patpat.packet.PatPatPacketType;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
@@ -22,21 +20,21 @@ public class PatEntityC2SPacket implements C2SPatPacket<PatEntityC2SPacket> {
 	private final UUID pattedEntityUuid;
 
 	public PatEntityC2SPacket(Entity pattedEntity) {
-		this.pattedEntityUuid = pattedEntity.getUuid();
+		this.pattedEntityUuid = pattedEntity.getUUID();
 	}
 
-	public PatEntityC2SPacket(PacketByteBuf buf) {
-		this.pattedEntityUuid = buf.readUuid();
+	public PatEntityC2SPacket(FriendlyByteBuf buf) {
+		this.pattedEntityUuid = buf.readUUID();
 	}
 
 	@Override
-	public void write(PacketByteBuf buf) {
-		buf.writeUuid(this.pattedEntityUuid);
+	public void write(FriendlyByteBuf buf) {
+		buf.writeUUID(this.pattedEntityUuid);
 	}
 
 	@Override
 	@Nullable
-	public Entity getPattedEntity(ServerWorld world) {
+	public Entity getPattedEntity(ServerLevel world) {
 		return world.getEntity(this.getPattedEntityUuid());
 	}
 

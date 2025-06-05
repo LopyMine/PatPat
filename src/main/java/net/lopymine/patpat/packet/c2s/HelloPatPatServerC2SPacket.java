@@ -1,13 +1,12 @@
 package net.lopymine.patpat.packet.c2s;
 
 import lombok.Getter;
-import net.minecraft.network.PacketByteBuf;
-
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.packet.BasePatPatPacket;
 import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.utils.IdentifierUtils;
+import net.minecraft.network.FriendlyByteBuf;
 
 @Getter
 public class HelloPatPatServerC2SPacket implements BasePatPatPacket<HelloPatPatServerC2SPacket> {
@@ -22,11 +21,11 @@ public class HelloPatPatServerC2SPacket implements BasePatPatPacket<HelloPatPatS
 		this.version = Version.CURRENT_MOD_VERSION;
 	}
 
-	public HelloPatPatServerC2SPacket(PacketByteBuf buf) {
+	public HelloPatPatServerC2SPacket(FriendlyByteBuf buf) {
 		this.version = readVersion(buf);
 	}
 
-	private static Version readVersion(PacketByteBuf buf){
+	private static Version readVersion(FriendlyByteBuf buf){
 		try {
 			int major = buf.readUnsignedByte();
 			int minor = buf.readUnsignedByte();
@@ -39,7 +38,7 @@ public class HelloPatPatServerC2SPacket implements BasePatPatPacket<HelloPatPatS
 	}
 
 	@Override
-	public void write(PacketByteBuf buf) {
+	public void write(FriendlyByteBuf buf) {
 		buf.writeByte(this.version.major());
 		buf.writeByte(this.version.minor());
 		buf.writeByte(this.version.patch());

@@ -68,6 +68,8 @@ repositories {
 }
 
 dependencies {
+	mappings loom.officialMojangMappings()
+
 	def mcVersion = stonecutter.current.version.toString()
 
 	// Fabric permission api

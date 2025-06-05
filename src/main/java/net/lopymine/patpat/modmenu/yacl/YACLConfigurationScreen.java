@@ -1,6 +1,5 @@
 package net.lopymine.patpat.modmenu.yacl;
 
-import net.minecraft.client.gui.screen.Screen;
 //? >=1.20.1 {
 import dev.isxander.yacl3.api.*;
 import lombok.experimental.ExtensionMethod;
@@ -11,6 +10,7 @@ import net.lopymine.patpat.modmenu.yacl.custom.base.*;
 import net.lopymine.patpat.modmenu.yacl.custom.extension.SimpleOptionExtension;
 import net.lopymine.patpat.modmenu.yacl.custom.screen.SimpleYACLScreen;
 import net.lopymine.patpat.modmenu.yacl.custom.utils.*;
+import net.minecraft.client.gui.screens.Screen;
 
 @ExtensionMethod(SimpleOptionExtension.class)
 public class YACLConfigurationScreen {

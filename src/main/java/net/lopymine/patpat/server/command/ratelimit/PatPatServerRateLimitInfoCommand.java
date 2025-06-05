@@ -1,11 +1,6 @@
 package net.lopymine.patpat.server.command.ratelimit;
 
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.argument.GameProfileArgumentType;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
-
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -17,11 +12,14 @@ import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
 import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.utils.CommandTextBuilder;
-
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.GameProfileArgument;
+import net.minecraft.network.chat.Component;
 import java.util.Collection;
 
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod({CommandExtension.class, PlayerExtension.class})
 public class PatPatServerRateLimitInfoCommand {
@@ -32,19 +30,19 @@ public class PatPatServerRateLimitInfoCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<ServerCommandSource> get() {
+	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("info")
 				.requires(context -> context.hasPatPatPermission("ratelimit.info"))
 				.executes(PatPatServerRateLimitInfoCommand::info)
-				.then(argument(PROFILE_KEY, GameProfileArgumentType.gameProfile())
-						.suggests((context, builder) -> CommandSource.suggestMatching(context.getSource().getPlayerNames(), builder))
+				.then(argument(PROFILE_KEY, GameProfileArgument.gameProfile())
+						.suggests((context, builder) -> SharedSuggestionProvider.suggest(context.getSource().getOnlinePlayerNames(), builder))
 						.executes(PatPatServerRateLimitInfoCommand::infoWithUser)
 				);
 	}
 
-	public static int info(CommandContext<ServerCommandSource> context) {
+	public static int info(CommandContext<CommandSourceStack> context) {
 		PatPatServerRateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
-		Text text = CommandTextBuilder.startBuilder("ratelimit.info",
+		Component text = CommandTextBuilder.startBuilder("ratelimit.info",
 				config.isEnabled(),
 				config.getTokenLimit(),
 				config.getTokenIncrement(),
@@ -55,16 +53,16 @@ public class PatPatServerRateLimitInfoCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 
-	public static int infoWithUser(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-		Collection<GameProfile> profiles = GameProfileArgumentType.getProfileArgument(context, "profile");
+	public static int infoWithUser(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+		Collection<GameProfile> profiles = GameProfileArgument.getGameProfiles(context, "profile");
 		if (profiles.size() != 1) {
-			Text text = CommandTextBuilder.startBuilder("ratelimit.info.only_one_player").build();
+			Component text = CommandTextBuilder.startBuilder("ratelimit.info.only_one_player").build();
 			context.getSource().sendPatPatFeedback(text);
 		}
 		PatPatServerRateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
 		GameProfile profile = profiles.iterator().next();
-		if (!context.getSource().getPlayerNames().contains(profile.getName())) {
-			Text text = CommandTextBuilder.startBuilder("ratelimit.info.player.not_online", profile.getName()).build();
+		if (!context.getSource().getOnlinePlayerNames().contains(profile.getName())) {
+			Component text = CommandTextBuilder.startBuilder("ratelimit.info.player.not_online", profile.getName()).build();
 			context.getSource().sendPatPatFeedback(text);
 			return 0;
 		}
@@ -75,7 +73,7 @@ public class PatPatServerRateLimitInfoCommand {
 			if (result) {
 				message = "bypass";
 			}
-			Text text = CommandTextBuilder.startBuilder("ratelimit.info.player", profile.getName(), message).build();
+			Component text = CommandTextBuilder.startBuilder("ratelimit.info.player", profile.getName(), message).build();
 			context.getSource().sendPatPatFeedback(text);
 		});
 		return Command.SINGLE_SUCCESS;

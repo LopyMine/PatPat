@@ -1,11 +1,6 @@
 package net.lopymine.patpat.server.command;
 
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.argument.GameProfileArgumentType;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.MutableText;
-
 import com.mojang.brigadier.arguments.*;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -18,9 +13,10 @@ import net.lopymine.patpat.server.command.ratelimit.set.*;
 import net.lopymine.patpat.server.command.reload.PatPatServerConfigReloadCommand;
 import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
 import net.lopymine.patpat.utils.TextUtils;
+import net.minecraft.network.chat.MutableComponent;
 
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 //? >=1.19 {
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -32,7 +28,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 @ExtensionMethod({TextExtension.class, CommandExtension.class})
 public class PatPatServerCommandManager {
 
-	public static final MutableText PATPAT_ID = TextUtils.literal("[§aPatPat§f] ");
+	public static final MutableComponent PATPAT_ID = TextUtils.literal("[§aPatPat§f] ");
 
 	private PatPatServerCommandManager() {
 		throw new IllegalStateException("Manager class");

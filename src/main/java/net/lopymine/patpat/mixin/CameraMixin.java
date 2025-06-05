@@ -1,8 +1,9 @@
 package net.lopymine.patpat.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.*;
-import net.minecraft.client.render.Camera;
-import net.minecraft.entity.*;
+import net.minecraft.client.Camera;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 //? <=1.20.2 {
@@ -19,14 +20,11 @@ import net.lopymine.patpat.client.manager.PatPatClientManager;
 @Mixin(Camera.class)
 public class CameraMixin {
 
-	//? >1.21.4 {
-	/*@Shadow
-	private float lastTickProgress;
-	*//*?} else if >1.20.2 {*/
+	/*? >1.20.2 {*/
 	@Shadow
-	private float lastTickDelta;
+	private float partialTickTime;
 	//?} else {
-	/*private float lastTickDelta = 0;
+	/*private float partialTickTime = 0;
 
 	@Inject(at = @At("HEAD"), method = "update")
 	private void onUpdate(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
@@ -34,10 +32,8 @@ public class CameraMixin {
 	}
 	*///?}
 
-	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getStandingEyeHeight()F"), method = "updateEyeHeight")
+	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getEyeHeight()F"), method = "tick")
 	private float applyPattingEffect(Entity entity, Operation<Float> original) {
-		//? >1.21.4
-		/*float lastTickDelta = lastTickProgress;*/
 
 		Float originalHeight = original.call(entity);
 
@@ -53,12 +49,12 @@ public class CameraMixin {
 			return originalHeight;
 		}
 
-		if (PatPatClientManager.expired(patEntity, this.lastTickDelta)) {
+		if (PatPatClientManager.expired(patEntity, this.partialTickTime)) {
 			PatPatClientManager.removePatEntity(patEntity);
 			return originalHeight;
 		}
 
-		return originalHeight * PatPatClientManager.getAnimationProgress(patEntity, this.lastTickDelta);
+		return originalHeight * PatPatClientManager.getAnimationProgress(patEntity, this.partialTickTime);
 	}
 
 }

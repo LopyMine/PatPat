@@ -1,12 +1,13 @@
 package net.lopymine.patpat.utils;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.*;
-import net.minecraft.text.ClickEvent.*;
-import net.minecraft.text.HoverEvent.*;
-import net.minecraft.text.HoverEvent.Action;
-
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.HoverEvent.Action;
+import net.minecraft.network.chat.HoverEvent.EntityTooltipInfo;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.world.entity.EntityType;
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
@@ -15,17 +16,17 @@ import java.util.UUID;
 public class CommandTextBuilder {
 
 	private final String key;
-	private final MutableText text;
+	private final MutableComponent text;
 
 	private CommandTextBuilder(String key, Object... args) {
 		this.key  = key;
 		this.text = CommandTextBuilder.translatable(key, args);
 	}
 
-	private static MutableText translatable(String key, Object... args) {
+	private static MutableComponent translatable(String key, Object... args) {
 		for (int i = 0; i < args.length; ++i) {
 			Object object = args[i];
-			if (!isPrimitive(object) && !(object instanceof Text)) {
+			if (!isPrimitive(object) && !(object instanceof Component)) {
 				args[i] = String.valueOf(object);
 			}
 		}
@@ -45,13 +46,13 @@ public class CommandTextBuilder {
 		return this.withShowEntity(type, uuid, TextUtils.literal(name));
 	}
 
-	public CommandTextBuilder withShowEntity(EntityType<?> type, UUID uuid, Text name) {
-		HoverEvent hoverEvent = getHoverEvent(Action.SHOW_ENTITY, new EntityContent(type, uuid, name));
+	public CommandTextBuilder withShowEntity(EntityType<?> type, UUID uuid, Component name) {
+		HoverEvent hoverEvent = getHoverEvent(Action.SHOW_ENTITY, new EntityTooltipInfo(type, uuid, name));
 		return this.withHoverEvent(hoverEvent);
 	}
 
 	public CommandTextBuilder withHoverText(Object... args) {
-		MutableText hoverText = CommandTextBuilder.translatable(this.key + ".hover_text", args);
+		MutableComponent hoverText = CommandTextBuilder.translatable(this.key + ".hover_text", args);
 		HoverEvent hoverEvent = getHoverEvent(Action.SHOW_TEXT, hoverText);
 		return this.withHoverEvent(hoverEvent);
 	}
@@ -108,7 +109,7 @@ public class CommandTextBuilder {
 		*//*?}*/
 	}
 
-	public Text build() {
+	public Component build() {
 		return this.text;
 	}
 }

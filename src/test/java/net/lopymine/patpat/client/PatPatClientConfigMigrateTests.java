@@ -1,7 +1,7 @@
 //? >=1.19.4 {
 package net.lopymine.patpat.client;
 
-import net.minecraft.Bootstrap;
+import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
 import org.junit.jupiter.api.*;
 
@@ -20,8 +20,8 @@ public class PatPatClientConfigMigrateTests {
 
 	@BeforeAll
 	static void beforeAll() {
-		SharedConstants.createGameVersion();
-		Bootstrap.initialize();
+		SharedConstants.tryDetectVersion();
+		Bootstrap.bootStrap();
 	}
 
 	@Nested

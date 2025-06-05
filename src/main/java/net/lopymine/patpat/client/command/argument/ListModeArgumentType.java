@@ -1,7 +1,5 @@
 package net.lopymine.patpat.client.command.argument;
 
-import net.minecraft.command.CommandSource;
-
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -12,7 +10,7 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.utils.CommandTextBuilder;
-
+import net.minecraft.commands.SharedSuggestionProvider;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
@@ -45,7 +43,7 @@ public class ListModeArgumentType implements ArgumentType<ListMode> {
 
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-		return CommandSource.suggestMatching(Arrays.stream(ListMode.values()).flatMap(listMode -> Stream.of(listMode.name())).toList(), builder);
+		return SharedSuggestionProvider.suggest(Arrays.stream(ListMode.values()).flatMap(listMode -> Stream.of(listMode.name())).toList(), builder);
 	}
 
 	@Override

@@ -1,9 +1,8 @@
 package net.lopymine.patpat.client.command.argument;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.*;
-import net.minecraft.util.Pair;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.util.Tuple;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -12,7 +11,6 @@ import com.mojang.brigadier.exceptions.*;
 
 import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.utils.CommandTextBuilder;
 
 import java.util.*;
@@ -43,12 +41,12 @@ public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 
 			PatPatClient.LOGGER.debug("Parsed PlayerInfo from PlayerInfoArgumentType: {}", s);
 
-			ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
+			ClientPacketListener networkHandler = Minecraft.getInstance().getConnection();
 			if (networkHandler == null) {
 				throw FAILED_PARSING.createWithContext(reader, reader.getString());
 			}
 
-			for (PlayerListEntry entry : networkHandler.getPlayerList()) {
+			for (net.minecraft.client.multiplayer.PlayerInfo entry : networkHandler.getOnlinePlayers()) {
 				GameProfile profile = entry.getProfile();
 				if (profile.getName().equals(s)) {
 					return new PlayerInfo(s, profile.getId());
@@ -72,18 +70,18 @@ public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 
 	public static class PlayerInfo {
 
-		private final Pair<String, UUID> pair;
+		private final Tuple<String, UUID> pair;
 
 		public PlayerInfo(String nickname, UUID uuid) {
-			this.pair = new Pair<>(nickname, uuid);
+			this.pair = new Tuple<>(nickname, uuid);
 		}
 
 		public String getNickname() {
-			return this.pair.getLeft();
+			return this.pair.getA();
 		}
 
 		public UUID getUuid() {
-			return this.pair.getRight();
+			return this.pair.getB();
 		}
 	}
 }

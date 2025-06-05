@@ -1,17 +1,12 @@
 package net.lopymine.patpat.entity;
 
 import lombok.*;
-import net.minecraft.entity.LivingEntity;
-
 import net.lopymine.patpat.client.config.resourcepack.*;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.TickRateManager;
+import net.minecraft.world.entity.LivingEntity;
 import java.util.*;
-
-//? >1.20.2 {
-import net.minecraft.world.tick.TickManager;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
-//?}
 
 @Getter
 public class PatEntity {
@@ -44,13 +39,13 @@ public class PatEntity {
 
 	public float getProgress(float tickDelta) {
 		//? >1.20.2 {
-		ClientWorld world = MinecraftClient.getInstance().world;
+		ClientLevel world = Minecraft.getInstance().level;
 		if (world == null) {
 			return 0;
 		}
 
-		TickManager tickManager = world.getTickManager();
-		float tickMillis = tickManager.getTickRate() > 20 ? (2500F / tickManager.getMillisPerTick()) : 50F;
+		TickRateManager tickManager = world.tickRateManager();
+		float tickMillis = tickManager.tickrate() > 20 ? (2500F / tickManager.millisecondsPerTick()) : 50F;
 		float v = Math.max(this.tickProgress, 0) * tickMillis;
 		float v1 = tickManager.isFrozen() ? 0 : tickDelta * tickMillis;
 		//?} else {
@@ -61,11 +56,11 @@ public class PatEntity {
 	}
 
 	public boolean is(LivingEntity entity) {
-		return this.is(entity.getUuid());
+		return this.is(entity.getUUID());
 	}
 
 	private boolean is(UUID uuid) {
-		return this.entity.getUuid().equals(uuid);
+		return this.entity.getUUID().equals(uuid);
 	}
 
 	@Override
@@ -78,6 +73,6 @@ public class PatEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.entity.getUuid());
+		return Objects.hash(this.entity.getUUID());
 	}
 }

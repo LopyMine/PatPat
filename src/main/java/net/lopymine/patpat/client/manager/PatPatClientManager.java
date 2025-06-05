@@ -1,13 +1,11 @@
 package net.lopymine.patpat.client.manager;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
-
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.entity.PatEntity;
-
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import java.util.*;
 import org.jetbrains.annotations.*;
 
@@ -21,7 +19,7 @@ public class PatPatClientManager {
 
 	@Nullable
 	public static PatEntity getPatEntity(@NotNull LivingEntity entity) {
-		return PAT_ENTITIES.get(entity.getUuid());
+		return PAT_ENTITIES.get(entity.getUUID());
 	}
 
 	public static void tickEntities() {
@@ -29,7 +27,7 @@ public class PatPatClientManager {
 	}
 
 	public static void removePatEntity(@NotNull LivingEntity entity) {
-		PAT_ENTITIES.remove(entity.getUuid());
+		PAT_ENTITIES.remove(entity.getUUID());
 	}
 
 	public static void removePatEntity(@NotNull PatEntity patEntity) {
@@ -42,7 +40,7 @@ public class PatPatClientManager {
 	public static PatEntity pat(@NotNull LivingEntity entity, @NotNull PlayerConfig whoPatted) {
 		PatPatClient.LOGGER.debug("{} patted {}", whoPatted.getName(), entity.getName());
 
-		UUID uuid = entity.getUuid();
+		UUID uuid = entity.getUUID();
 		PatEntity patEntity = PAT_ENTITIES.get(uuid);
 		if (patEntity == null) {
 			patEntity = new PatEntity(entity, whoPatted);
@@ -67,10 +65,10 @@ public class PatPatClientManager {
 		animationProgress = (float) (1 - Math.pow(1 - animationProgress, 2));
 		int totalFrames = animationConfig.getFrameConfig().totalFrames();
 
-		int frame = MathHelper.clamp((int) Math.floor(totalFrames * animationProgress), 0, totalFrames - 1);
+		int frame = Mth.clamp((int) Math.floor(totalFrames * animationProgress), 0, totalFrames - 1);
 		patEntity.setCurrentFrame(frame);
 
-		float range = PatPatClientConfig.getInstance().getVisualConfig().getPatWeight() / patEntity.getEntity().getHeight();
+		float range = PatPatClientConfig.getInstance().getVisualConfig().getPatWeight() / patEntity.getEntity().getBbHeight();
 		return ((float) ((1 - range) + range * (1 - Math.sin(animationProgress * Math.PI))));
 	}
 

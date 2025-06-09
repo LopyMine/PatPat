@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.utils.mixin.EntityRenderStateWithParent;
-//?}
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;

@@ -1,13 +1,12 @@
 package net.lopymine.patpat.client.config.resourcepack;
 
 import lombok.Getter;
-import net.minecraft.sound.SoundEvent;
-
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.utils.*;
+import net.minecraft.sounds.SoundEvent;
 
 @Getter
 public class SoundConfig {
@@ -30,7 +29,7 @@ public class SoundConfig {
 		return null;
 	}, soundConfig -> {
 		if ((soundConfig.getMinPitch() == 1.0F) && (soundConfig.getMaxPitch() == 1.0F) && (soundConfig.getVolume() == 1.0F)) {
-			return Either.right(soundConfig.getSound()./*? <1.21.2 {*//*getId()*//*?} else {*/id()/*?}*/.toString());
+			return Either.right(soundConfig.getSound()./*? <1.21.2 {*//*getId()*//*?} else {*/location()/*?}*/.toString());
 		}
 		return Either.left(soundConfig);
 	});

@@ -5,7 +5,6 @@ import net.minecraft.network.*;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.Version;
-import net.lopymine.patpat.packet.PatPatPacketType;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
@@ -22,7 +21,7 @@ public class HelloPatPatPlayerS2CPacket implements BasePatPatPacket<HelloPatPatP
 		this.version = Version.CURRENT_MOD_VERSION;
 	}
 
-	public HelloPatPatPlayerS2CPacket(PacketByteBuf buf) {
+	public HelloPatPatPlayerS2CPacket(FriendlyByteBuf buf) {
 		Version version = Version.INVALID;
 
 		try {
@@ -38,7 +37,7 @@ public class HelloPatPatPlayerS2CPacket implements BasePatPatPacket<HelloPatPatP
 	}
 
 	@Override
-	public void write(PacketByteBuf buf) {
+	public void write(FriendlyByteBuf buf) {
 		buf.writeByte(this.version.major());
 		buf.writeByte(this.version.minor());
 		buf.writeByte(this.version.patch());

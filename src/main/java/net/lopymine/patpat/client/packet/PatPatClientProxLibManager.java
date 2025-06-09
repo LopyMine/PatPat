@@ -10,23 +10,25 @@ import net.lopymine.patpat.compat.LoadedMods;
 
 public class PatPatClientProxLibManager {
 
+	private PatPatClientProxLibManager() {
+		throw new IllegalStateException("Manager class");
+	}
+
 	@Getter
 	private static boolean enabled;
 
 	public static void register() {
 		PatPatClientProxLibManager.setEnabled(LoadedMods.PROX_LIB_MOD_LOADED);
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-			PatPatClientProxLibManager.enabled = true;
+			if(PatPatClientConfig.getInstance().getServerConfig().isProxLibEnabled()){
+				PatPatClientProxLibManager.enabled = true;
+			}
 		});
 	}
 
 	public static void setEnabled(boolean enabled) {
 		PatPatClientProxLibManager.enabled = enabled;
-		if (enabled) {
-			PatPatClient.LOGGER.debug("ProxLib Enabled");
-		} else {
-			PatPatClient.LOGGER.debug("ProxLib Disabled");
-		}
+		PatPatClient.LOGGER.debug(enabled ? "ProxLib Enabled" : "ProxLib Disabled");
 	}
 
 	public static void disableIfEnabledBecauseReceivedPacketFromServer() {

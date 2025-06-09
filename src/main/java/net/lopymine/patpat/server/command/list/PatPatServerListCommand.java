@@ -1,13 +1,12 @@
 package net.lopymine.patpat.server.command.list;
 
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.server.command.ServerCommandSource;
-
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.lopymine.patpat.extension.*;
+import net.minecraft.commands.CommandSourceStack;
 
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod({TextExtension.class, CommandExtension.class})
 public class PatPatServerListCommand {
@@ -16,7 +15,7 @@ public class PatPatServerListCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<ServerCommandSource> get() {
+	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("list")
 				.then(PatPatServerListSetModeCommand.get())
 				.then(PatPatServerListChangeCommand.getAdd())

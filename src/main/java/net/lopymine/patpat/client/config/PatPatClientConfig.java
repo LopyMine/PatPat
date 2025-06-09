@@ -21,17 +21,17 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @AllArgsConstructor
 public class PatPatClientConfig {
 
-	public static final Codec<PatPatClientConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final Codec<PatPatClientConfig> CODEC = RecordCodecBuilder.create(inst -> inst.group(
 			option("version", Version.CLIENT_CONFIG_VERSION, Version.CODEC, PatPatClientConfig::getVersion),
 			option("main", PatPatClientMainConfig.getNewInstance(), PatPatClientMainConfig.CODEC, PatPatClientConfig::getMainConfig),
 			option("resourcePacks", PatPatClientResourcePacksConfig.getNewInstance(), PatPatClientResourcePacksConfig.CODEC, PatPatClientConfig::getResourcePacksConfig),
 			option("sounds", PatPatClientSoundsConfig.getNewInstance(), PatPatClientSoundsConfig.CODEC, PatPatClientConfig::getSoundsConfig),
 			option("visual", PatPatClientVisualConfig.getNewInstance(), PatPatClientVisualConfig.CODEC, PatPatClientConfig::getVisualConfig),
 			option("server", PatPatClientServerConfig.getNewInstance(), PatPatClientServerConfig.CODEC, PatPatClientConfig::getServerConfig)
-	).apply(instance, PatPatClientConfig::new));
+	).apply(inst, PatPatClientConfig::new));
 
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(PatPat.MOD_ID + "-client.json5").toFile();
-	private static PatPatClientConfig INSTANCE;
+	private static PatPatClientConfig instance;
 
 	private Version version;
 	private PatPatClientMainConfig mainConfig;
@@ -45,11 +45,12 @@ public class PatPatClientConfig {
 	}
 
 	public static PatPatClientConfig getInstance() {
-		return INSTANCE == null ? reload() : INSTANCE;
+		return instance == null ? reload() : instance;
 	}
 
 	public static PatPatClientConfig reload() {
-		return INSTANCE = PatPatClientConfig.read();
+		instance = PatPatClientConfig.read();
+		return instance;
 	}
 
 	public static PatPatClientConfig getNewInstance() {

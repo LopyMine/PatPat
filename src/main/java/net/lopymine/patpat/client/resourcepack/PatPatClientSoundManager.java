@@ -1,11 +1,11 @@
 package net.lopymine.patpat.client.resourcepack;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.*;
-import net.minecraft.util.math.MathHelper;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.SoundConfig;
@@ -25,7 +25,7 @@ public class PatPatClientSoundManager {
 
 	private static void registerModSound(String id) {
 		/*? >=1.19.3 {*/
-		net.minecraft.registry.Registry
+		net.minecraft.core.Registry
 		/*?} else {*/
 		/*net.minecraft.util.registry.Registry
 		*//*?}*/.register(
@@ -35,8 +35,8 @@ public class PatPatClientSoundManager {
 		);
 	}
 
-	public static void playSound(PatEntity patEntity, PlayerEntity player, double volume) {
-		ClientWorld world = MinecraftClient.getInstance().world;
+	public static void playSound(PatEntity patEntity, Player player, double volume) {
+		ClientLevel world = Minecraft.getInstance().level;
 		if (world == null) {
 			return;
 		}
@@ -47,11 +47,11 @@ public class PatPatClientSoundManager {
 		}
 		SoundEvent soundEvent = soundConfig.getSound();
 		world.playSound(player,
-				patEntity.getEntity().getBlockPos(),
+				patEntity.getEntity().blockPosition(),
 				soundEvent,
-				SoundCategory.PLAYERS,
+				SoundSource.PLAYERS,
 				soundConfig.getVolume() * (float) volume,
-				MathHelper.nextFloat(
+				Mth.nextFloat(
 						world.random,
 						soundConfig.getMinPitch(),
 						soundConfig.getMaxPitch()

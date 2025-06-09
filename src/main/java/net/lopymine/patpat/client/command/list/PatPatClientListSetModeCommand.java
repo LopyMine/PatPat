@@ -1,8 +1,6 @@
 package net.lopymine.patpat.client.command.list;
 
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.text.Text;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -13,6 +11,7 @@ import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.*;
+import net.minecraft.network.chat.Component;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
@@ -36,7 +35,7 @@ public class PatPatClientListSetModeCommand {
 		config.getServerConfig().setListMode(mode);
 		config.saveAsync();
 
-		Text text = CommandTextBuilder.startBuilder("list.mode.success", mode.getText()).build();
+		Component text = CommandTextBuilder.startBuilder("list.mode.success", mode.getText()).build();
 
 		context.getSource().sendPatPatFeedback(text);
 		return Command.SINGLE_SUCCESS;

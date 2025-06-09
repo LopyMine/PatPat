@@ -2,15 +2,13 @@ package net.lopymine.patpat.client.config.resourcepack;
 
 import lombok.*;
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.entity.Entity;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.extension.EntityExtension;
-
+import net.minecraft.world.entity.Entity;
 import java.util.*;
 import org.jetbrains.annotations.*;
 
@@ -45,7 +43,7 @@ public final class CustomAnimationConfig implements Comparable<CustomAnimationCo
 	}
 
 	public boolean canUseFor(@NotNull Entity entity, @NotNull PlayerConfig whoPatted) {
-		return this.canUseFor(entity.getTypeId(), entity.getName().getString(), entity.getUuid(), whoPatted);
+		return this.canUseFor(entity.getTypeId(), entity.getName().getString(), entity.getUUID(), whoPatted);
 	}
 
 	public boolean canUseFor(@NotNull String entityTypeId, @Nullable String entityName, @Nullable UUID entityUuid, @NotNull PlayerConfig whoPatted) {

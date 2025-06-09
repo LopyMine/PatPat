@@ -18,14 +18,12 @@ public class MossyDependenciesManager {
 
 	private static void addDependencies(MossyDependenciesExtension extension, Project project) {
 		String minecraft = extension.getMinecraft();
-		String mappings = extension.getMappings();
 		String fabricApi = extension.getFabricApi();
 		String fabricLoader = extension.getFabricLoader();
 		String lombok = extension.getLombok();
 
 		DependencyHandler dependencies = project.getDependencies();
 		dependencies.add("minecraft", "com.mojang:minecraft:%s".formatted(minecraft));
-		dependencies.add("mappings", "net.fabricmc:yarn:%s:v2".formatted(mappings));
 		dependencies.add("modImplementation", "net.fabricmc.fabric-api:fabric-api:%s".formatted(fabricApi));
 		dependencies.add("modImplementation", "net.fabricmc:fabric-loader:%s".formatted(fabricLoader));
 		dependencies.add("compileOnly", "org.projectlombok:lombok:%s".formatted(lombok));

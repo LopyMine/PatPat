@@ -1,8 +1,6 @@
 package net.lopymine.patpat.client.command.mod;
 
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.text.Text;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -12,6 +10,7 @@ import net.lopymine.patpat.client.command.PatPatClientCommandManager;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.CommandTextBuilder;
+import net.minecraft.network.chat.Component;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
@@ -34,7 +33,7 @@ public class PatPatClientModEnableCommand {
 
 	private static int switchPatPatState(CommandContext<FabricClientCommandSource> context, boolean state) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
-		Text text;
+		Component text;
 		if (config.getMainConfig().isModEnabled() != state) {
 			config.getMainConfig().setModEnabled(state);
 			config.saveAsync();

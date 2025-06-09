@@ -4,9 +4,8 @@ package net.lopymine.patpat.modmenu.yacl.custom.base;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.ConfigCategory.Builder;
-import net.minecraft.text.Text;
-
 import net.lopymine.patpat.utils.ModMenuUtils;
+import net.minecraft.network.chat.Component;
 
 @SuppressWarnings("unused")
 public class SimpleCategory {
@@ -15,7 +14,7 @@ public class SimpleCategory {
 
 	private SimpleCategory(String categoryId) {
 		String categoryKey = ModMenuUtils.getCategoryKey(categoryId);
-		Text categoryName = ModMenuUtils.getName(categoryKey);
+		Component categoryName = ModMenuUtils.getName(categoryKey);
 		this.builder = ConfigCategory.createBuilder().name(categoryName);
 	}
 

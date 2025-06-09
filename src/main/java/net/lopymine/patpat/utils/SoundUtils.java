@@ -1,8 +1,7 @@
 package net.lopymine.patpat.utils;
 
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class SoundUtils {
@@ -13,12 +12,12 @@ public class SoundUtils {
 
 	@NotNull
 	public static SoundEvent getSoundEvent(@NotNull String value) {
-		Identifier id = IdentifierUtils.id(value);
-		return /*? >=1.19.3 {*/SoundEvent.of(id)/*?} else {*//*new SoundEvent(id)*//*?}*/;
+		ResourceLocation id = IdentifierUtils.id(value);
+		return /*? >=1.19.3 {*/SoundEvent.createVariableRangeEvent(id)/*?} else {*//*new SoundEvent(id)*//*?}*/;
 	}
 
 	@NotNull
 	public static String getTypeId(@NotNull SoundEvent sound) {
-		return sound./*? <1.21.2 {*//*getId()*//*?} else {*/id()/*?}*/.toString();
+		return sound./*? <1.21.2 {*//*getId()*//*?} else {*/location()/*?}*/.toString();
 	}
 }

@@ -1,25 +1,23 @@
 package net.lopymine.patpat.client.config.resourcepack;
 
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
 import com.mojang.serialization.Codec;
 
 import net.lopymine.patpat.utils.TextUtils;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
 public enum ListMode {
-	WHITELIST(Formatting.DARK_GREEN),
-	BLACKLIST(Formatting.DARK_GREEN),
-	DISABLED(Formatting.DARK_RED);
+	WHITELIST(ChatFormatting.DARK_GREEN),
+	BLACKLIST(ChatFormatting.DARK_GREEN),
+	DISABLED(ChatFormatting.DARK_RED);
 
 	public static final Codec<ListMode> CODEC = Codec.STRING
 			.xmap(string -> ListMode.getByIdOrDefault(string, DISABLED), Enum::name);
 
-	private final Formatting formatting;
+	private final ChatFormatting formatting;
 
-	ListMode(Formatting formatting) {
+	ListMode(ChatFormatting formatting) {
 		this.formatting = formatting;
 	}
 
@@ -38,7 +36,7 @@ public enum ListMode {
 		return value == null ? listMode : value;
 	}
 
-	public Text getText() {
-		return TextUtils.literal(String.format("&%s%s&f", this.formatting./*? >=1.17 {*/getCode()/*?} else {*//*code*//*?}*/, this.name()));
+	public Component getText() {
+		return TextUtils.literal(String.format("&%s%s&f", this.formatting./*? >=1.17 {*/getChar()/*?} else {*//*code*//*?}*/, this.name()));
 	}
 }

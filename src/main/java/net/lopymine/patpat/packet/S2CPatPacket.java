@@ -1,12 +1,11 @@
 package net.lopymine.patpat.packet;
 
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
-public interface S2CPatPacket<T extends BasePatPatPacket<T>> extends PatPacket<ClientWorld, T> {
+public interface S2CPatPacket<T extends BasePatPatPacket<T>> extends PatPacket<ClientLevel, T> {
 
-	@Nullable Entity getWhoPattedEntity(ClientWorld world);
+	@Nullable Entity getWhoPattedEntity(ClientLevel world);
 
 }

@@ -1,10 +1,9 @@
 package net.lopymine.patpat.packet.s2c;
 
 import lombok.Getter;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.*;
-
+import net.minecraft.world.entity.Entity;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
 
@@ -26,26 +25,26 @@ public class PatEntityForReplayModS2CPacket implements S2CPatPacket<PatEntityFor
 		this.whoPattedUuid    = whoPattedUuid;
 	}
 
-	public PatEntityForReplayModS2CPacket(PacketByteBuf buf) {
-		this.pattedEntityUuid = buf.readUuid();
-		this.whoPattedUuid    = buf.readUuid();
+	public PatEntityForReplayModS2CPacket(FriendlyByteBuf buf) {
+		this.pattedEntityUuid = buf.readUUID();
+		this.whoPattedUuid    = buf.readUUID();
 	}
 
 	@Override
-	public void write(PacketByteBuf buf) {
-		buf.writeUuid(this.pattedEntityUuid);
-		buf.writeUuid(this.whoPattedUuid);
+	public void write(FriendlyByteBuf buf) {
+		buf.writeUUID(this.pattedEntityUuid);
+		buf.writeUUID(this.whoPattedUuid);
 	}
 
 	@Override
 	@Nullable
-	public Entity getPattedEntity(ClientWorld world) {
+	public Entity getPattedEntity(ClientLevel world) {
 		return WorldUtils.getEntity(world, this.getPattedEntityUuid());
 	}
 
 	@Override
 	@Nullable
-	public Entity getWhoPattedEntity(ClientWorld world) {
+	public Entity getWhoPattedEntity(ClientLevel world) {
 		return WorldUtils.getEntity(world, this.getPattedEntityUuid());
 	}
 

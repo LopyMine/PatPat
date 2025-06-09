@@ -1,18 +1,16 @@
 package net.lopymine.patpat.modmenu.yacl;
 
-import net.minecraft.client.gui.screen.Screen;
 //? >=1.20.1 {
 import dev.isxander.yacl3.api.*;
 import lombok.experimental.ExtensionMethod;
 
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.modmenu.yacl.custom.base.*;
 import net.lopymine.patpat.modmenu.yacl.custom.extension.SimpleOptionExtension;
 import net.lopymine.patpat.modmenu.yacl.custom.screen.SimpleYACLScreen;
 import net.lopymine.patpat.modmenu.yacl.custom.utils.*;
+import net.minecraft.client.gui.screens.Screen;
 
 @ExtensionMethod(SimpleOptionExtension.class)
 public class YACLConfigurationScreen {
@@ -129,6 +127,11 @@ public class YACLConfigurationScreen {
 						.build(),
 				SimpleOption.<Boolean>startBuilder("bypass_server_resource_pack_priority_enabled")
 						.withBinding(defConfig.isBypassServerResourcePackPriorityEnabled(), config::isBypassServerResourcePackPriorityEnabled, config::setBypassServerResourcePackEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Boolean>startBuilder("prox_lib_enabled")
+						.withBinding(defConfig.isProxLibEnabled(), config::isProxLibEnabled, config::setProxLibEnabled, false)
 						.withController()
 						.withDescription(SimpleContent.NONE)
 						.build()

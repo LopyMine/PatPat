@@ -1,7 +1,6 @@
 package net.lopymine.patpat.packet;
 
-import net.minecraft.entity.Entity;
-
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 public interface PatPacket<W, T extends BasePatPatPacket<T>> extends BasePatPatPacket<T> {

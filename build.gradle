@@ -68,6 +68,8 @@ repositories {
 }
 
 dependencies {
+	mappings loom.officialMojangMappings()
+
 	def mcVersion = stonecutter.current.version.toString()
 
 	// Fabric permission api
@@ -97,6 +99,7 @@ dependencies {
 			modCompileOnly("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
 		}
 	}
+	// TODO: Добавить тесты на версию раньше, чем 1.19.4
 	if (stonecutter.compare(mcVersion, "1.19.4") >= 0) {
 		testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
 	}
@@ -105,7 +108,6 @@ dependencies {
 	if (proxlibVersion != "unknown") {
 		include(modApi("maven.modrinth:proxlib:${proxlibVersion}"))
 	}
-	// TODO: Добавить тесты на версию раньше, чем 1.19.4
 }
 
 String prop(String key) {

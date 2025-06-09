@@ -1,12 +1,11 @@
 package net.lopymine.patpat.server.command.ratelimit;
 
-import net.minecraft.server.command.ServerCommandSource;
-
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.lopymine.patpat.server.command.ratelimit.set.*;
+import net.minecraft.commands.CommandSourceStack;
 
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.literal;
 
 public class PatPatServerRateLimitCommand {
 
@@ -14,7 +13,7 @@ public class PatPatServerRateLimitCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<ServerCommandSource> get() {
+	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("ratelimit")
 				.then(PatPatServerRateLimitVersionCommand.get())
 				.then(PatPatServerRateLimitInfoCommand.get())

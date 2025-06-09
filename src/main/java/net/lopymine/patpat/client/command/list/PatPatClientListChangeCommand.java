@@ -1,10 +1,6 @@
 package net.lopymine.patpat.client.command.list;
 
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.EntityType;
-import net.minecraft.text.Text;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -18,7 +14,9 @@ import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.client.config.sub.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.*;
-
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EntityType;
 import java.util.*;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
@@ -36,14 +34,14 @@ public class PatPatClientListChangeCommand {
 	public static LiteralArgumentBuilder<FabricClientCommandSource> getAdd() {
 		return literal("add")
 						.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
-								.suggests(((context, builder) -> CommandSource.suggestMatching(context.getSource().getPlayerNames(), builder)))
+								.suggests(((context, builder) -> SharedSuggestionProvider.suggest(context.getSource().getOnlinePlayerNames(), builder)))
 								.executes(context -> onListChange(context, true)));
 	}
 
 	public static LiteralArgumentBuilder<FabricClientCommandSource> getRemove() {
 		return literal("remove")
 						.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
-								.suggests((context, builder) -> CommandSource.suggestMatching(ClientNetworkUtils.getOnlinePlayersFromUuids(context.getSource().getClient().getNetworkHandler()), builder))
+								.suggests((context, builder) -> SharedSuggestionProvider.suggest(ClientNetworkUtils.getOnlinePlayersFromUuids(context.getSource().getClient().getConnection()), builder))
 								.executes(context -> onListChange(context, false)));
 	}
 
@@ -60,7 +58,7 @@ public class PatPatClientListChangeCommand {
 		String result = success ? "success" : "failed";
 		String key = String.format("list.%s.%s", action, result);
 
-		Text text = CommandTextBuilder.startBuilder(key, name)
+		Component text = CommandTextBuilder.startBuilder(key, name)
 				.withShowEntity(EntityType.PLAYER, uuid, name)
 				.withCopyToClipboard(uuid)
 				.build();

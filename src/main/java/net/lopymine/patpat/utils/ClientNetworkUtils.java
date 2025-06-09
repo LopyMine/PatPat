@@ -1,6 +1,7 @@
 package net.lopymine.patpat.utils;
 
-import net.minecraft.client.network.*;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.PlayerInfo;
 
 import net.lopymine.patpat.client.config.sub.PatPatClientPlayerListConfig;
 
@@ -14,12 +15,16 @@ public class ClientNetworkUtils {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static List<String> getOnlinePlayersFromUuids(@Nullable ClientPlayNetworkHandler networkHandler) {
+	public static List<String> getOnlinePlayersFromUuids(@Nullable ClientPacketListener networkHandler) {
 		if (networkHandler == null) {
-			return List.of();
+			return Collections.emptyList();
 		}
-		return PatPatClientPlayerListConfig.getInstance().getMap().entrySet().stream().flatMap(entry -> {
-			PlayerListEntry playerListEntry = networkHandler.getPlayerListEntry(entry.getKey());
+		PatPatClientPlayerListConfig playerListConfig = PatPatClientPlayerListConfig.getInstance();
+		if (playerListConfig == null) { // TODO: Fix, why instance is null?
+			return Collections.emptyList();
+		}
+		return playerListConfig.getMap().entrySet().stream().flatMap(entry -> {
+			PlayerInfo playerListEntry = networkHandler.getPlayerInfo(entry.getKey());
 			if (playerListEntry == null) {
 				return Stream.of(entry.getValue());
 			}

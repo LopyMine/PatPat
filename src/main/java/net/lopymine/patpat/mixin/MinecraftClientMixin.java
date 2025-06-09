@@ -1,12 +1,13 @@
 package net.lopymine.patpat.mixin;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.*;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.entity.*;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -35,46 +36,46 @@ import net.lopymine.patpat.compat.flashback.FlashbackCompat;
 import net.lopymine.patpat.packet.PatPacket;
 import net.lopymine.patpat.packet.c2s.PatEntityC2SPacket;
 
-@Mixin(MinecraftClient.class)
+@Mixin(Minecraft.class)
 public abstract class MinecraftClientMixin {
 
 	@Shadow
 	@Nullable
-	public HitResult crosshairTarget;
+	public HitResult hitResult;
 
 	@Shadow
 	@Nullable
-	public ClientPlayerEntity player;
+	public LocalPlayer player;
 
 	@Shadow
-	private int itemUseCooldown;
+	private int rightClickDelay;
 
 	@Shadow
 	public abstract
 		//? >=1.20.2 {
-	net.minecraft.client.session.Session
+	net.minecraft.client.User
 	//?} else {
 	/*net.minecraft.client.util.Session
 	 *///?}
-	getSession();
+	getUser();
 
-	@Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
 	private void onRightClickMouse(CallbackInfo ci) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		if (!config.getMainConfig().isModEnabled()) {
 			return;
 		}
-		if (!(this.crosshairTarget instanceof EntityHitResult hitResult)) {
+		if (!(this.hitResult instanceof EntityHitResult hitResult)) {
 			return;
 		}
-		if (this.player == null || this.player.isDead()) {
+		if (this.player == null || this.player.isDeadOrDying()) {
 			return;
 		}
 		Entity entity = hitResult.getEntity();
 		if (!(entity instanceof LivingEntity livingEntity)
 				|| this.player.isSpectator()
-				|| !this.player.getMainHandStack().isEmpty()
-				|| !this.player.isSneaking()) {
+				|| !this.player.getMainHandItem().isEmpty()
+				|| !this.player.isShiftKeyDown()) {
 			return;
 		}
 
@@ -82,16 +83,16 @@ public abstract class MinecraftClientMixin {
 			return;
 		}
 
-		PatPacket<ServerWorld, ?> packet = PatPatClientPacketManager.getPatPacket(livingEntity);
+		PatPacket<ServerLevel, ?> packet = PatPatClientPacketManager.getPatPacket(livingEntity);
 		PatPatClientNetworkManager.sendPacketToServer(packet);
 
-		UUID currentUuid = this.getSession()/*? >=1.20 {*/.getUuidOrNull()/*?} else {*//*.getProfile().getId()*//*?}*/;
-		PlayerConfig whoPatted = PlayerConfig.of(this.getSession().getUsername(), currentUuid);
+		UUID currentUuid = this.getUser()/*? >=1.20 {*/.getProfileId()/*?} else {*//*.getProfile().getId()*//*?}*/;
+		PlayerConfig whoPatted = PlayerConfig.of(this.getUser().getName(), currentUuid);
 
 		PatEntity patEntity = PatPatClientManager.pat(livingEntity, whoPatted);
 
 		if (config.getVisualConfig().isSwingHandEnabled()) {
-			this.player.swingHand(Hand.MAIN_HAND);
+			this.player.swing(InteractionHand.MAIN_HAND);
 		}
 
 		ReplayModCompat.onPat(livingEntity.getId(), this.player.getId());
@@ -102,7 +103,7 @@ public abstract class MinecraftClientMixin {
 			PatPatClientSoundManager.playSound(patEntity, this.player, config.getSoundsConfig().getSoundsVolume());
 		}
 
-		this.itemUseCooldown = 4;
+		this.rightClickDelay = 4;
 		ci.cancel();
 	}
 }

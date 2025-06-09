@@ -1,9 +1,7 @@
 package net.lopymine.patpat.utils;
 
-import net.minecraft.util.Identifier;
-
 import net.lopymine.patpat.PatPat;
-
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.*;
 
 public class IdentifierUtils {
@@ -14,15 +12,15 @@ public class IdentifierUtils {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static Identifier id(@NotNull String id) {
+	public static ResourceLocation id(@NotNull String id) {
 		return IdentifierUtils.typeId(id, null);
 	}
 
-	public static Identifier textureId(@NotNull String id) {
+	public static ResourceLocation textureId(@NotNull String id) {
 		return IdentifierUtils.typeId(id, TEXTURES_PATH);
 	}
 
-	public static Identifier typeId(@NotNull String id, @Nullable String type) {
+	public static ResourceLocation typeId(@NotNull String id, @Nullable String type) {
 		String namespace = PatPat.MOD_ID;
 		String path = id;
 		String[] split = path.split(":");
@@ -34,7 +32,7 @@ public class IdentifierUtils {
 			path = type + path;
 		}
 		//? >=1.19 {
-		return Identifier.of(namespace, path);
+		return ResourceLocation.fromNamespaceAndPath(namespace, path);
 		//?} else {
 		/*return new Identifier(namespace, path);
 		*///?}

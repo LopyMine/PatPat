@@ -1,25 +1,13 @@
 package net.lopymine.patpat.compat.flashback;
 
-//? >1.20.4 {
-import net.minecraft.network.NetworkPhase;
-//?} else {
-/*import net.minecraft.network.*;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-*///?}
-
-//? >1.19.3 {
-import net.minecraft.network.packet.Packet;
-//?} else {
-/*import net.minecraft.network.Packet;
-*///?}
-
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.s2c.*;
-
+import net.minecraft.network.ConnectionProtocol;
+import net.minecraft.network.protocol.Packet;
 //? flashback {
 import com.moulberry.flashback.Flashback;
 import com.moulberry.flashback.record.Recorder;
@@ -48,7 +36,7 @@ public class FlashbackCompat {
 			*///?}
 			recorder.writePacketAsync(
 					packet,
-					/*? >1.20.4 {*/NetworkPhase.PLAY/*?} else {*//*NetworkState.PLAY*//*?}*/
+					/*? >1.20.4 {*/ConnectionProtocol.PLAY/*?} else {*//*NetworkState.PLAY*//*?}*/
 			);
 		}
 		//?}

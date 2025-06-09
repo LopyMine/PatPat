@@ -20,12 +20,6 @@ import java.util.*;
 @Setter
 public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHandler {
 
-	// For tests, because you can't use it from VersionedThings in this case
-	public static final Codec<UUID> UUID_CODEC =
-			/*? >=1.19.3 {*/net.minecraft.util.Uuids
-			/*?} else {*//*net.minecraft.util.dynamic.DynamicSerializableUuid*//*?}*/
-			.CODEC;
-
 	private static final String MIGRATE_FILE_NAME = "patpat-client.json5";
 	private static final String MIGRATE_VERSION = "0";
 
@@ -62,7 +56,7 @@ public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHand
 	}
 
 	private void migrateFields(JsonObject object, PatPatClientConfig config, PatPatClientPlayerListConfig playerListConfig) {
-		HashMap<UUID, String> list = CodecUtils.decode("list", Codec.unboundedMap(UUID_CODEC, Codec.STRING).xmap(HashMap::new, HashMap::new), object);
+		HashMap<UUID, String> list = CodecUtils.decode("list", Codec.unboundedMap(VersionedThings.UUID_CODEC, Codec.STRING).xmap(HashMap::new, HashMap::new), object);
 		Boolean bypassServerResourcePackPriorityEnabled = CodecUtils.decode("bypassServerResourcePackPriorityEnabled", Codec.BOOL, object);
 		Boolean hidingNicknameEnabled = CodecUtils.decode("hidingNicknameEnabled", Codec.BOOL, object);
 		Boolean swingHandEnabled = CodecUtils.decode("swingHandEnabled", Codec.BOOL, object);

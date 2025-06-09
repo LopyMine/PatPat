@@ -1,12 +1,10 @@
 package net.lopymine.patpat.server.ratelimit;
 
-import net.minecraft.server.network.ServerPlayerEntity;
-
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.server.config.sub.PatPatServerPlayerListConfig;
-
+import net.minecraft.server.level.ServerPlayer;
 import java.util.UUID;
 
 public class PatPatServerListManager {
@@ -15,8 +13,8 @@ public class PatPatServerListManager {
 		throw new IllegalStateException("Manager class");
 	}
 
-	public static boolean canPat(ServerPlayerEntity player) {
-		return canPat(player.getUuid());
+	public static boolean canPat(ServerPlayer player) {
+		return canPat(player.getUUID());
 	}
 
 	public static boolean canPat(UUID uuid) {

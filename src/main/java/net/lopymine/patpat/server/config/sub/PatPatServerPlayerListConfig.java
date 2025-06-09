@@ -20,6 +20,9 @@ public class PatPatServerPlayerListConfig {
 	private final Map<UUID, String> map = new HashMap<>();
 
 	public static PatPatServerPlayerListConfig getInstance() {
+		if (INSTANCE == null) {
+			return reload();
+		}
 		return INSTANCE;
 	}
 

@@ -29,6 +29,7 @@ public class PatPatClient implements ClientModInitializer {
 		PatPatClientPacketManager.register();
 		PatPatClientReloadListener.register();
 		PatPatClientProxLibManager.register();
+		PatPatClientProxLibPacketRateLimitManager.register();
 		PatPatClientProxLibPacketManager.register();
 		PatPatClientRenderer.register();
 

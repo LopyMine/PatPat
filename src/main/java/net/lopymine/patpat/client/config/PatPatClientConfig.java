@@ -27,7 +27,8 @@ public class PatPatClientConfig {
 			option("resourcePacks", PatPatClientResourcePacksConfig.getNewInstance(), PatPatClientResourcePacksConfig.CODEC, PatPatClientConfig::getResourcePacksConfig),
 			option("sounds", PatPatClientSoundsConfig.getNewInstance(), PatPatClientSoundsConfig.CODEC, PatPatClientConfig::getSoundsConfig),
 			option("visual", PatPatClientVisualConfig.getNewInstance(), PatPatClientVisualConfig.CODEC, PatPatClientConfig::getVisualConfig),
-			option("server", PatPatClientServerConfig.getNewInstance(), PatPatClientServerConfig.CODEC, PatPatClientConfig::getServerConfig)
+			option("server", PatPatClientServerConfig.getNewInstance(), PatPatClientServerConfig.CODEC, PatPatClientConfig::getServerConfig),
+			option("proximityPackets", PatPatClientProximityPacketsConfig.getNewInstance(), PatPatClientProximityPacketsConfig.CODEC, PatPatClientConfig::getProximityPacketsConfig)
 	).apply(inst, PatPatClientConfig::new));
 
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(PatPat.MOD_ID + "-client.json5").toFile();
@@ -39,6 +40,7 @@ public class PatPatClientConfig {
 	private PatPatClientSoundsConfig soundsConfig;
 	private PatPatClientVisualConfig visualConfig;
 	private PatPatClientServerConfig serverConfig;
+	private PatPatClientProximityPacketsConfig proximityPacketsConfig;
 
 	private PatPatClientConfig() {
 		throw new IllegalArgumentException();

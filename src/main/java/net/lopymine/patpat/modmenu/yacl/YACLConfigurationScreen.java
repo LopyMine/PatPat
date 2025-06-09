@@ -35,6 +35,7 @@ public class YACLConfigurationScreen {
 				.groups(getSoundGroup(defConfig.getSoundsConfig(), config.getSoundsConfig()))
 				.groups(getVisualGroup(defConfig.getVisualConfig(), config.getVisualConfig()))
 				.groups(getServerGroup(defConfig.getServerConfig(), config.getServerConfig()))
+				.groups(getProximityPatPacketsGroup(defConfig.getProximityPacketsConfig(), config.getProximityPacketsConfig()))
 				.build();
 	}
 
@@ -129,10 +130,20 @@ public class YACLConfigurationScreen {
 						.withBinding(defConfig.isBypassServerResourcePackPriorityEnabled(), config::isBypassServerResourcePackPriorityEnabled, config::setBypassServerResourcePackEnabled, false)
 						.withController()
 						.withDescription(SimpleContent.NONE)
-						.build(),
-				SimpleOption.<Boolean>startBuilder("prox_lib_enabled")
-						.withBinding(defConfig.isProxLibEnabled(), config::isProxLibEnabled, config::setProxLibEnabled, false)
+						.build()
+		).build();
+	}
+
+	private static OptionGroup getProximityPatPacketsGroup(PatPatClientProximityPacketsConfig defConfig, PatPatClientProximityPacketsConfig config) {
+		return SimpleGroup.startBuilder("proximity_packets").options(
+				SimpleOption.<Boolean>startBuilder("proximity_packets_enabled")
+						.withBinding(defConfig.isProximityPacketsEnabled(), config::isProximityPacketsEnabled, config::setProximityPacketsEnabled, false)
 						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Integer>startBuilder("max_packets_per_second")
+						.withBinding(defConfig.getMaxPacketsPerSecond(), config::getMaxPacketsPerSecond, config::setMaxPacketsPerSecond, false)
+						.withController(0, 100, 1)
 						.withDescription(SimpleContent.NONE)
 						.build()
 		).build();

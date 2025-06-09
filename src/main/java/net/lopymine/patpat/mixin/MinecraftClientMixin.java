@@ -65,13 +65,13 @@ public abstract class MinecraftClientMixin {
 		if (!config.getMainConfig().isModEnabled()) {
 			return;
 		}
-		if (!(this.hitResult instanceof EntityHitResult hitResult)) {
+		if (!(this.hitResult instanceof EntityHitResult result)) {
 			return;
 		}
 		if (this.player == null || this.player.isDeadOrDying()) {
 			return;
 		}
-		Entity entity = hitResult.getEntity();
+		Entity entity = result.getEntity();
 		if (!(entity instanceof LivingEntity livingEntity)
 				|| this.player.isSpectator()
 				|| !this.player.getMainHandItem().isEmpty()

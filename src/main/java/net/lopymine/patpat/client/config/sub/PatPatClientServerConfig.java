@@ -19,15 +19,13 @@ public class PatPatClientServerConfig {
 	public static final Codec<PatPatClientServerConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			option("bypassServerResourcePackPriorityEnabled", false, Codec.BOOL, PatPatClientServerConfig::isBypassServerResourcePackPriorityEnabled),
 			option("patMeEnabled", true, Codec.BOOL, PatPatClientServerConfig::isPatMeEnabled),
-			option("listMode", ListMode.DISABLED, ListMode.CODEC, PatPatClientServerConfig::getListMode),
-			option("proxLib", true, Codec.BOOL, PatPatClientServerConfig::isProxLibEnabled)
+			option("listMode", ListMode.DISABLED, ListMode.CODEC, PatPatClientServerConfig::getListMode)
 	).apply(instance, PatPatClientServerConfig::new));
 
 	@Setter(value = AccessLevel.PRIVATE)
 	private boolean bypassServerResourcePackPriorityEnabled;
 	private boolean patMeEnabled;
 	private ListMode listMode;
-	private boolean proxLibEnabled;
 
 	private PatPatClientServerConfig() {
 		throw new IllegalArgumentException();
@@ -51,10 +49,5 @@ public class PatPatClientServerConfig {
 		if (bl) {
 			client.reloadResourcePacks();
 		}
-	}
-
-	public void setProxLibEnabled(boolean value){
-		this.proxLibEnabled = value;
-		PatPatClientProxLibManager.setEnabled(value);
 	}
 }

@@ -44,10 +44,14 @@ public class PatPatClientProxLibPacketManager {
 		if (!PatPatClientProxLibManager.isEnabled()) {
 			return;
 		}
+		if (PatPatClientProxLibPacketRateLimitManager.isLimitExceeded()) {
+			return;
+		}
 		//? if proxlib {
 		try {
 			int packetsCount = me.enderkill98.proxlib.client.ProxLib.sendPacket(Minecraft.getInstance(), PAT_PACKET_IDENTIFIER, encodeProxyPatPacket(pattedEntityId));
 			PatPatClient.LOGGER.debug("Sent proxy packets ({}) to pat entity with id {}", packetsCount, pattedEntityId);
+			PatPatClientProxLibPacketRateLimitManager.countPacket();
 		} catch (Exception e) {
 			PatPatClient.LOGGER.debug("Failed to send proxy packet, patted entity: {}, packet id: {}, data: {}", pattedEntityId, PAT_PAT_PACKETS_ID, e);
 		}

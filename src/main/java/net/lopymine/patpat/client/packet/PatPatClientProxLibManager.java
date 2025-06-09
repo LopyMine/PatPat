@@ -14,16 +14,23 @@ public class PatPatClientProxLibManager {
 		throw new IllegalStateException("Manager class");
 	}
 
-	@Getter
 	private static boolean enabled;
 
 	public static void register() {
-		PatPatClientProxLibManager.setEnabled(LoadedMods.PROX_LIB_MOD_LOADED);
+		PatPatClientProxLibManager.reset();
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-			if(PatPatClientConfig.getInstance().getServerConfig().isProxLibEnabled()){
-				PatPatClientProxLibManager.enabled = true;
+			if (PatPatClientConfig.getInstance().getProximityPacketsConfig().isProximityPacketsEnabled()){
+				PatPatClientProxLibManager.reset();
 			}
 		});
+	}
+
+	private static void reset() {
+		PatPatClientProxLibManager.setEnabled(LoadedMods.PROX_LIB_MOD_LOADED);
+	}
+
+	public static boolean isEnabled() {
+		return enabled && PatPatClientConfig.getInstance().getProximityPacketsConfig().isProximityPacketsEnabled();
 	}
 
 	public static void setEnabled(boolean enabled) {

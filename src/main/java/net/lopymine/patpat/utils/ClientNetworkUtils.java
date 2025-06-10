@@ -20,7 +20,7 @@ public class ClientNetworkUtils {
 			return Collections.emptyList();
 		}
 		PatPatClientPlayerListConfig playerListConfig = PatPatClientPlayerListConfig.getInstance();
-		if (playerListConfig == null) { // TODO: Fix, why instance is null?
+		if (playerListConfig == null) {
 			return Collections.emptyList();
 		}
 		return playerListConfig.getMap().entrySet().stream().flatMap(entry -> {

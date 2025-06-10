@@ -5,6 +5,7 @@ import lombok.*;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.utils.*;
 
 import static net.lopymine.patpat.utils.CodecUtils.option;
@@ -30,4 +31,8 @@ public class PatPatClientMainConfig {
 		return CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
+	public void setDebugLogEnabled(boolean debugLogEnabled) {
+		this.debugLogEnabled = debugLogEnabled;
+		PatPatClient.LOGGER.setDebugMode(debugLogEnabled);
+	}
 }

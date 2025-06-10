@@ -3,16 +3,15 @@ package net.lopymine.patpat.compat.flashback;
 import net.fabricmc.fabric.api.networking.v1.*;
 
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.s2c.*;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.protocol.Packet;
+
 //? flashback {
 import com.moulberry.flashback.Flashback;
 import com.moulberry.flashback.record.Recorder;
 //?}
-
 
 public class FlashbackCompat {
 
@@ -41,4 +40,6 @@ public class FlashbackCompat {
 		}
 		//?}
 	}
+
+
 }

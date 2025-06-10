@@ -16,6 +16,8 @@ import net.lopymine.patpat.client.config.sub.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
 import net.lopymine.patpat.common.Version;
+import net.lopymine.patpat.compat.flashback.FlashbackManager;
+import net.lopymine.patpat.compat.replaymod.ReplayModManager;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.packet.c2s.*;
 import net.lopymine.patpat.packet.s2c.*;
@@ -37,12 +39,12 @@ public class PatPatClientPacketManager {
 
 		PatPatClientNetworkManager.registerReceiver(PatEntityS2CPacket.TYPE, packet -> {
 			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
-			handlePatting(packet, false);
+			handlePatting(packet, FlashbackManager.isInReplay() || ReplayModManager.isInReplay());
 		});
 
 		PatPatClientNetworkManager.registerReceiver(PatEntityS2CPacketV2.TYPE, packet -> {
 			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
-			handlePatting(packet, false);
+			handlePatting(packet, FlashbackManager.isInReplay() || ReplayModManager.isInReplay());
 		});
 
 		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacket.TYPE, packet -> {
@@ -61,7 +63,7 @@ public class PatPatClientPacketManager {
 		Version version = packet.getVersion();
 		if (version.isInvalid()) {
 			PatPatClient.LOGGER.warn("Received invalid server version in hello packet!");
-			PatPatClientProxLibManager.setEnabled(false);
+			PatPatClientProxLibManager.setEnabledIfNotInReplay(false);
 			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
 			// Since v2 packet version we started sending hello packets
 			return;
@@ -71,7 +73,7 @@ public class PatPatClientPacketManager {
 		// 	 // stuff
 		// } else
 		if (version.isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
-			PatPatClientProxLibManager.setEnabled(false);
+			PatPatClientProxLibManager.setEnabledIfNotInReplay(false);
 			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
 		}
 		PatPatClient.LOGGER.debug("[PONG] Sending HelloPatPatServerC2S packet to the server...");

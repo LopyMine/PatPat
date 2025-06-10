@@ -59,7 +59,7 @@ public class PatPatServerConfig {
 	}
 
 	private static PatPatServerConfig read() {
-		return ConfigUtils.readConfig(CODEC, CONFIG_FILE, PatPatClient.LOGGER);
+		return ConfigUtils.readConfig(CODEC, CONFIG_FILE, PatPat.LOGGER);
 	}
 
 	public void saveAsync() {
@@ -67,6 +67,6 @@ public class PatPatServerConfig {
 	}
 
 	public void save() {
-		ConfigUtils.saveConfig(this, CODEC, CONFIG_FILE, PatPatClient.LOGGER);
+		ConfigUtils.saveConfig(this, CODEC, CONFIG_FILE, PatPat.LOGGER);
 	}
 }

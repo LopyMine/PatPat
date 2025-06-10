@@ -3,6 +3,8 @@ package net.lopymine.patpat.client.packet;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
+import net.lopymine.patpat.compat.flashback.*;
+import net.lopymine.patpat.compat.replaymod.*;
 import net.lopymine.patpat.packet.s2c.PatEntityS2CPacketV2;
 import net.minecraft.client.Minecraft;
 import java.io.*;
@@ -29,7 +31,7 @@ public class PatPatClientProxLibPacketManager {
 				int pattedEntityId = decodeProxyPatPacket(data);
 				int whoPattedId = entity.getId();
 
-				PatPatClientPacketManager.handlePatting(new PatEntityS2CPacketV2(pattedEntityId, whoPattedId), false);
+				PatPatClientPacketManager.handlePatting(new PatEntityS2CPacketV2(pattedEntityId, whoPattedId), FlashbackManager.isInReplay() || ReplayModManager.isInReplay());
 			} catch (Exception e) {
 				PatPatClient.LOGGER.debug("Failed to handle ProxLib packet from player: {}, packet id: {}, data: {}", entity.getName().getString(), id, data, e);
 			}
@@ -45,6 +47,7 @@ public class PatPatClientProxLibPacketManager {
 			return;
 		}
 		if (PatPatClientProxLibPacketRateLimitManager.isLimitExceeded()) {
+			System.out.println("Exceeding the limit!");
 			return;
 		}
 		//? if proxlib {

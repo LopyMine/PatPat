@@ -1,12 +1,12 @@
 package net.lopymine.patpat.client.packet;
 
-import lombok.Getter;
-
 import net.fabricmc.fabric.api.client.networking.v1.*;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
+import net.lopymine.patpat.compat.flashback.FlashbackManager;
+import net.lopymine.patpat.compat.replaymod.ReplayModManager;
 
 public class PatPatClientProxLibManager {
 
@@ -36,6 +36,13 @@ public class PatPatClientProxLibManager {
 	public static void setEnabled(boolean enabled) {
 		PatPatClientProxLibManager.enabled = enabled;
 		PatPatClient.LOGGER.debug(enabled ? "ProxLib Enabled" : "ProxLib Disabled");
+	}
+
+	public static void setEnabledIfNotInReplay(boolean enabled) {
+		if (FlashbackManager.isInReplay() || ReplayModManager.isInReplay()) {
+			return;
+		}
+		PatPatClientProxLibManager.setEnabled(enabled);
 	}
 
 	public static void disableIfEnabledBecauseReceivedPacketFromServer() {

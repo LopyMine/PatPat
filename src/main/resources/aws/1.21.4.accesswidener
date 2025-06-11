@@ -4,6 +4,4 @@ accessWidener v2 named
 accessible field net/minecraft/client/Camera eyeHeightOld F
 accessible field net/minecraft/client/Camera eyeHeight F
 
-accessible field net/minecraft/client/render/Camera lastCameraY F
-accessible field net/minecraft/client/render/Camera cameraY F
 accessible field net/minecraft/client/option/KeyBinding timesPressed I

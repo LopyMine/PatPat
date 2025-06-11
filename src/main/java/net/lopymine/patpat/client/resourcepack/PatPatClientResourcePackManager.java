@@ -73,7 +73,7 @@ public class PatPatClientResourcePackManager {
 	public void reload(List<PackResources> reloadPacks, ResourceManager manager) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		this.loadedAnimations.clear();
-		PatPatClientManager.reloadPatEntities();
+		PatPatClientManager.clearPatEntities();
 		List<PackResources> packs = reloadPacks.stream().filter(pack -> pack.getNamespaces(PackType.CLIENT_RESOURCES).contains(PatPat.MOD_ID)).toList();
 		List<List<CustomAnimationConfig>> serverResourcePacks = new ArrayList<>();
 		List<List<CustomAnimationConfig>> resourcePacks = new ArrayList<>();

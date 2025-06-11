@@ -96,7 +96,7 @@ public class PatPatClientPacketManager {
 		}
 
 		Entity pattedEntity = packet.getPattedEntity(clientWorld);
-		if (!(pattedEntity instanceof LivingEntity livingEntity)) {
+		if (!(pattedEntity instanceof LivingEntity pattedLivingEntity)) {
 			PatPatClient.LOGGER.debug("Packet declined, because patted entity in not LivingEntity");
 			return;
 		}
@@ -121,7 +121,7 @@ public class PatPatClientPacketManager {
 			PatPatClient.LOGGER.debug("Packet declined, because option 'Pat Me' is disabled");
 			return;
 		}
-		PatPatClientRenderer.packets.add(new PacketPat(livingEntity, PlayerConfig.of(playerEntity.getName().getString(), whoPattedUuid), player, replayModPacket));
+		PatPatClientRenderer.serverPats.add(new PacketPat(pattedLivingEntity, PlayerConfig.of(playerEntity.getName().getString(), whoPattedUuid), player, replayModPacket));
 	}
 
 	public static boolean isBlocked(UUID playerUuid) {

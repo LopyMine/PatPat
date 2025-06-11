@@ -5,6 +5,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.command.PatPatClientCommandManager;
 import net.lopymine.patpat.client.event.PatPatClientPlayerEvents;
+import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
 import net.lopymine.patpat.client.render.*;
 import net.lopymine.patpat.client.packet.*;
 import net.lopymine.patpat.client.resourcepack.*;
@@ -32,6 +33,7 @@ public class PatPatClient implements ClientModInitializer {
 		PatPatClientProxLibPacketRateLimitManager.register();
 		PatPatClientProxLibPacketManager.register();
 		PatPatClientRenderer.register();
+		PatPatClientKeybindingManager.register();
 
 		LOGGER.info("PatPat Client Initialized");
 	}

@@ -14,7 +14,11 @@
 		"EntityRenderStateMixin",
 		"MinecraftClientMixin",
 		"CameraMixin",
-		"AbstractClientPlayerEntityMixin"
+		"AbstractClientPlayerEntityMixin",
+		"ControlsListWidgetMixin",
+		"KeybindingMixin",
+		"ParentElementMixin",
+		"KeyBindsScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

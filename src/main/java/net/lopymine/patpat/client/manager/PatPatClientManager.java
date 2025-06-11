@@ -3,15 +3,28 @@ package net.lopymine.patpat.client.manager;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
+import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
+import net.lopymine.patpat.client.render.PatPatClientRenderer;
+import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
 import net.lopymine.patpat.entity.PatEntity;
+
+import lombok.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.phys.EntityHitResult;
+
 import java.util.*;
 import org.jetbrains.annotations.*;
 
 public class PatPatClientManager {
 
 	private static final Map<UUID, PatEntity> PAT_ENTITIES = new HashMap<>();
+
+	@Setter
+	@Getter
+	private static int patCooldown = 0;
 
 	private PatPatClientManager() {
 		throw new IllegalStateException("Manager class");
@@ -72,7 +85,67 @@ public class PatPatClientManager {
 		return ((float) ((1 - range) + range * (1 - Math.sin(animationProgress * Math.PI))));
 	}
 
-	public static void reloadPatEntities() {
+	public static void clearPatEntities() {
 		PAT_ENTITIES.clear();
+	}
+
+	public static boolean requestPat() {
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
+		if (!config.getMainConfig().isModEnabled()) {
+			return false;
+		}
+
+		if (patCooldown != 0 || !PatPatClientKeybindingManager.PAT_KEYBINDING.isDown()) {
+			return false;
+		}
+
+		Minecraft minecraft = Minecraft.getInstance();
+		LocalPlayer player = minecraft.player;
+
+		if (minecraft.player == null || minecraft.player.isDeadOrDying()) {
+			return false;
+		}
+
+		if (!(minecraft.hitResult instanceof EntityHitResult hitResult) || !(hitResult.getEntity() instanceof LivingEntity pattedEntity)) {
+			return false;
+		}
+
+		if (pattedEntity.isInvisible()) {
+			return false;
+		}
+
+		UUID currentUuid = minecraft.getGameProfile().getId();
+		PlayerConfig whoPatted = PlayerConfig.of(minecraft.getGameProfile().getName(), currentUuid);
+
+		PatPatClientRenderer.clientPats.add(new PacketPat(pattedEntity, whoPatted, player, false));
+
+		PatPatClientManager.patCooldown = 4;
+		return true;
+	}
+
+	public static boolean canPat() {
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
+		if (!config.getMainConfig().isModEnabled()) {
+			return false;
+		}
+
+		if (patCooldown != 0 || !PatPatClientKeybindingManager.PAT_KEYBINDING.isDown()) {
+			return false;
+		}
+
+		Minecraft minecraft = Minecraft.getInstance();
+		if (minecraft.player == null || minecraft.player.isDeadOrDying()) {
+			return false;
+		}
+
+		if (!(minecraft.hitResult instanceof EntityHitResult hitResult) || !(hitResult.getEntity() instanceof LivingEntity pattedEntity)) {
+			return false;
+		}
+
+		if (pattedEntity.isInvisible()) {
+			return false;
+		}
+
+		return true;
 	}
 }

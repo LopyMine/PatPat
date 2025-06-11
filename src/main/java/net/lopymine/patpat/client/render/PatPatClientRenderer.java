@@ -7,7 +7,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,18 +28,23 @@ import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
+import net.lopymine.patpat.client.packet.*;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
 import net.lopymine.patpat.common.config.vector.Vec3f;
+import net.lopymine.patpat.compat.flashback.FlashbackCompat;
+import net.lopymine.patpat.compat.replaymod.ReplayModCompat;
 import net.lopymine.patpat.entity.PatEntity;
+import net.lopymine.patpat.packet.PatPacket;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.jetbrains.annotations.Nullable;
 public class PatPatClientRenderer {
 
-	public static final List<PacketPat> packets = new ArrayList<>();
+	public static final List<PacketPat> serverPats = new ArrayList<>();
+	public static final List<PacketPat> clientPats = new ArrayList<>();
 
-	public record PacketPat(LivingEntity livingEntity, PlayerConfig playerConfig, LocalPlayer player, boolean replayModPacket){}
+	public record PacketPat(LivingEntity pattedEntity, PlayerConfig playerConfig, LocalPlayer player, boolean replayModPacket){}
 
 	public static void register() {
 		WorldRenderEvents.AFTER_ENTITIES.register(PatPatClientRenderer::renderPatOnYourself);
@@ -47,16 +54,42 @@ public class PatPatClientRenderer {
 				return;
 			}
 			//?}
-			packets.forEach(packetPat->{
-				LivingEntity livingEntity = packetPat.livingEntity();
-				PlayerConfig playerConfig = packetPat.playerConfig();
-				PatEntity patEntity = PatPatClientManager.pat(livingEntity, playerConfig);
-				PatPatClientConfig config = PatPatClientConfig.getInstance();
-				if (config.getSoundsConfig().isSoundsEnabled() && !packetPat.replayModPacket()) {
-					PatPatClientSoundManager.playSound(patEntity, packetPat.player(), config.getSoundsConfig().getSoundsVolume());
+			PatPatClientConfig config = PatPatClientConfig.getInstance();
+
+			serverPats.forEach((packet) -> {
+				LivingEntity pattedEntity = packet.pattedEntity();
+				PlayerConfig playerConfig = packet.playerConfig();
+				PatEntity patEntity = PatPatClientManager.pat(pattedEntity, playerConfig);
+
+				if (config.getSoundsConfig().isSoundsEnabled() && !packet.replayModPacket()) {
+					PatPatClientSoundManager.playSound(patEntity, packet.player(), config.getSoundsConfig().getSoundsVolume());
 				}
 			});
-			packets.clear();
+			serverPats.clear();
+
+			clientPats.forEach((patPacket) -> {
+				LocalPlayer player = patPacket.player();
+				LivingEntity pattedEntity = patPacket.pattedEntity();
+				PlayerConfig playerConfig = patPacket.playerConfig();
+
+				PatPatClientNetworkManager.sendPacketToServer(PatPatClientPacketManager.getPatPacket(pattedEntity));
+				PatEntity patEntity = PatPatClientManager.pat(pattedEntity, playerConfig);
+
+				if (config.getVisualConfig().isSwingHandEnabled()) {
+					player.swing(InteractionHand.MAIN_HAND);
+				}
+
+				System.out.println("ENTITY WAS PATTED           DDDDDDDDDD");
+
+				ReplayModCompat.onPat(pattedEntity.getId(), player.getId());
+				FlashbackCompat.onPat(pattedEntity.getId(), player.getId());
+				PatPatClientProxLibPacketManager.onPat(pattedEntity.getId());
+
+				if (config.getSoundsConfig().isSoundsEnabled()) {
+					PatPatClientSoundManager.playSound(patEntity, player, config.getSoundsConfig().getSoundsVolume());
+				}
+			});
+			clientPats.clear();
 			PatPatClientManager.tickEntities();
 		});
 	}

@@ -17,7 +17,6 @@ public class KeybindingMixin {
 	@Inject(at = @At("HEAD"), method = "click", cancellable = true)
 	private static void cancelClickForPatPatKeybinding(InputConstants.Key key, CallbackInfo ci) {
 		if (PatPatClientKeybindingManager.PAT_KEYBINDING.onKeyAction(key, true) && PatPatClientManager.canPat()) {
-			PatPatClientManager.requestPat();
 			ci.cancel();
 		}
 	}
@@ -25,7 +24,6 @@ public class KeybindingMixin {
 	@Inject(at = @At("HEAD"), method = "set", cancellable = true)
 	private static void processSetForPatPatKeybinding(InputConstants.Key key, boolean pressed, CallbackInfo ci) {
 		if (PatPatClientKeybindingManager.PAT_KEYBINDING.onKeyAction(key, pressed) && PatPatClientManager.canPat()) {
-			PatPatClientManager.requestPat();
 			ci.cancel();
 		}
 	}

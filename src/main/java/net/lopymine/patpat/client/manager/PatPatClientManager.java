@@ -89,29 +89,26 @@ public class PatPatClientManager {
 		PAT_ENTITIES.clear();
 	}
 
-	public static boolean requestPat() {
+	public static void requestPat() {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		if (!config.getMainConfig().isModEnabled()) {
-			return false;
+			return;
 		}
 
 		if (patCooldown != 0 || !PatPatClientKeybindingManager.PAT_KEYBINDING.isDown()) {
-			return false;
+			return;
 		}
 
 		Minecraft minecraft = Minecraft.getInstance();
 		LocalPlayer player = minecraft.player;
 
 		if (minecraft.player == null || minecraft.player.isDeadOrDying()) {
-			return false;
+			return;
 		}
 
-		if (!(minecraft.hitResult instanceof EntityHitResult hitResult) || !(hitResult.getEntity() instanceof LivingEntity pattedEntity)) {
-			return false;
-		}
-
-		if (pattedEntity.isInvisible()) {
-			return false;
+		LivingEntity pattedEntity = PatPatClientManager.getPatEntityFromHitResult();
+		if (pattedEntity == null) {
+			return;
 		}
 
 		UUID currentUuid = minecraft.getGameProfile().getId();
@@ -120,7 +117,6 @@ public class PatPatClientManager {
 		PatPatClientRenderer.clientPats.add(new PacketPat(pattedEntity, whoPatted, player, false));
 
 		PatPatClientManager.patCooldown = 4;
-		return true;
 	}
 
 	public static boolean canPat() {
@@ -128,24 +124,27 @@ public class PatPatClientManager {
 		if (!config.getMainConfig().isModEnabled()) {
 			return false;
 		}
-
-		if (patCooldown != 0 || !PatPatClientKeybindingManager.PAT_KEYBINDING.isDown()) {
+		if (!PatPatClientKeybindingManager.PAT_KEYBINDING.isDown()) {
 			return false;
 		}
+		return getPatEntityFromHitResult() != null;
+	}
 
+	@Nullable
+	public static LivingEntity getPatEntityFromHitResult() {
 		Minecraft minecraft = Minecraft.getInstance();
 		if (minecraft.player == null || minecraft.player.isDeadOrDying()) {
-			return false;
+			return null;
 		}
 
 		if (!(minecraft.hitResult instanceof EntityHitResult hitResult) || !(hitResult.getEntity() instanceof LivingEntity pattedEntity)) {
-			return false;
+			return null;
 		}
 
 		if (pattedEntity.isInvisible()) {
-			return false;
+			return null;
 		}
 
-		return true;
+		return pattedEntity;
 	}
 }

@@ -3,9 +3,13 @@ package net.lopymine.patpat.client.keybinding;
 import lombok.*;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.*;
+import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.InputConstants.Key;
 
+import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 
 import java.util.*;
@@ -16,7 +20,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class PatPatKeybinding extends KeyMapping {
 
-	private static final Combination defaultCombination = new Combination(InputConstants.Type.KEYSYM.getOrCreate(340), InputConstants.Type.MOUSE.getOrCreate(1));
+	public static final KeybindingCombination DEFAULT_COMBINATION = new KeybindingCombination(
+			InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_LEFT_SHIFT),
+			InputConstants.Type.MOUSE.getOrCreate(GLFW.GLFW_MOUSE_BUTTON_2)
+	);
 
 	private static final List<String> ATTRIBUTE_KEYS = List.of(
 			"key.keyboard.left.alt",
@@ -31,7 +38,7 @@ public class PatPatKeybinding extends KeyMapping {
 			"key.keyboard.caps.lock"
 	);
 
-	private final Combination bindingKeys = new Combination();
+	private final KeybindingCombination combination = new KeybindingCombination();
 	@Getter
 	private final Map<InputConstants.Key, Boolean> keys;
 	@Getter
@@ -39,64 +46,62 @@ public class PatPatKeybinding extends KeyMapping {
 	@Getter
 	private boolean canStartBinding = true;
 
-	public PatPatKeybinding(Set<InputConstants.Key> keys) {
-		super("patpat.keybinding.pat", InputConstants.UNKNOWN.getValue(), "PatPat");
-		this.keys = keys.stream()
+	public PatPatKeybinding(KeybindingCombination patCombination) {
+		super("patpat.keybinding.pat", InputConstants.UNKNOWN.getValue(), PatPat.MOD_NAME);
+
+		Map<InputConstants.Key, Boolean> keys = new HashMap<>();
+
+		if (!patCombination.getAttributeKey().equals(patCombination.getKey())) {
+			keys = Stream.of(patCombination.getAttributeKey(), patCombination.getKey())
+				.filter(key -> key.getValue() != -1)
 				.map(key -> Map.entry(key, false))
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+		}
+
+		this.keys = keys;
 	}
 
 	public boolean addBindingKey(InputConstants.Key key) {
-		System.out.println("ADDING KEYBIND");
 		if (ATTRIBUTE_KEYS.contains(key.getName())) {
-			if (this.bindingKeys.isComplete()) {
+			if (this.combination.isComplete()) {
 				return true;
 			}
 			this.binding         = true;
 			this.canStartBinding = false;
-			this.bindingKeys.setAttributeKey(key);
-			System.out.println("ADDED KEYBIND");
-			return this.bindingKeys.isComplete();
+			this.combination.setAttributeKey(key);
+			return this.combination.isComplete();
 		} else {
-			this.bindingKeys.setKey(key);
+			this.combination.setKey(key);
 			return true;
 		}
 	}
 
 	public void sendBindingKeys() {
-		System.out.println("SENDING KEYBIND");
 		this.keys.clear();
-		Stream.of(this.bindingKeys.attributeKey, this.bindingKeys.key).filter(Objects::nonNull).forEach(key -> this.keys.put(key, false));
-		this.bindingKeys.clear();
+		Stream.of(this.combination.getAttributeKey(), this.combination.getKey()).filter(Objects::nonNull).forEach(key -> this.keys.put(key, false));
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
+		config.getMainConfig().setPatCombination(this.combination);
+		config.saveAsync();
 		this.binding         = false;
 		this.canStartBinding = true;
-		System.out.println("SENDED KEYBIND");
-	}
-
-	public boolean containsKey(InputConstants.Key key) {
-		return this.keys.containsKey(key);
 	}
 
 	@Override
 	public void setKey(InputConstants.Key boundKey) {
 		if (boundKey.equals(this.getDefaultKey())) {
 			this.keys.clear();
-			Stream.of(defaultCombination.attributeKey, defaultCombination.key).filter(Objects::nonNull).forEach(key -> this.keys.put(key, false));
-			this.bindingKeys.clear();
-			System.out.println("CLEAR KEYBIND");
+			Stream.of(DEFAULT_COMBINATION.getAttributeKey(), DEFAULT_COMBINATION.getKey()).filter(Objects::nonNull).forEach(key -> this.keys.put(key, false));
 		}
 	}
 
-
 	public boolean onKeyAction(InputConstants.Key key, boolean pressed) {
-		if (!this.keys.containsKey(key)) return false;
-
-		System.out.printf("%s %s %s", key, pressed, this.isDown());
+		if (!this.keys.containsKey(key)) {
+			return false;
+		}
 
 		if (keys.size() == 1) {
 			keys.put(key, pressed);
 			this.setDown(pressed);
-			System.out.printf(" -> %s(1)%n", this.isDown());
 			return this.isDown();
 		}
 
@@ -104,7 +109,6 @@ public class PatPatKeybinding extends KeyMapping {
 			keys.put(key, false);
 			this.setDown(false);
 			PatPatClientManager.setPatCooldown(0);
-			System.out.printf(" -> %s(2)%n", this.isDown());
 			return false;
 		}
 
@@ -114,33 +118,31 @@ public class PatPatKeybinding extends KeyMapping {
 
 		if (isAttribute && !allPressed && anyPressed) {
 			this.setDown(false);
-			System.out.printf(" -> %s(3)%n", this.isDown());
 			return false;
 		}
 
 		keys.put(key, true);
 		boolean newState = keys.values().stream().allMatch(v -> v);
 		this.setDown(newState);
-		System.out.printf(" -> %s(4)%n", this.isDown());
 		return newState;
 	}
 
 	@Override
 	public boolean isDefault() {
-		return this.bindingKeys.equals(defaultCombination);
+		return this.combination.equals(DEFAULT_COMBINATION);
 	}
 
 	@Override
 	public @NotNull Component getTranslatedKeyMessage() {
 		MutableComponent result = Component.literal("");
-		if (!this.bindingKeys.isEmpty()) {
-			return this.bindingKeys.getCombinationLocalizedComponent();
+		if (this.isBinding()) {
+			return this.combination.getCombinationLocalizedComponent();
 		}
 		Set<InputConstants.Key> keys = this.keys.keySet();
 		if (keys.isEmpty()) {
 			return InputConstants.UNKNOWN.getDisplayName();
 		}
-		System.out.println(keys);
+
 		List<Component> list = keys.stream().sorted((o1, o2) -> {
 					if (o1.equals(o2)) {
 						return 0;
@@ -159,54 +161,9 @@ public class PatPatKeybinding extends KeyMapping {
 		return result;
 	}
 
-	@Getter
-	@Setter
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class Combination {
-
-		private static final Component COLLECT_TEXT = Component.literal(" + ");
-
-		private InputConstants.Key attributeKey;
-		private InputConstants.Key key;
-
-		public void clear() {
-			this.attributeKey = null;
-			this.key          = null;
-		}
-
-		public boolean isComplete() {
-			return this.attributeKey != null && this.key != null;
-		}
-
-		public boolean isEmpty() {
-			return this.attributeKey == null && this.key == null;
-		}
-
-		public Component getCombinationLocalizedComponent() {
-			if (this.attributeKey != null) {
-				MutableComponent component = this.attributeKey.getDisplayName().copy().append(COLLECT_TEXT);
-				if (this.key != null) {
-					component.append(this.key.getDisplayName());
-				}
-				return component;
-			}
-			if (this.key != null) {
-				return this.key.getDisplayName();
-			}
-			return InputConstants.UNKNOWN.getDisplayName();
-		}
-
-		@Override
-		public boolean equals(Object o) {
-			if (o == null || getClass() != o.getClass()) return false;
-			Combination that = (Combination) o;
-			return Objects.equals(this.attributeKey, that.attributeKey) && Objects.equals(this.key, that.key);
-		}
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(this.attributeKey, this.key);
-		}
+	public void unPress() {
+		this.setDown(false);
+		Set<Key> set = this.keys.keySet();
+		set.forEach((key) -> this.keys.put(key, false));
 	}
 }

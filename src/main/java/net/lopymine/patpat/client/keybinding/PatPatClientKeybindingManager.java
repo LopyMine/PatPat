@@ -11,7 +11,7 @@ public class PatPatClientKeybindingManager {
 	public static PatPatKeybinding PAT_KEYBINDING;
 
 	public static void register() {
-		PAT_KEYBINDING = new PatPatKeybinding(PatPatClientConfig.getInstance().getMainConfig().getPatKeys().keySet());
+		PAT_KEYBINDING = new PatPatKeybinding(PatPatClientConfig.getInstance().getMainConfig().getPatCombination());
 		registerKeybinding(PAT_KEYBINDING);
 	}
 

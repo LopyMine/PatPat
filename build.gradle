@@ -110,12 +110,32 @@ dependencies {
 	}
 }
 
-String prop(String key) {
-	return findProperty(key).toString()
-}
-
 if (stonecutter.compare(stonecutter.current.version.toString(), "1.19.4") >= 0) {
 	test {
 		useJUnitPlatform()
 	}
+}
+
+tasks.register('submodulesUpdate', Exec) {
+	description 'Updates (and inits) git submodules'
+	commandLine 'git', 'submodule', 'update', '--init', '--force', '--remote'
+}
+processResources.dependsOn("submodulesUpdate")
+
+jar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+	from("../../patpat-languages-files/lang") {
+		into "assets/${prop("data.mod_id")}/lang/"
+		eachFile { file ->
+			if (!file.isDirectory()) {
+				// Client requires lang files in lower case
+				file.name = file.name.toLowerCase()
+			}
+		}
+	}
+}
+
+String prop(String key) {
+	return findProperty(key).toString()
 }

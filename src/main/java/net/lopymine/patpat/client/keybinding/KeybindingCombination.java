@@ -5,13 +5,13 @@ import net.minecraft.network.chat.*;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.InputConstants.Key;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.client.config.InputType;
 
 import java.util.*;
+import org.jetbrains.annotations.Nullable;
 
 @Getter
 @Setter
@@ -31,7 +31,9 @@ public class KeybindingCombination {
 			KEY_CODEC.optionalFieldOf("key").xmap((o) -> o.orElse(InputConstants.UNKNOWN), Optional::ofNullable).forGetter(KeybindingCombination::getKey)
 	).apply(instance, KeybindingCombination::new));
 
+	@Nullable
 	private InputConstants.Key attributeKey;
+	@Nullable
 	private InputConstants.Key key;
 
 	public boolean isComplete() {

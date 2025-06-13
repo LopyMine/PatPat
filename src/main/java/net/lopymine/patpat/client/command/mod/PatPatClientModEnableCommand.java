@@ -10,7 +10,9 @@ import net.lopymine.patpat.client.command.PatPatClientCommandManager;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.CommandTextBuilder;
-import net.minecraft.network.chat.Component;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.*;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
@@ -33,7 +35,7 @@ public class PatPatClientModEnableCommand {
 
 	private static int switchPatPatState(CommandContext<FabricClientCommandSource> context, boolean state) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
-		Component text;
+		MutableComponent text;
 		if (config.getMainConfig().isModEnabled() != state) {
 			config.getMainConfig().setModEnabled(state);
 			config.saveAsync();
@@ -41,7 +43,7 @@ public class PatPatClientModEnableCommand {
 		} else {
 			text = CommandTextBuilder.startBuilder(state ? "on.already" : "off.already").build();
 		}
-		context.getSource().sendPatPatFeedback(text);
+		context.getSource().sendPatPatFeedback(text.withStyle(state ? ChatFormatting.GREEN : ChatFormatting.RED));
 		return Command.SINGLE_SUCCESS;
 	}
 }

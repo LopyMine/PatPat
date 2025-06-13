@@ -1,12 +1,12 @@
 package net.lopymine.patpat.client.keybinding;
 
 import lombok.*;
-import net.minecraft.client.KeyMapping;
+import net.minecraft.client.*;
 import net.minecraft.network.chat.*;
 import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.platform.InputConstants.Key;
+import com.mojang.blaze3d.platform.InputConstants.*;
 
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
@@ -51,11 +51,15 @@ public class PatPatKeybinding extends KeyMapping {
 
 		Map<InputConstants.Key, Boolean> keys = new HashMap<>();
 
-		if (!patCombination.getAttributeKey().equals(patCombination.getKey())) {
+		if (!Objects.equals(patCombination.getAttributeKey(), patCombination.getKey())) {
 			keys = Stream.of(patCombination.getAttributeKey(), patCombination.getKey())
-				.filter(key -> key.getValue() != -1)
+				.filter(Objects::nonNull)
+				.filter(key -> key.getValue() != InputConstants.UNKNOWN.getValue())
 				.map(key -> Map.entry(key, false))
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+
+			this.combination.setAttributeKey(patCombination.getAttributeKey());
+			this.combination.setKey(patCombination.getKey());
 		}
 
 		this.keys = keys;
@@ -99,32 +103,32 @@ public class PatPatKeybinding extends KeyMapping {
 			return false;
 		}
 
-		if (keys.size() == 1) {
-			keys.put(key, pressed);
+		if (this.keys.size() == 1) {
+			this.keys.put(key, pressed);
 			this.setDown(pressed);
 			return this.isDown();
 		}
 
 		if (!pressed) {
-			keys.put(key, false);
+			this.keys.put(key, false);
 			this.setDown(false);
 			PatPatClientManager.setPatCooldown(0);
 			return false;
 		}
 
 		boolean isAttribute = ATTRIBUTE_KEYS.contains(key.getName());
-		boolean allPressed = keys.values().stream().allMatch(v -> v);
-		boolean anyPressed = keys.values().stream().anyMatch(v -> v);
+		boolean allPressed = this.keys.values().stream().allMatch(v -> v);
+		boolean anyPressed = this.keys.values().stream().anyMatch(v -> v);
 
 		if (isAttribute && !allPressed && anyPressed) {
 			this.setDown(false);
 			return false;
 		}
 
-		keys.put(key, true);
-		boolean newState = keys.values().stream().allMatch(v -> v);
-		this.setDown(newState);
-		return newState;
+		this.keys.put(key, true);
+		boolean allPressedState = this.keys.values().stream().allMatch(v -> v);
+		this.setDown(allPressedState);
+		return allPressedState;
 	}
 
 	@Override
@@ -161,9 +165,17 @@ public class PatPatKeybinding extends KeyMapping {
 		return result;
 	}
 
-	public void unPress() {
-		this.setDown(false);
+	public void reset() {
 		Set<Key> set = this.keys.keySet();
-		set.forEach((key) -> this.keys.put(key, false));
+
+		set.forEach((key) -> {
+			if (key.getType() == Type.KEYSYM) {
+				this.keys.put(key, InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), key.getValue()));
+			} else {
+				this.keys.put(key, GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().getWindow(), key.getValue()) == 1);
+			}
+		});
+		boolean allPressed = this.keys.values().stream().allMatch(bl -> bl);
+		this.setDown(allPressed);
 	}
 }

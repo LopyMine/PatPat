@@ -44,7 +44,7 @@ public class PatPatClientPlayerListConfig {
 		this.save(CONFIG_FILE);
 	}
 
-	public void save(File folder) {
-		PlayerListConfigUtils.save(folder, PatPatClient.LOGGER, this.map);
+	public void save(File configFile) {
+		PlayerListConfigUtils.save(configFile, PatPatClient.LOGGER, this.map);
 	}
 }

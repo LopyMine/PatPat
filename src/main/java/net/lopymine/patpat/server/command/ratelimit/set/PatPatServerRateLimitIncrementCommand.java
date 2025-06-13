@@ -9,7 +9,9 @@ import com.mojang.brigadier.context.CommandContext;
 import net.lopymine.patpat.extension.CommandExtension;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
-import net.lopymine.patpat.utils.CommandTextBuilder;
+import net.lopymine.patpat.utils.*;
+
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 
@@ -36,7 +38,10 @@ public class PatPatServerRateLimitIncrementCommand {
 	public static int info(CommandContext<CommandSourceStack> context) {
 		CommandSourceStack sender = context.getSource();
 		PatPatServerRateLimitConfig rateLimitConfig = PatPatServerConfig.getInstance().getRateLimitConfig();
-		Component text = CommandTextBuilder.startBuilder("ratelimit.set.increment.info", rateLimitConfig.getTokenIncrement()).build();
+		Component text = CommandTextBuilder.startBuilder(
+				"ratelimit.set.increment.info",
+				TextUtils.literal(rateLimitConfig.getTokenIncrement()).withStyle(ChatFormatting.GOLD)
+		).build();
 		sender.sendPatPatFeedback(text);
 		return Command.SINGLE_SUCCESS;
 	}
@@ -48,7 +53,10 @@ public class PatPatServerRateLimitIncrementCommand {
 		int value = IntegerArgumentType.getInteger(context, "value");
 		rateLimitConfig.setTokenIncrement(value);
 		config.saveAsync();
-		Component text = CommandTextBuilder.startBuilder("ratelimit.set.increment", value).build();
+		Component text = CommandTextBuilder.startBuilder(
+				"ratelimit.set.increment",
+				TextUtils.literal(value).withStyle(ChatFormatting.GOLD)
+		).build();
 		sender.sendPatPatFeedback(text);
 		return Command.SINGLE_SUCCESS;
 	}

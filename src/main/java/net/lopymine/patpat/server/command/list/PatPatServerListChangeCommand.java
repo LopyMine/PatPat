@@ -10,7 +10,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.server.config.sub.PatPatServerPlayerListConfig;
-import net.lopymine.patpat.utils.CommandTextBuilder;
+import net.lopymine.patpat.utils.*;
+
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.GameProfileArgument;
@@ -66,10 +68,10 @@ public class PatPatServerListChangeCommand {
 			boolean success = add ? !map.containsKey(uuid) && map.put(uuid, name) == null : map.containsKey(uuid) && map.remove(uuid) != null;
 
 			String action = add ? "add" : "remove";
-			String result = success ? "success" : "failed";
+			String result = success ? "success" : "already";
 			String key = String.format("list.%s.%s", action, result);
 
-			Component text = CommandTextBuilder.startBuilder(key, gameProfile.getName())
+			Component text = CommandTextBuilder.startBuilder(key, TextUtils.literal(gameProfile.getName()).withStyle(ChatFormatting.GOLD))
 					.withShowEntity(EntityType.PLAYER, uuid, gameProfile.getName())
 					.withCopyToClipboard(uuid)
 					.build();

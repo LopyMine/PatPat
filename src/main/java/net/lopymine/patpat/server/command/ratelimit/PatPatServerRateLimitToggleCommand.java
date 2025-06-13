@@ -10,8 +10,10 @@ import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
 import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.utils.CommandTextBuilder;
+
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 
 import static net.minecraft.commands.Commands.literal;
 
@@ -45,15 +47,21 @@ public class PatPatServerRateLimitToggleCommand {
 	public static int toggle(CommandContext<CommandSourceStack> context, boolean toggle) {
 		PatPatServerConfig config = PatPatServerConfig.getInstance();
 		PatPatServerRateLimitConfig rateLimitConfig = config.getRateLimitConfig();
+		String key = toggle ? "enable" : "disable";
+
 		if (rateLimitConfig.isEnabled() == toggle) {
-			Component text = CommandTextBuilder.startBuilder("ratelimit.%s.already".formatted(toggle ? "enable" : "disable")).build();
+			MutableComponent text = CommandTextBuilder.startBuilder("ratelimit.%s.already".formatted(key))
+					.build()
+					.withStyle(toggle ? ChatFormatting.GREEN : ChatFormatting.RED);
 			context.getSource().sendPatPatFeedback(text, false);
 			return 0;
 		}
 		rateLimitConfig.setEnabled(toggle);
 		config.saveAsync();
 		PatPatServerRateLimitManager.reloadTask();
-		Component text = CommandTextBuilder.startBuilder("ratelimit." + (toggle ? "enable" : "disable")).build();
+		MutableComponent text = CommandTextBuilder.startBuilder("ratelimit.%s.success".formatted(key))
+				.build()
+				.withStyle(toggle ? ChatFormatting.GREEN : ChatFormatting.RED);
 		context.getSource().sendPatPatFeedback(text, false);
 		return Command.SINGLE_SUCCESS;
 	}

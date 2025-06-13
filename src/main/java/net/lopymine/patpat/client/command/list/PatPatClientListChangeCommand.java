@@ -14,6 +14,8 @@ import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.client.config.sub.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.*;
+
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
@@ -55,10 +57,10 @@ public class PatPatClientListChangeCommand {
 		boolean success = add ? !players.containsKey(uuid) && players.put(uuid, name) == null : players.containsKey(uuid) && players.remove(uuid) != null;
 
 		String action = add ? "add" : "remove";
-		String result = success ? "success" : "failed";
+		String result = success ? "success" : "already";
 		String key = String.format("list.%s.%s", action, result);
 
-		Component text = CommandTextBuilder.startBuilder(key, name)
+		Component text = CommandTextBuilder.startBuilder(key, TextUtils.literal(name).withStyle(ChatFormatting.GOLD))
 				.withShowEntity(EntityType.PLAYER, uuid, name)
 				.withCopyToClipboard(uuid)
 				.build();

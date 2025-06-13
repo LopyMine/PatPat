@@ -7,6 +7,10 @@ import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.packet.s2c.HelloPatPatPlayerS2CPacket;
 import net.lopymine.patpat.server.packet.PatPatServerNetworkManager;
 import net.lopymine.patpat.server.packet.PatPatServerPacketManager;
+import net.lopymine.patpat.utils.TextUtils;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PatPatServerPlayerEvents {

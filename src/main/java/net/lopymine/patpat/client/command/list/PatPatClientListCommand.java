@@ -13,6 +13,7 @@ public class PatPatClientListCommand {
 
 	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
 		return literal("list")
+				.then(PatPatClientListInfoCommand.get())
 				.then(PatPatClientListSetModeCommand.get())
 				.then(PatPatClientListChangeCommand.getAdd())
 				.then(PatPatClientListChangeCommand.getRemove());

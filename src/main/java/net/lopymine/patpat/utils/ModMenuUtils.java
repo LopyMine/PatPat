@@ -1,7 +1,8 @@
 package net.lopymine.patpat.utils;
 
 import net.lopymine.patpat.modmenu.yacl.custom.utils.SimpleContent;
-import net.minecraft.network.chat.Component;
+
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import java.util.function.Function;
 
@@ -19,20 +20,20 @@ public class ModMenuUtils {
 		return String.format("modmenu.group.%s", groupId);
 	}
 
-	public static Component getName(String key) {
+	public static MutableComponent getName(String key) {
 		return TextUtils.text(key + ".name");
 	}
 
-	public static Component getDescription(String key) {
+	public static MutableComponent getDescription(String key) {
 		return TextUtils.text(key + ".description");
+	}
+
+	public static MutableComponent getModTitle() {
+		return TextUtils.text("modmenu.title");
 	}
 
 	public static ResourceLocation getContentId(SimpleContent content, String contentId) {
 		return IdentifierUtils.id(String.format("textures/config/%s.%s", contentId, content.getFileExtension()));
-	}
-
-	public static Component getModTitle() {
-		return TextUtils.text("modmenu.title");
 	}
 
 	public static Function<Boolean, Component> getEnabledOrDisabledFormatter() {

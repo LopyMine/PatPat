@@ -11,7 +11,9 @@ import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
 import net.lopymine.patpat.common.config.time.Time;
 import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
 import net.lopymine.patpat.server.config.*;
-import net.lopymine.patpat.utils.CommandTextBuilder;
+import net.lopymine.patpat.utils.*;
+
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 
@@ -38,7 +40,10 @@ public class PatPatServerRateLimitIntervalCommand {
 	public static int info(CommandContext<CommandSourceStack> context) {
 		CommandSourceStack sender = context.getSource();
 		PatPatServerRateLimitConfig rateLimitConfig = PatPatServerConfig.getInstance().getRateLimitConfig();
-		Component text = CommandTextBuilder.startBuilder("ratelimit.set.interval.info", rateLimitConfig.getTokenIncrementInterval().toString()).build();
+		Component text = CommandTextBuilder.startBuilder(
+				"ratelimit.set.interval.info",
+				TextUtils.literal(rateLimitConfig.getTokenIncrementInterval().toString()).withStyle(ChatFormatting.GOLD)
+		).build();
 		sender.sendPatPatFeedback(text);
 		return Command.SINGLE_SUCCESS;
 	}
@@ -51,17 +56,27 @@ public class PatPatServerRateLimitIntervalCommand {
 		try {
 			Time time = Time.of(value);
 			if (time.getValue() < 1) {
-				Component text = CommandTextBuilder.startBuilder("ratelimit.set.interval.value_less_one", time).build();
+				Component text = CommandTextBuilder.startBuilder(
+						"error.time_less_than",
+						TextUtils.literal(time).withStyle(ChatFormatting.GOLD),
+						TextUtils.literal("1sec").withStyle(ChatFormatting.GOLD)
+				).build();
 				sender.sendPatPatFeedback(text);
 				return 0;
 			}
 			rateLimitConfig.setTokenIncrementInterval(time);
 			config.saveAsync();
 			PatPatServerRateLimitManager.reloadTask();
-			Component text = CommandTextBuilder.startBuilder("ratelimit.set.interval", time).build();
+			Component text = CommandTextBuilder.startBuilder(
+					"ratelimit.set.interval",
+					TextUtils.literal(time).withStyle(ChatFormatting.GOLD)
+			).build();
 			sender.sendPatPatFeedback(text);
 		} catch (IllegalArgumentException ignored) {
-			Component text = CommandTextBuilder.startBuilder("ratelimit.set.interval.wrong_type", value).build();
+			Component text = CommandTextBuilder.startBuilder(
+					"ratelimit.set.interval.time_not_time",
+					TextUtils.literal(value).withStyle(ChatFormatting.GOLD)
+			).build();
 			sender.sendPatPatFeedback(text);
 			return 0;
 		}

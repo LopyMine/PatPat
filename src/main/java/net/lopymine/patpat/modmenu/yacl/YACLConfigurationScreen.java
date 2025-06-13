@@ -94,17 +94,17 @@ public class YACLConfigurationScreen {
 				SimpleOption.<Float>startBuilder("hand_offset_x")
 						.withBinding(defConfig.getAnimationOffsets().getX(), config.getAnimationOffsets()::getX, config.getAnimationOffsets()::setX, false)
 						.withController(-5F, 5F, 0.01F)
-						.withDescription(SimpleContent.NONE)
+						.withDescription(SimpleContent.IMAGE)
 						.build(),
 				SimpleOption.<Float>startBuilder("hand_offset_y")
 						.withBinding(defConfig.getAnimationOffsets().getY(), config.getAnimationOffsets()::getY, config.getAnimationOffsets()::setY, false)
 						.withController(-5F, 5F, 0.01F)
-						.withDescription(SimpleContent.NONE)
+						.withDescription(SimpleContent.IMAGE)
 						.build(),
 				SimpleOption.<Float>startBuilder("hand_offset_z")
 						.withBinding(defConfig.getAnimationOffsets().getZ(), config.getAnimationOffsets()::getZ, config.getAnimationOffsets()::setZ, false)
 						.withController(-5F, 5F, 0.01F)
-						.withDescription(SimpleContent.NONE)
+						.withDescription(SimpleContent.IMAGE)
 						.build(),
 				SimpleOption.<Boolean>startBuilder("camera_shacking")
 						.withBinding(defConfig.isCameraShackingEnabled(), config::isCameraShackingEnabled, config::setCameraShackingEnabled, false)

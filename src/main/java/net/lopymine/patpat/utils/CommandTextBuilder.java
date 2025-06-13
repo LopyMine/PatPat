@@ -12,6 +12,7 @@ import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.UUID;
+import org.jetbrains.annotations.Nullable;
 
 public class CommandTextBuilder {
 
@@ -20,22 +21,7 @@ public class CommandTextBuilder {
 
 	private CommandTextBuilder(String key, Object... args) {
 		this.key  = key;
-		this.text = CommandTextBuilder.translatable(key, args);
-	}
-
-	private static MutableComponent translatable(String key, Object... args) {
-		for (int i = 0; i < args.length; ++i) {
-			Object object = args[i];
-			if (!isPrimitive(object) && !(object instanceof Component)) {
-				args[i] = String.valueOf(object);
-			}
-		}
-
-		return TextUtils.literal(TextUtils.text(key, args).getString().replace("&", "§"));
-	}
-
-	private static boolean isPrimitive(Object object) {
-		return object instanceof Number || object instanceof Boolean || object instanceof String;
+		this.text = TextUtils.text(key, args);
 	}
 
 	public static CommandTextBuilder startBuilder(String key, Object... args) {
@@ -52,7 +38,7 @@ public class CommandTextBuilder {
 	}
 
 	public CommandTextBuilder withHoverText(Object... args) {
-		MutableComponent hoverText = CommandTextBuilder.translatable(this.key + ".hover_text", args);
+		MutableComponent hoverText = TextUtils.text(this.key + ".hover_text", args);
 		HoverEvent hoverEvent = getHoverEvent(Action.SHOW_TEXT, hoverText);
 		return this.withHoverEvent(hoverEvent);
 	}
@@ -88,14 +74,14 @@ public class CommandTextBuilder {
 
 	public static ClickEvent getClickEvent(ClickEvent.Action action, Object value) {
 		//? <=1.21.4 {
-		return new ClickEvent(action, (String) value);
+		return new ClickEvent(action, String.valueOf(value));
 		 /*?} else {*/
 		/*return switch (action) {
 			case OPEN_URL -> new OpenUrl((URI) value);
-			case RUN_COMMAND -> new RunCommand((String) value);
-			case SUGGEST_COMMAND -> new SuggestCommand((String) value);
+			case RUN_COMMAND -> new RunCommand(String.valueOf(value));
+			case SUGGEST_COMMAND -> new SuggestCommand(String.valueOf(value));
 			case CHANGE_PAGE -> new ChangePage((int) value);
-			case COPY_TO_CLIPBOARD -> new CopyToClipboard((String) value);
+			case COPY_TO_CLIPBOARD -> new CopyToClipboard(String.valueOf(value));
 			case OPEN_FILE -> {
 				if (value instanceof File file) {
 					yield new OpenFile(file);
@@ -109,7 +95,7 @@ public class CommandTextBuilder {
 		*//*?}*/
 	}
 
-	public Component build() {
+	public MutableComponent build() {
 		return this.text;
 	}
 }

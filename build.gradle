@@ -68,9 +68,17 @@ repositories {
 }
 
 dependencies {
-	mappings loom.officialMojangMappings()
-
 	def mcVersion = stonecutter.current.version.toString()
+
+	if (mcVersion == "1.16.5") {
+		mappings loom.layered {
+			officialMojangMappings()
+			//it.mappings(file("mappingsfix.tiny"))
+			//println "[Using fix for mappings]"
+		}
+	} else {
+		mappings loom.officialMojangMappings()
+	}
 
 	// Fabric permission api
 	def fpaVersion = prop("dep.fabric-permissions-api")

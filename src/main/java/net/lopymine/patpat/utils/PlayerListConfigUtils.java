@@ -45,13 +45,15 @@ public class PlayerListConfigUtils {
 	}
 
 	public static void save(File config, PatLogger logger, Map<UUID, String> map) {
-		File folder = config.getParentFile();
-		try (FileWriter writer = new FileWriter(folder, StandardCharsets.UTF_8)) {
-			writer.write(map
+		try (FileWriter writer = new FileWriter(config, StandardCharsets.UTF_8)) {
+			String collect = map
 					.entrySet()
 					.stream()
 					.map(entry -> "%s %s".formatted(entry.getKey(), entry.getValue()))
-					.collect(Collectors.joining("\n"))
+					.collect(Collectors.joining("\n"));
+			logger.debug("Saving list with players:");
+			logger.debug(collect);
+			writer.write(collect
 			);
 		} catch (Exception e) {
 			logger.error("Failed to save PlayerListConfig with name " + config.getName(), e);

@@ -28,6 +28,6 @@ public abstract class MinecraftClientMixin {
 
 	@Inject(at = @At("HEAD"), method = "setScreen")
 	private void clearPatPatKeybinding(Screen screen, CallbackInfo ci) {
-		PatPatClientKeybindingManager.PAT_KEYBINDING.unPress();
+		PatPatClientKeybindingManager.PAT_KEYBINDING.reset();
 	}
 }

@@ -5,16 +5,19 @@ package net.lopymine.patpat.modmenu.yacl.custom.base;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.ConfigCategory.Builder;
 import net.lopymine.patpat.utils.ModMenuUtils;
-import net.minecraft.network.chat.Component;
+
+import net.minecraft.network.chat.*;
 
 @SuppressWarnings("unused")
 public class SimpleCategory {
+
+	public static final Style NAME_STYLE = Style.EMPTY.withBold(true);
 
 	private final Builder builder;
 
 	private SimpleCategory(String categoryId) {
 		String categoryKey = ModMenuUtils.getCategoryKey(categoryId);
-		Component categoryName = ModMenuUtils.getName(categoryKey);
+		Component categoryName = ModMenuUtils.getName(categoryKey).withStyle(NAME_STYLE);
 		this.builder = ConfigCategory.createBuilder().name(categoryName);
 	}
 

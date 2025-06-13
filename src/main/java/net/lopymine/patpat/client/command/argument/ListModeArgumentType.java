@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 public class ListModeArgumentType implements ArgumentType<ListMode> {
 
-	public static final DynamicCommandExceptionType FAILED_PARSING = new DynamicCommandExceptionType(o -> CommandTextBuilder.startBuilder("argument.list_mode.exception.failed_parsing", o).build());
+	public static final DynamicCommandExceptionType FAILED_PARSING = new DynamicCommandExceptionType(o -> CommandTextBuilder.startBuilder("error.failed_when_parsing", o).build());
 
 	private ListModeArgumentType() {
 	}
@@ -33,7 +33,7 @@ public class ListModeArgumentType implements ArgumentType<ListMode> {
 	@Override
 	public ListMode parse(StringReader reader) throws CommandSyntaxException {
 		String modeId = reader.readUnquotedString();
-		PatPatClient.LOGGER.debug("Parsed modeId from ListModeArgumentType: {}", modeId);
+		PatPatClient.LOGGER.debug("Parsed ListMode from ListModeArgumentType: {}", modeId);
 		ListMode listMode = ListMode.getById(modeId);
 		if (listMode == null) {
 			throw FAILED_PARSING.createWithContext(reader, reader.getString());

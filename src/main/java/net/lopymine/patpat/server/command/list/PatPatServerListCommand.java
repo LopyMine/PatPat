@@ -17,6 +17,7 @@ public class PatPatServerListCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("list")
+				.then(PatPatServerListInfoCommand.get())
 				.then(PatPatServerListSetModeCommand.get())
 				.then(PatPatServerListChangeCommand.getAdd())
 				.then(PatPatServerListChangeCommand.getRemove());

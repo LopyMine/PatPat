@@ -5,17 +5,20 @@ import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.OptionGroup.Builder;
 import dev.isxander.yacl3.gui.image.ImageRenderer;
 import net.lopymine.patpat.utils.ModMenuUtils;
-import net.minecraft.network.chat.Component;
+
+import net.minecraft.network.chat.*;
 
 @SuppressWarnings("unused")
 public class SimpleGroup {
+
+	public static final Style NAME_STYLE = Style.EMPTY.withBold(true);
 
 	private final Builder groupBuilder;
 	private final OptionDescription.Builder description;
 
 	public SimpleGroup(String groupId) {
 		String groupKey = ModMenuUtils.getGroupKey(groupId);
-		Component groupName = ModMenuUtils.getName(groupKey);
+		Component groupName = ModMenuUtils.getName(groupKey).withStyle(NAME_STYLE);
 		Component description = ModMenuUtils.getDescription(groupKey);
 
 		this.groupBuilder = OptionGroup.createBuilder().name(groupName);

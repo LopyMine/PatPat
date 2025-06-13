@@ -15,7 +15,6 @@ public class PatPatServerRateLimitCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("ratelimit")
-				.then(PatPatServerRateLimitVersionCommand.get())
 				.then(PatPatServerRateLimitInfoCommand.get())
 				.then(PatPatServerRateLimitSetCommand.get())
 				.then(PatPatServerRateLimitToggleCommand.getEnable())

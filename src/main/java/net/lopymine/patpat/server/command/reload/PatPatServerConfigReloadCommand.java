@@ -30,7 +30,7 @@ public class PatPatServerConfigReloadCommand {
 	public static int reload(CommandContext<CommandSourceStack> context) {
 		PatPatConfigManager.reloadServer();
 		PatPatServerRateLimitManager.reloadTask();
-		Component text = CommandTextBuilder.startBuilder("reload.success").build();
+		Component text = CommandTextBuilder.startBuilder("reload").build();
 		context.getSource().sendPatPatFeedback(text);
 		return Command.SINGLE_SUCCESS;
 	}

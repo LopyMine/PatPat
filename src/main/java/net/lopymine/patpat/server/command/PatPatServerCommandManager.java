@@ -1,21 +1,19 @@
 package net.lopymine.patpat.server.command;
 
 import lombok.experimental.ExtensionMethod;
-import com.mojang.brigadier.arguments.*;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.extension.*;
+import net.lopymine.patpat.server.command.info.PatPatServerInfoCommand;
 import net.lopymine.patpat.server.command.list.*;
 import net.lopymine.patpat.server.command.ratelimit.*;
-import net.lopymine.patpat.server.command.ratelimit.set.*;
 import net.lopymine.patpat.server.command.reload.PatPatServerConfigReloadCommand;
 import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
 import net.lopymine.patpat.utils.TextUtils;
 import net.minecraft.network.chat.MutableComponent;
 
-import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 //? >=1.19 {
@@ -45,6 +43,7 @@ public class PatPatServerCommandManager {
 			}
 			*///?}
 			dispatcher.register(literal("patpat")
+					.then(PatPatServerInfoCommand.get())
 					.then(PatPatServerListCommand.get())
 					.then(PatPatServerRateLimitCommand.get())
 					.then(PatPatServerConfigReloadCommand.get())

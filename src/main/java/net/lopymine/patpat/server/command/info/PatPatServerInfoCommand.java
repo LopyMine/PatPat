@@ -34,7 +34,7 @@ public class PatPatServerInfoCommand {
 	public static int version(CommandContext<CommandSourceStack> context) {
 		String version = PatPat.MOD_VERSION;
 		String minecraftVersion = SharedConstants.getCurrentVersion().getName();
-		String debugInformation = "Platform: %s Minecraft: %s Version: %s"
+		String debugInformation = "Platform: %s%nMinecraft: %s%nVersion: %s"
 				.formatted(PLATFORM, minecraftVersion, version);
 
 		Style style = Style.EMPTY

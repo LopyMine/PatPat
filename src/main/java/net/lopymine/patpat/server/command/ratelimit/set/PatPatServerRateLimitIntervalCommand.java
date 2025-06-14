@@ -13,7 +13,6 @@ import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.utils.*;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 
@@ -52,7 +51,7 @@ public class PatPatServerRateLimitIntervalCommand {
 			Component text = CommandText.goldenArgs("ratelimit.set.interval", time).finish();
 			context.sendMsg(text);
 		} catch (IllegalArgumentException ignored) {
-			Component text = CommandText.goldenArgs("ratelimit.set.interval.time_not_time", value).finish();
+			Component text = CommandText.goldenArgs("ratelimit.set.interval.not_time", value).finish();
 			context.sendMsg(text);
 			return 0;
 		}

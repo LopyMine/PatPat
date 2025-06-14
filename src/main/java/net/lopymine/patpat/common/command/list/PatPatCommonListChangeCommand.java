@@ -36,10 +36,9 @@ public class PatPatCommonListChangeCommand {
 		MutableComponent playersText = TextUtils.literal("");
 
 		if (!iterator.hasNext()) {
-			MutableComponent emptyText = CommandText.text("list.empty")
+			playersText = CommandText.text("list.empty")
 					.finish()
 					.withStyle(EMPTY_TEXT_STYLE);
-			playersText.append(emptyText);
 		}
 
 		while (iterator.hasNext()) {

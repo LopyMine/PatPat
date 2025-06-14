@@ -18,6 +18,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.HoverEvent.Action;
 
 import java.util.Collection;
 
@@ -50,7 +51,15 @@ public class PatPatServerRateLimitInfoCommand {
 		Object limitComponent = config.getTokenLimit();
 		Object incrementComponent = config.getTokenIncrement();
 		Object intervalComponent = config.getTokenIncrementInterval().toString();
-		Object permissionComponent = config.getPermissionBypass();
+		Object permissionComponent = TextUtils.text(config.getPermissionBypass()).withStyle(
+				Style.EMPTY.withHoverEvent(CommandText.getHoverEvent(
+								Action.SHOW_TEXT,
+								CommandText.text("ratelimit.info.permission_bypass.copy").finish()
+						)).withClickEvent(CommandText.getClickEvent(
+								ClickEvent.Action.COPY_TO_CLIPBOARD,
+								config.getPermissionBypass()
+						)).withColor(ChatFormatting.GOLD)
+		);
 
 		context.sendMsg(CommandText.goldenArgs("ratelimit.info.status", statusComponent).finish());
 		context.sendMsg(CommandText.goldenArgs("ratelimit.info.limit", limitComponent).finish());
@@ -85,9 +94,9 @@ public class PatPatServerRateLimitInfoCommand {
 					"ratelimit.info.player",
 					profile.getName()
 			).finish();
+			context.sendMsg(text);
 
 			Component text2 = CommandText.goldenArgs("ratelimit.info.tokens", arg).finish();
-			context.sendMsg(text);
 			context.sendMsg(text2);
 		});
 		return Command.SINGLE_SUCCESS;

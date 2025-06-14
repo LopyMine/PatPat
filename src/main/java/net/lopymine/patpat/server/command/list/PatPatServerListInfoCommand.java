@@ -25,7 +25,8 @@ public class PatPatServerListInfoCommand {
 	}
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
-		return literal("get")
+		return literal("info")
+				.requires(context -> context.hasPatPatPermission("list.info"))
 				.executes(PatPatServerListInfoCommand::onInfo);
 	}
 

@@ -83,9 +83,9 @@
 	"patpat.formatter.enabled_or_disabled.false": "Disabled",
 
 	"patpat.command.error.failed_when_parsing": "Failed when parsing: {0}",
-	"patpat.command.error.number_not_number": "{0} is not a number",
+	"patpat.command.error.not_number": "{0} is not a number",
 	"patpat.command.error.number_less_than": "Number {0} can't be less than {1}",
-	"patpat.command.error.time_not_time": "{0} is not a valid time value (examples: 1sec, 5s, 5min)",
+	"patpat.command.error.not_time": "{0} is not a valid time value (examples: 1sec, 5s, 5min)",
 	"patpat.command.error.time_less_than": "Time {0} can't be less than {1}",
 	"patpat.command.error.player_not_exist": "Player {0} does not exist!",
 	"patpat.command.error.only_one_player": "This command can have only one player in argument",

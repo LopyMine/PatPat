@@ -91,7 +91,7 @@ public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHand
 		}
 
 		// SERVER CONFIG
-		PatPatClientServerConfig serverConfig = config.getServerConfig();
+		PatPatClientMultiplayerConfig serverConfig = config.getMultiPlayerConfig();
 		if (bypassServerResourcePackPriorityEnabled != null) {
 			serverConfig.setBypassServerResourcePackEnabled(bypassServerResourcePackPriorityEnabled);
 		}

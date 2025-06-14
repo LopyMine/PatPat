@@ -11,15 +11,15 @@ import com.mojang.brigadier.exceptions.*;
 
 import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.utils.CommandTextBuilder;
+import net.lopymine.patpat.utils.CommandText;
 
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 
-	public static final DynamicCommandExceptionType FAILED_PARSING = new DynamicCommandExceptionType(o -> CommandTextBuilder.startBuilder("error.failed_when_parsing", o).build());
-	public static final DynamicCommandExceptionType UNKNOWN_PLAYER = new DynamicCommandExceptionType(o -> CommandTextBuilder.startBuilder("error.player_not_exist", o).build());
+	public static final DynamicCommandExceptionType FAILED_PARSING = new DynamicCommandExceptionType(o -> CommandText.text("error.failed_when_parsing", o).finish());
+	public static final DynamicCommandExceptionType UNKNOWN_PLAYER = new DynamicCommandExceptionType(o -> CommandText.text("error.player_not_exist", o).finish());
 	private static final Collection<String> EXAMPLES = Arrays.asList("LopyMine", "nikita51", "192e3748-12d5-4573-a8a5-479cd394a1dc", "7b829ed5-9b74-428f-9b4d-ede06975fbc1");
 
 	private PlayerInfoArgumentType() {

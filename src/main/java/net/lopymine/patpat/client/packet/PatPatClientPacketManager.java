@@ -117,7 +117,7 @@ public class PatPatClientPacketManager {
 			PatPatClient.LOGGER.debug("Packet declined, because player uuid is blocked (/patpat-client list)");
 			return;
 		}
-		if (pattedEntityUuid.equals(player.getUUID()) && !config.getServerConfig().isPatMeEnabled()) {
+		if (pattedEntityUuid.equals(player.getUUID()) && !config.getMultiPlayerConfig().isPatMeEnabled()) {
 			PatPatClient.LOGGER.debug("Packet declined, because option 'Pat Me' is disabled");
 			return;
 		}
@@ -130,8 +130,8 @@ public class PatPatClientPacketManager {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		PatPatClientPlayerListConfig playerListConfig = PatPatClientPlayerListConfig.getInstance();
 
-		return (config.getServerConfig().getListMode() == ListMode.WHITELIST && !playerListConfig.getMap().containsKey(playerUuid))
-				|| (config.getServerConfig().getListMode() == ListMode.BLACKLIST && playerListConfig.getMap().containsKey(playerUuid))
+		return (config.getMultiPlayerConfig().getListMode() == ListMode.WHITELIST && !playerListConfig.getMap().containsKey(playerUuid))
+				|| (config.getMultiPlayerConfig().getListMode() == ListMode.BLACKLIST && playerListConfig.getMap().containsKey(playerUuid))
 				|| socialManager.isBlocked(playerUuid)
 				|| socialManager.isHidden(playerUuid)
 				/*? >=1.17 {*/ || socialManager.shouldHideMessageFrom(playerUuid)/*?}*/;

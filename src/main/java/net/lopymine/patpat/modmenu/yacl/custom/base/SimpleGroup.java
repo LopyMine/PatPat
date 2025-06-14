@@ -25,6 +25,10 @@ public class SimpleGroup {
 		this.description  = OptionDescription.createBuilder().text(description);
 	}
 
+	public static MutableComponent getGroupName(String groupId) {
+		return ModMenuUtils.getName(ModMenuUtils.getGroupKey(groupId)).withStyle(NAME_STYLE);
+	}
+
 	public static SimpleGroup startBuilder(String groupId) {
 		return new SimpleGroup(groupId);
 	}

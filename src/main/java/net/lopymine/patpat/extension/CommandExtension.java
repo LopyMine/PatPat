@@ -2,8 +2,12 @@ package net.lopymine.patpat.extension;
 
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.lopymine.patpat.server.command.PatPatServerCommandManager;
+import net.lopymine.patpat.utils.TextUtils;
+
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+
+import com.mojang.brigadier.context.CommandContext;
 
 public class CommandExtension {
 
@@ -11,21 +15,20 @@ public class CommandExtension {
 		throw new IllegalStateException("Extension class");
 	}
 
-	public static void sendPatPatFeedback(CommandSourceStack source, String feedback) {
-		sendPatPatFeedback(source, feedback, false);
+	public static void sendMsg(CommandContext<CommandSourceStack> source, String feedback) {
+		sendMsg(source, feedback, false);
 	}
 
-	public static void sendPatPatFeedback(CommandSourceStack source, String feedback, boolean broadcastToOps) {
-		Component text = /*? >=1.20 {*/Component.literal(feedback)/*?} else {*//*Text.of(feedback)*//*?}*/;
-		sendPatPatFeedback(source, text, broadcastToOps);
+	public static void sendMsg(CommandContext<CommandSourceStack> source, String feedback, boolean broadcastToOps) {
+		sendMsg(source, TextUtils.literal(feedback), broadcastToOps);
 	}
 
-	public static void sendPatPatFeedback(CommandSourceStack source, Component text) {
-		sendPatPatFeedback(source, text, false);
+	public static void sendMsg(CommandContext<CommandSourceStack> source, Component text) {
+		sendMsg(source, text, false);
 	}
 
-	public static void sendPatPatFeedback(CommandSourceStack source, Component text, boolean broadcastToOps) {
-		source.sendSuccess(/*? >=1.20 {*/() -> /*?}*/ PatPatServerCommandManager.PATPAT_ID.copy().append(text), broadcastToOps);
+	public static void sendMsg(CommandContext<CommandSourceStack> source, Component text, boolean broadcastToOps) {
+		source.getSource().sendSuccess(/*? >=1.20 {*/() -> /*?}*/ PatPatServerCommandManager.PATPAT_ID.copy().append(text), broadcastToOps);
 	}
 
 	public static boolean hasPatPatPermission(CommandSourceStack context, String permission) {

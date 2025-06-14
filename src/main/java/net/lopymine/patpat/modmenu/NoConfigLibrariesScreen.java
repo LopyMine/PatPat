@@ -1,16 +1,15 @@
 package net.lopymine.patpat.modmenu;
 
-import net.minecraft.SharedConstants;
-import net.minecraft.Util;
+import net.minecraft.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraft.util.*;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
-import net.lopymine.patpat.utils.TextUtils;
+import net.lopymine.patpat.utils.*;
 
 import java.net.*;
 import java.util.*;
@@ -21,11 +20,13 @@ public class NoConfigLibrariesScreen {
 		throw new IllegalStateException("Screen class, use NoConfigLibrariesScreen.createScreen(...) method!");
 	}
 
-	private static final Component TITLE = TextUtils.translatable("patpat.modmenu.title");
-	private static final Component MESSAGE = TextUtils.translatable("patpat.modmenu.no_config_libraries_screen.message");
-	private static final Component OPEN_YACL_PAGE = TextUtils.translatable("patpat.modmenu.no_config_libraries_screen.open_yacl_page");
-	private static final Component OPEN_CLOTH_CONFIG_PAGE = TextUtils.translatable("patpat.modmenu.no_config_libraries_screen.open_cloth_config_page");
+	private static final Component TITLE;
+	private static final Component MESSAGE;
+	private static final Component OPEN_YACL_PAGE;
+	private static final Component OPEN_CLOTH_CONFIG_PAGE;
+
 	private static final Set<String> ALLOWED_PROTOCOLS = Set.of("http", "https");
+
 	private static final String YACL_MODRINTH_LINK = "https://modrinth.com/mod/yacl?version=%s&loader=fabric#download";
 	private static final String CLOTH_CONFIG_API_MODRINTH_LINK = "https://modrinth.com/mod/cloth-config?version=%s&loader=fabric#download";
 
@@ -63,5 +64,16 @@ public class NoConfigLibrariesScreen {
 		} catch (URISyntaxException e) {
 			PatPatClient.LOGGER.error("Can't open {} Modrinth page: ", (bl ? "YACL" : "Cloth Config API"), e);
 		}
+	}
+
+	static {
+		MutableComponent yaclShort = TextUtils.literal("YACL").withStyle(ChatFormatting.GOLD);
+		Component yaclFull = TextUtils.literal("Yet Another Config Lib [YACL]").withStyle(ChatFormatting.GOLD);
+		Component clothConfig = TextUtils.literal("Cloth Config API").withStyle(ChatFormatting.GOLD);
+
+		TITLE = ModMenuUtils.getModTitle();
+		MESSAGE        = TextUtils.text("modmenu.no_config_libraries_screen.message", yaclFull, clothConfig);
+		OPEN_YACL_PAGE = TextUtils.text("modmenu.no_config_libraries_screen.open_page", yaclShort);
+		OPEN_CLOTH_CONFIG_PAGE = TextUtils.text("modmenu.no_config_libraries_screen.open_page", clothConfig);
 	}
 }

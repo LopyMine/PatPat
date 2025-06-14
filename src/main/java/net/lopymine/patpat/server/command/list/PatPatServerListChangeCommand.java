@@ -8,6 +8,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.server.config.sub.PatPatServerPlayerListConfig;
 import net.lopymine.patpat.utils.*;
@@ -16,7 +17,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.GameProfileArgument;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraft.world.entity.EntityType;
 import java.util.*;
 
@@ -65,26 +66,11 @@ public class PatPatServerListChangeCommand {
 			String name = gameProfile.getName();
 			UUID uuid = gameProfile.getId();
 
-			boolean success = add ? !map.containsKey(uuid) && map.put(uuid, name) == null : map.containsKey(uuid) && map.remove(uuid) != null;
-
-			String action = add ? "add" : "remove";
-			String result = success ? "success" : "already";
-			String key = String.format("list.%s.%s", action, result);
-
-			Component text = CommandTextBuilder.startBuilder(key, TextUtils.literal(gameProfile.getName()).withStyle(ChatFormatting.GOLD))
-					.withShowEntity(EntityType.PLAYER, uuid, gameProfile.getName())
-					.withCopyToClipboard(uuid)
-					.build();
-
-			context.getSource().sendPatPatFeedback(text, true);
-			if (success) {
-				PatPat.LOGGER.info(text.asString());
-			} else {
-				PatPat.LOGGER.warn(text.asString());
-			}
+			PatPatCommonListChangeCommand.changeList(add, map, uuid, name, (component) -> context.sendMsg(component, true));
 		}
 
 		config.save();
+
 		return Command.SINGLE_SUCCESS;
 	}
 

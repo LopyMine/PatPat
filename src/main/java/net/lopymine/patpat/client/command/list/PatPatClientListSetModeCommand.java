@@ -9,11 +9,10 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.lopymine.patpat.client.command.argument.*;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
-import net.lopymine.patpat.client.config.sub.PatPatClientServerConfig;
+import net.lopymine.patpat.client.config.sub.PatPatClientMultiplayerConfig;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.*;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
@@ -35,18 +34,18 @@ public class PatPatClientListSetModeCommand {
 	private static int onSetListMode(CommandContext<FabricClientCommandSource> context) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		ListMode mode = ListModeArgumentType.getListMode(context, "mode");
-		PatPatClientServerConfig serverConfig = config.getServerConfig();
+		PatPatClientMultiplayerConfig serverConfig = config.getMultiPlayerConfig();
 
 		Component text;
 		if (serverConfig.getListMode() == mode) {
-			text = CommandTextBuilder.startBuilder("list.set.already", mode.getText()).build();
+			text = CommandText.text("list.set.already", mode.getText()).finish();
 		} else {
-			text = CommandTextBuilder.startBuilder("list.set.success", mode.getText()).build();
+			text = CommandText.text("list.set.success", mode.getText()).finish();
 			serverConfig.setListMode(mode);
 			config.saveAsync();
 		}
 
-		context.getSource().sendPatPatFeedback(text);
+		context.sendMsg(text);
 		return Command.SINGLE_SUCCESS;
 	}
 

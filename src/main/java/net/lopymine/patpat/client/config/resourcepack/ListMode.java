@@ -38,6 +38,6 @@ public enum ListMode {
 	}
 
 	public MutableComponent getText() {
-		return TextUtils.literal(this.name()).withStyle(Style.EMPTY.withColor(this.formatting).withBold(true));
+		return TextUtils.literal(this.name()).withStyle(this.formatting);
 	}
 }

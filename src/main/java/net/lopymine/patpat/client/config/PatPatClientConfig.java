@@ -27,7 +27,7 @@ public class PatPatClientConfig {
 			option("resourcePacks", PatPatClientResourcePacksConfig.getNewInstance(), PatPatClientResourcePacksConfig.CODEC, PatPatClientConfig::getResourcePacksConfig),
 			option("sounds", PatPatClientSoundsConfig.getNewInstance(), PatPatClientSoundsConfig.CODEC, PatPatClientConfig::getSoundsConfig),
 			option("visual", PatPatClientVisualConfig.getNewInstance(), PatPatClientVisualConfig.CODEC, PatPatClientConfig::getVisualConfig),
-			option("server", PatPatClientServerConfig.getNewInstance(), PatPatClientServerConfig.CODEC, PatPatClientConfig::getServerConfig),
+			option("multiplayer", PatPatClientMultiplayerConfig.getNewInstance(), PatPatClientMultiplayerConfig.CODEC, PatPatClientConfig::getMultiPlayerConfig),
 			option("proximityPackets", PatPatClientProximityPacketsConfig.getNewInstance(), PatPatClientProximityPacketsConfig.CODEC, PatPatClientConfig::getProximityPacketsConfig)
 	).apply(inst, PatPatClientConfig::new));
 
@@ -39,7 +39,7 @@ public class PatPatClientConfig {
 	private PatPatClientResourcePacksConfig resourcePacksConfig;
 	private PatPatClientSoundsConfig soundsConfig;
 	private PatPatClientVisualConfig visualConfig;
-	private PatPatClientServerConfig serverConfig;
+	private PatPatClientMultiplayerConfig multiPlayerConfig;
 	private PatPatClientProximityPacketsConfig proximityPacketsConfig;
 
 	private PatPatClientConfig() {

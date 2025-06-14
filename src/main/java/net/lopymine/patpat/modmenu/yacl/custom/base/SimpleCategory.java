@@ -21,6 +21,10 @@ public class SimpleCategory {
 		this.builder = ConfigCategory.createBuilder().name(categoryName);
 	}
 
+	public static MutableComponent getCategoryName(String categoryId) {
+		return ModMenuUtils.getName(ModMenuUtils.getCategoryKey(categoryId)).withStyle(NAME_STYLE);
+	}
+
 	public static SimpleCategory startBuilder(String categoryId) {
 		return new SimpleCategory(categoryId);
 	}

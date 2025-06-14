@@ -31,53 +31,29 @@ public class PatPatServerRateLimitIntervalCommand {
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("interval")
 				.requires(context -> context.hasPatPatPermission("ratelimit.set.interval"))
-				.executes(PatPatServerRateLimitIntervalCommand::info)
 				.then(argument(VALUE_KEY, StringArgumentType.word())
-						.executes(PatPatServerRateLimitIntervalCommand::set)
-				);
-	}
-
-	public static int info(CommandContext<CommandSourceStack> context) {
-		CommandSourceStack sender = context.getSource();
-		PatPatServerRateLimitConfig rateLimitConfig = PatPatServerConfig.getInstance().getRateLimitConfig();
-		Component text = CommandTextBuilder.startBuilder(
-				"ratelimit.set.interval.info",
-				TextUtils.literal(rateLimitConfig.getTokenIncrementInterval().toString()).withStyle(ChatFormatting.GOLD)
-		).build();
-		sender.sendPatPatFeedback(text);
-		return Command.SINGLE_SUCCESS;
+						.executes(PatPatServerRateLimitIntervalCommand::set));
 	}
 
 	public static int set(CommandContext<CommandSourceStack> context) {
-		CommandSourceStack sender = context.getSource();
 		PatPatServerConfig config = PatPatServerConfig.getInstance();
 		PatPatServerRateLimitConfig rateLimitConfig = config.getRateLimitConfig();
 		String value = StringArgumentType.getString(context, "value");
 		try {
 			Time time = Time.of(value);
 			if (time.getValue() < 1) {
-				Component text = CommandTextBuilder.startBuilder(
-						"error.time_less_than",
-						TextUtils.literal(time).withStyle(ChatFormatting.GOLD),
-						TextUtils.literal("1sec").withStyle(ChatFormatting.GOLD)
-				).build();
-				sender.sendPatPatFeedback(text);
+				Component text = CommandText.goldenArgs("error.time_less_than", time, "1sec").finish();
+				context.sendMsg(text);
 				return 0;
 			}
 			rateLimitConfig.setTokenIncrementInterval(time);
 			config.saveAsync();
 			PatPatServerRateLimitManager.reloadTask();
-			Component text = CommandTextBuilder.startBuilder(
-					"ratelimit.set.interval",
-					TextUtils.literal(time).withStyle(ChatFormatting.GOLD)
-			).build();
-			sender.sendPatPatFeedback(text);
+			Component text = CommandText.goldenArgs("ratelimit.set.interval", time).finish();
+			context.sendMsg(text);
 		} catch (IllegalArgumentException ignored) {
-			Component text = CommandTextBuilder.startBuilder(
-					"ratelimit.set.interval.time_not_time",
-					TextUtils.literal(value).withStyle(ChatFormatting.GOLD)
-			).build();
-			sender.sendPatPatFeedback(text);
+			Component text = CommandText.goldenArgs("ratelimit.set.interval.time_not_time", value).finish();
+			context.sendMsg(text);
 			return 0;
 		}
 		return Command.SINGLE_SUCCESS;

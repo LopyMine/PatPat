@@ -2,6 +2,7 @@ package net.lopymine.patpat.utils;
 
 import net.lopymine.patpat.modmenu.yacl.custom.utils.SimpleContent;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import java.util.function.Function;
@@ -28,6 +29,14 @@ public class ModMenuUtils {
 		return TextUtils.text(key + ".description");
 	}
 
+	public static MutableComponent getOptionName(String optionId) {
+		return getName(getOptionKey(optionId));
+	}
+
+	public static MutableComponent getOptionDescription(String optionId) {
+		return getDescription(getOptionKey(optionId));
+	}
+
 	public static MutableComponent getModTitle() {
 		return TextUtils.text("modmenu.title");
 	}
@@ -37,6 +46,10 @@ public class ModMenuUtils {
 	}
 
 	public static Function<Boolean, Component> getEnabledOrDisabledFormatter() {
-		return state -> TextUtils.text("modmenu.formatter.enabled_or_disabled." + state);
+		return state -> TextUtils.text("formatter.enabled_or_disabled." + Boolean.TRUE.equals(state));
+	}
+
+	public static Function<Boolean, Component> getEnabledOrDisabledFormatterColored() {
+		return state -> TextUtils.text("formatter.enabled_or_disabled." + Boolean.TRUE.equals(state)).withStyle(Boolean.TRUE.equals(state) ? ChatFormatting.GREEN : ChatFormatting.RED);
 	}
 }

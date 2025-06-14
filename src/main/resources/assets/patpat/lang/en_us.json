@@ -3,9 +3,9 @@
 
 	"patpat.title": "PatPat",
 	"patpat.title.client": "PatPat Client",
-	"patpat.modmenu.title": "PatPat Client-Side Configuration",
+	"patpat.modmenu.title": "PatPat Client-Side Configuration Screen",
 
-	"patpat.modmenu.category.main.name": "PatPat Client-Side Configuration",
+	"patpat.modmenu.category.main.name": "PatPat Client-Side Configuration Screen",
 
 	"patpat.modmenu.no_config_libraries_screen.message": "You need to install {0} or {1} to open PatPat Client Configuration Screen.\n\n§7[Esc] to close",
 	"patpat.modmenu.no_config_libraries_screen.open_page": "Open {0} page",
@@ -14,22 +14,22 @@
 	"patpat.modmenu.group.main.description": "Main settings of PatPat mod.",
 
 	"patpat.modmenu.option.enable_mod.name": "Enable Mod",
-	"patpat.modmenu.option.enable_mod.description": "If enabled, you will see mob patting and other features; if disabled, won't.",
+	"patpat.modmenu.option.enable_mod.description": "If enabled, you will see mob patting and other features;\nif disabled, won't.",
 
 	"patpat.modmenu.option.debug_log_enabled.name": "Debug Log Enabled",
-	"patpat.modmenu.option.debug_log_enabled.description": "If enabled, additional info will be logged to console for debugging; if disabled, won't.",
+	"patpat.modmenu.option.debug_log_enabled.description": "If enabled, additional info will be logged to console for debugging;\nif disabled, won't.",
 
 	"patpat.modmenu.group.resource_packs.name": "Resource Packs",
 	"patpat.modmenu.group.resource_packs.description": "Resource Pack settings of PatPat mod.",
 
 	"patpat.modmenu.option.skip_outdated_animations_enabled.name": "Skip outdated animations",
-	"patpat.modmenu.option.skip_outdated_animations_enabled.description": "If enabled, resource packs animations with outdated config version will be skipped; if disabled, won't.",
+	"patpat.modmenu.option.skip_outdated_animations_enabled.description": "If enabled, resource packs animations with outdated config version will be skipped;\nif disabled, won't.",
 
 	"patpat.modmenu.group.sound.name": "Sound",
 	"patpat.modmenu.group.sound.description": "Sound settings of PatPat mod.",
 
 	"patpat.modmenu.option.enable_sounds.name": "Enable Sounds",
-	"patpat.modmenu.option.enable_sounds.description": "If enabled, you will hear the patting sounds; if disabled, won't.",
+	"patpat.modmenu.option.enable_sounds.description": "If enabled, you will hear the patting sounds;\nif disabled, won't.",
 
 	"patpat.modmenu.option.sounds_volume.name": "Volume",
 	"patpat.modmenu.option.sounds_volume.description": "Overall volume of patting sounds.",
@@ -38,13 +38,13 @@
 	"patpat.modmenu.group.visual.description": "Visual settings of PatPat mod.",
 
 	"patpat.modmenu.option.hiding_nickname_enabled.name": "Enable Nickname Hiding",
-	"patpat.modmenu.option.hiding_nickname_enabled.description": "If enabled, entity's nickname will disappear when you or someone pats it; if disabled, won't.",
+	"patpat.modmenu.option.hiding_nickname_enabled.description": "If enabled, entity's nickname will disappear when you or someone pats it;\nif disabled, won't.",
 
 	"patpat.modmenu.option.swing_hand_enabled.name": "Enable Hand Swinging",
-	"patpat.modmenu.option.swing_hand_enabled.description": "If enabled, your hand in hud will moving; if disabled, won't.",
+	"patpat.modmenu.option.swing_hand_enabled.description": "If enabled, your hand in hud will moving;\nif disabled, won't.",
 
 	"patpat.modmenu.option.lowering_animation_enabled.name": "Enable Lowering Animation",
-	"patpat.modmenu.option.lowering_animation_enabled.description": "If enabled, pat animation will lowering; if disabled, won't.",
+	"patpat.modmenu.option.lowering_animation_enabled.description": "If enabled, pat animation will lowering;\nif disabled, won't.",
 
 	"patpat.modmenu.option.hand_offset_x.name": "Hand Offset X",
 	"patpat.modmenu.option.hand_offset_x.description": "Transfer the hand along X axis relative to default pos.",
@@ -56,28 +56,28 @@
 	"patpat.modmenu.option.hand_offset_z.description": "Transfer the hand along Z axis relative to default pos.",
 
 	"patpat.modmenu.option.camera_shacking.name": "Camera Shaking",
-	"patpat.modmenu.option.camera_shacking.description": "If enabled, your camera will shake when someone pat you; if disabled, won't.",
+	"patpat.modmenu.option.camera_shacking.description": "If enabled, your camera will shake when someone pat you;\nif disabled, won't.",
 
 	"patpat.modmenu.option.pat_weight.name": "Pat Weight",
 	"patpat.modmenu.option.pat_weight.description": "The power of patting. The more, the stronger mob's squeeze effect will be.",
 
-	"patpat.modmenu.group.server.name": "Server",
-	"patpat.modmenu.group.server.description": "Server-related settings of PatPat mod.",
+	"patpat.modmenu.group.multiplayer.name": "Multiplayer",
+	"patpat.modmenu.group.multiplayer.description": "Multiplayer-related settings of PatPat mod.",
 
 	"patpat.modmenu.option.pat_me_enabled.name": "Enable Pat Me",
-	"patpat.modmenu.option.pat_me_enabled.description": "If enabled, other players will be able to pat you; if disabled, won't be able.",
+	"patpat.modmenu.option.pat_me_enabled.description": "If enabled, other players will be able to pat you;\nif disabled, won't be able.",
 
 	"patpat.modmenu.option.bypass_server_resource_pack_priority_enabled.name": "Bypass Server Resource Pack",
-	"patpat.modmenu.option.bypass_server_resource_pack_priority_enabled.description": "If enabled, server resource pack priority will bypassing; if disabled, won't.",
+	"patpat.modmenu.option.bypass_server_resource_pack_priority_enabled.description": "If enabled, server resource pack priority will bypassing;\nif disabled, won't.",
 
 	"patpat.modmenu.group.proximity_packets.name": "Proximity Packets",
 	"patpat.modmenu.group.proximity_packets.description": "Proximity packets are packets for exchanging small data between players close to each other.\n\nPatPat Mod uses such packets in pat packets so that other players will see your pats, even without having a mod or plugin on the server.\n\nPure magic.",
 
 	"patpat.modmenu.option.proximity_packets_enabled.name": "Enable Proximity Packets",
-	"patpat.modmenu.option.proximity_packets_enabled.description": "If enabled, other players will see pats from you (without mod or plugin on the server); if disabled, they won't.",
+	"patpat.modmenu.option.proximity_packets_enabled.description": "If enabled, other players will see pats from you (without mod or plugin on the server);\nif disabled, they won't.",
 
 	"patpat.modmenu.option.max_packets_per_second.name": "Max Packets Per Second",
-	"patpat.modmenu.option.max_packets_per_second.description": "Maximum number of proximity packets per second. This is to prevent the server from kicking you due to a large number of packets. If you made 50 pats per second, with a limit of 10, you will see 50 pats per second, but other players will only see 10.\n\nUse with caution at higher values!",
+	"patpat.modmenu.option.max_packets_per_second.description": "Maximum number of proximity packets per second. This is to prevent the server from kicking you due to a large number of packets.\nIf you made 50 pats per second, with a limit of 10, you will see 50 pats per second, but other players will only see 10.\n\nUse with caution at higher values!",
 
 	"patpat.formatter.enabled_or_disabled.true": "Enabled",
 	"patpat.formatter.enabled_or_disabled.false": "Disabled",
@@ -100,10 +100,10 @@
 
 	"patpat.command.list.set.success": "List mode has been changed to {0}",
 	"patpat.command.list.set.failed": "{0} is not a valid list mode!",
-	"patpat.command.list.set.failed.hover_text": "Available list modes:\n{0}",
 	"patpat.command.list.set.already": "List mode is already {0}!",
 
-	"patpat.command.list.info": "Current List Mode: {0}, {1} player(s) in the list:\n{2}",
+	"patpat.command.list.info.mode": "List Mode: {0}",
+	"patpat.command.list.info.content": "{0} player(s) in the list:",
 	"patpat.command.list.empty": "*empty*",
 
 	"patpat.command.reload": "Config reloaded successfully",
@@ -119,13 +119,8 @@
 	"patpat.command.off.success": "PatPat Mod Disabled",
 	"patpat.command.off.already": "PatPat Mod was already disabled!",
 
-	"patpat.command.ratelimit.set.increment.info": "Token increment: {0}",
 	"patpat.command.ratelimit.set.increment": "Set token increment to: {0}",
-
-	"patpat.command.ratelimit.set.interval.info": "Token interval: {0}",
 	"patpat.command.ratelimit.set.interval": "Set token interval to: {0}",
-
-	"patpat.command.ratelimit.set.limit.info": "Token Limit: {0}",
 	"patpat.command.ratelimit.set.limit": "Token limit set to: {0}",
 
 	"patpat.command.ratelimit.enable.success": "RateLimit Enabled",
@@ -135,6 +130,9 @@
 	"patpat.command.ratelimit.disable.already": "RateLimit is already disabled",
 
 	"patpat.command.ratelimit.info.status": "Status: {0}",
+	"patpat.command.ratelimit.info.increment": "Token increment: {0}",
+	"patpat.command.ratelimit.info.interval": "Token interval: {0}",
+	"patpat.command.ratelimit.info.limit": "Token Limit: {0}",
 	"patpat.command.ratelimit.info.permission_bypass": "Permission bypass: {0}",
 	"patpat.command.ratelimit.info.permission_bypass.copy": "Copy bypass permission",
 

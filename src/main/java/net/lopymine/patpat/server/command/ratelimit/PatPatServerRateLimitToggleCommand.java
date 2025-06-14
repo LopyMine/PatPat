@@ -9,7 +9,7 @@ import net.lopymine.patpat.extension.CommandExtension;
 import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
 import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
 import net.lopymine.patpat.server.config.*;
-import net.lopymine.patpat.utils.CommandTextBuilder;
+import net.lopymine.patpat.utils.CommandText;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -50,19 +50,18 @@ public class PatPatServerRateLimitToggleCommand {
 		String key = toggle ? "enable" : "disable";
 
 		if (rateLimitConfig.isEnabled() == toggle) {
-			MutableComponent text = CommandTextBuilder.startBuilder("ratelimit.%s.already".formatted(key))
-					.build()
-					.withStyle(toggle ? ChatFormatting.GREEN : ChatFormatting.RED);
-			context.getSource().sendPatPatFeedback(text, false);
+			MutableComponent text = CommandText.text("ratelimit.%s.already".formatted(key))
+					.finish();
+			context.sendMsg(text, false);
 			return 0;
 		}
 		rateLimitConfig.setEnabled(toggle);
 		config.saveAsync();
 		PatPatServerRateLimitManager.reloadTask();
-		MutableComponent text = CommandTextBuilder.startBuilder("ratelimit.%s.success".formatted(key))
-				.build()
+		MutableComponent text = CommandText.text("ratelimit.%s.success".formatted(key))
+				.finish()
 				.withStyle(toggle ? ChatFormatting.GREEN : ChatFormatting.RED);
-		context.getSource().sendPatPatFeedback(text, false);
+		context.sendMsg(text, false);
 		return Command.SINGLE_SUCCESS;
 	}
 }

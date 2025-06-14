@@ -8,7 +8,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.lopymine.patpat.extension.CommandExtension;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
-import net.lopymine.patpat.utils.CommandTextBuilder;
+import net.lopymine.patpat.utils.CommandText;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 
@@ -30,8 +30,8 @@ public class PatPatServerConfigReloadCommand {
 	public static int reload(CommandContext<CommandSourceStack> context) {
 		PatPatConfigManager.reloadServer();
 		PatPatServerRateLimitManager.reloadTask();
-		Component text = CommandTextBuilder.startBuilder("reload").build();
-		context.getSource().sendPatPatFeedback(text);
+		Component text = CommandText.text("reload").finish();
+		context.sendMsg(text);
 		return Command.SINGLE_SUCCESS;
 	}
 }

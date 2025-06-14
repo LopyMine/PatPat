@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
-import net.lopymine.patpat.client.packet.PatPatClientProxLibManager;
 import net.lopymine.patpat.utils.*;
 import net.minecraft.client.Minecraft;
 
@@ -14,24 +13,24 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PatPatClientServerConfig {
+public class PatPatClientMultiplayerConfig {
 
-	public static final Codec<PatPatClientServerConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			option("bypassServerResourcePackPriorityEnabled", false, Codec.BOOL, PatPatClientServerConfig::isBypassServerResourcePackPriorityEnabled),
-			option("patMeEnabled", true, Codec.BOOL, PatPatClientServerConfig::isPatMeEnabled),
-			option("listMode", ListMode.DISABLED, ListMode.CODEC, PatPatClientServerConfig::getListMode)
-	).apply(instance, PatPatClientServerConfig::new));
+	public static final Codec<PatPatClientMultiplayerConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			option("bypassServerResourcePackPriorityEnabled", false, Codec.BOOL, PatPatClientMultiplayerConfig::isBypassServerResourcePackPriorityEnabled),
+			option("patMeEnabled", true, Codec.BOOL, PatPatClientMultiplayerConfig::isPatMeEnabled),
+			option("listMode", ListMode.DISABLED, ListMode.CODEC, PatPatClientMultiplayerConfig::getListMode)
+	).apply(instance, PatPatClientMultiplayerConfig::new));
 
 	@Setter(value = AccessLevel.PRIVATE)
 	private boolean bypassServerResourcePackPriorityEnabled;
 	private boolean patMeEnabled;
 	private ListMode listMode;
 
-	private PatPatClientServerConfig() {
+	private PatPatClientMultiplayerConfig() {
 		throw new IllegalArgumentException();
 	}
 
-	public static PatPatClientServerConfig getNewInstance() {
+	public static PatPatClientMultiplayerConfig getNewInstance() {
 		return CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 

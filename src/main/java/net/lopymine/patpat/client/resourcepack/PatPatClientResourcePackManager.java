@@ -114,7 +114,7 @@ public class PatPatClientResourcePackManager {
 			animationConfigs.sort(CustomAnimationConfig::compareTo);
 			Collections.reverse(animationConfigs);
 
-			if (config.getServerConfig().isBypassServerResourcePackPriorityEnabled() && resourcePackName.startsWith("server/")) {
+			if (config.getMultiPlayerConfig().isBypassServerResourcePackPriorityEnabled() && resourcePackName.startsWith("server/")) {
 				serverResourcePacks.add(animationConfigs);
 			} else {
 				resourcePacks.add(animationConfigs);

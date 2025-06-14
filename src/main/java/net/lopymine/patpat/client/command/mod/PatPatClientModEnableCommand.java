@@ -6,10 +6,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.lopymine.patpat.client.command.PatPatClientCommandManager;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.extension.ClientCommandExtension;
-import net.lopymine.patpat.utils.CommandTextBuilder;
+import net.lopymine.patpat.utils.CommandText;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
@@ -39,11 +38,12 @@ public class PatPatClientModEnableCommand {
 		if (config.getMainConfig().isModEnabled() != state) {
 			config.getMainConfig().setModEnabled(state);
 			config.saveAsync();
-			text = CommandTextBuilder.startBuilder(state ? "on.success" : "off.success").build();
+			text = CommandText.text(state ? "on.success" : "off.success").finish()
+					.withStyle(state ? ChatFormatting.GREEN : ChatFormatting.RED);
 		} else {
-			text = CommandTextBuilder.startBuilder(state ? "on.already" : "off.already").build();
+			text = CommandText.text(state ? "on.already" : "off.already").finish();
 		}
-		context.getSource().sendPatPatFeedback(text.withStyle(state ? ChatFormatting.GREEN : ChatFormatting.RED));
+		context.sendMsg(text);
 		return Command.SINGLE_SUCCESS;
 	}
 }

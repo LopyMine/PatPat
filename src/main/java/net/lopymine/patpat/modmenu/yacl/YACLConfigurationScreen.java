@@ -34,7 +34,7 @@ public class YACLConfigurationScreen {
 				.groups(getResourcePacksGroup(defConfig.getResourcePacksConfig(), config.getResourcePacksConfig()))
 				.groups(getSoundGroup(defConfig.getSoundsConfig(), config.getSoundsConfig()))
 				.groups(getVisualGroup(defConfig.getVisualConfig(), config.getVisualConfig()))
-				.groups(getServerGroup(defConfig.getServerConfig(), config.getServerConfig()))
+				.groups(getMultiplayerGroup(defConfig.getMultiPlayerConfig(), config.getMultiPlayerConfig()))
 				.groups(getProximityPatPacketsGroup(defConfig.getProximityPacketsConfig(), config.getProximityPacketsConfig()))
 				.build();
 	}
@@ -119,8 +119,8 @@ public class YACLConfigurationScreen {
 		).build();
 	}
 
-	private static OptionGroup getServerGroup(PatPatClientServerConfig defConfig, PatPatClientServerConfig config) {
-		return SimpleGroup.startBuilder("server").options(
+	private static OptionGroup getMultiplayerGroup(PatPatClientMultiplayerConfig defConfig, PatPatClientMultiplayerConfig config) {
+		return SimpleGroup.startBuilder("multiplayer").options(
 				SimpleOption.<Boolean>startBuilder("pat_me_enabled")
 						.withBinding(defConfig.isPatMeEnabled(), config::isPatMeEnabled, config::setPatMeEnabled, false)
 						.withController()

@@ -1,5 +1,6 @@
 package net.lopymine.patpat.utils;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -8,53 +9,67 @@ import net.minecraft.network.chat.HoverEvent.EntityTooltipInfo;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.EntityType;
-import java.io.File;
-import java.net.URI;
-import java.nio.file.Path;
-import java.util.UUID;
-import org.jetbrains.annotations.Nullable;
 
-public class CommandTextBuilder {
+import java.util.UUID;
+
+public class CommandText {
 
 	private final String key;
 	private final MutableComponent text;
 
-	private CommandTextBuilder(String key, Object... args) {
+	private CommandText(String key, Object... args) {
 		this.key  = key;
 		this.text = TextUtils.text(key, args);
 	}
 
-	public static CommandTextBuilder startBuilder(String key, Object... args) {
-		return new CommandTextBuilder("command." + key, args);
+	public static CommandText text(String key, Object... args) {
+		return new CommandText("command." + key, args);
 	}
 
-	public CommandTextBuilder withShowEntity(EntityType<?> type, UUID uuid, String name) {
+	public static CommandText goldenArgs(String key, Object... args) {
+		return new CommandText("command." + key, getGoldenArgs(args));
+	}
+
+	private static Object[] getGoldenArgs(Object... args) {
+		Object[] objects = new Object[args.length];
+		for (int i = 0; i < args.length; i++) {
+			Object arg = args[i];
+			if (arg instanceof MutableComponent component) {
+				objects[i] = component;
+			} else {
+				objects[i] = TextUtils.literal(arg).withStyle(ChatFormatting.GOLD);
+			}
+		}
+		return objects;
+	}
+
+	public CommandText withShowEntity(EntityType<?> type, UUID uuid, String name) {
 		return this.withShowEntity(type, uuid, TextUtils.literal(name));
 	}
 
-	public CommandTextBuilder withShowEntity(EntityType<?> type, UUID uuid, Component name) {
+	public CommandText withShowEntity(EntityType<?> type, UUID uuid, Component name) {
 		HoverEvent hoverEvent = getHoverEvent(Action.SHOW_ENTITY, new EntityTooltipInfo(type, uuid, name));
 		return this.withHoverEvent(hoverEvent);
 	}
 
-	public CommandTextBuilder withHoverText(Object... args) {
+	public CommandText withHoverText(Object... args) {
 		MutableComponent hoverText = TextUtils.text(this.key + ".hover_text", args);
 		HoverEvent hoverEvent = getHoverEvent(Action.SHOW_TEXT, hoverText);
 		return this.withHoverEvent(hoverEvent);
 	}
 
-	public CommandTextBuilder withHoverEvent(HoverEvent hoverEvent) {
+	public CommandText withHoverEvent(HoverEvent hoverEvent) {
 		Style style = this.text.getStyle().withHoverEvent(hoverEvent);
 		this.text.setStyle(style);
 		return this;
 	}
 
-	public CommandTextBuilder withCopyToClipboard(Object value) {
+	public CommandText withCopyToClipboard(Object value) {
 		ClickEvent clickEvent = getClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, value);
 		return this.withClickEvent(clickEvent);
 	}
 
-	public CommandTextBuilder withClickEvent(ClickEvent clickEvent) {
+	public CommandText withClickEvent(ClickEvent clickEvent) {
 		Style style = this.text.getStyle().withClickEvent(clickEvent);
 		this.text.setStyle(style);
 		return this;
@@ -95,7 +110,7 @@ public class CommandTextBuilder {
 		*//*?}*/
 	}
 
-	public MutableComponent build() {
+	public MutableComponent finish() {
 		return this.text;
 	}
 }

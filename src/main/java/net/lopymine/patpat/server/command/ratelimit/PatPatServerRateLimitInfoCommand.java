@@ -18,10 +18,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.network.chat.*;
-import net.minecraft.network.chat.ClickEvent.Action;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -49,59 +47,48 @@ public class PatPatServerRateLimitInfoCommand {
 		PatPatServerRateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
 
 		Component statusComponent = TextUtils.text("formatter.enabled_or_disabled." + config.isEnabled()).withStyle(ChatFormatting.GOLD);
-		Component limitComponent = TextUtils.literal(config.getTokenLimit()).withStyle(ChatFormatting.GOLD);
-		Component incrementComponent = TextUtils.literal(config.getTokenIncrement()).withStyle(ChatFormatting.GOLD);
-		Component intervalComponent = TextUtils.literal(config.getTokenIncrementInterval().toString()).withStyle(ChatFormatting.GOLD);
-		Component permissionComponent = TextUtils.literal(config.getPermissionBypass()).withStyle(
-				Style.EMPTY.withClickEvent(CommandTextBuilder.getClickEvent(
-								Action.COPY_TO_CLIPBOARD, config.getPermissionBypass()
-						)).withHoverEvent(CommandTextBuilder.getHoverEvent(
-								HoverEvent.Action.SHOW_TEXT,
-								CommandTextBuilder.startBuilder("ratelimit.info.permission_bypass.copy").build()
-						)).withColor(ChatFormatting.GOLD)
-		);
+		Object limitComponent = config.getTokenLimit();
+		Object incrementComponent = config.getTokenIncrement();
+		Object intervalComponent = config.getTokenIncrementInterval().toString();
+		Object permissionComponent = config.getPermissionBypass();
 
-		context.getSource().sendPatPatFeedback(CommandTextBuilder.startBuilder("ratelimit.info.status", statusComponent).build());
-		context.getSource().sendPatPatFeedback(CommandTextBuilder.startBuilder("ratelimit.set.limit.info", limitComponent).build());
-		context.getSource().sendPatPatFeedback(CommandTextBuilder.startBuilder("ratelimit.set.increment.info", incrementComponent).build());
-		context.getSource().sendPatPatFeedback(CommandTextBuilder.startBuilder("ratelimit.set.interval.info", intervalComponent).build());
-		context.getSource().sendPatPatFeedback(CommandTextBuilder.startBuilder("ratelimit.info.permission_bypass", permissionComponent).build());
+		context.sendMsg(CommandText.goldenArgs("ratelimit.info.status", statusComponent).finish());
+		context.sendMsg(CommandText.goldenArgs("ratelimit.info.limit", limitComponent).finish());
+		context.sendMsg(CommandText.goldenArgs("ratelimit.info.increment", incrementComponent).finish());
+		context.sendMsg(CommandText.goldenArgs("ratelimit.info.interval", intervalComponent).finish());
+		context.sendMsg(CommandText.goldenArgs("ratelimit.info.permission_bypass", permissionComponent).finish());
 		return Command.SINGLE_SUCCESS;
 	}
 
 	public static int infoWithUser(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		Collection<GameProfile> profiles = GameProfileArgument.getGameProfiles(context, "profile");
 		if (profiles.size() != 1) {
-			Component text = CommandTextBuilder.startBuilder("error.only_one_player").build();
-			context.getSource().sendPatPatFeedback(text);
+			Component text = CommandText.text("error.only_one_player").finish();
+			context.sendMsg(text);
 		}
 		PatPatServerRateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
 		GameProfile profile = profiles.iterator().next();
 		if (!context.getSource().getOnlinePlayerNames().contains(profile.getName())) {
-			Component text = CommandTextBuilder.startBuilder(
-					"error.player_not_exist",
-					TextUtils.literal(profile.getName()).withStyle(ChatFormatting.GOLD)
-			).build();
-			context.getSource().sendPatPatFeedback(text);
+			Component text = CommandText.goldenArgs("error.player_not_exist", profile.getName()).finish();
+			context.sendMsg(text);
 			return 0;
 		}
 
 		int availablePats = PatPatServerRateLimitManager.getAvailablePats(profile.getId());
 		profile.hasPermission(config.getPermissionBypass(), context).thenAcceptAsync(result -> {
-			MutableComponent message = (result ?
-					CommandTextBuilder.startBuilder("ratelimit.info.tokens.bypass").build()
+			Object arg = result ?
+					CommandText.text("ratelimit.info.tokens.bypass").finish().withStyle(ChatFormatting.GOLD)
 					:
-					TextUtils.literal(availablePats)
-			).withStyle(ChatFormatting.GOLD);
+					availablePats;
 
-			Component text = CommandTextBuilder.startBuilder(
+			Component text = CommandText.goldenArgs(
 					"ratelimit.info.player",
-					TextUtils.literal(profile.getName()).withStyle(ChatFormatting.GOLD)
-			).build();
+					profile.getName()
+			).finish();
 
-			Component text2 = CommandTextBuilder.startBuilder("ratelimit.info.tokens", message).build();
-			context.getSource().sendPatPatFeedback(text);
-			context.getSource().sendPatPatFeedback(text2);
+			Component text2 = CommandText.goldenArgs("ratelimit.info.tokens", arg).finish();
+			context.sendMsg(text);
+			context.sendMsg(text2);
 		});
 		return Command.SINGLE_SUCCESS;
 	}

@@ -12,7 +12,6 @@ import net.lopymine.patpat.server.config.PatPatServerConfig;
 import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.utils.*;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.*;
@@ -42,11 +41,11 @@ public class PatPatServerListSetModeCommand {
 		PatPatServerConfig config = PatPatServerConfig.getInstance();
 		ListMode listMode = ListMode.getById(modeId);
 		if (config.getListMode() == listMode) {
-			Component text = CommandTextBuilder.startBuilder(
+			Component text = CommandText.goldenArgs(
 					"list.set.already",
-					TextUtils.literal(listMode).withStyle(ChatFormatting.GOLD)
-			).build();
-			context.getSource().sendPatPatFeedback(text, true);
+					listMode == null ? "null" : listMode.getText()
+			).finish();
+			context.sendMsg(text, true);
 			return 0;
 		}
 
@@ -58,28 +57,11 @@ public class PatPatServerListSetModeCommand {
 
 		String result = success ? "success" : "failed";
 		String key = String.format("list.set.%s", result);
-		Component arg = success ? listMode.getText() : TextUtils.literal(modeId).withStyle(ChatFormatting.GOLD);
+		Object arg = success ? listMode.getText() : modeId;
 
-		CommandTextBuilder builder = CommandTextBuilder.startBuilder(key, arg);
-		if (!success) {
-			ListMode[] modes = ListMode.values();
-			MutableComponent component = TextUtils.literal("");
-			for (int i = 0; i < modes.length; i++) {
-				MutableComponent text = modes[i].getText();
-				if (i < modes.length - 1) {
-					text.append("\n");
-				}
-				component.append(text);
-			}
-			builder.withHoverText(component);
-		}
-		Component text = builder.build();
-		context.getSource().sendPatPatFeedback(text, true);
-		if (success) {
-			PatPat.LOGGER.info(text.asString());
-		} else {
-			PatPat.LOGGER.warn(text.asString());
-		}
+		Component text = CommandText.goldenArgs(key, arg).finish();
+		context.sendMsg(text, true);
+
 		return success ? Command.SINGLE_SUCCESS : 0;
 	}
 }

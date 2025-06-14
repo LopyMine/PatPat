@@ -7,9 +7,8 @@ import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.suggestion.*;
 
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
-import net.lopymine.patpat.utils.CommandTextBuilder;
+import net.lopymine.patpat.utils.CommandText;
 import net.minecraft.commands.SharedSuggestionProvider;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -17,7 +16,7 @@ import java.util.stream.Stream;
 
 public class ListModeArgumentType implements ArgumentType<ListMode> {
 
-	public static final DynamicCommandExceptionType FAILED_PARSING = new DynamicCommandExceptionType(o -> CommandTextBuilder.startBuilder("error.failed_when_parsing", o).build());
+	public static final DynamicCommandExceptionType FAILED_PARSING = new DynamicCommandExceptionType(o -> CommandText.text("error.failed_when_parsing", o).finish());
 
 	private ListModeArgumentType() {
 	}

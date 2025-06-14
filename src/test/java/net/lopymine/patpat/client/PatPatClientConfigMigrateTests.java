@@ -42,7 +42,7 @@ public class PatPatClientConfigMigrateTests {
 			mainConfig.setModEnabled(false);
 			mainConfig.setDebugLogEnabled(false);
 
-			PatPatClientServerConfig serverConfig = config.getServerConfig();
+			PatPatClientMultiplayerConfig serverConfig = config.getMultiPlayerConfig();
 			serverConfig.setListMode(ListMode.DISABLED);
 			serverConfig.setBypassServerResourcePackEnabled(false);
 			serverConfig.setPatMeEnabled(false);

@@ -7,7 +7,8 @@
 
 	"patpat.modmenu.category.main.name": "PatPat Client-Side Configuration Screen",
 
-	"patpat.modmenu.no_config_libraries_screen.message": "You need to install {0} or {1} to open PatPat Client Configuration Screen.\n\n§7[Esc] to close",
+	"patpat.modmenu.no_config_libraries_screen.message": "You need to install {0} or {1} to open PatPat Client Configuration Screen.\n\n{2}",
+	"patpat.modmenu.no_config_libraries_screen.close": "[Esc] to close",
 	"patpat.modmenu.no_config_libraries_screen.open_page": "Open {0} page",
 
 	"patpat.modmenu.group.main.name": "Main",
@@ -19,8 +20,8 @@
 	"patpat.modmenu.option.debug_log_enabled.name": "Debug Log Enabled",
 	"patpat.modmenu.option.debug_log_enabled.description": "If enabled, additional info will be logged to console for debugging;\nif disabled, won't.",
 
-	"patpat.modmenu.group.resource_packs.name": "Resource Packs",
-	"patpat.modmenu.group.resource_packs.description": "Resource Pack settings of PatPat mod.",
+	"patpat.modmenu.group.custom_animations.name": "Custom Animations",
+	"patpat.modmenu.group.custom_animations.description": "Custom animation settings made using resource packs.",
 
 	"patpat.modmenu.option.skip_outdated_animations_enabled.name": "Skip outdated animations",
 	"patpat.modmenu.option.skip_outdated_animations_enabled.description": "If enabled, resource packs animations with outdated config version will be skipped;\nif disabled, won't.",

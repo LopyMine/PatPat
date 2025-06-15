@@ -1,91 +1,146 @@
 {
 	"modmenu.descriptionTranslation.patpat": "Простой клиентский и (опционально) серверный Fabric мод для похлопывания любых (живых) мобов!",
-	"patpat.title": "§lPatPat",
-	"patpat.title.client": "§lPatPat Клиент",
-	"patpat.command.argument.player_info.exception.failed_parsing": "Ошибка получения данных: %s",
-	"patpat.command.argument.player_info.exception.unknown_player": "Неизвестный игрок: %s",
-	"patpat.command.list.add.success": "Игрок &6%s&f &aдобавлен&f в список",
-	"patpat.command.list.add.failed": "Игрок &6%s&f уже в списке",
-	"patpat.command.list.remove.success": "Игрок &6%s&f &cудалён&f из списка",
-	"patpat.command.list.remove.failed": "Игрок &6%s&f не найден в списке",
-	"patpat.command.list.mode.success": "Режим списка изменён на %s",
-	"patpat.command.list.mode.already": "Режим списка уже установлен на %s",
-	"patpat.command.list.mode.failed": "&cНе удалось получить режим списка из &7'&f%s&7'&f",
-	"patpat.command.list.mode.failed.hover_text": "&7Доступные режимы списка:\n  %s,\n  %s,\n  %s.",
 
-	"patpat.command.reload.success": "Конфиг успешно перезагружен",
+	"patpat.title": "PatPat",
+	"patpat.title.client": "PatPat Клиент",
+	"patpat.modmenu.title": "Клиентский экран конфигурации PatPat",
 
-	"patpat.command.on.success": "PatPat мод &aвключен&f",
-	"patpat.command.on.already": "PatPat мод уже был &6включен&f",
-	"patpat.command.off.success": "PatPat мод &cвыключен&f",
-	"patpat.command.off.already": "PatPat мод уже был &cвыключен&f",
+	"patpat.modmenu.category.main.name": "Клиентский экран конфигурации PatPat",
 
-	"patpat.command.ratelimit.info": "Статус: %s\nЛимит токенов: %d\nКоличество выдаваемых токенов в интервал: %d\nИнтервал токенов: %s\nПраво игнорирующее лимит запросов: %s",
-	"patpat.command.ratelimit.info.only_one_player": "Эта команда может иметь аргумент только одного игрока",
-	"patpat.command.ratelimit.info.player": "Информация '%s'\nТокены: %s",
-	"patpat.command.ratelimit.info.player.not_online": "Игрок '%s' не онлайн",
+	"patpat.modmenu.no_config_libraries_screen.message": "Вам необходимо установить {0} или {1} чтобы открыть клиентский экран конфигурации PatPat.\n\n{2}",
+	"patpat.modmenu.no_config_libraries_screen.close": "[Esc] чтобы закрыть",
+	"patpat.modmenu.no_config_libraries_screen.open_page": "Открыть страницу {0}",
 
-	"patpat.command.ratelimit.enable": "Лимит запросов включен",
-	"patpat.command.ratelimit.enable.already": "Лимит запросов уже включен",
+	"patpat.modmenu.group.main.name": "Основное",
+	"patpat.modmenu.group.main.description": "Основные настройки мода PatPat.",
 
-	"patpat.command.ratelimit.disable": "Лимит запросов выключен",
-	"patpat.command.ratelimit.disable.already": "Лимит запросов уже выключен",
+	"patpat.modmenu.option.enable_mod.name": "Включить мод",
+	"patpat.modmenu.option.enable_mod.description": "Если включено, вы увидите похлопывание мобов и другие функции;\nесли отключено, не увидите.",
 
-	"patpat.command.ratelimit.set.increment": "Установлено количество выдаваемых токенов в интервал: %d",
-	"patpat.command.ratelimit.set.increment.info": "Количество выдаваемых токенов в интервал: %d",
+	"patpat.modmenu.option.debug_log_enabled.name": "Включить дополнительный журнал откладки мода",
+	"patpat.modmenu.option.debug_log_enabled.description": "Если включено, в консоль игры будет выведена дополнительная информация о моде;\nесли отключено, не будет.",
 
-	"patpat.command.ratelimit.set.limit": "Установлен лимит токенов: %d",
-	"patpat.command.ratelimit.set.limit.info": "Лимит токенов: %d",
+	"patpat.modmenu.group.custom_animations.name": "Пользовательские анимации",
+	"patpat.modmenu.group.custom_animations.description": "Настройки пользовательских анимаций, сделанных с помощью наборов ресурсов.",
 
-	"patpat.command.ratelimit.set.interval": "Установлен интервал токенов: %s",
-	"patpat.command.ratelimit.set.interval.value_less_one": "Время '%s' не может быть меньше 1",
-	"patpat.command.ratelimit.set.interval.wrong_type": "'%s' не является временным значением (примеры: 1sec, 5s, 5min...)",
-	"patpat.command.ratelimit.set.interval.info": "Интервал токенов: %s",
+	"patpat.modmenu.option.skip_outdated_animations_enabled.name": "Пропускать устаревшие анимации",
+	"patpat.modmenu.option.skip_outdated_animations_enabled.description": "Если включено, устаревшие анимации из наборов ресурсов будут пропущены;\nесли отключено, не будут.",
 
-	"patpat.modmenu.title": "§lКлиентские настройки PatPat мода",
-	"patpat.modmenu.no_config_libraries_screen.message": "Вам нужно установить §6§lYet Another Config Lib [YACL]§f или §6§lCloth Config API§f, чтобы открыть экран настроек PatPat клиента.\n\n§7[Esc] чтобы вернуться",
-	"patpat.modmenu.no_config_libraries_screen.open_yacl_page": "Открыть страницу YACL",
-	"patpat.modmenu.no_config_libraries_screen.open_cloth_config_page": "Открыть страницу Cloth Config",
-	"patpat.modmenu.main": "§lОсновные",
-	"patpat.modmenu.main.description": "Основные настройки.",
-	"patpat.modmenu.main.option.enable_mod": "Включить мод",
-	"patpat.modmenu.main.option.enable_mod.description": "Если включено, вы увидите похлопывание мобов и другие функции; если отключено, не увидите.",
-	"patpat.modmenu.main.option.debug_log_enabled": "§6Включить дополнительный журнал откладки мода",
-	"patpat.modmenu.main.option.debug_log_enabled.description": "Если включено, в консоль игры будет выведена допольнительная информация о моде; если отключено, не будет.",
-	"patpat.modmenu.resource_packs": "§lСобственные анимации",
-	"patpat.modmenu.resource_packs.description": "Настройки, связанные с наборами ресурсов и их собственными анимациями.",
-	"patpat.modmenu.resource_packs.option.skip_outdated_animations_enabled": "Пропускать устаревшие анимации",
-	"patpat.modmenu.resource_packs.option.skip_outdated_animations_enabled.description": "Если включено, устаревшие анимации из наборов ресурсов будут пропущены; если отключено, не будут.",
-	"patpat.modmenu.sound": "§lЗвук",
-	"patpat.modmenu.sound.description": "Настройки, связанные со звуком.",
-	"patpat.modmenu.sound.option.enable_sounds": "Включить звуки",
-	"patpat.modmenu.sound.option.enable_sounds.description": "Если включено, вы услышите звуки похлопывания; если отключено, не услышите.",
-	"patpat.modmenu.sound.option.sounds_volume": "Громкость",
-	"patpat.modmenu.sound.option.sounds_volume.description": "Общая громкость звуков похлопывания.",
-	"patpat.modmenu.visual": "§lВизуал",
-	"patpat.modmenu.visual.description": "Настройки, связанные с визуальной частью.",
-	"patpat.modmenu.visual.option.hiding_nickname_enabled": "Включить скрытие никнейма",
-	"patpat.modmenu.visual.option.hiding_nickname_enabled.description": "Если включено, никнейм сущности исчезнет, когда вы или кто-то другой её похлопает; если отключено, не исчезнет.",
-	"patpat.modmenu.visual.option.swing_hand_enabled": "Включить размахивание рукой",
-	"patpat.modmenu.visual.option.swing_hand_enabled.description": "Если включено, ваша основная рука будет махать при похлопывании моба; если отключено, не будет.",
-	"patpat.modmenu.visual.option.lowering_animation_enabled": "Включить понижение анимации",
-	"patpat.modmenu.visual.option.lowering_animation_enabled.description": "Если включено, анимация похлопывания будет понижаться; если отключено, не будет.",
-	"patpat.modmenu.visual.option.hand_offset_x": "Смещение анимации похлопывания по оси X",
-	"patpat.modmenu.visual.option.hand_offset_x.description": "Переместить анимацию похлопывания по оси X относительно стандартного положения.",
-	"patpat.modmenu.visual.option.hand_offset_y": "Смещение анимации похлопывания по оси Y",
-	"patpat.modmenu.visual.option.hand_offset_y.description": "Переместить анимацию похлопывания по оси Y относительно стандартного положения.",
-	"patpat.modmenu.visual.option.hand_offset_z": "Смещение анимации похлопывания по оси Z",
-	"patpat.modmenu.visual.option.hand_offset_z.description": "Переместить анимацию похлопывания по оси Z относительно стандартного положения.",
-	"patpat.modmenu.visual.option.camera_shacking": "Включить тряску камеры",
-	"patpat.modmenu.visual.option.camera_shacking.description": "Если включено, ваша камера будет трястись, когда кто-то хлопает вас; если отключено, не будет.",
-	"patpat.modmenu.visual.option.pat_weight": "Сила похлопывания",
-	"patpat.modmenu.visual.option.pat_weight.description": "Сила сплющивания мобов когда вы, или кто-то другой, хлопает их. Чем больше, тем сильнее будет эффект сплющивания.",
-	"patpat.modmenu.server": "§lСервер",
-	"patpat.modmenu.server.description": "Настройки, связанные с сервером.",
-	"patpat.modmenu.server.option.pat_me_enabled": "Разрешить хлопать меня",
-	"patpat.modmenu.server.option.pat_me_enabled.description": "Если включено, другие игроки смогут вас похлопать; если отключено, не смогут.",
-	"patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled": "Включить обход серверного ресурс-пака",
-	"patpat.modmenu.server.option.bypass_server_resource_pack_priority_enabled.description": "Если включено, приоритет сервеного ресурс-пака будет обходиться; если отключено, не будет.",
-	"patpat.modmenu.formatter.enable_or_disable.true": "Включено",
-	"patpat.modmenu.formatter.enable_or_disable.false": "Отключено"
+	"patpat.modmenu.group.sound.name": "Звук",
+	"patpat.modmenu.group.sound.description": "Настройки, связанные со звуком.",
+
+	"patpat.modmenu.option.enable_sounds.name": "Включить звуки",
+	"patpat.modmenu.option.enable_sounds.description": "Если включено, вы услышите звуки похлопывания;\nесли отключено, не услышите.",
+
+	"patpat.modmenu.option.sounds_volume.name": "Громкость",
+	"patpat.modmenu.option.sounds_volume.description": "Общая громкость звуков похлопывания.",
+
+	"patpat.modmenu.group.visual.name": "Визуал",
+	"patpat.modmenu.group.visual.description": "Настройки, связанные с визуальной частью.",
+
+	"patpat.modmenu.option.hiding_nickname_enabled.name": "Включить скрытие никнейма",
+	"patpat.modmenu.option.hiding_nickname_enabled.description": "Если включено, никнейм сущности исчезнет, когда вы или кто-то другой её похлопает;\nесли отключено, не исчезнет.",
+
+	"patpat.modmenu.option.swing_hand_enabled.name": "Включить размахивание рукой",
+	"patpat.modmenu.option.swing_hand_enabled.description": "Если включено, ваш персонаж будет махать основной рукой при похлопывании моба;\nесли отключено, не будет.",
+
+	"patpat.modmenu.option.lowering_animation_enabled.name": "Включить понижение анимации",
+	"patpat.modmenu.option.lowering_animation_enabled.description": "Если включено, анимация похлопывания будет понижаться;\nесли отключено, не будет.",
+
+	"patpat.modmenu.option.hand_offset_x.name": "Смещение анимации похлопывания по оси X",
+	"patpat.modmenu.option.hand_offset_x.description": "Переместить анимацию похлопывания по оси X относительно стандартного положения.",
+
+	"patpat.modmenu.option.hand_offset_y.name": "Смещение анимации похлопывания по оси Y",
+	"patpat.modmenu.option.hand_offset_y.description": "Переместить анимацию похлопывания по оси Y относительно стандартного положения.",
+
+	"patpat.modmenu.option.hand_offset_z.name": "Смещение анимации похлопывания по оси Z",
+	"patpat.modmenu.option.hand_offset_z.description": "Переместить анимацию похлопывания по оси Z относительно стандартного положения.",
+
+	"patpat.modmenu.option.camera_shacking.name": "Включить тряску камеры",
+	"patpat.modmenu.option.camera_shacking.description": "Если включено, ваша камера будет трястись, когда кто-то хлопает вас;\nесли отключено, не будет.",
+
+	"patpat.modmenu.option.pat_weight.name": "Сила похлопывания",
+	"patpat.modmenu.option.pat_weight.description": "Сила сплющивания мобов когда вы, или кто-то другой, хлопает их. Чем больше, тем сильнее будет эффект сплющивания.",
+
+	"patpat.modmenu.group.multiplayer.name": "Сетевая игра",
+	"patpat.modmenu.group.multiplayer.description": "Настройки мода PatPat, когда вы играете на сервере с другими игроками.",
+
+	"patpat.modmenu.option.pat_me_enabled.name": "Разрешить хлопать меня",
+	"patpat.modmenu.option.pat_me_enabled.description": "Если включено, другие игроки смогут вас похлопать;\nесли отключено, не смогут.",
+
+	"patpat.modmenu.option.bypass_server_resource_pack_priority_enabled.name": "Включить обход серверных анимаций",
+	"patpat.modmenu.option.bypass_server_resource_pack_priority_enabled.description": "Если включено, максимальный приоритет серверных анимаций будет обходиться;\nесли отключено, не будет.",
+
+	"patpat.modmenu.group.proximity_packets.name": "Близкие пакеты",
+	"patpat.modmenu.group.proximity_packets.description": "Близкие пакеты — это пакеты по обмену малыми данными между ближайшими игроками.\n\nPatPat мод использует такие пакеты для того, чтобы другие игроки увидели ваши похлопывания даже не имея мод или плагин на самом сервере.\n\nПолная магия!",
+
+	"patpat.modmenu.option.proximity_packets_enabled.name": "Включить близкие пакеты",
+	"patpat.modmenu.option.proximity_packets_enabled.description": "Если включено, другие игроки будут видеть, как вы похлопываете других мобов (даже без мода или плагина на самом сервере);\nесли выключено, не будут.",
+
+	"patpat.modmenu.option.max_packets_per_second.name": "Максимум пакетов в секунду",
+	"patpat.modmenu.option.max_packets_per_second.description": "Максимальное количество пакетов в секунду. Это сделано для того, чтобы сервер не кикнул вас с сервера за слишком большое количество пакетов.\nЕсли вы сделаете 50 похлопываний в секунду, но имея лимит в 10 похлопываний, вы увидите все 50 похлопываний, но другие игроки увидят только 10.\n\nИспользуйте с крайней осторожностью при больших значениях!",
+
+	"patpat.formatter.enabled_or_disabled.true": "Включено",
+	"patpat.formatter.enabled_or_disabled.false": "Выключено",
+
+	"patpat.command.error.failed_when_parsing": "Неудачный разбор команды: {0}",
+	"patpat.command.error.not_number": "{0} не является числом",
+	"patpat.command.error.number_less_than": "Число {0} не может быть меньше, чем {1}",
+	"patpat.command.error.not_time": "{0} не является временным значением (примеры: 1sec, 5s, 5min)",
+	"patpat.command.error.time_less_than": "Временное значение {0} не может быть меньше, чем {1}",
+	"patpat.command.error.player_not_exist": "Не существует игрока с никнеймом {0}!",
+	"patpat.command.error.only_one_player": "Эта команда требует только одного игрока в качестве аргумента",
+
+	"patpat.command.no_permission": "Недостаточно прав, чтобы выполнить эту команду!",
+
+	"patpat.command.list.add.success": "Игрок {0} был добавлен в список",
+	"patpat.command.list.add.already": "Игрок {0} уже находится в списке!",
+
+	"patpat.command.list.remove.success": "Игрок {0} был удалён в список",
+	"patpat.command.list.remove.already": "Игрока {0} нету в списке!",
+
+	"patpat.command.list.set.success": "Режим работы списка был изменён на {0}",
+	"patpat.command.list.set.failed": "Не существует режима работы списка с названием {0}!",
+	"patpat.command.list.set.already": "Режим списка уже установлен на {0}!",
+
+	"patpat.command.list.info.mode": "Режим списка: {0}",
+	"patpat.command.list.info.content": "{0} игрок(ов) в списке:",
+	"patpat.command.list.empty": "*пусто*",
+
+	"patpat.command.reload": "Конфиг успешно перезагружен",
+
+	"patpat.command.info.platform": "Платформа: {0}",
+	"patpat.command.info.minecraft_version": "Версия Minecraft: {0}",
+	"patpat.command.info.version": "Версия: {0}",
+	"patpat.command.info.copy": "Скопировать информацию для откладки",
+
+	"patpat.command.on.success": "PatPat мод включён",
+	"patpat.command.on.already": "PatPat уже был включён!",
+
+	"patpat.command.off.success": "PatPat мод выключен",
+	"patpat.command.off.already": "PatPat мод уже был выключен!",
+
+	"patpat.command.ratelimit.set.increment": "Установлено количество выдаваемых токенов в интервал: {0}",
+	"patpat.command.ratelimit.set.interval": "Установлен интервал выдачи токенов: {0}",
+	"patpat.command.ratelimit.set.limit": "Установлено максимальное токенов: {0}",
+
+	"patpat.command.ratelimit.enable.success": "Лимит запросов был включен",
+	"patpat.command.ratelimit.enable.already": "Лимит запросов уже был включен!",
+
+	"patpat.command.ratelimit.disable.success": "Лимит запросов был выключен",
+	"patpat.command.ratelimit.disable.already": "Лимит запросов уже был выключен!",
+
+	"patpat.command.ratelimit.info.status": "Статус: {0}",
+	"patpat.command.ratelimit.info.increment": "Количество выдаваемых токенов: {0}",
+	"patpat.command.ratelimit.info.interval": "Интервал выдачи токенов: {0}",
+	"patpat.command.ratelimit.info.limit": "Максимальное количество токенов: {0}",
+	"patpat.command.ratelimit.info.permission_bypass": "Ключ обхода: {0}",
+	"patpat.command.ratelimit.info.permission_bypass.copy": "Скопировать ключ обхода",
+
+	"patpat.command.ratelimit.info.player": "Игрок: {0}",
+	"patpat.command.ratelimit.info.tokens": "Токенов: {0}",
+	"patpat.command.ratelimit.info.tokens.bypass": "Обход",
+
+	"patpat.warn.old_version_mod": "Вы имеете слишком старую версию PatPat мода, которая не будет поддерживаться в дальнейших версиях PatPat плагина. Пожалуйста, обновитесь как можно скорее!",
+	"patpat.link.open": "Открыть страницу {0}"
 }

@@ -5,10 +5,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.*;
-import net.minecraft.util.*;
 
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.utils.*;
 
 import java.net.*;
@@ -70,9 +68,10 @@ public class NoConfigLibrariesScreen {
 		MutableComponent yaclShort = TextUtils.literal("YACL").withStyle(ChatFormatting.GOLD);
 		Component yaclFull = TextUtils.literal("Yet Another Config Lib [YACL]").withStyle(ChatFormatting.GOLD);
 		Component clothConfig = TextUtils.literal("Cloth Config API").withStyle(ChatFormatting.GOLD);
+		Component closeText = TextUtils.text("modmenu.no_config_libraries_screen.close").withStyle(ChatFormatting.GRAY);
 
 		TITLE = ModMenuUtils.getModTitle();
-		MESSAGE        = TextUtils.text("modmenu.no_config_libraries_screen.message", yaclFull, clothConfig);
+		MESSAGE        = TextUtils.text("modmenu.no_config_libraries_screen.message", yaclFull, clothConfig, closeText);
 		OPEN_YACL_PAGE = TextUtils.text("modmenu.no_config_libraries_screen.open_page", yaclShort);
 		OPEN_CLOTH_CONFIG_PAGE = TextUtils.text("modmenu.no_config_libraries_screen.open_page", clothConfig);
 	}

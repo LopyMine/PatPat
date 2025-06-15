@@ -70,7 +70,7 @@ public class ClothConfigConfigurationScreen {
 	}
 
 	private static SubCategoryListEntry getResourcePackGroup(ConfigEntryBuilder entryBuilder, PatPatClientResourcePacksConfig config, PatPatClientResourcePacksConfig defConfig) {
-		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(SimpleGroup.getGroupName("resource_packs"));
+		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(SimpleGroup.getGroupName("custom_animations"));
 		subcategory.add(
 				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("skip_outdated_animations_enabled"), config.isSkipOldAnimationsEnabled())
 						.setTooltip(ModMenuUtils.getOptionDescription("skip_outdated_animations_enabled"))

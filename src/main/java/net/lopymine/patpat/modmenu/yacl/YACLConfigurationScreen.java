@@ -55,7 +55,7 @@ public class YACLConfigurationScreen {
 	}
 
 	private static OptionGroup getResourcePacksGroup(PatPatClientResourcePacksConfig defConfig, PatPatClientResourcePacksConfig config) {
-		return SimpleGroup.startBuilder("resource_packs").options(
+		return SimpleGroup.startBuilder("custom_animations").options(
 				SimpleOption.<Boolean>startBuilder("skip_outdated_animations_enabled")
 						.withBinding(defConfig.isSkipOldAnimationsEnabled(), config::isSkipOldAnimationsEnabled, config::setSkipOldAnimationsEnabled, false)
 						.withController()

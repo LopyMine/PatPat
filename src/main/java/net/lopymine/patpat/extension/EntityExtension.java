@@ -4,8 +4,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.utils.VersionedThings;
+import net.lopymine.patpat.utils.mixin.MarkedEntity;
 
 public class EntityExtension {
 
@@ -28,5 +28,18 @@ public class EntityExtension {
 
 	public static int getEntityIntId(Entity entity) {
 		return entity./*? if >=1.21 {*/ getId /*?} else {*/ /*getEntityId *//*?}*/();
+	}
+
+	public static void mark(Entity entity, boolean marked) {
+		if (entity instanceof MarkedEntity markedEntity) {
+			markedEntity.patPat$mark(marked);
+		}
+	}
+
+	public static boolean isMarked(Entity entity) {
+		if (entity instanceof MarkedEntity markedEntity) {
+			return markedEntity.patPat$isMarked();
+		}
+		return false;
 	}
 }

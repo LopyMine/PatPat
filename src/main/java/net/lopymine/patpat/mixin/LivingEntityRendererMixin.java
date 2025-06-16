@@ -20,13 +20,13 @@ public class LivingEntityRendererMixin {
 	private void render(LivingEntity pattedEntity, float f, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
 	 *///?} else {
 	@Inject(method = "render(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;scale(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
-	private void render(LivingEntityRenderState livingEntityRenderState, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, CallbackInfo ci) {
+	private void render(LivingEntityRenderState livingEntityRenderState, PoseStack poseStack, MultiBufferSource vertexConsumerProvider, int i, CallbackInfo ci) {
+	//?}
 		Entity entity = ((EntityRenderStateWithParent) livingEntityRenderState).patPat$getEntity();
 		float tickDelta = ((EntityRenderStateWithParent) livingEntityRenderState).patPat$getTickDelta();
 		if (!(entity instanceof LivingEntity livingEntity)) {
 			return;
 		}
-	//?}
-		PatPatClientRenderer.scaleEntityIfPatted(livingEntity, matrixStack, tickDelta);
+		PatPatClientRenderer.scaleEntityIfPatted(livingEntity, poseStack, tickDelta);
 	}
 }

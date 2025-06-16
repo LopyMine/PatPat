@@ -18,7 +18,10 @@
 		"ControlsListWidgetMixin",
 		"KeybindingMixin",
 		"ParentElementMixin",
-		"KeyBindsScreenMixin"
+		"KeyBindsScreenMixin",
+		"GameRendererMixin",
+		"EntityMixin",
+		"EnderDragonRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -32,8 +32,8 @@ public class PatEntity {
 
 	public void tick() {
 		this.tickProgress += 1;
-		if (tickProgress == Integer.MAX_VALUE) {
-			tickProgress = 0;
+		if (this.tickProgress == Integer.MAX_VALUE) {
+			this.tickProgress = 0;
 		}
 	}
 

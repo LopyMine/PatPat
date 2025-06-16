@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -34,7 +33,6 @@ import net.lopymine.patpat.common.config.vector.Vec3f;
 import net.lopymine.patpat.compat.flashback.FlashbackCompat;
 import net.lopymine.patpat.compat.replaymod.ReplayModCompat;
 import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.packet.PatPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,23 +47,21 @@ public class PatPatClientRenderer {
 	public static void register() {
 		WorldRenderEvents.AFTER_ENTITIES.register(PatPatClientRenderer::renderPatOnYourself);
 		ClientTickEvents.END_WORLD_TICK.register(client -> {
-			//? >1.20.2 {
-			if (client.tickRateManager().isFrozen()) {
-				return;
-			}
-			//?}
+			boolean frozen = /*? if >1.20.2 {*/ client.tickRateManager().isFrozen(); /*?} else {*//* false; *//*?}*/
 			PatPatClientConfig config = PatPatClientConfig.getInstance();
 
-			serverPats.forEach((packet) -> {
-				LivingEntity pattedEntity = packet.pattedEntity();
-				PlayerConfig playerConfig = packet.playerConfig();
-				PatEntity patEntity = PatPatClientManager.pat(pattedEntity, playerConfig);
+			if (!frozen) {
+				serverPats.forEach((packet) -> {
+					LivingEntity pattedEntity = packet.pattedEntity();
+					PlayerConfig playerConfig = packet.playerConfig();
+					PatEntity patEntity = PatPatClientManager.pat(pattedEntity, playerConfig);
 
-				if (config.getSoundsConfig().isSoundsEnabled() && !packet.replayModPacket()) {
-					PatPatClientSoundManager.playSound(patEntity, packet.player(), config.getSoundsConfig().getSoundsVolume());
-				}
-			});
-			serverPats.clear();
+					if (config.getSoundsConfig().isSoundsEnabled() && !packet.replayModPacket()) {
+						PatPatClientSoundManager.playSound(patEntity, packet.player(), config.getSoundsConfig().getSoundsVolume());
+					}
+				});
+				serverPats.clear();
+			}
 
 			clientPats.forEach((patPacket) -> {
 				LocalPlayer player = patPacket.player();
@@ -90,7 +86,10 @@ public class PatPatClientRenderer {
 				}
 			});
 			clientPats.clear();
-			PatPatClientManager.tickEntities();
+
+			if (!frozen) {
+				PatPatClientManager.tickEntities();
+			}
 		});
 	}
 

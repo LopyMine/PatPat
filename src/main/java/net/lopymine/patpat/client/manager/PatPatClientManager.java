@@ -7,17 +7,21 @@ import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
 import net.lopymine.patpat.entity.PatEntity;
+import net.lopymine.patpat.extension.EntityExtension;
 
 import lombok.*;
+import lombok.experimental.ExtensionMethod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.util.profiling.Profiler;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.*;
 
 import java.util.*;
 import org.jetbrains.annotations.*;
 
+@ExtensionMethod(EntityExtension.class)
 public class PatPatClientManager {
 
 	private static final Map<UUID, PatEntity> PAT_ENTITIES = new HashMap<>();
@@ -133,11 +137,26 @@ public class PatPatClientManager {
 	@Nullable
 	public static LivingEntity getPatEntityFromHitResult() {
 		Minecraft minecraft = Minecraft.getInstance();
-		if (minecraft.player == null || minecraft.player.isDeadOrDying()) {
+		LocalPlayer player = minecraft.player;
+		if (player == null || minecraft.level == null || player.isDeadOrDying()) {
 			return null;
 		}
 
-		if (!(minecraft.hitResult instanceof EntityHitResult hitResult) || !(hitResult.getEntity() instanceof LivingEntity pattedEntity)) {
+		Entity cameraEntity = minecraft.getCameraEntity();
+		if (cameraEntity == null) {
+			return null;
+		}
+
+		Profiler.get().push("patpat$pick");
+		double blockInteractionRange = player.blockInteractionRange();
+		double entityInteractionRange = player.entityInteractionRange();
+		float tickDelta = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
+		cameraEntity.mark(true);
+		HitResult result = minecraft.gameRenderer.pick(cameraEntity, blockInteractionRange, entityInteractionRange, tickDelta);
+		cameraEntity.mark(false);
+		Profiler.get().pop();
+
+		if (!(result instanceof EntityHitResult hitResult) || !(hitResult.getEntity() instanceof LivingEntity pattedEntity)) {
 			return null;
 		}
 

@@ -1,19 +1,16 @@
 package net.lopymine.patpat.client.command.list;
 
 import lombok.experimental.ExtensionMethod;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.*;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
-import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.ClientCommandExtension;
-import net.lopymine.patpat.utils.*;
 
 import java.util.*;
 

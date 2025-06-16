@@ -1,4 +1,4 @@
-package net.lopymine.patpat.client.config.sub;
+package net.lopymine.patpat.client.config;
 
 import lombok.Getter;
 

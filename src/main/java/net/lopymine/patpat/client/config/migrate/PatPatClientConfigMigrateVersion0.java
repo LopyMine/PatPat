@@ -7,7 +7,7 @@ import lombok.Setter;
 import com.mojang.serialization.Codec;
 
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.config.vector.Vec3f;

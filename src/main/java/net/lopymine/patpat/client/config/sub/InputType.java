@@ -1,4 +1,4 @@
-package net.lopymine.patpat.client.config;
+package net.lopymine.patpat.client.config.sub;
 
 import net.minecraft.util.StringRepresentable;
 

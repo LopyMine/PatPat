@@ -12,7 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
-import net.lopymine.patpat.client.config.sub.PatPatClientPlayerListConfig;
+import net.lopymine.patpat.client.config.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
 import net.lopymine.patpat.common.Version;

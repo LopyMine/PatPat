@@ -8,7 +8,7 @@ import com.mojang.blaze3d.platform.InputConstants.Key;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.lopymine.patpat.client.config.InputType;
+import net.lopymine.patpat.client.config.sub.InputType;
 
 import java.util.*;
 import org.jetbrains.annotations.Nullable;
@@ -35,6 +35,22 @@ public class KeybindingCombination {
 	private InputConstants.Key attributeKey;
 	@Nullable
 	private InputConstants.Key key;
+
+	public void setAttributeKey(@Nullable Key attributeKey) {
+		if (attributeKey != null && attributeKey.getValue() == InputConstants.UNKNOWN.getValue()) {
+			this.attributeKey = null;
+			return;
+		}
+		this.attributeKey = attributeKey;
+	}
+
+	public void setKey(@Nullable Key key) {
+		if (key != null && key.getValue() == InputConstants.UNKNOWN.getValue()) {
+			this.key = null;
+			return;
+		}
+		this.key = key;
+	}
 
 	public boolean isComplete() {
 		return this.attributeKey != null && this.key != null;

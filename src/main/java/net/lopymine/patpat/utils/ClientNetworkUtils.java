@@ -3,7 +3,7 @@ package net.lopymine.patpat.utils;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 
-import net.lopymine.patpat.client.config.sub.PatPatClientPlayerListConfig;
+import net.lopymine.patpat.client.config.PatPatClientPlayerListConfig;
 
 import java.util.*;
 import java.util.stream.Stream;

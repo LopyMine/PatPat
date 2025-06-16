@@ -5,7 +5,7 @@ import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
 import org.junit.jupiter.api.*;
 
-import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.config.migrate.*;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.client.config.sub.*;

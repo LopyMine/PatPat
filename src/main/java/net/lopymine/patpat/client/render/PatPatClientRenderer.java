@@ -26,6 +26,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.*;
 
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
+import net.lopymine.patpat.client.config.PatPatStatsConfig;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.client.packet.*;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
@@ -71,11 +72,12 @@ public class PatPatClientRenderer {
 				PatPatClientNetworkManager.sendPacketToServer(PatPatClientPacketManager.getPatPacket(pattedEntity));
 				PatEntity patEntity = PatPatClientManager.pat(pattedEntity, playerConfig);
 
+				PatPatStatsConfig statsConfig = PatPatStatsConfig.getInstance();
+				statsConfig.count(pattedEntity);
+
 				if (config.getVisualConfig().isSwingHandEnabled()) {
 					player.swing(InteractionHand.MAIN_HAND);
 				}
-
-				System.out.println("ENTITY WAS PATTED           DDDDDDDDDD");
 
 				ReplayModCompat.onPat(pattedEntity.getId(), player.getId());
 				FlashbackCompat.onPat(pattedEntity.getId(), player.getId());

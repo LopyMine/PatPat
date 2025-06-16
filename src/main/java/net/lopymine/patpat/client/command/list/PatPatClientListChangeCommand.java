@@ -8,15 +8,13 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.command.argument.*;
 import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
-import net.lopymine.patpat.client.config.sub.PatPatClientPlayerListConfig;
+import net.lopymine.patpat.client.config.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.*;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.*;
-import net.minecraft.world.entity.EntityType;
+
 import java.util.*;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;

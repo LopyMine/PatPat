@@ -22,7 +22,7 @@ public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 
 	@Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
 	private void handlePatPatKeybindingOnKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-		if (this.selectedKey instanceof PatPatKeybinding keybinding && (keybinding.isBinding() || keybinding.isCanStartBinding())) {
+		if (this.selectedKey instanceof PatPatKeybinding keybinding) {
 			boolean bl = keybinding.addBindingKey(InputConstants.getKey(keyCode, scanCode));
 			if (bl) {
 				keybinding.sendBindingKeys();
@@ -35,7 +35,7 @@ public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 
 	@Inject(at = @At("HEAD"), method = "mouseClicked", cancellable = true)
 	private void handlePatPatKeybindingOnMouseClick(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-		if (this.selectedKey instanceof PatPatKeybinding keybinding && (keybinding.isBinding() || keybinding.isCanStartBinding())) {
+		if (this.selectedKey instanceof PatPatKeybinding keybinding) {
 			boolean bl = keybinding.addBindingKey(InputConstants.Type.MOUSE.getOrCreate(button));
 			if (bl) {
 				keybinding.sendBindingKeys();

@@ -13,34 +13,16 @@ import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 
 import java.util.*;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
 public class PatPatKeybinding extends KeyMapping {
 
 	public static final KeybindingCombination DEFAULT_COMBINATION = new KeybindingCombination(
-			InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_LEFT_SHIFT),
-			InputConstants.Type.MOUSE.getOrCreate(GLFW.GLFW_MOUSE_BUTTON_2)
+			InputConstants.Type.KEYSYM.getOrCreate(InputConstants.KEY_LSHIFT),
+			InputConstants.Type.MOUSE.getOrCreate(InputConstants.MOUSE_BUTTON_RIGHT)
 	);
 
-	private static final List<String> ATTRIBUTE_KEYS = List.of(
-			"key.keyboard.left.alt",
-			"key.keyboard.left.control",
-			"key.keyboard.left.shift",
-			"key.keyboard.left.win",
-			"key.keyboard.right.alt",
-			"key.keyboard.right.control",
-			"key.keyboard.right.shift",
-			"key.keyboard.right.win",
-			"key.keyboard.tab",
-			"key.keyboard.caps.lock"
-	);
-
-	private final KeybindingCombination combination = new KeybindingCombination();
-	@Getter
-	private final Map<InputConstants.Key, Boolean> keys;
+	private final PressableKeybindingCombination combination = new PressableKeybindingCombination();
 	@Getter
 	private boolean binding;
 	@Getter
@@ -48,30 +30,35 @@ public class PatPatKeybinding extends KeyMapping {
 
 	public PatPatKeybinding(KeybindingCombination patCombination) {
 		super("patpat.keybinding.pat", InputConstants.UNKNOWN.getValue(), PatPat.MOD_NAME);
+		this.combination.setAttributeKey(patCombination.getAttributeKey());
+		this.combination.setKey(patCombination.getKey());
+	}
 
-		Map<InputConstants.Key, Boolean> keys = new HashMap<>();
-
-		if (!Objects.equals(patCombination.getAttributeKey(), patCombination.getKey())) {
-			keys = Stream.of(patCombination.getAttributeKey(), patCombination.getKey())
-				.filter(Objects::nonNull)
-				.filter(key -> key.getValue() != InputConstants.UNKNOWN.getValue())
-				.map(key -> Map.entry(key, false))
-				.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-
-			this.combination.setAttributeKey(patCombination.getAttributeKey());
-			this.combination.setKey(patCombination.getKey());
-		}
-
-		this.keys = keys;
+	public void startBinding() {
+		this.resetPressedState();
+		this.combination.setAttributeKey(null);
+		this.combination.setKey(null);
+		this.binding         = true;
+		this.canStartBinding = false;
 	}
 
 	public boolean addBindingKey(InputConstants.Key key) {
-		if (ATTRIBUTE_KEYS.contains(key.getName())) {
+		if (this.isCanStartBinding()) {
+			this.startBinding();
+		}
+		if (!this.isBinding()) {
+			return true;
+		}
+		if (key.getValue() == GLFW.GLFW_KEY_ESCAPE) {
+			this.resetPressedState();
+			this.combination.setKey(null);
+			this.combination.setAttributeKey(null);
+			return true;
+		}
+		if (KeybindingCombination.isAttributeKey(key.getValue())) {
 			if (this.combination.isComplete()) {
 				return true;
 			}
-			this.binding         = true;
-			this.canStartBinding = false;
 			this.combination.setAttributeKey(key);
 			return this.combination.isComplete();
 		} else {
@@ -81,11 +68,11 @@ public class PatPatKeybinding extends KeyMapping {
 	}
 
 	public void sendBindingKeys() {
-		this.keys.clear();
-		Stream.of(this.combination.getAttributeKey(), this.combination.getKey()).filter(Objects::nonNull).forEach(key -> this.keys.put(key, false));
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		config.getMainConfig().setPatCombination(this.combination);
 		config.saveAsync();
+		this.resetPressedState();
+		this.combination.setAll(false);
 		this.binding         = false;
 		this.canStartBinding = true;
 	}
@@ -93,42 +80,35 @@ public class PatPatKeybinding extends KeyMapping {
 	@Override
 	public void setKey(InputConstants.Key boundKey) {
 		if (boundKey.equals(this.getDefaultKey())) {
-			this.keys.clear();
-			Stream.of(DEFAULT_COMBINATION.getAttributeKey(), DEFAULT_COMBINATION.getKey()).filter(Objects::nonNull).forEach(key -> this.keys.put(key, false));
+			this.resetPressedState();
+			this.combination.setAttributeKey(DEFAULT_COMBINATION.getAttributeKey());
+			this.combination.setKey(DEFAULT_COMBINATION.getKey());
 		}
 	}
 
 	public boolean onKeyAction(InputConstants.Key key, boolean pressed) {
-		if (!this.keys.containsKey(key)) {
+		if (!this.combination.contains(key)) {
 			return false;
 		}
 
-		if (this.keys.size() == 1) {
-			this.keys.put(key, pressed);
+		if (this.combination.onlyOneKey()) {
+			this.combination.set(key, pressed);
 			this.setDown(pressed);
 			return this.isDown();
 		}
 
 		if (!pressed) {
-			this.keys.put(key, false);
+			this.combination.set(key, false);
 			this.setDown(false);
 			PatPatClientManager.setPatCooldown(0);
 			return false;
 		}
 
-		boolean isAttribute = ATTRIBUTE_KEYS.contains(key.getName());
-		boolean allPressed = this.keys.values().stream().allMatch(v -> v);
-		boolean anyPressed = this.keys.values().stream().anyMatch(v -> v);
-
-		if (isAttribute && !allPressed && anyPressed) {
-			this.setDown(false);
-			return false;
-		}
-
-		this.keys.put(key, true);
-		boolean allPressedState = this.keys.values().stream().allMatch(v -> v);
+		this.combination.set(key, true);
+		boolean allPressedState = this.combination.allPressed();
 		this.setDown(allPressedState);
-		return allPressedState;
+
+		return allPressedState && !KeybindingCombination.isAttributeKey(key.getValue());
 	}
 
 	@Override
@@ -138,44 +118,19 @@ public class PatPatKeybinding extends KeyMapping {
 
 	@Override
 	public @NotNull Component getTranslatedKeyMessage() {
-		MutableComponent result = Component.literal("");
-		if (this.isBinding()) {
-			return this.combination.getCombinationLocalizedComponent();
-		}
-		Set<InputConstants.Key> keys = this.keys.keySet();
-		if (keys.isEmpty()) {
-			return InputConstants.UNKNOWN.getDisplayName();
-		}
-
-		List<Component> list = keys.stream().sorted((o1, o2) -> {
-					if (o1.equals(o2)) {
-						return 0;
-					}
-					return ATTRIBUTE_KEYS.contains(o1.getName()) ? -1 : 1;
-				})
-				.map(InputConstants.Key::getDisplayName)
-				.toList();
-		for (int i = 0; i < list.size(); i++) {
-			Component part = list.get(i);
-			result.append(part);
-			if (i != list.size() - 1) {
-				result.append(" + ");
-			}
-		}
-		return result;
+		return this.combination.getCombinationLocalizedComponent(!this.isBinding());
 	}
 
-	public void reset() {
-		Set<Key> set = this.keys.keySet();
-
-		set.forEach((key) -> {
+	public void resetPressedState() {
+		List<Key> keys = this.combination.getKeys();
+		keys.forEach((key) -> {
 			if (key.getType() == Type.KEYSYM) {
-				this.keys.put(key, InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), key.getValue()));
+				this.combination.set(key, InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), key.getValue()));
 			} else {
-				this.keys.put(key, GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().getWindow(), key.getValue()) == 1);
+				this.combination.set(key, GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().getWindow(), key.getValue()) == 1);
 			}
 		});
-		boolean allPressed = this.keys.values().stream().allMatch(bl -> bl);
+		boolean allPressed = this.combination.allPressed();
 		this.setDown(allPressed);
 	}
 }

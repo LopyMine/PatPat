@@ -11,6 +11,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.lopymine.patpat.client.config.sub.InputType;
 
 import java.util.*;
+import java.util.stream.Stream;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
@@ -31,10 +32,27 @@ public class KeybindingCombination {
 			KEY_CODEC.optionalFieldOf("key").xmap((o) -> o.orElse(InputConstants.UNKNOWN), Optional::ofNullable).forGetter(KeybindingCombination::getKey)
 	).apply(instance, KeybindingCombination::new));
 
+	private static final Set<Integer> ATTRIBUTE_KEY_IDS = Set.of(
+			InputConstants.KEY_LALT,
+			InputConstants.KEY_LCONTROL,
+			InputConstants.KEY_LSHIFT,
+			InputConstants.KEY_LWIN,
+			InputConstants.KEY_RALT,
+			InputConstants.KEY_RCONTROL,
+			InputConstants.KEY_RSHIFT,
+			InputConstants.KEY_RWIN,
+			InputConstants.KEY_TAB,
+			InputConstants.KEY_CAPSLOCK
+	);
+
 	@Nullable
 	private InputConstants.Key attributeKey;
 	@Nullable
 	private InputConstants.Key key;
+
+	public static boolean isAttributeKey(int keyId) {
+		return ATTRIBUTE_KEY_IDS.contains(keyId);
+	}
 
 	public void setAttributeKey(@Nullable Key attributeKey) {
 		if (attributeKey != null && attributeKey.getValue() == InputConstants.UNKNOWN.getValue()) {
@@ -56,10 +74,20 @@ public class KeybindingCombination {
 		return this.attributeKey != null && this.key != null;
 	}
 
-	public Component getCombinationLocalizedComponent() {
+	public List<Key> getKeys() {
+		return Stream.of(this.getKey(), this.getAttributeKey()).filter(Objects::nonNull).toList();
+	}
+
+	public Component getCombinationLocalizedComponent(boolean asFinished) {
 		if (this.attributeKey != null) {
-			MutableComponent component = this.attributeKey.getDisplayName().copy().append(COLLECT_TEXT);
+			MutableComponent component = this.attributeKey.getDisplayName().copy();
+			if (!asFinished) {
+				component.append(COLLECT_TEXT);
+			}
 			if (this.key != null) {
+				if (asFinished) {
+					component.append(COLLECT_TEXT);
+				}
 				component.append(this.key.getDisplayName());
 			}
 			return component;
@@ -72,8 +100,9 @@ public class KeybindingCombination {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o == null || getClass() != o.getClass()) return false;
-		KeybindingCombination that = (KeybindingCombination) o;
+		if (!(o instanceof KeybindingCombination that)) {
+			return false;
+		}
 		return Objects.equals(this.attributeKey, that.attributeKey) && Objects.equals(this.key, that.key);
 	}
 

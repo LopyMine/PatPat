@@ -83,6 +83,8 @@
 	"patpat.formatter.enabled_or_disabled.true": "Enabled",
 	"patpat.formatter.enabled_or_disabled.false": "Disabled",
 
+	"patpat.keybinding.pat": "Pat Entity",
+
 	"patpat.command.error.failed_when_parsing": "Failed when parsing: {0}",
 	"patpat.command.error.not_number": "{0} is not a number",
 	"patpat.command.error.number_less_than": "Number {0} can't be less than {1}",

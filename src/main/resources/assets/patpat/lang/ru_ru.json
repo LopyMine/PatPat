@@ -39,7 +39,7 @@
 	"patpat.modmenu.group.visual.description": "Настройки, связанные с визуальной частью.",
 
 	"patpat.modmenu.option.hiding_nickname_enabled.name": "Включить скрытие никнейма",
-	"patpat.modmenu.option.hiding_nickname_enabled.description": "Если включено, никнейм сущности исчезнет, когда вы или кто-то другой её похлопает;\nесли отключено, не исчезнет.",
+	"patpat.modmenu.option.hiding_nickname_enabled.description": "Если включено, никнейм моба исчезнет, когда вы или кто-то другой её похлопает;\nесли отключено, не исчезнет.",
 
 	"patpat.modmenu.option.swing_hand_enabled.name": "Включить размахивание рукой",
 	"patpat.modmenu.option.swing_hand_enabled.description": "Если включено, ваш персонаж будет махать основной рукой при похлопывании моба;\nесли отключено, не будет.",
@@ -82,6 +82,8 @@
 
 	"patpat.formatter.enabled_or_disabled.true": "Включено",
 	"patpat.formatter.enabled_or_disabled.false": "Выключено",
+
+	"patpat.keybinding.pat": "Похлопать моба",
 
 	"patpat.command.error.failed_when_parsing": "Неудачный разбор команды: {0}",
 	"patpat.command.error.not_number": "{0} не является числом",

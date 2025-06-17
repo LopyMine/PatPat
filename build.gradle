@@ -4,13 +4,6 @@ plugins {
 	id("net.lopymine.mossy-plugin")
 }
 
-var buildTime = (int) (System.currentTimeMillis() / 10000) - 174611089
-var buildCodeTime = String.format("%07x", buildTime & 0xFFFFFFF)
-def modVersion = prop("data.mod_version")
-def mossyPlugin = (MossyPlugin) getPlugins().getPlugin("net.lopymine.mossy-plugin")
-
-version = "${modVersion}+${mossyPlugin.projectMultiVersion.projectVersion()}+${buildCodeTime}"
-
 mossyDependencies {
 	def mcVersion = stonecutter.current.version.toString()
 	minecraft = mcVersion
@@ -129,6 +122,12 @@ if (stonecutter.compare(stonecutter.current.version.toString(), "1.19.4") >= 0) 
 	test {
 		useJUnitPlatform()
 	}
+}
+
+stonecutter {
+	var buildTime = (int) (System.currentTimeMillis() / 10000) - 174611089
+	var buildCodeTime = String.format("%07x", buildTime & 0xFFFFFFF)
+	swap("build_code_time", "\"${buildCodeTime}\";")
 }
 
 //tasks.register('submodulesUpdate', Exec) {

@@ -16,7 +16,7 @@ import net.lopymine.patpat.utils.*;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.*;
 
 import static net.lopymine.patpat.utils.CodecUtils.option;
 
@@ -54,9 +54,11 @@ public class PatPatStatsConfig {
 		} else {
 			patsCounter.totalPats++;
 		}
+		AutoSaveManager.markToSave();
 	}
 
 	public static void registerSaveHooks() {
+		AutoSaveManager.start();
 		ClientLifecycleEvents.CLIENT_STOPPING.register((client) -> {
 			PatPatStatsConfig.getInstance().save();
 		});
@@ -96,5 +98,34 @@ public class PatPatStatsConfig {
 		).apply(instance, PatsCounter::new));
 
 		public long totalPats;
+	}
+
+	private static class AutoSaveManager {
+
+		private static final ScheduledExecutorService SERVICE = Executors.newScheduledThreadPool(1);
+		private static boolean shouldSave = true;
+
+		private static void start() {
+			Runnable runnable = () -> {
+				if (!AutoSaveManager.shouldSave || !PatPatClientConfig.getInstance().getMainConfig().isModEnabled()) {
+					return;
+				}
+				PatPatClient.LOGGER.debug("Saving PatPat Statistics...");
+				PatPatStatsConfig.getInstance().save();
+				AutoSaveManager.shouldSave = false;
+				PatPatClient.LOGGER.debug("PatPat Statistics Saved");
+			};
+
+			SERVICE.scheduleAtFixedRate(
+					runnable,
+					5,
+					5,
+					TimeUnit.MINUTES
+			);
+		}
+
+		private static void markToSave() {
+			AutoSaveManager.shouldSave = true;
+		}
 	}
 }

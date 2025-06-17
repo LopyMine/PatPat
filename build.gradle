@@ -4,6 +4,13 @@ plugins {
 	id("net.lopymine.mossy-plugin")
 }
 
+var buildTime = (int) (System.currentTimeMillis() / 10000) - 174611089
+var buildCodeTime = String.format("%07x", buildTime & 0xFFFFFFF)
+def modVersion = prop("data.mod_version")
+def mossyPlugin = (MossyPlugin) getPlugins().getPlugin("net.lopymine.mossy-plugin")
+
+version = "${modVersion}+${mossyPlugin.projectMultiVersion.projectVersion()}+${buildCodeTime}"
+
 mossyDependencies {
 	def mcVersion = stonecutter.current.version.toString()
 	minecraft = mcVersion

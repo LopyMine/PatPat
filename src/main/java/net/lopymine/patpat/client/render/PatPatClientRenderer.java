@@ -1,5 +1,6 @@
 package net.lopymine.patpat.client.render;
 
+import lombok.experimental.ExtensionMethod;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -10,9 +11,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
 //? <=1.21.4 {
 import com.mojang.blaze3d.systems.RenderSystem;
 /*?} else {*/
@@ -34,10 +33,13 @@ import net.lopymine.patpat.common.config.vector.Vec3f;
 import net.lopymine.patpat.compat.flashback.FlashbackCompat;
 import net.lopymine.patpat.compat.replaymod.ReplayModCompat;
 import net.lopymine.patpat.entity.PatEntity;
+import net.lopymine.patpat.extension.VertexConsumerExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.jetbrains.annotations.Nullable;
+
+@ExtensionMethod(VertexConsumerExtension.class)
 public class PatPatClientRenderer {
 
 	public static final List<PacketPat> serverPats = new ArrayList<>();
@@ -48,7 +50,7 @@ public class PatPatClientRenderer {
 	public static void register() {
 		WorldRenderEvents.AFTER_ENTITIES.register(PatPatClientRenderer::renderPatOnYourself);
 		ClientTickEvents.END_WORLD_TICK.register(client -> {
-			boolean frozen = /*? if >1.20.2 {*/ client.tickRateManager().isFrozen(); /*?} else {*//* false; *//*?}*/
+			boolean frozen = /*? if >1.20.2 {*/ client.tickRateManager().isFrozen(); /*?} else {*/ /*false; *//*?}*/
 			PatPatClientConfig config = PatPatClientConfig.getInstance();
 
 			if (!frozen) {
@@ -110,7 +112,7 @@ public class PatPatClientRenderer {
 		}
 
 		EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-		float tickDelta = context./*? if >=1.21 {*/ tickCounter().getGameTimeDeltaPartialTick(false); /*?} else {*/ /*tickDelta(); *//*?}*/
+		float tickDelta = context./*? if >=1.21 {*/ /*tickCounter().getGameTimeDeltaPartialTick(false); *//*?} else {*/ tickDelta(); /*?}*/
 		int light = dispatcher.getPackedLightCoords(player, tickDelta);
 
 		PatEntity patEntity = PatPatClientManager.getPatEntity(player);
@@ -146,18 +148,17 @@ public class PatPatClientRenderer {
 			return RenderResult.FAILED;
 		}
 
-		int numberToMirrorTexture = /*? >=1.21 {*/1/*?} else {*/ /*-1*//*?}*/;
+		int numberToMirrorTexture = /*? >=1.21 {*//*1*//*?} else {*/ -1/*?}*/;
 
 		CustomAnimationSettingsConfig animation = patEntity.getAnimation();
 		FrameConfig frameConfig = animation.getFrameConfig();
 		enableBlend();
-
 		//? <=1.20.4 {
-		/*float nameLabelHeight = entity.getHeight();
-		 *///?} else {
-		Vec3 vec3d = entity != null ? entity.getAttachments().getNullable(EntityAttachment.NAME_TAG, 0, entity.getViewYRot(tickDelta)) : null;
+		float nameLabelHeight = entity != null ? entity.getBbHeight() : 0.0F;
+		 //?} else {
+		/*net.minecraft.world.phys.Vec3 vec3d = entity != null ? entity.getAttachments().getNullable(net.minecraft.world.entity.EntityAttachment.NAME_TAG, 0, entity.getViewYRot(tickDelta)) : null;
 		float nameLabelHeight = vec3d != null ? (float) vec3d.y: 0.0F;
-		//?}
+		*///?}
 
 		matrices.pushPose();
 		matrices.translate(
@@ -195,13 +196,13 @@ public class PatPatClientRenderer {
 		float v2 = 1.0F;
 
 		Pose peek = matrices.last();
-		/*? >=1.19.3 {*/org.joml.Matrix4f/*?} else {*/ /*net.minecraft.util.math.Matrix4f*//*?}*/ matrix4f = peek./*? <=1.17.1 {*//*getModel()*//*?} else {*/pose()/*?}*/;
+		/*? >=1.19.3 {*/org.joml.Matrix4f/*?} else {*/ /*com.mojang.math.Matrix4f*//*?}*/ matrix4f = peek./*? <=1.17.1 {*//*getModel()*//*?} else {*/pose()/*?}*/;
 		VertexConsumer buffer = provider.getBuffer(RenderType.entityTranslucent(animation.getTexture()));
 
-		buffer.addVertex(matrix4f, x1, y1, z).setColor(255, 255, 255, 255).setUv(u1, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
-		buffer.addVertex(matrix4f, x1, y2, z).setColor(255, 255, 255, 255).setUv(u1, v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
-		buffer.addVertex(matrix4f, x2, y2, z).setColor(255, 255, 255, 255).setUv(u2, v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
-		buffer.addVertex(matrix4f, x2, y1, z).setColor(255, 255, 255, 255).setUv(u2, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0, 1, 0)/*? <=1.20.6 {*//*.next();*//*?} else {*/; /*?}*/
+		buffer.withVertex(matrix4f, x1, y1, z).withColor(255, 255, 255, 255).withUv(u1, v1).withOverlay(OverlayTexture.NO_OVERLAY).withLight(light).withNormal(0, 1, 0).end();
+		buffer.withVertex(matrix4f, x1, y2, z).withColor(255, 255, 255, 255).withUv(u1, v2).withOverlay(OverlayTexture.NO_OVERLAY).withLight(light).withNormal(0, 1, 0).end();
+		buffer.withVertex(matrix4f, x2, y2, z).withColor(255, 255, 255, 255).withUv(u2, v2).withOverlay(OverlayTexture.NO_OVERLAY).withLight(light).withNormal(0, 1, 0).end();
+		buffer.withVertex(matrix4f, x2, y1, z).withColor(255, 255, 255, 255).withUv(u2, v1).withOverlay(OverlayTexture.NO_OVERLAY).withLight(light).withNormal(0, 1, 0).end();
 
 		matrices.popPose();
 		disableBlend();

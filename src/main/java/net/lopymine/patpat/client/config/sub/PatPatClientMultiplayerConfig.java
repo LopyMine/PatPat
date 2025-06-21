@@ -41,9 +41,9 @@ public class PatPatClientMultiplayerConfig {
 			return;
 		}
 		boolean bl = client.getResourcePackRepository()
-				/*? <=1.20.4 {*//*.getEnabledNames()
-				 *//*?} else {*/.getSelectedIds()/*?}*/
-				.stream().anyMatch(s -> s.startsWith("server/"));
+				.getSelectedIds()
+				.stream()
+				.anyMatch(s -> s.startsWith("server/"));
 
 		if (bl) {
 			client.reloadResourcePacks();

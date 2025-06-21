@@ -1,2 +1,5 @@
 accessWidener v2 named
 # 1.20.3 AW
+
+accessible field net/minecraft/client/Camera eyeHeightOld F
+accessible field net/minecraft/client/Camera eyeHeight F

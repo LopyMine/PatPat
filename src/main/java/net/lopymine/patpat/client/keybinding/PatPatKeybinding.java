@@ -68,9 +68,7 @@ public class PatPatKeybinding extends KeyMapping {
 	}
 
 	public void sendBindingKeys() {
-		PatPatClientConfig config = PatPatClientConfig.getInstance();
-		config.getMainConfig().setPatCombination(this.combination);
-		config.saveAsync();
+		this.saveCombination();
 		this.resetPressedState();
 		this.combination.setAll(false);
 		this.binding         = false;
@@ -83,7 +81,14 @@ public class PatPatKeybinding extends KeyMapping {
 			this.resetPressedState();
 			this.combination.setAttributeKey(DEFAULT_COMBINATION.getAttributeKey());
 			this.combination.setKey(DEFAULT_COMBINATION.getKey());
+			this.saveCombination();
 		}
+	}
+
+	private void saveCombination() {
+		PatPatClientConfig config = PatPatClientConfig.getInstance();
+		config.getMainConfig().setPatCombination(this.combination);
+		config.saveAsync();
 	}
 
 	public boolean onKeyAction(InputConstants.Key key, boolean pressed) {

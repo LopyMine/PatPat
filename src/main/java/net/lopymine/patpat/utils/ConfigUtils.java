@@ -5,7 +5,6 @@ import com.google.gson.*;
 import com.mojang.serialization.*;
 
 import net.lopymine.patpat.*;
-import net.lopymine.patpat.client.PatPatClient;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -39,38 +38,38 @@ public class ConfigUtils {
 		}
 	}
 
-	private static <A> A create(Codec<A> codec, File location) {
+	private static <A> A create(Codec<A> codec, File location, PatLogger logger) {
 		A config = CodecUtils.parseNewInstanceHacky(codec);
 		if (location.exists()) {
-			PatPatClient.LOGGER.error("Invoked create config method, but config already exists!");
+			logger.error("Invoked create config method, but config already exists!");
 			return config;
 		}
 		try (FileWriter writer = new FileWriter(location, StandardCharsets.UTF_8)) {
-			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPatClient.LOGGER::error));*/
+			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*//*.getOrThrow());*//*?} else*/.getOrThrow(false, logger::error));
 			writer.write(json);
 		} catch (Exception e) {
-			PatPatClient.LOGGER.error("Failed to create config", e);
+			logger.error("Failed to create config", e);
 		}
 		return config;
 	}
 
 	public static <A> A readConfig(Codec<A> codec, File location, PatLogger logger) {
 		if (!location.exists()) {
-			return ConfigUtils.create(codec, location);
+			return ConfigUtils.create(codec, location, logger);
 		}
 		try (FileReader reader = new FileReader(location, StandardCharsets.UTF_8)) {
-			return codec.decode(JsonOps.INSTANCE, /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, PatPatClient.LOGGER::error)*//*?}*/.getFirst();
+			return codec.decode(JsonOps.INSTANCE, /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/)/*? if >=1.20.5 {*//*.getOrThrow()*//*?} else {*/.getOrThrow(false, logger::error)/*?}*/.getFirst();
 		} catch (Exception e) {
 			logger.error("Failed to read config", e);
 			createBackup(location);
 		}
-		return ConfigUtils.create(codec, location);
+		return ConfigUtils.create(codec, location, logger);
 	}
 
 	public static <A> void saveConfig(A config, Codec<A> codec, File location, PatLogger logger) {
 		logger.debug("Saving config...");
 		try (FileWriter writer = new FileWriter(location, StandardCharsets.UTF_8)) {
-			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, PatPatClient.LOGGER::error));*/
+			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*//*.getOrThrow());*//*?} else*/.getOrThrow(false, logger::error));
 			writer.write(json);
 		} catch (Exception e) {
 			logger.error("Failed to save config:", e);

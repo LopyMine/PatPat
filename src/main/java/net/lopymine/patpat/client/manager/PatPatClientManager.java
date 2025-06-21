@@ -8,15 +8,17 @@ import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.extension.EntityExtension;
+import net.lopymine.patpat.utils.ProfilerUtils;
 
 import lombok.*;
 import lombok.experimental.ExtensionMethod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.util.profiling.Profiler;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.phys.*;
+
+import com.mojang.authlib.GameProfile;
 
 import java.util.*;
 import org.jetbrains.annotations.*;
@@ -115,9 +117,9 @@ public class PatPatClientManager {
 			return;
 		}
 
-		UUID currentUuid = minecraft.getGameProfile().getId();
-		PlayerConfig whoPatted = PlayerConfig.of(minecraft.getGameProfile().getName(), currentUuid);
+		GameProfile profile = /*? if >=1.20.2 {*/ minecraft.getGameProfile(); /*?} else {*/ /*minecraft.getUser().getGameProfile(); *//*?}*/
 
+		PlayerConfig whoPatted = PlayerConfig.of(profile.getName(), profile.getId());
 		PatPatClientRenderer.clientPats.add(new PacketPat(pattedEntity, whoPatted, player, false));
 
 		PatPatClientManager.patCooldown = 4;
@@ -147,14 +149,31 @@ public class PatPatClientManager {
 			return null;
 		}
 
-		Profiler.get().push("patpat$pick");
-		double blockInteractionRange = player.blockInteractionRange();
+		ProfilerUtils.push("patpat$pick");
+		//? if >=1.20.5 {
+		/*double blockInteractionRange = player.blockInteractionRange();
 		double entityInteractionRange = player.entityInteractionRange();
-		float tickDelta = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
+		*///?}
+		
+		//? if >=1.21.2 {
+		/*float tickDelta = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
+		*///?} elif >=1.21 {
+		/*float tickDelta = minecraft.getTimer().getGameTimeDeltaPartialTick(false);
+		*///?} else {
+		float tickDelta = minecraft.getFrameTime();
+		//?}
+
 		cameraEntity.mark(true);
-		HitResult result = minecraft.gameRenderer.pick(cameraEntity, blockInteractionRange, entityInteractionRange, tickDelta);
+		//? if >=1.20.5 {
+		/*HitResult result = minecraft.gameRenderer.pick(cameraEntity, blockInteractionRange, entityInteractionRange, tickDelta);
+		*///?} else {
+		HitResult oldResult = minecraft.hitResult;
+		minecraft.gameRenderer.pick(tickDelta);
+		HitResult result = minecraft.hitResult;
+		minecraft.hitResult = oldResult;
+		//?}
 		cameraEntity.mark(false);
-		Profiler.get().pop();
+		ProfilerUtils.pop();
 
 		if (!(result instanceof EntityHitResult hitResult) || !(hitResult.getEntity() instanceof LivingEntity pattedEntity)) {
 			return null;

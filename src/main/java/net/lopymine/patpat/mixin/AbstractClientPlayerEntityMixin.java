@@ -1,23 +1,28 @@
 package net.lopymine.patpat.mixin;
 
-
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 
 //? >1.20.1 {
 import com.llamalad7.mixinextras.injector.wrapoperation.*;
-
-import com.mojang.authlib.GameProfile;
+import net.minecraft.client.resources.PlayerSkin;
+//?} else {
+/*import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+*///?}
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
+import org.jetbrains.annotations.Nullable;
+
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerEntityMixin {
+
+	@Unique
+	private static final ResourceLocation PAT_PAT_CAPE_ID = IdentifierUtils.modId("textures/cape/patpat_cape_hand.png");
 
 	//? >1.20.1 {
 	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerInfo;getSkin()Lnet/minecraft/client/resources/PlayerSkin;"), method = "getSkin")
@@ -27,27 +32,25 @@ public abstract class AbstractClientPlayerEntityMixin {
 		if (capeTexture != null || !PatPatClient.AUTHORS.contains(instance.getProfile().getId())) {
 			return call;
 		}
-		ResourceLocation patpatCapeTexture = IdentifierUtils.textureId("cape/patpat_cape_hand.png");
-		return new PlayerSkin(call.texture(), call.textureUrl(), patpatCapeTexture, call.elytraTexture(), call.model(), call.secure());
+		return new PlayerSkin(call.texture(), call.textureUrl(), PAT_PAT_CAPE_ID, call.elytraTexture(), call.model(), call.secure());
 	}
 	//?} else {
-	/*@Shadow
-	@Nullable
-	protected abstract PlayerListEntry getPlayerListEntry();
 
-	@Inject(method = "getCapeTexture", at = @At("RETURN"), cancellable = true)
-	private void test(CallbackInfoReturnable<Identifier> cir) {
-		Identifier original = cir.getReturnValue();
+
+	/*@Shadow @Nullable protected abstract PlayerInfo getPlayerInfo();
+
+	@Inject(method = "getCloakTextureLocation", at = @At("RETURN"), cancellable = true)
+	private void test(CallbackInfoReturnable<ResourceLocation> cir) {
+		ResourceLocation original = cir.getReturnValue();
 		if (original != null) {
 			return;
 		}
-		PlayerListEntry playerListEntry = getPlayerListEntry();
+		PlayerInfo playerListEntry = this.getPlayerInfo();
 		if (playerListEntry == null) {
 			return;
 		}
-		if (PatPatClient.AUTHORS_UUIDS.contains(playerListEntry.getProfile().getId())) {
-			Identifier identifier = IdentifierUtils.textureId("cape/patpat_cape_hand.png");
-			cir.setReturnValue(identifier);
+		if (PatPatClient.AUTHORS.contains(playerListEntry.getProfile().getId())) {
+			cir.setReturnValue(PAT_PAT_CAPE_ID);
 		}
 	}
 	*///?}

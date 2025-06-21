@@ -11,7 +11,7 @@ import net.minecraft.network.chat.*;
 @SuppressWarnings("unused")
 public class SimpleCategory {
 
-	public static final Style NAME_STYLE = Style.EMPTY.withBold(true);
+	private static final Style NAME_STYLE = Style.EMPTY.withBold(true);
 
 	private final Builder builder;
 
@@ -19,10 +19,6 @@ public class SimpleCategory {
 		String categoryKey = ModMenuUtils.getCategoryKey(categoryId);
 		Component categoryName = ModMenuUtils.getName(categoryKey).withStyle(NAME_STYLE);
 		this.builder = ConfigCategory.createBuilder().name(categoryName);
-	}
-
-	public static MutableComponent getCategoryName(String categoryId) {
-		return ModMenuUtils.getName(ModMenuUtils.getCategoryKey(categoryId)).withStyle(NAME_STYLE);
 	}
 
 	public static SimpleCategory startBuilder(String categoryId) {

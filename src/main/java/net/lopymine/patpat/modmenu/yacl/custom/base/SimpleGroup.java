@@ -11,7 +11,7 @@ import net.minecraft.network.chat.*;
 @SuppressWarnings("unused")
 public class SimpleGroup {
 
-	public static final Style NAME_STYLE = Style.EMPTY.withBold(true);
+	private static final Style NAME_STYLE = Style.EMPTY.withBold(true);
 
 	private final Builder groupBuilder;
 	private final OptionDescription.Builder description;
@@ -25,10 +25,6 @@ public class SimpleGroup {
 		this.description  = OptionDescription.createBuilder().text(description);
 	}
 
-	public static MutableComponent getGroupName(String groupId) {
-		return ModMenuUtils.getName(ModMenuUtils.getGroupKey(groupId)).withStyle(NAME_STYLE);
-	}
-
 	public static SimpleGroup startBuilder(String groupId) {
 		return new SimpleGroup(groupId);
 	}
@@ -40,11 +36,6 @@ public class SimpleGroup {
 			}
 			this.groupBuilder.option(option);
 		}
-		return this;
-	}
-
-	public SimpleGroup withCustomDescription(ImageRenderer renderer) {
-		this.description.customImage(renderer);
 		return this;
 	}
 

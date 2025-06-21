@@ -13,7 +13,7 @@ public enum InputType implements StringRepresentable {
 	SCANCODE,
 	MOUSE;
 
-	public static final Codec<InputType> CODEC = StringRepresentable.fromValues(InputType::values);
+	public static final Codec<InputType> CODEC = StringRepresentable.fromEnum(InputType::values);
 
 	public InputConstants.Type toVanillaType() {
 		return switch (this) {
@@ -25,9 +25,9 @@ public enum InputType implements StringRepresentable {
 
 	public static InputType of(InputConstants.Type type) {
 		return switch (type) {
-			case InputConstants.Type.KEYSYM -> KEYSYM;
-			case InputConstants.Type.SCANCODE -> SCANCODE;
-			case InputConstants.Type.MOUSE -> MOUSE;
+			case KEYSYM -> KEYSYM;
+			case SCANCODE -> SCANCODE;
+			case MOUSE -> MOUSE;
 		};
 	}
 

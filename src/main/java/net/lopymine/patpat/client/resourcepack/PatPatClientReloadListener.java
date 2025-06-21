@@ -6,8 +6,6 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.fabricmc.fabric.api.resource.*;
 
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
@@ -21,7 +19,7 @@ public class PatPatClientReloadListener implements SimpleSynchronousResourceRelo
 
 	@Override
 	public ResourceLocation getFabricId() {
-		return IdentifierUtils.id("patpat_packs_listener");
+		return IdentifierUtils.modId("patpat_packs_listener");
 	}
 
 	@Override

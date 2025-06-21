@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.SoundConfig;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.utils.*;
@@ -24,13 +23,9 @@ public class PatPatClientSoundManager {
 	}
 
 	private static void registerModSound(String id) {
-		/*? >=1.19.3 {*/
-		net.minecraft.core.Registry
-		/*?} else {*/
-		/*net.minecraft.util.registry.Registry
-		*//*?}*/.register(
+		net.minecraft.core.Registry.register(
 				VersionedThings.SOUND_EVENT,
-				IdentifierUtils.id(id),
+				IdentifierUtils.modId(id),
 				SoundUtils.getSoundEvent(id)
 		);
 	}

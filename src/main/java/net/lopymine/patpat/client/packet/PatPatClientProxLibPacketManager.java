@@ -18,10 +18,10 @@ public class PatPatClientProxLibPacketManager {
 	//?}
 
 	public static void register() {
+		//? if proxlib {
 		if (!LoadedMods.PROX_LIB_MOD_LOADED) {
 			return;
 		}
-		//? if proxlib {
 		me.enderkill98.proxlib.client.ProxLib.addHandlerFor(PAT_PACKET_IDENTIFIER, (entity, id, data) -> {
 			PatPatClient.LOGGER.debug("Received ProxLib packet, ProxLib enabled: {}", PatPatClientProxLibManager.isEnabled());
 			if (!PatPatClientProxLibManager.isEnabled()) {
@@ -40,6 +40,7 @@ public class PatPatClientProxLibPacketManager {
 	}
 
 	public static void onPat(int pattedEntityId) {
+		//? if proxlib {
 		if (!LoadedMods.PROX_LIB_MOD_LOADED) {
 			return;
 		}
@@ -50,7 +51,6 @@ public class PatPatClientProxLibPacketManager {
 			System.out.println("Exceeding the limit!");
 			return;
 		}
-		//? if proxlib {
 		try {
 			int packetsCount = me.enderkill98.proxlib.client.ProxLib.sendPacket(Minecraft.getInstance(), PAT_PACKET_IDENTIFIER, encodeProxyPatPacket(pattedEntityId));
 			PatPatClient.LOGGER.debug("Sent proxy packets ({}) to pat entity with id {}", packetsCount, pattedEntityId);

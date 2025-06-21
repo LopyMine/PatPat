@@ -1,7 +1,7 @@
 package net.lopymine.patpat.mixin;
 
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.gui.screens.options.controls.*;
+import net.minecraft.client.gui.screens./*? if >=1.21 {*//*options.*//*?}*/controls.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -28,7 +28,9 @@ public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 				keybinding.sendBindingKeys();
 				this.selectedKey = null;
 			}
+			//? if >=1.19.4 {
 			this.keyBindsList.refreshEntries();
+			//?}
 			cir.setReturnValue(false);
 		}
 	}
@@ -41,7 +43,9 @@ public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 				keybinding.sendBindingKeys();
 				this.selectedKey = null;
 			}
+			//? if >=1.19.4 {
 			this.keyBindsList.refreshEntries();
+			//?}
 			cir.setReturnValue(false);
 		}
 	}
@@ -51,7 +55,9 @@ public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 		if (this.selectedKey instanceof PatPatKeybinding keybinding && keybinding.isBinding()) {
 			keybinding.sendBindingKeys();
 			this.selectedKey = null;
+			//? if >=1.19.4 {
 			this.keyBindsList.refreshEntries();
+			//?}
 		}
 	}
 }

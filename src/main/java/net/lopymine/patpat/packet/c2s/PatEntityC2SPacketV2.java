@@ -17,7 +17,7 @@ public class PatEntityC2SPacketV2 implements C2SPatPacket<PatEntityC2SPacketV2> 
 
 	public static final String PACKET_ID = "pat_entity_c2s_packet_v2";
 
-	public static final PatPatPacketType<PatEntityC2SPacketV2> TYPE = new PatPatPacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityC2SPacketV2::new);
+	public static final PatPatPacketType<PatEntityC2SPacketV2> TYPE = new PatPatPacketType<>(IdentifierUtils.modId(PACKET_ID), PatEntityC2SPacketV2::new);
 
 	private final int pattedEntityId;
 
@@ -41,7 +41,7 @@ public class PatEntityC2SPacketV2 implements C2SPatPacket<PatEntityC2SPacketV2> 
 	}
 
 	@Override
-	public PatPatPacketType<PatEntityC2SPacketV2> getType() {
+	public PatPatPacketType<PatEntityC2SPacketV2> getPatPatType() {
 		return TYPE;
 	}
 }

@@ -29,7 +29,7 @@ public class SoundConfig {
 		return null;
 	}, soundConfig -> {
 		if ((soundConfig.getMinPitch() == 1.0F) && (soundConfig.getMaxPitch() == 1.0F) && (soundConfig.getVolume() == 1.0F)) {
-			return Either.right(soundConfig.getSound()./*? <1.21.2 {*//*getId()*//*?} else {*/location()/*?}*/.toString());
+			return Either.right(soundConfig.getSound()./*? <1.21.2 {*/getLocation()/*?} else {*//*location()*//*?}*/.toString());
 		}
 		return Either.left(soundConfig);
 	});

@@ -18,7 +18,7 @@ public class PatEntityS2CPacketV2 implements S2CPatPacket<PatEntityS2CPacketV2> 
 
 	public static final String PACKET_ID = "pat_entity_s2c_packet_v2";
 
-	public static final PatPatPacketType<PatEntityS2CPacketV2> TYPE = new PatPatPacketType<>(IdentifierUtils.id(PACKET_ID), PatEntityS2CPacketV2::new);
+	public static final PatPatPacketType<PatEntityS2CPacketV2> TYPE = new PatPatPacketType<>(IdentifierUtils.modId(PACKET_ID), PatEntityS2CPacketV2::new);
 
 	private final int pattedEntityId;
 	private final int whoPattedId;
@@ -52,7 +52,7 @@ public class PatEntityS2CPacketV2 implements S2CPatPacket<PatEntityS2CPacketV2> 
 	}
 
 	@Override
-	public PatPatPacketType<PatEntityS2CPacketV2> getType() {
+	public PatPatPacketType<PatEntityS2CPacketV2> getPatPatType() {
 		return TYPE;
 	}
 }

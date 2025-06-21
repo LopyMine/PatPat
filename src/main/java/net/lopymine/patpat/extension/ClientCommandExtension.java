@@ -17,7 +17,7 @@ public class ClientCommandExtension {
 	}
 
 	public static void sendMsg(CommandContext<FabricClientCommandSource> context, String feedback) {
-		Component text = /*? >=1.20 {*/Component.literal(feedback)/*?} else {*//*Text.of(feedback)*//*?}*/;
+		Component text = TextUtils.literal(feedback);
 		sendMsg(context, text);
 	}
 

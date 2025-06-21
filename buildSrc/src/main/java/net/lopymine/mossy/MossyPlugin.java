@@ -62,7 +62,7 @@ public class MossyPlugin implements Plugin<Project> {
 		//
 
 		MossyPlugin.configureExtensions(project, this);
-		MossyPlugin.configureTasks(project);
+		MossyPlugin.configureTasks(project, this);
 
 		LOGGER.log("Project Version: %s", project.getVersion());
 		LOGGER.log("Java Version: %s", this.javaVersionIndex);
@@ -78,7 +78,7 @@ public class MossyPlugin implements Plugin<Project> {
 		});
 	}
 
-	private static void configureTasks(@NotNull Project project) {
+	private static void configureTasks(@NotNull Project project, MossyPlugin plugin) {
 		project.getTasks().register("generatePublishWorkflowsForEachVersion", GeneratePublishWorkflowsForEachVersionTask.class, (task) -> {
 			task.setGroup("mossy");
 		});
@@ -87,7 +87,9 @@ public class MossyPlugin implements Plugin<Project> {
 		});
 		project.getTasks().register("regenerateRunConfigurations", Delete.class, (task) -> {
 			task.setGroup("mossy");
-			task.delete(getRootFile(project, ".idea/runConfigurations"));
+			String version = plugin.getProjectMultiVersion().projectVersion();
+			task.delete(getRootFile(project, ".idea/runConfigurations/Minecraft_Client___%s__%s.xml".formatted(version.replace(".", "_"), version)));
+			task.delete(getRootFile(project, ".idea/runConfigurations/Minecraft_Server___%s__%s.xml".formatted(version.replace(".", "_"), version)));
 			task.finalizedBy("ideaSyncTask");
 		});
 		project.getTasks().register("rebuildLibs", Delete.class, task -> {

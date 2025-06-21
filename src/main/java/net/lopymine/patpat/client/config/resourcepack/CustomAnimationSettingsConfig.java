@@ -21,14 +21,14 @@ import org.jetbrains.annotations.Nullable;
 public final class CustomAnimationSettingsConfig {
 
 	public static final Codec<CustomAnimationSettingsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.STRING.fieldOf("texture").xmap(IdentifierUtils::textureId, ResourceLocation::toString).forGetter(CustomAnimationSettingsConfig::getTexture),
+			Codec.STRING.fieldOf("texture").xmap(IdentifierUtils::vanillaId, ResourceLocation::toString).forGetter(CustomAnimationSettingsConfig::getTexture),
 			Codec.INT.fieldOf("duration").forGetter(CustomAnimationSettingsConfig::getDuration),
 			FrameConfig.CODEC.fieldOf("frame").forGetter(CustomAnimationSettingsConfig::getFrameConfig),
 			SoundConfig.STRINGED_CODEC.optionalFieldOf("sound").forGetter(CustomAnimationSettingsConfig::getOptionalSoundConfig)
 	).apply(instance, CustomAnimationSettingsConfig::new));
 
 	public static final CustomAnimationSettingsConfig DEFAULT_PATPAT_ANIMATION = new CustomAnimationSettingsConfig(
-			IdentifierUtils.textureId("default/patpat.png"),
+			IdentifierUtils.modId("textures/default/patpat.png"),
 			240,
 			FrameConfig.DEFAULT_FRAME,
 			Optional.of(SoundConfig.PATPAT_SOUND)

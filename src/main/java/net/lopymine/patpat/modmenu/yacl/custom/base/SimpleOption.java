@@ -45,12 +45,6 @@ public class SimpleOption {
 					.name(ModMenuUtils.getName(this.optionKey));
 		}
 
-		public Builder<T> withCustomDescription(ImageRenderer renderer) {
-			OptionDescription.Builder builder = OptionDescription.createBuilder().customImage(renderer);
-			this.optionBuilder.description(builder.build());
-			return this;
-		}
-
 		public Builder<T> withDescription(SimpleContent content) {
 			OptionDescription.Builder builder = OptionDescription.createBuilder().text(ModMenuUtils.getDescription(this.optionKey));
 			if (content == SimpleContent.IMAGE) {
@@ -93,12 +87,6 @@ public class SimpleOption {
 					.action(biConsumer);
 		}
 
-		public ButtonBuilder withCustomDescription(ImageRenderer renderer) {
-			OptionDescription.Builder builder = OptionDescription.createBuilder().customImage(renderer);
-			this.optionBuilder.description(builder.build());
-			return this;
-		}
-
 		public ButtonBuilder withDescription(SimpleContent content) {
 			OptionDescription.Builder builder = OptionDescription.createBuilder().text(ModMenuUtils.getDescription(this.optionKey));
 			if (content == SimpleContent.IMAGE) {
@@ -128,12 +116,6 @@ public class SimpleOption {
 			this.optionKey     = ModMenuUtils.getGroupKey(optionId);
 			this.optionBuilder = ListOption.<T>createBuilder()
 					.name(ModMenuUtils.getName(this.optionKey));
-		}
-
-		public ListOptionBuilder<T> withCustomDescription(ImageRenderer renderer) {
-			OptionDescription.Builder builder = OptionDescription.createBuilder().customImage(renderer);
-			this.optionBuilder.description(builder.build());
-			return this;
 		}
 
 		public ListOptionBuilder<T> withDescription(SimpleContent content) {

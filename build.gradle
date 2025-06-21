@@ -22,7 +22,7 @@ mossyDependencies {
 		// - Or if you want to disable it and handle by yourself, just disable it auto handling:
 		// disable("just_mod_id")
 
-		//override("modCompileOnly", "flashback")
+		override("modCompileOnly", "flashback")
 
 		// Fabric Permissions Api
 		disable("fabric-permissions-api")
@@ -36,7 +36,7 @@ mossyDependencies {
 		if (stonecutter.compare("1.20.5", mcVersion) == 0) {
 			disable("replaymod")
 		} else {
-			//override("modCompileOnly", "replaymod")
+			override("modCompileOnly", "replaymod")
 		}
 	}
 }
@@ -70,18 +70,10 @@ repositories {
 dependencies {
 	def mcVersion = stonecutter.current.version.toString()
 
-	if (mcVersion == "1.16.5") {
-		mappings loom.layered {
-			officialMojangMappings()
-			//it.mappings(file("mappingsfix.tiny"))
-			//println "[Using fix for mappings]"
-		}
-	} else {
-		mappings loom.officialMojangMappings()
-	}
+	mappings loom.officialMojangMappings()
 
 	// Fabric permission api
-	def fpaVersion = prop("dep.fabric-permissions-api")
+	def fpaVersion = prop("build.fabric-permissions-api")
 	include(modImplementation('me.lucko:fabric-permissions-api:' + fpaVersion)){
 		exclude(group: "net.fabricmc.fabric-api")
 	}
@@ -121,6 +113,12 @@ dependencies {
 if (stonecutter.compare(stonecutter.current.version.toString(), "1.19.4") >= 0) {
 	test {
 		useJUnitPlatform()
+	}
+}
+
+configurations.configureEach {
+	resolutionStrategy {
+		force("net.fabricmc:fabric-loader:${prop("build.fabric_loader")}")
 	}
 }
 

@@ -60,7 +60,7 @@ public class PatPatServerPacketManager {
 			}
 		}
 
-		ServerLevel serverWorld = (ServerLevel) sender./*? >=1.18 {*/level()/*?} else {*//*world*//*?}*/;
+		ServerLevel serverWorld = (ServerLevel) sender./*? >=1.20 {*/level()/*?} elif >=1.18 {*//*level*//*?} else {*//*world*//*?}*/;
 		Entity entity = packet.getPattedEntity(serverWorld);
 		if (!(entity instanceof LivingEntity)) {
 			return;
@@ -84,7 +84,7 @@ public class PatPatServerPacketManager {
 	private static void registerPackets() {
 		// Register all packets
 		//? >=1.20.5 {
-		registerC2SPacket(HelloPatPatServerC2SPacket.TYPE);
+		/*registerC2SPacket(HelloPatPatServerC2SPacket.TYPE);
 		registerS2CPacket(HelloPatPatPlayerS2CPacket.TYPE);
 
 		// v2
@@ -96,17 +96,17 @@ public class PatPatServerPacketManager {
 		registerC2SPacket(PatEntityC2SPacket.TYPE);
 		registerS2CPacket(PatEntityS2CPacket.TYPE);
 		registerS2CPacket(PatEntityForReplayModS2CPacket.TYPE);
-		//?}
+		*///?}
 	}
 
 	//? >=1.20.5 {
-	private static <T extends BasePatPatPacket<T>> void  registerC2SPacket(PatPatPacketType<T> type) {
+	/*private static <T extends BasePatPatPacket<T>> void  registerC2SPacket(PatPatPacketType<T> type) {
 		PayloadTypeRegistry.playC2S().register(type.getPacketId(), type.getCodec());
 	}
 	private static <T extends BasePatPatPacket<T>> void  registerS2CPacket(PatPatPacketType<T> type) {
 		PayloadTypeRegistry.playS2C().register(type.getPacketId(), type.getCodec());
 	}
-	//?}
+	*///?}
 
 	public static PatPacket<ClientLevel, ?> getPatPacket(Entity pattedEntity, Entity whoPattedEntity) {
 		if (PLAYER_VERSIONS.get(whoPattedEntity.getUUID()).isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {

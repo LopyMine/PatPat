@@ -6,35 +6,34 @@ import org.jetbrains.annotations.*;
 
 public class IdentifierUtils {
 
-	private static final String TEXTURES_PATH = "textures/";
-
 	private IdentifierUtils() {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static ResourceLocation id(@NotNull String id) {
-		return IdentifierUtils.typeId(id, null);
+	public static ResourceLocation modId(@NotNull String path) {
+		return IdentifierUtils.id(PatPat.MOD_ID, path);
 	}
 
-	public static ResourceLocation textureId(@NotNull String id) {
-		return IdentifierUtils.typeId(id, TEXTURES_PATH);
+	public static ResourceLocation vanillaId(@NotNull String path) {
+		return IdentifierUtils.id("minecraft", path);
 	}
 
-	public static ResourceLocation typeId(@NotNull String id, @Nullable String type) {
-		String namespace = PatPat.MOD_ID;
-		String path = id;
+	public static ResourceLocation id(String namespace, String path) {
+		String name = namespace;
+		String location = path;
+
 		String[] split = path.split(":");
 		if (split.length >= 2) {
-			namespace = split[0];
-			path      = split[1];
+			name     = split[0];
+			location = split[1];
 		}
-		if (type != null && !path.startsWith(type)) {
-			path = type + path;
-		}
-		//? >=1.19 {
-		return ResourceLocation.fromNamespaceAndPath(namespace, path);
+
+		//? >=1.21 {
+		/*return ResourceLocation.fromNamespaceAndPath(name, location);
+		*///?} elif >=1.19 {
+		return new ResourceLocation(name, location);
 		//?} else {
-		/*return new Identifier(namespace, path);
+		/*return new Identifier(name, location);
 		*///?}
 	}
 }

@@ -78,7 +78,7 @@ public class PatPatServerConfigMigrateVersion0 extends AbstractConfigMigrateHand
 			Map<UUID, String> oldConfigMap = new HashMap<>();
 			JsonObject jsonObject = rootObj.getAsJsonObject("list");
 
-			jsonObject.asMap().entrySet().forEach(entry -> {
+			jsonObject/*? if >=1.19.3 {*/.asMap()/*?}*/.entrySet().forEach(entry -> {
 				try {
 					String uuid = entry.getKey();
 					String nickname = entry.getValue().getAsString();

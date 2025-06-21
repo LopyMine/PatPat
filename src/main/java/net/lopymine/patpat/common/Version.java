@@ -1,5 +1,7 @@
 package net.lopymine.patpat.common;
 
+import net.minecraft.network.FriendlyByteBuf;
+
 import com.mojang.serialization.Codec;
 
 import net.lopymine.patpat.PatPat;
@@ -20,6 +22,17 @@ public record Version(int major, int minor, int patch) {
 	public static final Version CURRENT_MOD_VERSION = Version.of(PatPat.MOD_VERSION.substring(0, PatPat.MOD_VERSION.indexOf('+')));
 	public static final Version PACKET_V1_VERSION = new Version(1, 0, 0);
 	public static final Version PACKET_V2_VERSION = new Version(1, 2, 0);
+
+	public static Version readVersion(FriendlyByteBuf buf) {
+		try {
+			int major = buf.readUnsignedByte();
+			int minor = buf.readUnsignedByte();
+			int patch = buf.readUnsignedByte();
+			return new Version(major, minor, patch);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Failed to parse version:", e);
+		}
+	}
 
 	public static Version of(@NotNull String version) {
 		String[] numbers = version.split("\\.");

@@ -12,12 +12,12 @@ public class SoundUtils {
 
 	@NotNull
 	public static SoundEvent getSoundEvent(@NotNull String value) {
-		ResourceLocation id = IdentifierUtils.id(value);
+		ResourceLocation id = IdentifierUtils.modId(value);
 		return /*? >=1.19.3 {*/SoundEvent.createVariableRangeEvent(id)/*?} else {*//*new SoundEvent(id)*//*?}*/;
 	}
 
 	@NotNull
 	public static String getTypeId(@NotNull SoundEvent sound) {
-		return sound./*? <1.21.2 {*//*getId()*//*?} else {*/location()/*?}*/.toString();
+		return sound./*? <1.21.2 {*/getLocation()/*?} else {*//*location()*//*?}*/.toString();
 	}
 }

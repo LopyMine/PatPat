@@ -25,22 +25,16 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @AllArgsConstructor
 public class PatPatStatsConfig {
 
-	public static final Codec<EntityType<?>> ENTITY_TYPE_CODEC = Codec.STRING.xmap(
-			(id) -> VersionedThings.ENTITY_TYPE.getValue(ResourceLocation.tryParse(id)),
-			(type) -> Optional.ofNullable(VersionedThings.ENTITY_TYPE.getKey(type))
-					.orElse(ResourceLocation.withDefaultNamespace("area_effect_cloud")).toString()
-	);
-
 	public static final Codec<PatPatStatsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			option("totalPatsCounter", new PatsCounter(0), PatsCounter.CODEC, PatPatStatsConfig::getTotalPatsCounter),
-			option("entities", new HashMap<>(), ENTITY_TYPE_CODEC, PatsCounter.CODEC, PatPatStatsConfig::getPatsPerEntity)
+			option("entities", new HashMap<>(), Codec.STRING, PatsCounter.CODEC, PatPatStatsConfig::getPatsPerEntity)
 	).apply(instance, PatPatStatsConfig::new));
 
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(PatPat.MOD_ID + "-client-stats.json5").toFile();
 	private static PatPatStatsConfig instance;
 
 	private PatsCounter totalPatsCounter;
-	private HashMap<EntityType<?>, PatsCounter> patsPerEntity;
+	private HashMap<String, PatsCounter> patsPerEntity;
 
 	private PatPatStatsConfig() {
 		throw new IllegalArgumentException();
@@ -48,9 +42,14 @@ public class PatPatStatsConfig {
 
 	public void count(LivingEntity pattedEntity) {
 		this.totalPatsCounter.totalPats++;
-		PatsCounter patsCounter = this.patsPerEntity.get(pattedEntity.getType());
+		ResourceLocation id = VersionedThings.ENTITY_TYPE.getKey(pattedEntity.getType());
+		if (id == null) {
+			return;
+		}
+		String entityId = id.toString();
+		PatsCounter patsCounter = this.patsPerEntity.get(entityId);
 		if (patsCounter == null) {
-			this.patsPerEntity.put(pattedEntity.getType(), new PatsCounter(0));
+			this.patsPerEntity.put(entityId, new PatsCounter(0));
 		} else {
 			patsCounter.totalPats++;
 		}

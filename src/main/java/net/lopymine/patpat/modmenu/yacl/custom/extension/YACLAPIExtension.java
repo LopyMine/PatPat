@@ -21,10 +21,11 @@ public class YACLAPIExtension {
 		Version currentYACLVersion = getCurrentYACLVersion();
 
 		if (currentYACLVersion.compareTo(getVersion(STATE_MANAGER_VERSION)) >= 0) {
+			//? if yacl: >=3.6.0 {
 			builder.state(instant ? StateManager.createInstant(binding) : StateManager.createSimple(binding));
+			//?}
 		} else {
 			builder.binding(binding);
-			//builder.instant(instant);
 		}
 
 		return builder;
@@ -34,7 +35,9 @@ public class YACLAPIExtension {
 		Version currentYACLVersion = getCurrentYACLVersion();
 
 		if (currentYACLVersion.compareTo(getVersion(STATE_MANAGER_VERSION)) >= 0) {
+			//? if yacl: >=3.6.0 {
 			builder.stateManager(instant ? StateManager.createInstant(binding) : StateManager.createSimple(binding));
+			//?}
 		} else {
 			builder.binding(binding);
 			builder.instant(instant);

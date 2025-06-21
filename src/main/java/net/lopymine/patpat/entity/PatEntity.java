@@ -2,9 +2,6 @@ package net.lopymine.patpat.entity;
 
 import lombok.*;
 import net.lopymine.patpat.client.config.resourcepack.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.world.TickRateManager;
 import net.minecraft.world.entity.LivingEntity;
 import java.util.*;
 
@@ -39,12 +36,12 @@ public class PatEntity {
 
 	public float getProgress(float tickDelta) {
 		//? >1.20.2 {
-		ClientLevel world = Minecraft.getInstance().level;
+		net.minecraft.client.multiplayer.ClientLevel world = net.minecraft.client.Minecraft.getInstance().level;
 		if (world == null) {
 			return 0;
 		}
 
-		TickRateManager tickManager = world.tickRateManager();
+		net.minecraft.world.TickRateManager tickManager = world.tickRateManager();
 		float tickMillis = tickManager.tickrate() > 20 ? (2500F / tickManager.millisecondsPerTick()) : 50F;
 		float v = Math.max(this.tickProgress, 0) * tickMillis;
 		float v1 = tickManager.isFrozen() ? 0 : tickDelta * tickMillis;

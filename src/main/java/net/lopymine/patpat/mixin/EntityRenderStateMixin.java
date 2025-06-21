@@ -1,7 +1,7 @@
 package net.lopymine.patpat.mixin;
 
 //? >=1.21.2 {
-import net.lopymine.patpat.utils.mixin.EntityRenderStateWithParent;
+/*import net.lopymine.patpat.utils.mixin.EntityRenderStateWithParent;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,4 +36,4 @@ public class EntityRenderStateMixin implements EntityRenderStateWithParent {
 		return this.tickDelta;
 	}
 }
-//?}
+*///?}

@@ -8,7 +8,6 @@ import net.minecraft.network.chat.*;
 
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.sub.*;
-import net.lopymine.patpat.modmenu.yacl.custom.base.*;
 import net.lopymine.patpat.utils.*;
 
 import java.util.function.Function;
@@ -16,6 +15,8 @@ import java.util.function.Function;
 public class ClothConfigConfigurationScreen {
 
 	public static final Function<Boolean, Component> ENABLED_OR_DISABLED_FORMATTER = ModMenuUtils.getEnabledOrDisabledFormatterColored();
+
+	public static final Style NAME_STYLE = Style.EMPTY.withBold(true);
 
 	private ClothConfigConfigurationScreen() {
 		throw new IllegalStateException("Screen class");
@@ -31,8 +32,8 @@ public class ClothConfigConfigurationScreen {
 				.setTitle(ModMenuUtils.getModTitle());
 
 		ConfigEntryBuilder entryBuilder = builder.entryBuilder();
-		MutableComponent title = SimpleCategory.getCategoryName("general")
-				.withStyle(SimpleCategory.NAME_STYLE);
+		MutableComponent title = getCategoryName("general")
+				.withStyle(NAME_STYLE);
 		ConfigCategory general = builder.getOrCreateCategory(title);
 
 		general.addEntry(getMainGroup(entryBuilder, config.getMainConfig(), defConfig.getMainConfig()));
@@ -48,7 +49,7 @@ public class ClothConfigConfigurationScreen {
 	}
 
 	private static SubCategoryListEntry getMainGroup(ConfigEntryBuilder entryBuilder, PatPatClientMainConfig config, PatPatClientMainConfig defConfig) {
-		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(SimpleGroup.getGroupName("main"));
+		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(getGroupName("main"));
 		subcategory.add(
 				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("enable_mod"), config.isModEnabled())
 						.setTooltip(ModMenuUtils.getOptionDescription("enable_mod"))
@@ -70,7 +71,7 @@ public class ClothConfigConfigurationScreen {
 	}
 
 	private static SubCategoryListEntry getResourcePackGroup(ConfigEntryBuilder entryBuilder, PatPatClientResourcePacksConfig config, PatPatClientResourcePacksConfig defConfig) {
-		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(SimpleGroup.getGroupName("custom_animations"));
+		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(getGroupName("custom_animations"));
 		subcategory.add(
 				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("skip_outdated_animations_enabled"), config.isSkipOldAnimationsEnabled())
 						.setTooltip(ModMenuUtils.getOptionDescription("skip_outdated_animations_enabled"))
@@ -84,7 +85,7 @@ public class ClothConfigConfigurationScreen {
 	}
 
 	private static SubCategoryListEntry getSoundGroup(ConfigEntryBuilder entryBuilder, PatPatClientSoundsConfig config, PatPatClientSoundsConfig defConfig) {
-		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(SimpleGroup.getGroupName("sound"));
+		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(getGroupName("sound"));
 		subcategory.add(
 				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("enable_sounds"), config.isSoundsEnabled())
 						.setTooltip(ModMenuUtils.getOptionDescription("enable_sounds"))
@@ -107,7 +108,7 @@ public class ClothConfigConfigurationScreen {
 	}
 
 	private static SubCategoryListEntry getVisualGroup(ConfigEntryBuilder entryBuilder, PatPatClientVisualConfig config, PatPatClientVisualConfig defConfig) {
-		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(SimpleGroup.getGroupName("visual"));
+		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(getGroupName("visual"));
 		subcategory.add(
 				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("hiding_nickname_enabled"), config.isHidingNicknameEnabled())
 						.setTooltip(ModMenuUtils.getOptionDescription("hiding_nickname_enabled"))
@@ -174,7 +175,7 @@ public class ClothConfigConfigurationScreen {
 	}
 
 	private static SubCategoryListEntry getMultiplayerGroup(ConfigEntryBuilder entryBuilder, PatPatClientMultiplayerConfig config, PatPatClientMultiplayerConfig defConfig) {
-		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(SimpleGroup.getGroupName("multiplayer"));
+		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(getGroupName("multiplayer"));
 		subcategory.add(
 				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("pat_me_enabled"), config.isPatMeEnabled())
 						.setTooltip(ModMenuUtils.getOptionDescription("pat_me_enabled"))
@@ -196,7 +197,7 @@ public class ClothConfigConfigurationScreen {
 	}
 
 	private static SubCategoryListEntry getProximityPacketsGroup(ConfigEntryBuilder entryBuilder, PatPatClientProximityPacketsConfig config, PatPatClientProximityPacketsConfig defConfig) {
-		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(SimpleGroup.getGroupName("proximity_packets"));
+		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(getGroupName("proximity_packets"));
 		subcategory.add(
 				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("proximity_packets_enabled"), config.isProximityPacketsEnabled())
 						.setTooltip(ModMenuUtils.getOptionDescription("proximity_packets_enabled"))
@@ -217,5 +218,14 @@ public class ClothConfigConfigurationScreen {
 		subcategory.setExpanded(true);
 		return subcategory.build();
 	}
+
+	public static MutableComponent getCategoryName(String categoryId) {
+		return ModMenuUtils.getName(ModMenuUtils.getCategoryKey(categoryId)).withStyle(NAME_STYLE);
+	}
+
+	public static MutableComponent getGroupName(String groupId) {
+		return ModMenuUtils.getName(ModMenuUtils.getGroupKey(groupId)).withStyle(NAME_STYLE);
+	}
+
 
 }

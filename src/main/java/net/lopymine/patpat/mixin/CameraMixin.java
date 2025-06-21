@@ -4,15 +4,10 @@ import com.llamalad7.mixinextras.injector.wrapoperation.*;
 import net.minecraft.client.Camera;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.BlockGetter;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
-//? <=1.20.2 {
-/*import net.minecraft.world.BlockView;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-*///?}
 
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
@@ -24,11 +19,12 @@ public class CameraMixin {
 	@Shadow
 	private float partialTickTime;
 	//?} else {
-	/*private float partialTickTime = 0;
+	/*@Unique
+	private float partialTickTime = 0;
 
-	@Inject(at = @At("HEAD"), method = "update")
-	private void onUpdate(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
-		this.lastTickDelta = tickDelta;
+	@Inject(at = @At("HEAD"), method = "setup")
+	private void onUpdate(BlockGetter area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+		this.partialTickTime = tickDelta;
 	}
 	*///?}
 

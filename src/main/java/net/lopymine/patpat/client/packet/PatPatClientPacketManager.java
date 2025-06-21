@@ -77,7 +77,7 @@ public class PatPatClientPacketManager {
 			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
 		}
 		PatPatClient.LOGGER.debug("[PONG] Sending HelloPatPatServerC2S packet to the server...");
-		PatPatClientNetworkManager.sendPacketToServer(new HelloPatPatServerC2SPacket());
+		PatPatClientNetworkManager.sendPacketToServer(packet.getPongPacket());
 	}
 
 	public static void handlePatting(S2CPatPacket<?> packet, boolean replayModPacket) {

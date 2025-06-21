@@ -42,7 +42,7 @@ public class ModMenuUtils {
 	}
 
 	public static ResourceLocation getContentId(SimpleContent content, String contentId) {
-		return IdentifierUtils.id(String.format("textures/config/%s.%s", contentId, content.getFileExtension()));
+		return IdentifierUtils.modId(String.format("textures/config/%s.%s", contentId, content.getFileExtension()));
 	}
 
 	public static Function<Boolean, Component> getEnabledOrDisabledFormatter() {

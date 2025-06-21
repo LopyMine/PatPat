@@ -4,7 +4,7 @@ import net.minecraft.network.protocol.Packet;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.compat.LoadedMods;
 
-//? !(=1.20.5) {
+//? replaymod {
 import com.replaymod.recording.ReplayModRecording;
 import com.replaymod.recording.packet.PacketListener;
 import com.replaymod.replay.ReplayModReplay;
@@ -13,7 +13,7 @@ import com.replaymod.replay.ReplayModReplay;
 public class ReplayModManager {
 
 	public static void sendDummyPacket(Packet<?> packet) {
-		//? !(=1.20.5) {
+		//? replaymod {
 		if (!LoadedMods.REPLAY_MOD_LOADED) {
 			return;
 		}
@@ -28,7 +28,7 @@ public class ReplayModManager {
 	}
 
 	public static boolean isInReplay() {
-		//? !(=1.20.5) {
+		//? replaymod {
 		if (!LoadedMods.REPLAY_MOD_LOADED) {
 			return false;
 		}

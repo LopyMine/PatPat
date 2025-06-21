@@ -26,16 +26,13 @@ public class MossyStonecutterManager {
 		properties.put("mod_version", project.getVersion().toString());
 
 		properties.forEach((key, value) -> {
-			addSwap(stonecutter, value, key);
+			stonecutter.getSwaps().put(key, getFormatted(value));
 		});
 
 		dependencies.forEach((modId, version) -> {
 			stonecutter.getConstants().put(modId, !version.equals("unknown"));
+			stonecutter.getDependencies().put(modId, version);
 		});
-	}
-
-	private static void addSwap(StonecutterBuildExtension stonecutter, String value, String propertyId) {
-		stonecutter.swap(propertyId, getFormatted(value));
 	}
 
 	private static @NotNull String getFormatted(String modVersion) {

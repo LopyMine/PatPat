@@ -151,27 +151,27 @@ public class PatPatClientManager {
 
 		ProfilerUtils.push("patpat$pick");
 		//? if >=1.20.5 {
-		/*double blockInteractionRange = player.blockInteractionRange();
+		double blockInteractionRange = player.blockInteractionRange();
 		double entityInteractionRange = player.entityInteractionRange();
-		*///?}
+		//?}
 		
 		//? if >=1.21.2 {
-		/*float tickDelta = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
-		*///?} elif >=1.21 {
+		float tickDelta = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
+		//?} elif >=1.21 {
 		/*float tickDelta = minecraft.getTimer().getGameTimeDeltaPartialTick(false);
 		*///?} else {
-		float tickDelta = minecraft.getFrameTime();
-		//?}
+		/*float tickDelta = minecraft.getFrameTime();
+		*///?}
 
 		cameraEntity.mark(true);
 		//? if >=1.20.5 {
-		/*HitResult result = minecraft.gameRenderer.pick(cameraEntity, blockInteractionRange, entityInteractionRange, tickDelta);
-		*///?} else {
-		HitResult oldResult = minecraft.hitResult;
+		HitResult result = minecraft.gameRenderer.pick(cameraEntity, blockInteractionRange, entityInteractionRange, tickDelta);
+		//?} else {
+		/*HitResult oldResult = minecraft.hitResult;
 		minecraft.gameRenderer.pick(tickDelta);
 		HitResult result = minecraft.hitResult;
 		minecraft.hitResult = oldResult;
-		//?}
+		*///?}
 		cameraEntity.mark(false);
 		ProfilerUtils.pop();
 

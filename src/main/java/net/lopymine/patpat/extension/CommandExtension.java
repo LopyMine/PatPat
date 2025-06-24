@@ -45,7 +45,7 @@ public class CommandExtension {
 
 	public static boolean hasPermission(CommandSourceStack context, String permission, int defaultLevel) {
 		//? <1.17.1 {
-		/*return context.hasPermissionLevel(defaultLevel);
+		/*return context./^? if >=1.17.1 {^/hasPermissionLevel/^?} else {^//^hasPermission^//^?}^/(defaultLevel);
 		 *///?} else {
 		return Permissions.check(context, permission, defaultLevel);
 		//?}

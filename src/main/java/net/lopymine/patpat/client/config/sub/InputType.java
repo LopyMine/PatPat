@@ -5,7 +5,7 @@ import net.minecraft.util.StringRepresentable;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.serialization.Codec;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.*;
 
 public enum InputType implements StringRepresentable {
 
@@ -13,7 +13,17 @@ public enum InputType implements StringRepresentable {
 	SCANCODE,
 	MOUSE;
 
-	public static final Codec<InputType> CODEC = StringRepresentable.fromEnum(InputType::values);
+	public static final Codec<InputType> CODEC = StringRepresentable.fromEnum(InputType::values/*? if <=1.18.2 {*//*, InputType::byName *//*?}*/);
+
+	@Nullable
+	private static InputType byName(String name) {
+		try {
+			return InputType.valueOf(name.toUpperCase());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public InputConstants.Type toVanillaType() {
 		return switch (this) {

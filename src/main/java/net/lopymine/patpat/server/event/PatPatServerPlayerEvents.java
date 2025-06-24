@@ -17,13 +17,13 @@ public class PatPatServerPlayerEvents {
 	}
 
 	public static void register() {
-		ServerPlayConnectionEvents.INIT.register((handler, server) -> { ServerPlayer player = /*? if >=1.21 {*/ /*handler.getPlayer() *//*?} else {*/ handler.player /*?}*/;
+		ServerPlayConnectionEvents.INIT.register((handler, server) -> { ServerPlayer player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
 			PatPatServerPacketManager.PLAYER_VERSIONS.put(player.getUUID(), Version.PACKET_V1_VERSION);
 			PatPat.LOGGER.debug("Player {} joined, send hello packet", player.getName().getString());
 			PatPatServerNetworkManager.sendPacketToPlayer(player, new HelloPatPatPlayerS2CPacket());
 		});
 
-		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> { ServerPlayer player = /*? if >=1.21 {*/ /*handler.getPlayer() *//*?} else {*/ handler.player /*?}*/;
+		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> { ServerPlayer player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
 			PatPatServerPacketManager.PLAYER_VERSIONS.remove(player.getUUID());
 			PatPat.LOGGER.debug("Player {} quit", player.getName().getString());
 		});

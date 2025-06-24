@@ -36,7 +36,7 @@ public class YACLConfigurationScreen {
 				.groups(getSoundGroup(defConfig.getSoundsConfig(), config.getSoundsConfig()))
 				.groups(getVisualGroup(defConfig.getVisualConfig(), config.getVisualConfig()))
 				.groups(getMultiplayerGroup(defConfig.getMultiPlayerConfig(), config.getMultiPlayerConfig()))
-				.groups(getProximityPatPacketsGroup(defConfig.getProximityPacketsConfig(), config.getProximityPacketsConfig()))
+				/*? if proxlib {*/.groups(getProximityPatPacketsGroup(defConfig.getProximityPacketsConfig(), config.getProximityPacketsConfig())) /*?}*/
 				.build();
 	}
 

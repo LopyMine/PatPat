@@ -21,7 +21,7 @@ public class PlayerExtension {
 
 	public static boolean hasPermission(ServerPlayer player, String permission, int defaultLevel) {
 		//? <1.17.1 {
-		/*return player.hasPermissionLevel(defaultLevel);
+		/*return player./^? if >=1.17.1 {^/hasPermissionLevel/^?} else {^//^hasPermissions^//^?}^/(defaultLevel);
 		*///?} else {
 		return Permissions.check(player, permission, defaultLevel);
 		 //?}
@@ -33,7 +33,7 @@ public class PlayerExtension {
 
 	public static CompletableFuture<Boolean> hasPermission(GameProfile profile, String permission, int defaultLevel, CommandContext<CommandSourceStack> context) {
 		//? <1.17.1 {
-		/*return CompletableFuture.completedFuture(context.getSource().getMinecraftServer().getPermissionLevel(profile) >= defaultLevel);
+		/*return CompletableFuture.completedFuture(context.getSource()./^? if >=1.17.1 {^/getMinecraftServer().getPermissionLevel(profile)/^?} else {^/ /^getServer().getProfilePermissions(profile) ^//^?}^/ >= defaultLevel);
 		*///?} else {
 		MinecraftServer server = context.getSource().getServer();
 		return Permissions.check(profile, permission, defaultLevel, server);

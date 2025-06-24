@@ -18,6 +18,6 @@ public class SoundUtils {
 
 	@NotNull
 	public static String getTypeId(@NotNull SoundEvent sound) {
-		return sound./*? <1.21.2 {*/getLocation()/*?} else {*//*location()*//*?}*/.toString();
+		return sound./*? <1.21.2 {*//*getLocation()*//*?} else {*/location()/*?}*/.toString();
 	}
 }

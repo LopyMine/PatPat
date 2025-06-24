@@ -1,6 +1,7 @@
 package net.lopymine.patpat.client.keybinding;
 
 import lombok.*;
+import net.lopymine.patpat.utils.TextUtils;
 import net.minecraft.client.*;
 import net.minecraft.network.chat.*;
 import org.lwjgl.glfw.GLFW;
@@ -18,8 +19,8 @@ import org.jetbrains.annotations.NotNull;
 public class PatPatKeybinding extends KeyMapping {
 
 	public static final KeybindingCombination DEFAULT_COMBINATION = new KeybindingCombination(
-			InputConstants.Type.KEYSYM.getOrCreate(InputConstants.KEY_LSHIFT),
-			InputConstants.Type.MOUSE.getOrCreate(InputConstants.MOUSE_BUTTON_RIGHT)
+			InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_LEFT_SHIFT),
+			InputConstants.Type.MOUSE.getOrCreate(GLFW.GLFW_MOUSE_BUTTON_2)
 	);
 
 	private final PressableKeybindingCombination combination = new PressableKeybindingCombination();
@@ -29,7 +30,7 @@ public class PatPatKeybinding extends KeyMapping {
 	private boolean canStartBinding = true;
 
 	public PatPatKeybinding(KeybindingCombination patCombination) {
-		super("patpat.keybinding.pat", InputConstants.UNKNOWN.getValue(), PatPat.MOD_NAME);
+		super("patpat.keybinding.pat", -1, PatPat.MOD_NAME);
 		this.combination.setAttributeKey(patCombination.getAttributeKey());
 		this.combination.setKey(patCombination.getKey());
 	}
@@ -122,7 +123,21 @@ public class PatPatKeybinding extends KeyMapping {
 	}
 
 	@Override
-	public @NotNull Component getTranslatedKeyMessage() {
+	@NotNull
+	public Component getTranslatedKeyMessage() {
+		//? if >=1.19 {
+		return this.getFullTranslatedKeyMessage();
+		//?} else {
+		/*if (this.combination.onlyOneKey()) {
+			return this.getFullTranslatedKeyMessage();
+		} else {
+			return TextUtils.literal("...");
+		}
+		*///?}
+	}
+
+	@NotNull
+	public Component getFullTranslatedKeyMessage() {
 		return this.combination.getCombinationLocalizedComponent(!this.isBinding());
 	}
 

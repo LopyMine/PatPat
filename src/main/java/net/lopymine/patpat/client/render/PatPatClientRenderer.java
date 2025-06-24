@@ -13,10 +13,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 //? <=1.21.4 {
-import com.mojang.blaze3d.systems.RenderSystem;
-/*?} else {*/
-/*import com.mojang.blaze3d.opengl.GlStateManager;
- *//*?}*/
+/*import com.mojang.blaze3d.systems.RenderSystem;
+*//*?} else {*/
+import com.mojang.blaze3d.opengl.GlStateManager;
+ /*?}*/
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -112,7 +112,7 @@ public class PatPatClientRenderer {
 		}
 
 		EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-		float tickDelta = context./*? if >=1.21 {*/ /*tickCounter().getGameTimeDeltaPartialTick(false); *//*?} else {*/ tickDelta(); /*?}*/
+		float tickDelta = context./*? if >=1.21 {*/ tickCounter().getGameTimeDeltaPartialTick(false); /*?} else {*/ /*tickDelta(); *//*?}*/
 		int light = dispatcher.getPackedLightCoords(player, tickDelta);
 
 		PatEntity patEntity = PatPatClientManager.getPatEntity(player);
@@ -148,17 +148,17 @@ public class PatPatClientRenderer {
 			return RenderResult.FAILED;
 		}
 
-		int numberToMirrorTexture = /*? >=1.21 {*//*1*//*?} else {*/ -1/*?}*/;
+		int numberToMirrorTexture = /*? >=1.21 {*/1/*?} else {*/ /*-1*//*?}*/;
 
 		CustomAnimationSettingsConfig animation = patEntity.getAnimation();
 		FrameConfig frameConfig = animation.getFrameConfig();
 		enableBlend();
 		//? <=1.20.4 {
-		float nameLabelHeight = entity != null ? entity.getBbHeight() : 0.0F;
-		 //?} else {
-		/*net.minecraft.world.phys.Vec3 vec3d = entity != null ? entity.getAttachments().getNullable(net.minecraft.world.entity.EntityAttachment.NAME_TAG, 0, entity.getViewYRot(tickDelta)) : null;
+		/*float nameLabelHeight = entity != null ? entity.getBbHeight() : 0.0F;
+		 *///?} else {
+		net.minecraft.world.phys.Vec3 vec3d = entity != null ? entity.getAttachments().getNullable(net.minecraft.world.entity.EntityAttachment.NAME_TAG, 0, entity.getViewYRot(tickDelta)) : null;
 		float nameLabelHeight = vec3d != null ? (float) vec3d.y: 0.0F;
-		*///?}
+		//?}
 
 		matrices.pushPose();
 		matrices.translate(
@@ -196,7 +196,7 @@ public class PatPatClientRenderer {
 		float v2 = 1.0F;
 
 		Pose peek = matrices.last();
-		/*? >=1.19.3 {*/org.joml.Matrix4f/*?} else {*/ /*com.mojang.math.Matrix4f*//*?}*/ matrix4f = peek./*? <=1.17.1 {*//*getModel()*//*?} else {*/pose()/*?}*/;
+		/*? >=1.19.3 {*/org.joml.Matrix4f/*?} else {*/ /*com.mojang.math.Matrix4f*//*?}*/ matrix4f = peek.pose();
 		VertexConsumer buffer = provider.getBuffer(RenderType.entityTranslucent(animation.getTexture()));
 
 		buffer.withVertex(matrix4f, x1, y1, z).withColor(255, 255, 255, 255).withUv(u1, v1).withOverlay(OverlayTexture.NO_OVERLAY).withLight(light).withNormal(0, 1, 0).end();
@@ -234,18 +234,18 @@ public class PatPatClientRenderer {
 
 	private static void enableBlend() {
 		//? <=1.21.4 {
-		RenderSystem.enableBlend();
-		/*?} else {*/
-		/*GlStateManager._enableBlend();
-		 *//*?}*/
+		/*RenderSystem.enableBlend();
+		*//*?} else {*/
+		GlStateManager._enableBlend();
+		 /*?}*/
 	}
 
 	private static void disableBlend() {
 		//? <=1.21.4 {
-		RenderSystem.disableBlend();
-		/*?} else {*/
-		/*GlStateManager._disableBlend();
-		 *//*?}*/
+		/*RenderSystem.disableBlend();
+		*//*?} else {*/
+		GlStateManager._disableBlend();
+		 /*?}*/
 	}
 
 }

@@ -33,7 +33,7 @@ public class NoConfigLibrariesScreen {
 			@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 				if (keyCode == 256 && this.shouldCloseOnEsc()) {
-					Minecraft.getInstance()./*? <=1.17 {*//*openScreen*//*?} else {*/setScreen/*?}*/(parent);
+					Minecraft.getInstance().setScreen(parent);
 					return true;
 				}
 				return super.keyPressed(keyCode, scanCode, modifiers);
@@ -48,7 +48,7 @@ public class NoConfigLibrariesScreen {
 
 	private static void onConfirm(boolean bl) {
 		try {
-			String url = (bl ? YACL_MODRINTH_LINK : CLOTH_CONFIG_API_MODRINTH_LINK).formatted(SharedConstants.getCurrentVersion().getName());
+			String url = (bl ? YACL_MODRINTH_LINK : CLOTH_CONFIG_API_MODRINTH_LINK).formatted(SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*//* getName *//*?}*/());
 
 			URI link = new URI(url);
 			String string = link.getScheme();

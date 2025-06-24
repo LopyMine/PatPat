@@ -24,7 +24,7 @@ public class TextUtils {
 		//? >=1.19 {
 		return Component.literal(String.valueOf(text));
 		//?} else {
-		/*return new LiteralText(text);
+		/*return new TextComponent(String.valueOf(text));
 		*///?}
 	}
 
@@ -77,12 +77,11 @@ public class TextUtils {
 		if (arg instanceof Component component) {
 			return component;
 		}
-		return Component.literal(String.valueOf(arg));
+		return TextUtils.literal(String.valueOf(arg));
 	}
 
 	public static boolean isPrimitive(Object object) {
 		return object instanceof Number || object instanceof Boolean || object instanceof String;
 	}
-
 
 }

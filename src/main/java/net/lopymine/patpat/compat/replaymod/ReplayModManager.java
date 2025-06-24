@@ -5,16 +5,16 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.compat.LoadedMods;
 
 //? replaymod {
-import com.replaymod.recording.ReplayModRecording;
+/*import com.replaymod.recording.ReplayModRecording;
 import com.replaymod.recording.packet.PacketListener;
 import com.replaymod.replay.ReplayModReplay;
-//?}
+*///?}
 
 public class ReplayModManager {
 
 	public static void sendDummyPacket(Packet<?> packet) {
 		//? replaymod {
-		if (!LoadedMods.REPLAY_MOD_LOADED) {
+		/*if (!LoadedMods.REPLAY_MOD_LOADED) {
 			return;
 		}
 		if (ReplayModRecording.instance.getConnectionEventHandler() != null) {
@@ -24,12 +24,12 @@ public class ReplayModManager {
 				packetListener.save(packet);
 			}
 		}
-		//?}
+		*///?}
 	}
 
 	public static boolean isInReplay() {
 		//? replaymod {
-		if (!LoadedMods.REPLAY_MOD_LOADED) {
+		/*if (!LoadedMods.REPLAY_MOD_LOADED) {
 			return false;
 		}
 		ReplayModReplay instance = ReplayModReplay.instance;
@@ -37,8 +37,8 @@ public class ReplayModManager {
 			return false;
 		}
 		return instance.getReplayHandler() != null;
-		//?} else {
-		/*return false;
-		 *///?}
+		*///?} else {
+		return false;
+		 //?}
 	}
 }

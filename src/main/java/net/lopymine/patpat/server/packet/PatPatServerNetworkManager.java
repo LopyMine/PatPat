@@ -12,7 +12,7 @@ public class PatPatServerNetworkManager {
 
 	public static <T extends BasePatPatPacket<T>> void registerReceiver(PatPatPacketType<T> id, PacketListener<T> listener) {
 		ServerPlayNetworking.registerGlobalReceiver(/*? if >=1.19.4 {*/ id.getPacketId(), /*?} else {*/ /*id.getId(), *//*?}*/
-				/*? >=1.20.5 {*//*(packet, context) -> { ServerPlayer sender = context.player(); PacketSender responseSender = context.responseSender(); *//*?} elif <=1.20.4 && >=1.19.4 {*/(packet, sender, responseSender) -> {/*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { T packet = id.getFactory().apply(buf); *//*?}*/
+				/*? >=1.20.5 {*/(packet, context) -> { ServerPlayer sender = context.player(); PacketSender responseSender = context.responseSender(); /*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, sender, responseSender) -> {*//*?} else {*//*(server, sender, networkHandler, buf, responseSender) -> { T packet = id.getFactory().apply(buf); *//*?}*/
 					if (packet instanceof PingPatPacket<?, ?> pingPacket) {
 						pingPacket.setPacketSender(responseSender);
 					}

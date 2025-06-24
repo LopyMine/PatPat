@@ -1,2 +1,9 @@
 accessWidener v2 named
 # 1.18.2 AW
+
+accessible field net/minecraft/client/Camera eyeHeightOld F
+accessible field net/minecraft/client/Camera eyeHeight F
+
+accessible field net/minecraft/client/gui/components/Button onTooltip Lnet/minecraft/client/gui/components/Button$OnTooltip;
+mutable field net/minecraft/client/gui/components/Button onTooltip Lnet/minecraft/client/gui/components/Button$OnTooltip;
+accessible field net/minecraft/client/gui/screens/controls/KeyBindsList keyBindsScreen Lnet/minecraft/client/gui/screens/controls/KeyBindsScreen;

@@ -11,7 +11,9 @@
 		/*? =1.16.5*/
 		/*"TitleScreenMixin",*/
 		/*? >=1.21.2*/
-		/*"EntityRenderStateMixin",*/
+		"EntityRenderStateMixin",
+		/*? <=1.18.1*/
+		/*"ScreenMixin",*/
 		"MinecraftClientMixin",
 		"CameraMixin",
 		"AbstractClientPlayerEntityMixin",

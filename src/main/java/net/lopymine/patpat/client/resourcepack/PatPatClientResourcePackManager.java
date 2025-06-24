@@ -62,7 +62,7 @@ public class PatPatClientResourcePackManager {
 					return;
 				}
 			}
-			CustomAnimationConfig animationConfig = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json)/*? if >=1.20.5 {*//*.getOrThrow()*//*?} else {*/.getOrThrow(false, PatPatClient.LOGGER::error)/*?}*/.getFirst();
+			CustomAnimationConfig animationConfig = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, PatPatClient.LOGGER::error)*//*?}*/.getFirst();
 			animationConfig.setConfigPath("%s/%s".formatted(packName, path));
 			configs.add(animationConfig);
 		} catch (Exception e) {

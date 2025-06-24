@@ -19,7 +19,7 @@ public class ConfigUtils {
 		int index = 0;
 
 		while (Files.exists(parentDir.resolve(backupName))) {
-			backupName = String.format("%s%d.bkp", fileName, ++index);
+			backupName = String.format("%s-%d.bkp", fileName, ++index);
 		}
 
 		return backupName;
@@ -45,7 +45,7 @@ public class ConfigUtils {
 			return config;
 		}
 		try (FileWriter writer = new FileWriter(location, StandardCharsets.UTF_8)) {
-			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*//*.getOrThrow());*//*?} else*/.getOrThrow(false, logger::error));
+			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, logger::error));*/
 			writer.write(json);
 		} catch (Exception e) {
 			logger.error("Failed to create config", e);
@@ -58,7 +58,7 @@ public class ConfigUtils {
 			return ConfigUtils.create(codec, location, logger);
 		}
 		try (FileReader reader = new FileReader(location, StandardCharsets.UTF_8)) {
-			return codec.decode(JsonOps.INSTANCE, /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/)/*? if >=1.20.5 {*//*.getOrThrow()*//*?} else {*/.getOrThrow(false, logger::error)/*?}*/.getFirst();
+			return codec.decode(JsonOps.INSTANCE, /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, logger::error)*//*?}*/.getFirst();
 		} catch (Exception e) {
 			logger.error("Failed to read config", e);
 			createBackup(location);
@@ -69,7 +69,7 @@ public class ConfigUtils {
 	public static <A> void saveConfig(A config, Codec<A> codec, File location, PatLogger logger) {
 		logger.debug("Saving config...");
 		try (FileWriter writer = new FileWriter(location, StandardCharsets.UTF_8)) {
-			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*//*.getOrThrow());*//*?} else*/.getOrThrow(false, logger::error));
+			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, logger::error));*/
 			writer.write(json);
 		} catch (Exception e) {
 			logger.error("Failed to save config:", e);

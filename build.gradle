@@ -87,10 +87,12 @@ dependencies {
 	// GeckoLib
 	def geckoLibVersion = prop("dep.geckolib")
 	if (geckoLibVersion != "unknown") {
-		if (mcVersion == "1.17.1") {
-			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.17:${geckoLibVersion}")
+		if (mcVersion == "1.16.5") {
+			modCompileOnly("software.bernie.geckolib:geckolib-forge-${mcVersion}:${geckoLibVersion}")
+		} else if (mcVersion == "1.17.1") {
+			modCompileOnly("software.bernie.geckolib:geckolib-1.17.1-forge:${geckoLibVersion}")
 		} else if (mcVersion == "1.18.2") {
-			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.18:${geckoLibVersion}")
+			modCompileOnly("software.bernie.geckolib:geckolib-forge-1.18:${geckoLibVersion}")
 		} else if (mcVersion == "1.19.1" || mcVersion == "1.19.2") {
 			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.19:${geckoLibVersion}")
 		} else if (mcVersion == "1.20") {

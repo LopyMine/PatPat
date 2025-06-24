@@ -33,7 +33,7 @@ public class PatPatServerInfoCommand {
 
 	public static int version(CommandContext<CommandSourceStack> context) {
 		String version = PatPat.MOD_VERSION + "+" + PatPat.BUILD_CODE_TIME;
-		String minecraftVersion = SharedConstants.getCurrentVersion().getName();
+		String minecraftVersion = SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*//* getName *//*?}*/();
 		String debugInformation = "Platform: %s%nMinecraft: %s%nVersion: %s"
 				.formatted(PLATFORM, minecraftVersion, version);
 

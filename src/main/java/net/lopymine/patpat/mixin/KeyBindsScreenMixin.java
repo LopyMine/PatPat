@@ -1,7 +1,7 @@
 package net.lopymine.patpat.mixin;
 
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.gui.screens./*? if >=1.21 {*//*options.*//*?}*/controls.*;
+import net.minecraft.client.gui.screens./*? if >=1.21 {*/options./*?}*/controls.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -13,12 +13,15 @@ import net.lopymine.patpat.utils.mixin.ScreenWithPatPatKeybinding;
 
 import org.jetbrains.annotations.Nullable;
 
-@Mixin(KeyBindsScreen.class)
+@Mixin(/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*ControlsScreen *//*?}*/.class)
 public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 
 	@Shadow @Nullable public KeyMapping selectedKey;
 
-	@Shadow private KeyBindsList keyBindsList;
+	//? if >=1.19.4 {
+	@Shadow
+	private KeyBindsList keyBindsList;
+	//?}
 
 	@Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
 	private void handlePatPatKeybindingOnKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {

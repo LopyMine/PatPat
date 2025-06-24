@@ -11,8 +11,8 @@ import net.lopymine.patpat.packet.*;
 public class PatPatClientNetworkManager {
 
 	public static <T extends BasePatPatPacket<T>> void registerReceiver(PatPatPacketType<T> id, PacketListener<T> listener) {
-		ClientPlayNetworking.registerGlobalReceiver(/*? if >=1.19.4 {*/ id.getPacketId(), /*?} else {*/ /*id.getId(), *//*?}*/
-				/*? >=1.20.5 {*//*(packet, context) -> { PacketSender responseSender = context.responseSender();*//*?} elif <=1.20.4 && >=1.19.4 {*/(packet, player, responseSender) -> {/*?} else {*//*(client, handler, buf, responseSender) -> { T packet = id.getFactory().apply(buf); *//*?}*/
+		ClientPlayNetworking.registerGlobalReceiver(/*? if >=1.19.4 {*/ id.getPacketId(), /*?} else {*//*id.getId(),*//*?}*/
+				/*? >=1.20.5 {*/(packet, context) -> { PacketSender responseSender = context.responseSender();/*?} elif <=1.20.4 && >=1.19.4 {*//*(packet, player, responseSender) -> {*//*?} else {*//*(client, handler, buf, responseSender) -> { T packet = id.getFactory().apply(buf); *//*?}*/
 					if (packet instanceof PingPatPacket<?, ?> pingPacket) {
 						pingPacket.setPacketSender(responseSender);
 					}

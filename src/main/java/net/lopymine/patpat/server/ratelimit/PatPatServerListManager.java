@@ -3,7 +3,7 @@ package net.lopymine.patpat.server.ratelimit;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 
 import net.lopymine.patpat.server.config.*;
-import net.lopymine.patpat.server.config.sub.PatPatServerPlayerListConfig;
+import net.lopymine.patpat.server.config.PatPatServerPlayerListConfig;
 import net.minecraft.server.level.ServerPlayer;
 import java.util.UUID;
 

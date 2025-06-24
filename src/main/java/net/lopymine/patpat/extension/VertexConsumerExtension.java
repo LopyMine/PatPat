@@ -4,13 +4,6 @@ import /*? >=1.19.3 {*/org.joml.Matrix4f/*?} else {*/ /*com.mojang.math.Matrix4f
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-
-//		buffer.addVertex(matrix4f, x2, y1, z)
-//		.setColor(255, 255, 255, 255)
-//		.setUv(u2, v1)
-//		.setOverlay(OverlayTexture.NO_OVERLAY)
-//		.setNormal(0, 1, 0)/*? <=1.20.6 {*/.next();/*?} else {*//*; *//*?}*/
-
 public class VertexConsumerExtension {
 
 	public static VertexConsumer withVertex(VertexConsumer consumer, Matrix4f matrix4f, float x, float y, float z) {

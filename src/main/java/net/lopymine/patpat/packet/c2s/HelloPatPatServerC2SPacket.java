@@ -32,7 +32,7 @@ public class HelloPatPatServerC2SPacket implements PongPatPacket<HelloPatPatServ
 		try {
 			return Version.readVersion(buf);
 		} catch (Exception e) {
-			PatPat.LOGGER.warn("Failed to parse client packet version from hello packet:", e);
+			PatPat.LOGGER.error("Failed to parse client packet version from hello packet:", e);
 			return Version.INVALID;
 		}
 	}

@@ -48,8 +48,8 @@ public class PatPatClientListChangeCommand {
 		PatPatClientPlayerListConfig config = PatPatClientPlayerListConfig.getInstance();
 		Map<UUID, String> map = config.getMap();
 		PlayerInfo playerInfo = PlayerInfoArgumentType.getPlayerInfo(PLAYER_ARGUMENT_NAME, context);
-		UUID uuid = playerInfo.getUuid();
-		String name = playerInfo.getNickname();
+		UUID uuid = playerInfo.uuid();
+		String name = playerInfo.nickname();
 
 		PatPatCommonListChangeCommand.changeList(add, map, uuid, name, (component) -> context.sendMsg(component));
 

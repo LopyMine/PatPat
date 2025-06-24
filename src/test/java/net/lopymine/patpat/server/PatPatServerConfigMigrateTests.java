@@ -7,7 +7,7 @@ import net.lopymine.patpat.util.PathUtils;
 import org.junit.jupiter.api.*;
 
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
-import net.lopymine.patpat.server.config.sub.PatPatServerPlayerListConfig;
+import net.lopymine.patpat.server.config.PatPatServerPlayerListConfig;
 
 import java.io.*;
 import java.nio.file.Path;

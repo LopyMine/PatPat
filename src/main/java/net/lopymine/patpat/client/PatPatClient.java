@@ -38,5 +38,6 @@ public class PatPatClient implements ClientModInitializer {
 		PatPatStatsConfig.registerSaveHooks();
 
 		LOGGER.info("PatPat Client Initialized");
+		LOGGER.debug("Debug Mode Enabled");
 	}
 }

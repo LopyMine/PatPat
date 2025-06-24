@@ -5,7 +5,7 @@ import lombok.*;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.Version;
@@ -31,6 +31,7 @@ public class PatPatClientConfig {
 			option("proximityPackets", PatPatClientProximityPacketsConfig.getNewInstance(), PatPatClientProximityPacketsConfig.CODEC, PatPatClientConfig::getProximityPacketsConfig)
 	).apply(inst, PatPatClientConfig::new));
 
+	private static final PatLogger LOGGER = PatPatClient.LOGGER.extend("Config");
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(PatPat.MOD_ID + "-client.json5").toFile();
 	private static PatPatClientConfig instance;
 
@@ -60,7 +61,7 @@ public class PatPatClientConfig {
 	}
 
 	private static PatPatClientConfig read() {
-		return ConfigUtils.readConfig(CODEC, CONFIG_FILE, PatPatClient.LOGGER);
+		return ConfigUtils.readConfig(CODEC, CONFIG_FILE, LOGGER);
 	}
 
 	public void saveAsync() {
@@ -68,6 +69,6 @@ public class PatPatClientConfig {
 	}
 
 	public void save() {
-		ConfigUtils.saveConfig(this, CODEC, CONFIG_FILE, PatPatClient.LOGGER);
+		ConfigUtils.saveConfig(this, CODEC, CONFIG_FILE, LOGGER);
 	}
 }

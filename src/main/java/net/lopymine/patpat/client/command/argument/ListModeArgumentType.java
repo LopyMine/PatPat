@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.suggestion.*;
 
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.command.PatPatClientCommandManager;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.utils.CommandText;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -32,9 +33,10 @@ public class ListModeArgumentType implements ArgumentType<ListMode> {
 	@Override
 	public ListMode parse(StringReader reader) throws CommandSyntaxException {
 		String modeId = reader.readUnquotedString();
-		PatPatClient.LOGGER.debug("Parsed ListMode from ListModeArgumentType: {}", modeId);
+		PatPatClientCommandManager.LOGGER.debug("Parsed ListMode from ListModeArgumentType: {}", modeId);
 		ListMode listMode = ListMode.getById(modeId);
 		if (listMode == null) {
+			PatPatClientCommandManager.LOGGER.debug("Failed to find ListMode from parsed string: {}", modeId);
 			throw FAILED_PARSING.createWithContext(reader, reader.getString());
 		}
 		return listMode;

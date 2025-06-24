@@ -4,7 +4,7 @@ import lombok.experimental.ExtensionMethod;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
-import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.*;
 import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.server.command.info.PatPatServerInfoCommand;
 import net.lopymine.patpat.server.command.list.*;
@@ -25,6 +25,8 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
 @ExtensionMethod({TextExtension.class, CommandExtension.class})
 public class PatPatServerCommandManager {
+
+	public static final PatLogger LOGGER = PatPat.LOGGER.extend("CommandManager");
 
 	public static final MutableComponent PATPAT_ID = TextUtils.literal("[§aPatPat§f] ");
 

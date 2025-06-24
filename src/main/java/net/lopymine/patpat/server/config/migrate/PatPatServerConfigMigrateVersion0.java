@@ -8,7 +8,7 @@ import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.common.migrate.AbstractConfigMigrateHandler;
 import net.lopymine.patpat.server.config.*;
-import net.lopymine.patpat.server.config.sub.PatPatServerPlayerListConfig;
+import net.lopymine.patpat.server.config.PatPatServerPlayerListConfig;
 
 import java.io.*;
 import java.util.*;

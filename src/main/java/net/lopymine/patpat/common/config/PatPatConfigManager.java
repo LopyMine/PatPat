@@ -6,11 +6,10 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.migrate.PatPatClientConfigMigrateManager;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.server.config.migrate.PatPatServerConfigMigrateManager;
-import net.lopymine.patpat.server.config.sub.PatPatServerPlayerListConfig;
+import net.lopymine.patpat.server.config.PatPatServerPlayerListConfig;
 
 import java.io.File;
 import java.nio.file.Path;

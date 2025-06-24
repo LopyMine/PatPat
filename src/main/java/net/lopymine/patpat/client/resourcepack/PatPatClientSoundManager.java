@@ -1,5 +1,6 @@
 package net.lopymine.patpat.client.resourcepack;
 
+import net.lopymine.patpat.PatLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -12,6 +13,8 @@ import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.utils.*;
 
 public class PatPatClientSoundManager {
+
+	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("SoundManager");
 
 	private PatPatClientSoundManager() {
 		throw new IllegalStateException("Manager class");
@@ -30,19 +33,20 @@ public class PatPatClientSoundManager {
 		);
 	}
 
-	public static void playSound(PatEntity patEntity, Player player, double volume) {
+	public static void playSound(PatEntity whoPatted, Player pattedEntity, double volume) {
 		ClientLevel world = Minecraft.getInstance().level;
 		if (world == null) {
 			return;
 		}
-		SoundConfig soundConfig = patEntity.getAnimation().getSoundConfig();
+		SoundConfig soundConfig = whoPatted.getAnimation().getSoundConfig();
 		if (soundConfig == null) {
-			PatPatClient.LOGGER.debug("SoundConfig not found in animation: {}", patEntity.getAnimation());
+			LOGGER.debug("Failed to find sound config in animation: {}", whoPatted.getAnimation());
 			return;
 		}
+		LOGGER.debug("Playing sound from config {}, whoPatted: {}, pattedEntity: {}", soundConfig.toString(), whoPatted.toString(), pattedEntity.toString());
 		SoundEvent soundEvent = soundConfig.getSound();
-		world.playSound(player,
-				patEntity.getEntity().blockPosition(),
+		world.playSound(pattedEntity,
+				whoPatted.getEntity().blockPosition(),
 				soundEvent,
 				SoundSource.PLAYERS,
 				soundConfig.getVolume() * (float) volume,

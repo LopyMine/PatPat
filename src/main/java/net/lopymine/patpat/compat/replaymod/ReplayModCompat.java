@@ -2,6 +2,7 @@ package net.lopymine.patpat.compat.replaymod;
 
 import net.fabricmc.fabric.api.networking.v1.*;
 
+import net.lopymine.patpat.client.packet.PatPatClientPacketManager;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.s2c.*;
 
@@ -12,7 +13,8 @@ import net.lopymine.patpat.packet.s2c.*;
 public class ReplayModCompat {
 
 	public static void onPat(int pattedEntityId, int whoPattedId) {
-		if (!LoadedMods.FLASHBACK_MOD_LOADED) {
+		//? if replaymod {
+		if (!LoadedMods.REPLAY_MOD_LOADED) {
 			return;
 		}
 		PatEntityForReplayModS2CPacketV2 packet = new PatEntityForReplayModS2CPacketV2(pattedEntityId, whoPattedId);
@@ -23,5 +25,7 @@ public class ReplayModCompat {
 		packet.write(buf);
 		ReplayModManager.sendDummyPacket(ServerPlayNetworking.createS2CPacket(packet.getPatPatType().getId(), buf));
 		*///?}
+		PatPatClientPacketManager.LOGGER.debug("Saved packet to ReplayMod");
+		//?}
 	}
 }

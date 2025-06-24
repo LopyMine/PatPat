@@ -1,6 +1,7 @@
 package net.lopymine.patpat.client.config;
 
 import lombok.*;
+import net.lopymine.patpat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.*;
 
@@ -9,7 +10,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 
-import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.utils.*;
@@ -30,6 +30,7 @@ public class PatPatStatsConfig {
 			option("entities", new HashMap<>(), Codec.STRING, PatsCounter.CODEC, PatPatStatsConfig::getPatsPerEntity)
 	).apply(instance, PatPatStatsConfig::new));
 
+	private static final PatLogger LOGGER = PatPatClient.LOGGER.extend("StatsConfig");
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(PatPat.MOD_ID + "-client-stats.json5").toFile();
 	private static PatPatStatsConfig instance;
 
@@ -77,7 +78,7 @@ public class PatPatStatsConfig {
 	}
 
 	private static PatPatStatsConfig read() {
-		return ConfigUtils.readConfig(CODEC, CONFIG_FILE, PatPatClient.LOGGER);
+		return ConfigUtils.readConfig(CODEC, CONFIG_FILE, LOGGER);
 	}
 
 	public void saveAsync() {
@@ -85,7 +86,7 @@ public class PatPatStatsConfig {
 	}
 
 	public void save() {
-		ConfigUtils.saveConfig(this, CODEC, CONFIG_FILE, PatPatClient.LOGGER);
+		ConfigUtils.saveConfig(this, CODEC, CONFIG_FILE, LOGGER);
 	}
 
 	@Getter
@@ -109,10 +110,10 @@ public class PatPatStatsConfig {
 				if (!AutoSaveManager.shouldSave || !PatPatClientConfig.getInstance().getMainConfig().isModEnabled()) {
 					return;
 				}
-				PatPatClient.LOGGER.debug("Saving PatPat Statistics...");
+				LOGGER.debug("Saving PatPat Statistics...");
 				PatPatStatsConfig.getInstance().save();
 				AutoSaveManager.shouldSave = false;
-				PatPatClient.LOGGER.debug("PatPat Statistics Saved");
+				LOGGER.debug("PatPat Statistics Saved");
 			};
 
 			SERVICE.scheduleAtFixedRate(

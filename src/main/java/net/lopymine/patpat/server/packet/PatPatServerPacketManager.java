@@ -1,5 +1,6 @@
 package net.lopymine.patpat.server.packet;
 
+import net.lopymine.patpat.*;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,7 +9,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.ChunkPos;
 import net.fabricmc.fabric.api.networking.v1.*;
 
-import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.packet.c2s.*;
@@ -24,6 +24,8 @@ public class PatPatServerPacketManager {
 		throw new IllegalStateException("Manager class");
 	}
 
+	public static final PatLogger LOGGER = PatPat.LOGGER.extend("PacketManager");
+	
 	public static final Map<UUID, Version> PLAYER_VERSIONS = new HashMap<>();
 
 	private static final List<Predicate<ServerPlayer>> PACKET_TESTS = new ArrayList<>();
@@ -40,20 +42,20 @@ public class PatPatServerPacketManager {
 	}
 
 	private static void handleHelloPacket(ServerPlayer sender, HelloPatPatServerC2SPacket packet) {
-		PatPat.LOGGER.debug("Received hello packet from {}!", sender.getName().getString());
+		LOGGER.debug("Received hello packet from {}!", sender.getName().getString());
 		Version version = packet.getVersion();
 		if (version.isInvalid()) {
-			PatPat.LOGGER.warn("Received invalid client version in hello packet from {}!", sender.getName().getString());
+			LOGGER.error("Received invalid client version in hello packet from {}!", sender.getName().getString());
 			PLAYER_VERSIONS.put(sender.getUUID(), Version.PACKET_V2_VERSION);
 			// Since v2 packet version we started sending hello packets
 			return;
 		}
-		PatPat.LOGGER.debug("Player PatPat version: {}", version);
+		LOGGER.debug("Player PatPat Version: {}", version);
 		PLAYER_VERSIONS.put(sender.getUUID(), version);
 	}
 
 	public static void handlePacket(ServerPlayer sender, PatPacket<ServerLevel, ?> packet) {
-		PatPat.LOGGER.warn("Received pat packet from {}!", sender.getName().getString());
+		LOGGER.debug("Received pat packet from {}", sender.getName().getString());
 		for (Predicate<ServerPlayer> packetTest : PACKET_TESTS) {
 			if (!packetTest.test(sender)) {
 				return;
@@ -67,7 +69,7 @@ public class PatPatServerPacketManager {
 		}
 
 		if (entity.isInvisible()) {
-			PatPat.LOGGER.warn("Received packet from client, {} patted {}, but patted entity is invisible! This shouldn't happens because it should checks at client-side!", sender.getName(), entity.getName());
+			LOGGER.warn("Received packet from client, {} patted {}, but patted entity is invisible! This shouldn't happens because it should be checked at the client-side! Ignoring packet", sender.getName(), entity.getName());
 			return;
 		}
 
@@ -76,7 +78,7 @@ public class PatPatServerPacketManager {
 			if (player.equals(sender)) {
 				continue;
 			}
-			PatPat.LOGGER.debug("Sending pat packet to {}", player.getName().getString());
+			LOGGER.debug("Sending pat packet to {} from {}", player.getName().getString(), sender.getName().getString());
 			PatPatServerNetworkManager.sendPacketToPlayer(player, getPatPacket(entity, player));
 		}
 	}
@@ -110,10 +112,10 @@ public class PatPatServerPacketManager {
 
 	public static PatPacket<ClientLevel, ?> getPatPacket(Entity pattedEntity, Entity whoPattedEntity) {
 		if (PLAYER_VERSIONS.get(whoPattedEntity.getUUID()).isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
-			PatPat.LOGGER.warn("Using v2 packets");
+			LOGGER.debug("Getting pat packet... Using V2 version");
 			return new PatEntityS2CPacketV2(pattedEntity, whoPattedEntity);
 		} else {
-			PatPat.LOGGER.warn("Using v1 packets");
+			LOGGER.debug("Getting pat packet... Using V1 version");
 			return new PatEntityS2CPacket(pattedEntity, whoPattedEntity);
 		}
 	}

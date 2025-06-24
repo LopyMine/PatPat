@@ -10,6 +10,7 @@ import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.s2c.*;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.protocol.Packet;
+import net.lopymine.patpat.client.packet.PatPatClientPacketManager;
 *///?}
 
 public class FlashbackCompat {
@@ -19,7 +20,7 @@ public class FlashbackCompat {
 		/*if (!LoadedMods.FLASHBACK_MOD_LOADED) {
 			return;
 		}
-		PatPatClient.LOGGER.debug("Sending dummy packet for Flashback mod. [Patted: {} and Who: {}]", pattedEntityId, whoPattedId);
+
 		Recorder recorder = Flashback.RECORDER;
 		if (recorder != null) {
 			PatEntityForReplayModS2CPacketV2 patPacket = new PatEntityForReplayModS2CPacketV2(pattedEntityId, whoPattedId);
@@ -34,6 +35,7 @@ public class FlashbackCompat {
 					packet,
 					/^? >1.20.4 {^/ConnectionProtocol.PLAY/^?} else {^//^NetworkState.PLAY^//^?}^/
 			);
+			PatPatClientPacketManager.LOGGER.debug("Saved packet to Flashback");
 		}
 		*///?}
 	}

@@ -34,7 +34,7 @@ public class HelloPatPatPlayerS2CPacket implements PingPatPacket<HelloPatPatPlay
 		try {
 			return Version.readVersion(buf);
 		} catch (Exception e) {
-			PatPatClient.LOGGER.warn("Failed to parse server packet version from hello packet:", e);
+			PatPatClient.LOGGER.error("Failed to parse server packet version from hello packet:", e);
 			return Version.INVALID;
 		}
 	}

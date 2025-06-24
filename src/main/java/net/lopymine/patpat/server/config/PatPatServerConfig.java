@@ -1,17 +1,14 @@
 package net.lopymine.patpat.server.config;
 
 import lombok.*;
-import lombok.experimental.ExtensionMethod;
 
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.common.config.*;
-import net.lopymine.patpat.extension.GsonExtension;
 import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
 import net.lopymine.patpat.utils.*;
 
@@ -22,7 +19,6 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 
 @Getter
 @AllArgsConstructor
-@ExtensionMethod(GsonExtension.class)
 public class PatPatServerConfig {
 
 	public static final Codec<PatPatServerConfig> CODEC = RecordCodecBuilder.create(inst -> inst.group(
@@ -32,6 +28,7 @@ public class PatPatServerConfig {
 			option("rateLimit", new PatPatServerRateLimitConfig(), PatPatServerRateLimitConfig.CODEC, PatPatServerConfig::getRateLimitConfig)
 	).apply(inst, PatPatServerConfig::new));
 
+	private static final PatLogger LOGGER = PatPat.LOGGER.extend("Config");
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(PatPat.MOD_ID + ".json5").toFile();
 	private static PatPatServerConfig INSTANCE;
 
@@ -59,7 +56,7 @@ public class PatPatServerConfig {
 	}
 
 	private static PatPatServerConfig read() {
-		return ConfigUtils.readConfig(CODEC, CONFIG_FILE, PatPat.LOGGER);
+		return ConfigUtils.readConfig(CODEC, CONFIG_FILE, LOGGER);
 	}
 
 	public void saveAsync() {
@@ -67,6 +64,6 @@ public class PatPatServerConfig {
 	}
 
 	public void save() {
-		ConfigUtils.saveConfig(this, CODEC, CONFIG_FILE, PatPat.LOGGER);
+		ConfigUtils.saveConfig(this, CODEC, CONFIG_FILE, LOGGER);
 	}
 }

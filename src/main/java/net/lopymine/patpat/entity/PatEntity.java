@@ -72,4 +72,14 @@ public class PatEntity {
 	public int hashCode() {
 		return Objects.hash(this.entity.getUUID());
 	}
+
+	@Override
+	public String toString() {
+		return "PatEntity{" +
+				"entity=" + this.entity.toString() +
+				", animation=" + this.animation.toString() +
+				", currentFrame=" + this.currentFrame +
+				", tickProgress=" + this.tickProgress +
+				'}';
+	}
 }

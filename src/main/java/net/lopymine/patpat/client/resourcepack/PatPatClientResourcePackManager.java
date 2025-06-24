@@ -3,6 +3,7 @@ package net.lopymine.patpat.client.resourcepack;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
@@ -10,7 +11,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.LivingEntity;
 import com.mojang.serialization.JsonOps;
 
-import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 @ExtensionMethod(EntityExtension.class)
 public class PatPatClientResourcePackManager {
 
+	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("ResourcePackManager");
 	public static final PatPatClientResourcePackManager INSTANCE = new PatPatClientResourcePackManager();
 	private final List<List<CustomAnimationConfig>> loadedAnimations = new ArrayList<>();
 
@@ -40,33 +41,33 @@ public class PatPatClientResourcePackManager {
 		try (InputStream inputStream = inputStreamInputSupplier.get(); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 			JsonElement json = /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/;
 			if (!json.isJsonObject()) {
-				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' is not a json object, skip", packName, path);
+				LOGGER.error("ResourcePack '{}', file '{}' is not a json object, skipping", packName, path);
 				return;
 			}
 
 			JsonObject jsonObject = json.getAsJsonObject();
 			JsonElement jsonElement = jsonObject.get("version");
 			if (jsonElement == null) {
-				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' failed to verify version because it's missing, skip", packName, path);
+				LOGGER.error("ResourcePack '{}', file '{}' failed to get config version because it's missing, skipping", packName, path);
 				return;
 			}
 
 			String string = jsonElement.getAsString();
 			Version configVersion = Version.of(string);
 			if (configVersion.isMoreThan(Version.CURRENT_MOD_VERSION)) {
-				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has unsupported new version[{} < {}], there may be errors!", packName, path, Version.CURRENT_MOD_VERSION, configVersion);
+				LOGGER.warn("ResourcePack '{}', file '{}' has unsupported new version[{} < {}], there may be errors!", packName, path, Version.CURRENT_MOD_VERSION, configVersion);
 			} else if (configVersion.isLessThan(Version.RESOURCE_PACKS_MIN_SUPPORT_VERSION)) {
 				boolean shouldSkip = config.getResourcePacksConfig().isSkipOldAnimationsEnabled();
-				PatPatClient.LOGGER.warn("ResourcePack '{}', file '{}' has unsupported old version[{} > {}], {}!", packName, path, Version.RESOURCE_PACKS_MIN_SUPPORT_VERSION, configVersion, (shouldSkip ? "skip" : "there may be errors"));
+				LOGGER.warn("ResourcePack '{}', file '{}' has unsupported old version[{} > {}], {}!", packName, path, Version.RESOURCE_PACKS_MIN_SUPPORT_VERSION, configVersion, (shouldSkip ? "skipping" : "there may be errors"));
 				if (shouldSkip) {
 					return;
 				}
 			}
-			CustomAnimationConfig animationConfig = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, PatPatClient.LOGGER::error)*//*?}*/.getFirst();
+			CustomAnimationConfig animationConfig = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, LOGGER::error)*//*?}*/.getFirst();
 			animationConfig.setConfigPath("%s/%s".formatted(packName, path));
 			configs.add(animationConfig);
 		} catch (Exception e) {
-			PatPatClient.LOGGER.warn(String.format("ResourcePack '%s', file '%s' failed to parse, skip", packName, path), e);
+			LOGGER.warn(String.format("ResourcePack '%s', failed to parse file '%s', skipping", packName, path), e);
 		}
 	}
 
@@ -82,13 +83,13 @@ public class PatPatClientResourcePackManager {
 			String resourcePackName = /*? if >=1.19.3 {*/ pack.packId(); /*?} else {*//*pack.getName(); *//*?}*/
 			List<CustomAnimationConfig> animationConfigs = new ArrayList<>();
 
-			PatPatClient.LOGGER.info("Registering {} resource pack", resourcePackName);
+			LOGGER.info("Registering {} resource pack", resourcePackName);
 			//? >=1.19.3 {
 			pack.listResources(PackType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures", (id, input) -> {
 				try (InputStream inputStream = input.get()) {
 					parseConfig(resourcePackName, id, () -> inputStream, animationConfigs, config);
 				} catch (Exception e) {
-					PatPatClient.LOGGER.error("Failed to read custom animation at {} from {}", id.toString(), resourcePackName);
+					LOGGER.error("Failed to read custom animation at {} from {}", id.toString(), resourcePackName);
 				}
 			});//?} else {
 			/*Collection<ResourceLocation> customAnimationIds = pack.getResources(PackType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures", /^? <=1.18.2 {^//^0,^//^?}^/ (identifier) -> {
@@ -102,7 +103,7 @@ public class PatPatClientResourcePackManager {
 				try (InputStream inputStream = /^? >=1.19 {^/manager.open(customAnimationId)/^?} else {^//^manager.getResource(customAnimationId).getInputStream()^//^?}^/) {
 					PatPatClientResourcePackManager.parseConfig(resourcePackName, customAnimationId, () -> inputStream, animationConfigs, config);
 				} catch (Exception e) {
-					PatPatClient.LOGGER.error("Failed to read custom animation at {} from {}", customAnimationId.toString(), resourcePackName);
+					LOGGER.error("Failed to read custom animation at {} from {}", customAnimationId.toString(), resourcePackName);
 				}
 			}
 			*///?}

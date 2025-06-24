@@ -15,7 +15,7 @@ public class PatPatClientPlayerEvents {
 	public static void register() {
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
 			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V1_VERSION);
-			PatPatClient.LOGGER.debug("Disconnected, disabling v2 packets!!");
+			PatPatClient.LOGGER.debug("Disconnected from the server, reset current packets version to V1");
 		});
 	}
 

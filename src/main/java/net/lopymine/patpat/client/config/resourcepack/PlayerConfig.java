@@ -54,8 +54,8 @@ public class PlayerConfig {
 	@Override
 	public String toString() {
 		return "PlayerConfig{" +
-				"name='" + name + '\'' +
-				", uuid=" + uuid +
+				"name='" + this.name + '\'' +
+				", uuid=" + this.uuid +
 				'}';
 	}
 

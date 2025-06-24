@@ -10,7 +10,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.server.config.PatPatServerConfig;
-import net.lopymine.patpat.server.config.sub.PatPatServerPlayerListConfig;
+import net.lopymine.patpat.server.config.PatPatServerPlayerListConfig;
 
 import java.util.*;
 

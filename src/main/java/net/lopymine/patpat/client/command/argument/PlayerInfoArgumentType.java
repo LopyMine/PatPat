@@ -1,5 +1,6 @@
 package net.lopymine.patpat.client.command.argument;
 
+import net.lopymine.patpat.client.command.PatPatClientCommandManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.util.Tuple;
@@ -39,24 +40,30 @@ public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 		try {
 			String s = reader.readUnquotedString();
 
-			PatPatClient.LOGGER.debug("Parsed PlayerInfo from PlayerInfoArgumentType: {}", s);
+			PatPatClientCommandManager.LOGGER.debug("Parsed PlayerInfo from PlayerInfoArgumentType: {}", s);
 
 			ClientPacketListener networkHandler = Minecraft.getInstance().getConnection();
 			if (networkHandler == null) {
+				PatPatClientCommandManager.LOGGER.debug("networkHandler is null, cannot parse PlayerInfo from PlayerInfoArgumentType!");
 				throw FAILED_PARSING.createWithContext(reader, reader.getString());
 			}
 
 			for (net.minecraft.client.multiplayer.PlayerInfo entry : networkHandler.getOnlinePlayers()) {
 				GameProfile profile = entry.getProfile();
 				if (profile.getName().equals(s)) {
-					return new PlayerInfo(s, profile.getId());
+					PlayerInfo playerInfo = new PlayerInfo(s, profile.getId());
+					PatPatClientCommandManager.LOGGER.debug("Found PlayerInfo by nickname from PlayerInfoArgumentType, parsed: {}", playerInfo);
+					return playerInfo;
 				} else {
 					UUID uuid = UUID.fromString(s);
 					if (profile.getId().equals(uuid)) {
-						return new PlayerInfo(profile.getName(), uuid);
+						PlayerInfo playerInfo = new PlayerInfo(profile.getName(), uuid);
+						PatPatClientCommandManager.LOGGER.debug("Found PlayerInfo by uuid from PlayerInfoArgumentType, parsed: {}", playerInfo);
+						return playerInfo;
 					}
 				}
 			}
+
 			throw UNKNOWN_PLAYER.createWithContext(reader, reader.getString());
 		} catch (CommandSyntaxException e) {
 			throw FAILED_PARSING.createWithContext(reader, reader.getString());
@@ -68,20 +75,14 @@ public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 		return EXAMPLES;
 	}
 
-	public static class PlayerInfo {
+	public record PlayerInfo(String nickname, UUID uuid) {
 
-		private final Tuple<String, UUID> pair;
-
-		public PlayerInfo(String nickname, UUID uuid) {
-			this.pair = new Tuple<>(nickname, uuid);
-		}
-
-		public String getNickname() {
-			return this.pair.getA();
-		}
-
-		public UUID getUuid() {
-			return this.pair.getB();
+		@Override
+		public String toString() {
+			return "PlayerInfo{" +
+					"nickname='" + this.nickname + '\'' +
+					", uuid=" + this.uuid +
+					'}';
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package net.lopymine.patpat.client.packet;
 
 import lombok.*;
+import net.lopymine.patpat.PatLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.social.PlayerSocialManager;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -30,6 +31,8 @@ public class PatPatClientPacketManager {
 		throw new IllegalStateException("Manager class");
 	}
 
+	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("PacketManager");
+	
 	@Getter
 	@Setter
 	private static Version currentPatPatServerPacketVersion = Version.PACKET_V1_VERSION;
@@ -59,15 +62,17 @@ public class PatPatClientPacketManager {
 	}
 
 	private static void handleHelloPacket(HelloPatPatPlayerS2CPacket packet) {
-		PatPatClient.LOGGER.debug("[PING] Received HelloPatPatPlayerS2CPacket packet! PatPat Mod/Plugin installed on the server!");
+		LOGGER.debug("[PING] Received HelloPatPatPlayerS2CPacket packet! PatPat Mod/Plugin installed on the server!");
+
 		Version version = packet.getVersion();
 		if (version.isInvalid()) {
-			PatPatClient.LOGGER.warn("Received invalid server version in hello packet!");
+			LOGGER.warn("Received invalid server version in hello packet!");
 			PatPatClientProxLibManager.setEnabledIfNotInReplay(false);
 			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
 			// Since v2 packet version we started sending hello packets
 			return;
 		}
+		LOGGER.debug("Server PatPat Version: {}", version);
 		// Example for the future packet versions:
 		// if (version.isGreaterOrEqualThan(Version.PACKET_V3_VERSION)) {
 		// 	 // stuff
@@ -76,52 +81,56 @@ public class PatPatClientPacketManager {
 			PatPatClientProxLibManager.setEnabledIfNotInReplay(false);
 			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
 		}
-		PatPatClient.LOGGER.debug("[PONG] Sending HelloPatPatServerC2S packet to the server...");
-		PatPatClientNetworkManager.sendPacketToServer(packet.getPongPacket());
+		HelloPatPatServerC2SPacket pongPacket = packet.getPongPacket();
+		LOGGER.debug("[PONG] Sending {} packet to the server...", pongPacket.getClass().getName());
+		PatPatClientNetworkManager.sendPacketToServer(pongPacket);
 	}
 
 	public static void handlePatting(S2CPatPacket<?> packet, boolean replayModPacket) {
+		LOGGER.debug("Started handling packet...");
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
-		PatPatClient.LOGGER.debug("Handle patting running");
 		if (!config.getMainConfig().isModEnabled()) {
-			PatPatClient.LOGGER.debug("Packet declined, because mod is disabled");
+			LOGGER.debug("Packet declined, because mod is disabled");
 			return;
 		}
 
 		ClientLevel clientWorld = Minecraft.getInstance().level;
 		LocalPlayer player = Minecraft.getInstance().player;
 		if (clientWorld == null || player == null) {
-			PatPatClient.LOGGER.debug("Packet declined, because world or player is null");
+			LOGGER.debug("Packet declined, because world or player is null");
 			return;
 		}
 
 		Entity pattedEntity = packet.getPattedEntity(clientWorld);
 		if (!(pattedEntity instanceof LivingEntity pattedLivingEntity)) {
-			PatPatClient.LOGGER.debug("Packet declined, because patted entity in not LivingEntity");
+			LOGGER.debug("Packet declined, because patted entity in not LivingEntity");
 			return;
 		}
-		Entity playerEntity = packet.getWhoPattedEntity(clientWorld);
-		if(playerEntity == null) {
-			PatPatClient.LOGGER.debug("Packet declined, because who patted entity is null");
+		LOGGER.debug("Patted entity with name {} ", pattedEntity.getName());
+		Entity whoPattedEntity = packet.getWhoPattedEntity(clientWorld);
+		if(whoPattedEntity == null) {
+			LOGGER.debug("Packet declined, because who patted entity is null");
 			return;
 		}
-		PatPatClient.LOGGER.debug("Pat packet from {} player", playerEntity.getName());
-		if (!(playerEntity instanceof Player)) {
-			PatPatClient.LOGGER.debug("Packet declined, because who patted entity in not PlayerEntity");
+		LOGGER.debug("Who patted entity with name {}", whoPattedEntity.getName());
+		if (!(whoPattedEntity instanceof Player)) {
+			LOGGER.debug("Packet declined, because who patted entity in not PlayerEntity");
 			return;
 		}
 
 		UUID pattedEntityUuid = pattedEntity.getUUID();
-		UUID whoPattedUuid = playerEntity.getUUID();
+		UUID whoPattedUuid = whoPattedEntity.getUUID();
 		if (isBlocked(whoPattedUuid)) {
-			PatPatClient.LOGGER.debug("Packet declined, because player uuid is blocked (/patpat-client list)");
+			LOGGER.debug("Packet declined, because player uuid is blocked (/patpat-client list)");
 			return;
 		}
 		if (pattedEntityUuid.equals(player.getUUID()) && !config.getMultiPlayerConfig().isPatMeEnabled()) {
-			PatPatClient.LOGGER.debug("Packet declined, because option 'Pat Me' is disabled");
+			LOGGER.debug("Packet declined, because option 'Pat Me' is disabled");
 			return;
 		}
-		PatPatClientRenderer.serverPats.add(new PacketPat(pattedLivingEntity, PlayerConfig.of(playerEntity.getName().getString(), whoPattedUuid), player, replayModPacket));
+		PacketPat patPacket = new PacketPat(pattedLivingEntity, PlayerConfig.of(whoPattedEntity.getName().getString(), whoPattedUuid), player, replayModPacket);
+		PatPatClientRenderer.serverPats.add(patPacket);
+		LOGGER.debug("Packet handled! Packet Data: {}", patPacket.toString());
 	}
 
 	public static boolean isBlocked(UUID playerUuid) {
@@ -139,10 +148,10 @@ public class PatPatClientPacketManager {
 
 	public static PatPacket<ServerLevel, ?> getPatPacket(Entity pattedEntity) {
 		if (PatPatClientPacketManager.getCurrentPatPatServerPacketVersion().isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
-			PatPatClient.LOGGER.debug("Using v2 packets");
+			LOGGER.debug("Getting pat packet... Using V2 version");
 			return new PatEntityC2SPacketV2(pattedEntity);
 		} else {
-			PatPatClient.LOGGER.debug("Using v1 packets");
+			LOGGER.debug("Getting pat packet... Using V1 version");
 			return new PatEntityC2SPacket(pattedEntity);
 		}
 	}

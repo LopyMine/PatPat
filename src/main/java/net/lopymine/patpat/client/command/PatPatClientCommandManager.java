@@ -2,6 +2,7 @@ package net.lopymine.patpat.client.command;
 
 import lombok.experimental.ExtensionMethod;
 
+import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.command.list.*;
 import net.lopymine.patpat.client.command.mod.PatPatClientModEnableCommand;
 import net.lopymine.patpat.extension.TextExtension;
@@ -22,6 +23,8 @@ public class PatPatClientCommandManager {
 	private PatPatClientCommandManager() {
 		throw new IllegalStateException("Manager class");
 	}
+
+	public static final PatLogger LOGGER = PatPat.LOGGER.extend("CommandManager");
 
 	public static void register() {
 		/*? >=1.19 {*/

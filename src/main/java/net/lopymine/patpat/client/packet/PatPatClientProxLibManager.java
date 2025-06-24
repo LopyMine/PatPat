@@ -2,6 +2,7 @@ package net.lopymine.patpat.client.packet;
 
 import net.fabricmc.fabric.api.client.networking.v1.*;
 
+import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
@@ -13,6 +14,8 @@ public class PatPatClientProxLibManager {
 	private PatPatClientProxLibManager() {
 		throw new IllegalStateException("Manager class");
 	}
+
+	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("ProxLibManager");
 
 	private static boolean enabled;
 
@@ -35,7 +38,7 @@ public class PatPatClientProxLibManager {
 
 	public static void setEnabled(boolean enabled) {
 		PatPatClientProxLibManager.enabled = enabled;
-		PatPatClient.LOGGER.debug(enabled ? "ProxLib Enabled" : "ProxLib Disabled");
+		LOGGER.debug(enabled ? "Proximity Packets Enabled" : "Proximity Packets Disabled");
 	}
 
 	public static void setEnabledIfNotInReplay(boolean enabled) {
@@ -47,9 +50,9 @@ public class PatPatClientProxLibManager {
 
 	public static void disableIfEnabledBecauseReceivedPacketFromServer() {
 		if (isEnabled()) {
-			PatPatClient.LOGGER.debug("--------------------------------------");
-			PatPatClient.LOGGER.debug("Received pat packet from server with enabled ProxLib, looks like server has old PatPat Plugin/Mod installed. Automatically disabling ProxLib to avoid packet duplication...");
-			PatPatClient.LOGGER.debug("--------------------------------------");
+			LOGGER.debug("--------------------------------------");
+			LOGGER.debug("Received pat packet from server with enabled Proximity Packets, looks like server has old PatPat Plugin/Mod installed. Automatically disabling Proximity Packets to avoid packet duplication...");
+			LOGGER.debug("--------------------------------------");
 			PatPatClientProxLibManager.setEnabled(false);
 		}
 	}

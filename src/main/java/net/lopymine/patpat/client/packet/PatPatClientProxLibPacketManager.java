@@ -1,5 +1,6 @@
 package net.lopymine.patpat.client.packet;
 
+import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
@@ -10,6 +11,8 @@ import net.minecraft.client.Minecraft;
 import java.io.*;
 
 public class PatPatClientProxLibPacketManager {
+
+	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("ProxLibPacketManager");
 
 	public static final int PAT_PAT_PACKETS_ID = 2;
 
@@ -23,7 +26,7 @@ public class PatPatClientProxLibPacketManager {
 			return;
 		}
 		me.enderkill98.proxlib.client.ProxLib.addHandlerFor(PAT_PACKET_IDENTIFIER, (entity, id, data) -> {
-			PatPatClient.LOGGER.debug("Received ProxLib packet, ProxLib enabled: {}", PatPatClientProxLibManager.isEnabled());
+			LOGGER.debug("Received proximity packet, ProxLib enabled: {}", PatPatClientProxLibManager.isEnabled());
 			if (!PatPatClientProxLibManager.isEnabled()) {
 				return;
 			}
@@ -33,7 +36,7 @@ public class PatPatClientProxLibPacketManager {
 
 				PatPatClientPacketManager.handlePatting(new PatEntityS2CPacketV2(pattedEntityId, whoPattedId), FlashbackManager.isInReplay() || ReplayModManager.isInReplay());
 			} catch (Exception e) {
-				PatPatClient.LOGGER.debug("Failed to handle ProxLib packet from player: {}, packet id: {}, data: {}", entity.getName().getString(), id, data, e);
+				LOGGER.debug("Failed to handle proximity packet from player: {}, packet id: {}, data: {}", entity.getName().getString(), id, data, e);
 			}
 		});
 		//?}
@@ -48,15 +51,15 @@ public class PatPatClientProxLibPacketManager {
 			return;
 		}
 		if (PatPatClientProxLibPacketRateLimitManager.isLimitExceeded()) {
-			System.out.println("Exceeding the limit!");
+			LOGGER.debug("Trying to make proximity pat, but max packets limit is exceeded!");
 			return;
 		}
 		try {
 			int packetsCount = me.enderkill98.proxlib.client.ProxLib.sendPacket(Minecraft.getInstance(), PAT_PACKET_IDENTIFIER, encodeProxyPatPacket(pattedEntityId));
-			PatPatClient.LOGGER.debug("Sent proxy packets ({}) to pat entity with id {}", packetsCount, pattedEntityId);
+			LOGGER.debug("Sent proximity packets ({}) to pat entity with id {}", packetsCount, pattedEntityId);
 			PatPatClientProxLibPacketRateLimitManager.countPacket();
 		} catch (Exception e) {
-			PatPatClient.LOGGER.debug("Failed to send proxy packet, patted entity: {}, packet id: {}, data: {}", pattedEntityId, PAT_PAT_PACKETS_ID, e);
+			LOGGER.debug("Failed to send proximity packet, patted entity: {}, packet id: {}, data: {}", pattedEntityId, PAT_PAT_PACKETS_ID, e);
 		}
 		//?}
 	}

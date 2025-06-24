@@ -26,7 +26,8 @@ public class PatPat implements ModInitializer {
 		PatPatServerCommandManager.register();
 		PatPatServerPlayerEvents.register();
 		PatPatServerPacketManager.register();
+
 		PatPat.LOGGER.info("PatPat Initialized");
-		PatPat.LOGGER.debug("Debug mode enabled");
+		PatPat.LOGGER.debug("Debug Mode Enabled");
 	}
 }

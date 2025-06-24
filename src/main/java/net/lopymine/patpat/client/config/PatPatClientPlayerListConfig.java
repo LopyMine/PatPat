@@ -2,6 +2,7 @@ package net.lopymine.patpat.client.config;
 
 import lombok.Getter;
 
+import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.utils.PlayerListConfigUtils;
@@ -14,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public class PatPatClientPlayerListConfig {
 
 	private static final String FILENAME = "player-list-client.txt";
+	private static final PatLogger LOGGER = PatPatClient.LOGGER.extend("PlayerListConfig");
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(FILENAME).toFile();
 	private static PatPatClientPlayerListConfig INSTANCE;
 
@@ -28,7 +30,7 @@ public class PatPatClientPlayerListConfig {
 
 	public static PatPatClientPlayerListConfig reload() {
 		PatPatClientPlayerListConfig config = new PatPatClientPlayerListConfig();
-		PlayerListConfigUtils.read(CONFIG_FILE, PatPatClient.LOGGER, config.getMap());
+		PlayerListConfigUtils.read(CONFIG_FILE, LOGGER, config.getMap());
 		return INSTANCE = config;
 	}
 
@@ -45,6 +47,6 @@ public class PatPatClientPlayerListConfig {
 	}
 
 	public void save(File configFile) {
-		PlayerListConfigUtils.save(configFile, PatPatClient.LOGGER, this.map);
+		PlayerListConfigUtils.save(configFile, LOGGER, this.map);
 	}
 }

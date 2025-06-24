@@ -52,4 +52,14 @@ public class SoundConfig {
 		this.maxPitch = 1.0F;
 		this.volume = 1.0F;
 	}
+
+	@Override
+	public String toString() {
+		return "SoundConfig{" +
+				"sound=" + this.sound +
+				", minPitch=" + this.minPitch +
+				", maxPitch=" + this.maxPitch +
+				", volume=" + this.volume +
+				'}';
+	}
 }

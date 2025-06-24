@@ -20,23 +20,23 @@ public class PatPatClientProxLibPacketRateLimitManager {
 	}
 
 	public static void tick(ClientLevel level) {
-		if (ticks == Integer.MAX_VALUE) {
-			ticks = 0;
+		if (PatPatClientProxLibPacketRateLimitManager.ticks == Integer.MAX_VALUE) {
+			PatPatClientProxLibPacketRateLimitManager.ticks = 0;
 		}
-		if (ticks++ % 20 == 0) {
+		if (PatPatClientProxLibPacketRateLimitManager.ticks++ % 20 == 0) {
 			tickPerSecond();
 		}
 	}
 
 	private static void tickPerSecond() {
-		packetsSentPerSecond = 0;
+		PatPatClientProxLibPacketRateLimitManager.packetsSentPerSecond = 0;
 	}
 
 	public static void countPacket() {
-		packetsSentPerSecond++;
+		PatPatClientProxLibPacketRateLimitManager.packetsSentPerSecond++;
 	}
 
 	public static boolean isLimitExceeded() {
-		return packetsSentPerSecond >= PatPatClientConfig.getInstance().getProximityPacketsConfig().getMaxPacketsPerSecond();
+		return PatPatClientProxLibPacketRateLimitManager.packetsSentPerSecond >= PatPatClientConfig.getInstance().getProximityPacketsConfig().getMaxPacketsPerSecond();
 	}
 }

@@ -1,5 +1,6 @@
 package net.lopymine.patpat.client.manager;
 
+import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
@@ -27,6 +28,8 @@ import org.jetbrains.annotations.*;
 public class PatPatClientManager {
 
 	private static final Map<UUID, PatEntity> PAT_ENTITIES = new HashMap<>();
+
+	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("PatManager");
 
 	@Setter
 	@Getter
@@ -57,7 +60,7 @@ public class PatPatClientManager {
 	}
 
 	public static PatEntity pat(@NotNull LivingEntity entity, @NotNull PlayerConfig whoPatted) {
-		PatPatClient.LOGGER.debug("{} patted {}", whoPatted.getName(), entity.getName());
+		LOGGER.debug("{} just patted {}", whoPatted.getName(), entity.getName());
 
 		UUID uuid = entity.getUUID();
 		PatEntity patEntity = PAT_ENTITIES.get(uuid);

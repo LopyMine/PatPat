@@ -45,7 +45,18 @@ public class PatPatClientRenderer {
 	public static final List<PacketPat> serverPats = new ArrayList<>();
 	public static final List<PacketPat> clientPats = new ArrayList<>();
 
-	public record PacketPat(LivingEntity pattedEntity, PlayerConfig playerConfig, LocalPlayer player, boolean replayModPacket){}
+	public record PacketPat(LivingEntity pattedEntity, PlayerConfig playerConfig, LocalPlayer player, boolean replayModPacket) {
+
+		@Override
+		public String toString() {
+			return "PacketPat{" +
+					"pattedEntity=" + this.pattedEntity.toString() +
+					", playerConfig=" + this.playerConfig.toString() +
+					", player=" + this.player.toString() +
+					", replayModPacket=" + this.replayModPacket +
+					'}';
+		}
+	}
 
 	public static void register() {
 		WorldRenderEvents.AFTER_ENTITIES.register(PatPatClientRenderer::renderPatOnYourself);

@@ -7,18 +7,13 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.*;
-import net.lopymine.patpat.server.config.sub.PatPatServerPlayerListConfig;
-import net.lopymine.patpat.utils.*;
+import net.lopymine.patpat.server.config.PatPatServerPlayerListConfig;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.GameProfileArgument;
-import net.minecraft.network.chat.*;
-import net.minecraft.world.entity.EntityType;
 import java.util.*;
 
 import static net.minecraft.commands.Commands.argument;

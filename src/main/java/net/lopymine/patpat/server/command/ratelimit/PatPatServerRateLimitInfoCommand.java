@@ -51,7 +51,7 @@ public class PatPatServerRateLimitInfoCommand {
 		Object limitComponent = config.getTokenLimit();
 		Object incrementComponent = config.getTokenIncrement();
 		Object intervalComponent = config.getTokenIncrementInterval().toString();
-		Object permissionComponent = TextUtils.text(config.getPermissionBypass()).withStyle(
+		Object permissionComponent = TextUtils.literal(config.getPermissionBypass()).withStyle(
 				Style.EMPTY.withHoverEvent(CommandText.getHoverEvent(
 								Action.SHOW_TEXT,
 								CommandText.text("ratelimit.info.permission_bypass.copy").finish()

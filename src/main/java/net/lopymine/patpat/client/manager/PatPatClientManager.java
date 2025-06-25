@@ -60,7 +60,7 @@ public class PatPatClientManager {
 	}
 
 	public static PatEntity pat(@NotNull LivingEntity entity, @NotNull PlayerConfig whoPatted) {
-		LOGGER.debug("{} just patted {}", whoPatted.getName(), entity.getName());
+		LOGGER.debug("{} just patted {}", whoPatted.getName(), entity.getName().getString());
 
 		UUID uuid = entity.getUUID();
 		PatEntity patEntity = PAT_ENTITIES.get(uuid);

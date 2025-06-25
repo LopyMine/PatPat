@@ -14,12 +14,10 @@ import net.lopymine.patpat.client.render.PatPatClientRenderer;
 //? if >=1.19.3 {
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import net.minecraft.world.entity.Entity;
-//?} else {
-/*import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-*///?}
+//?}
 
 @Pseudo
-@Mixin(GeoEntityRenderer.class)
+@Mixin(/*? if <1.19.3 {*/ /*targets = "software.bernie.geckolib3.renderer.geo.GeoEntityRenderer" *//*?} else {*/ GeoEntityRenderer.class /*?}*/)
 public abstract class GeoEntityRendererMixin {
 
 	//? if >=1.21.2 {

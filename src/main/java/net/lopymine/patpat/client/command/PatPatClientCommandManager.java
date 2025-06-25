@@ -9,11 +9,9 @@ import net.lopymine.patpat.extension.TextExtension;
 
 //? >=1.19 {
 import net.fabricmc.fabric.api.client.command.v2.*;
-
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 //?} else {
 /*import net.fabricmc.fabric.api.client.command.v1.*;
-import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
 *///?}
 

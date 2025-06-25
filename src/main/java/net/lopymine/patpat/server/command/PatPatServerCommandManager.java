@@ -39,11 +39,6 @@ public class PatPatServerCommandManager {
 		ServerLifecycleEvents.SERVER_STOPPING.register(server -> PatPatServerRateLimitManager.stopTask());
 
 		CommandRegistrationCallback.EVENT.register((/*? >=1.19 {*/(dispatcher, registryAccess, environment)/*?} else {*//*(dispatcher, dedicated)*//*?}*/ -> {
-			//? <=1.18.2 {
-			/*if (!dedicated) {
-				return;
-			}
-			*///?}
 			dispatcher.register(literal("patpat")
 					.then(PatPatServerInfoCommand.get())
 					.then(PatPatServerListCommand.get())

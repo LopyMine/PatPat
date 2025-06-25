@@ -42,6 +42,10 @@
 			"links": {
 				"modmenu.discord": "https://discord.gg/NZzxdkrV4s"
 			},
+			"credits": {
+				"translator": "Test"
+			},
+
 			"update_checker": true
 		}
 	}

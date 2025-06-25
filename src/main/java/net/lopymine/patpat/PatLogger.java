@@ -3,7 +3,7 @@ package net.lopymine.patpat;
 import org.jetbrains.annotations.Nullable;
 import lombok.*;
 
-//? >=1.17
+//? >=1.17 {
 import org.slf4j.*;
 //?} else {
 /*import org.apache.logging.log4j.*;

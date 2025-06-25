@@ -18,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 /*import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 *///?}
 
+@Pseudo
 @Mixin(GeoEntityRenderer.class)
 public abstract class GeoEntityRendererMixin {
 
@@ -36,7 +37,7 @@ public abstract class GeoEntityRendererMixin {
 			return;
 	}
 	*///?} else {
-	/*@SuppressWarnings("all") // Actually works fine, just a forge jar moment
+	/*@Dynamic
 	@Inject(at = @At("HEAD"), method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V")
 	private void render(LivingEntity livingEntity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
 	*///?}

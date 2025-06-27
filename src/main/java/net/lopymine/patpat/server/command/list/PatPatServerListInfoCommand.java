@@ -33,7 +33,7 @@ public class PatPatServerListInfoCommand {
 	private static int onInfo(CommandContext<CommandSourceStack> context) {
 		PatPatServerConfig config = PatPatServerConfig.getInstance();
 		Map<UUID, String> map = PatPatServerPlayerListConfig.getInstance().getMap();
-		PatPatCommonListChangeCommand.sendInfo(map, config.getListMode(), (component) -> context.sendMsg(component, true));
+		PatPatCommonListChangeCommand.sendInfo(map, config.getListMode(), (component) -> context.sendMsg(component));
 		return Command.SINGLE_SUCCESS;
 	}
 

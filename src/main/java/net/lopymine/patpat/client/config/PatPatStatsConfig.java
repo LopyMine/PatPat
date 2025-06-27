@@ -110,10 +110,8 @@ public class PatPatStatsConfig {
 				if (!AutoSaveManager.shouldSave || !PatPatClientConfig.getInstance().getMainConfig().isModEnabled()) {
 					return;
 				}
-				LOGGER.debug("Saving PatPat Statistics...");
 				PatPatStatsConfig.getInstance().save();
 				AutoSaveManager.shouldSave = false;
-				LOGGER.debug("PatPat Statistics Saved");
 			};
 
 			SERVICE.scheduleAtFixedRate(

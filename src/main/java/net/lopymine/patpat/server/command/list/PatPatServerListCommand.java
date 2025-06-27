@@ -8,7 +8,7 @@ import net.minecraft.commands.CommandSourceStack;
 
 import static net.minecraft.commands.Commands.literal;
 
-@ExtensionMethod({TextExtension.class, CommandExtension.class})
+@ExtensionMethod(CommandExtension.class)
 public class PatPatServerListCommand {
 
 	private PatPatServerListCommand() {
@@ -17,6 +17,7 @@ public class PatPatServerListCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("list")
+				.requires(context -> context.hasPatPatPermission("list"))
 				.then(PatPatServerListInfoCommand.get())
 				.then(PatPatServerListSetModeCommand.get())
 				.then(PatPatServerListChangeCommand.getAdd())

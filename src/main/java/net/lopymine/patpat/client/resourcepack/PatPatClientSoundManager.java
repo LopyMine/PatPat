@@ -3,6 +3,7 @@ package net.lopymine.patpat.client.resourcepack;
 import net.lopymine.patpat.PatLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.Registry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -20,13 +21,30 @@ public class PatPatClientSoundManager {
 		throw new IllegalStateException("Manager class");
 	}
 
+	private static SoundEvent PAT_PAT_SOUND_EVENT;
+	private static SoundEvent LOPI_SOUND_EVENT;
+
 	public static void register() {
-		PatPatClientSoundManager.registerModSound("patpat");
-		PatPatClientSoundManager.registerModSound("lopi");
+		LOPI_SOUND_EVENT = getLopiSoundEvent();
+		PAT_PAT_SOUND_EVENT = getPatPatSoundEvent();
 	}
 
-	private static void registerModSound(String id) {
-		net.minecraft.core.Registry.register(
+	public static SoundEvent getLopiSoundEvent() {
+		if (LOPI_SOUND_EVENT == null) {
+			return LOPI_SOUND_EVENT = registerModSound("lopi");
+		}
+		return LOPI_SOUND_EVENT;
+	}
+
+	public static SoundEvent getPatPatSoundEvent() {
+		if (PAT_PAT_SOUND_EVENT == null) {
+			return PAT_PAT_SOUND_EVENT = registerModSound("patpat");
+		}
+		return PAT_PAT_SOUND_EVENT;
+	}
+
+	private static SoundEvent registerModSound(String id) {
+		return Registry.register(
 				VersionedThings.SOUND_EVENT,
 				IdentifierUtils.modId(id),
 				SoundUtils.getSoundEvent(id)

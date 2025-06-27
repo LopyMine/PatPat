@@ -8,6 +8,7 @@ import net.minecraft.network.chat.*;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.utils.*;
+import net.lopymine.patpat.*;
 
 import java.net.*;
 import java.util.*;
@@ -48,7 +49,7 @@ public class NoConfigLibrariesScreen {
 
 	private static void onConfirm(boolean bl) {
 		try {
-			String url = (bl ? YACL_MODRINTH_LINK : CLOTH_CONFIG_API_MODRINTH_LINK).formatted(SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*//* getName *//*?}*/());
+			String url = (bl ? YACL_MODRINTH_LINK : CLOTH_CONFIG_API_MODRINTH_LINK).formatted(SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*/ /*getName *//*?}*/());
 
 			URI link = new URI(url);
 			String string = link.getScheme();
@@ -68,11 +69,11 @@ public class NoConfigLibrariesScreen {
 		MutableComponent yaclShort = TextUtils.literal("YACL").withStyle(ChatFormatting.GOLD);
 		Component yaclFull = TextUtils.literal("Yet Another Config Lib [YACL]").withStyle(ChatFormatting.GOLD);
 		Component clothConfig = TextUtils.literal("Cloth Config API").withStyle(ChatFormatting.GOLD);
-		Component closeText = TextUtils.text("modmenu.no_config_libraries_screen.close").withStyle(ChatFormatting.GRAY);
+		Component closeText = PatTranslation.text("modmenu.no_config_libraries_screen.close").withStyle(ChatFormatting.GRAY);
 
 		TITLE = ModMenuUtils.getModTitle();
-		MESSAGE        = TextUtils.text("modmenu.no_config_libraries_screen.message", yaclFull, clothConfig, closeText);
-		OPEN_YACL_PAGE = TextUtils.text("modmenu.no_config_libraries_screen.open_page", yaclShort);
-		OPEN_CLOTH_CONFIG_PAGE = TextUtils.text("modmenu.no_config_libraries_screen.open_page", clothConfig);
+		MESSAGE        = PatTranslation.text("modmenu.no_config_libraries_screen.message", yaclFull, clothConfig, closeText);
+		OPEN_YACL_PAGE = PatTranslation.text("modmenu.no_config_libraries_screen.open_page", yaclShort);
+		OPEN_CLOTH_CONFIG_PAGE = PatTranslation.text("modmenu.no_config_libraries_screen.open_page", clothConfig);
 	}
 }

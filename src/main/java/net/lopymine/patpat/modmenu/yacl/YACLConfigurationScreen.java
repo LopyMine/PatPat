@@ -144,7 +144,7 @@ public class YACLConfigurationScreen {
 						.build(),
 				SimpleOption.<Integer>startBuilder("max_packets_per_second")
 						.withBinding(defConfig.getMaxPacketsPerSecond(), config::getMaxPacketsPerSecond, config::setMaxPacketsPerSecond, false)
-						.withController(0, 100, 1)
+						.withController(1, 100, 1)
 						.withDescription(SimpleContent.NONE)
 						.build()
 		).build();

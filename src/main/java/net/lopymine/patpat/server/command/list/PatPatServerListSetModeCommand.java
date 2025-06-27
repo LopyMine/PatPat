@@ -6,7 +6,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
-import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.server.config.PatPatServerConfig;
 import net.lopymine.patpat.extension.*;
@@ -45,7 +44,7 @@ public class PatPatServerListSetModeCommand {
 					"list.set.already",
 					listMode == null ? "null" : listMode.getText()
 			).finish();
-			context.sendMsg(text, true);
+			context.sendMsg(text);
 			return 0;
 		}
 
@@ -60,7 +59,7 @@ public class PatPatServerListSetModeCommand {
 		Object arg = success ? listMode.getText() : modeId;
 
 		Component text = CommandText.goldenArgs(key, arg).finish();
-		context.sendMsg(text, true);
+		context.sendMsg(text);
 
 		return success ? Command.SINGLE_SUCCESS : 0;
 	}

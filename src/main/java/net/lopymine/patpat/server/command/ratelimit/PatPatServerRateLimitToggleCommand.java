@@ -52,7 +52,7 @@ public class PatPatServerRateLimitToggleCommand {
 		if (rateLimitConfig.isEnabled() == toggle) {
 			MutableComponent text = CommandText.text("ratelimit.%s.already".formatted(key))
 					.finish();
-			context.sendMsg(text, false);
+			context.sendMsg(text);
 			return 0;
 		}
 		rateLimitConfig.setEnabled(toggle);
@@ -61,7 +61,7 @@ public class PatPatServerRateLimitToggleCommand {
 		MutableComponent text = CommandText.text("ratelimit.%s.success".formatted(key))
 				.finish()
 				.withStyle(toggle ? ChatFormatting.GREEN : ChatFormatting.RED);
-		context.sendMsg(text, false);
+		context.sendMsg(text);
 		return Command.SINGLE_SUCCESS;
 	}
 }

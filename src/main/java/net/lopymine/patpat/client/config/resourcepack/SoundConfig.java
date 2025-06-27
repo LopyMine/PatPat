@@ -5,15 +5,17 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
 import net.lopymine.patpat.utils.*;
 import net.minecraft.sounds.SoundEvent;
 
 @Getter
 public class SoundConfig {
-	public static final SoundConfig PATPAT_SOUND = new SoundConfig("patpat");
+
+	public static final SoundConfig PAT_PAT_SOUND = new SoundConfig(PatPatClientSoundManager.getPatPatSoundEvent(), 1.0F, 1.0F, 1.0F);
 
 	public static final Codec<SoundConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.STRING.xmap(SoundUtils::getSoundEvent, SoundUtils::getTypeId).fieldOf("id").forGetter(SoundConfig::getSound),
+			Codec.STRING.xmap(SoundUtils::getSoundEvent, SoundUtils::getLocation).fieldOf("id").forGetter(SoundConfig::getSound),
 			Codec.FLOAT.optionalFieldOf("minPitch", 1.0F).forGetter(SoundConfig::getMinPitch),
 			Codec.FLOAT.optionalFieldOf("maxPitch", 1.0F).forGetter(SoundConfig::getMaxPitch),
 			Codec.FLOAT.optionalFieldOf("volume", 1.0F).forGetter(SoundConfig::getVolume)
@@ -29,7 +31,7 @@ public class SoundConfig {
 		return null;
 	}, soundConfig -> {
 		if ((soundConfig.getMinPitch() == 1.0F) && (soundConfig.getMaxPitch() == 1.0F) && (soundConfig.getVolume() == 1.0F)) {
-			return Either.right(soundConfig.getSound()./*? <1.21.2 {*//*getLocation()*//*?} else {*/location()/*?}*/.toString());
+			return Either.right(SoundUtils.getLocation(soundConfig.getSound()));
 		}
 		return Either.left(soundConfig);
 	});
@@ -56,7 +58,7 @@ public class SoundConfig {
 	@Override
 	public String toString() {
 		return "SoundConfig{" +
-				"sound=" + this.sound +
+				"sound=" + SoundUtils.getLocation(this.sound) +
 				", minPitch=" + this.minPitch +
 				", maxPitch=" + this.maxPitch +
 				", volume=" + this.volume +

@@ -22,7 +22,8 @@ mossyDependencies {
 		// - Or if you want to disable it and handle by yourself, just disable it auto handling:
 		// disable("just_mod_id")
 
-		override("modCompileOnly", "flashback")
+		//override("modCompileOnly", "flashback")
+		//override("modCompileOnly", "replaymod")
 
 		// Fabric Permissions Api
 		disable("fabric-permissions-api")
@@ -33,11 +34,6 @@ mossyDependencies {
 		// ProxLib
 		disable("proxlib")
 		// Replay Mod
-		if (stonecutter.compare("1.20.5", mcVersion) == 0) {
-			disable("replaymod")
-		} else {
-			override("modCompileOnly", "replaymod")
-		}
 	}
 }
 

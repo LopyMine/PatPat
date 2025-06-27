@@ -53,9 +53,9 @@ public class PatPatServerInfoCommand {
 				.finish()
 				.withStyle(style);
 
-		context.sendMsg(platformText, true);
-		context.sendMsg(minecraftVersionText, true);
-		context.sendMsg(versionText, true);
+		context.sendMsg(platformText);
+		context.sendMsg(minecraftVersionText);
+		context.sendMsg(versionText);
 
 		return Command.SINGLE_SUCCESS;
 	}

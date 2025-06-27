@@ -17,7 +17,7 @@ public class TextUtils {
 	}
 
 	public static MutableComponent translatable(String key, Object... args) {
-		return translate(key, args);
+		return processWithArgs(Language.getInstance().getOrDefault(key), args);
 	}
 
 	public static MutableComponent literal(Object text) {
@@ -32,13 +32,7 @@ public class TextUtils {
 		return Component.nullToEmpty(key);
 	}
 
-	public static MutableComponent text(String path, Object... args) {
-		return TextUtils.translatable(String.format("%s.%s", PatPat.MOD_ID, path), args);
-	}
-
-	private static MutableComponent translate(String path, Object... args) {
-		String text = Language.getInstance().getOrDefault(path);
-
+	public static MutableComponent processWithArgs(String text, Object... args) {
 		LinkedList<String> parts = new LinkedList<>();
 
 		Matcher matcher = ARGUMENT_PATTERN.matcher(text);
@@ -78,10 +72,6 @@ public class TextUtils {
 			return component;
 		}
 		return TextUtils.literal(String.valueOf(arg));
-	}
-
-	public static boolean isPrimitive(Object object) {
-		return object instanceof Number || object instanceof Boolean || object instanceof String;
 	}
 
 }

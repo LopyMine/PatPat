@@ -11,6 +11,7 @@ import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.common.config.*;
 import net.lopymine.patpat.utils.*;
+import net.lopymine.patpat.*;
 
 import java.io.*;
 import java.util.concurrent.CompletableFuture;

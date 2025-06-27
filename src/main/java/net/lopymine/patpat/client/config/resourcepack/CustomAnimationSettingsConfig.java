@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.resourcepack.PatPatClientResourcePackManager;
 import net.lopymine.patpat.utils.IdentifierUtils;
 import net.minecraft.client.Minecraft;
@@ -31,7 +30,7 @@ public final class CustomAnimationSettingsConfig {
 			IdentifierUtils.modId("textures/default/patpat.png"),
 			240,
 			FrameConfig.DEFAULT_FRAME,
-			Optional.of(SoundConfig.PATPAT_SOUND)
+			Optional.of(SoundConfig.PAT_PAT_SOUND)
 	);
 
 	private final ResourceLocation texture;
@@ -99,7 +98,7 @@ public final class CustomAnimationSettingsConfig {
 			this.textureWidth  = nativeImage.getWidth();
 			this.textureHeight = nativeImage.getHeight();
 		} catch (IOException e) {
-			e.printStackTrace();
+			PatPatClient.LOGGER.error("Failed to load texture size from custom animation: ", e);
 		}
 	}
 

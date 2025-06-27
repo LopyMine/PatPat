@@ -51,12 +51,10 @@ public class PatPatClientPacketManager {
 		});
 
 		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacket.TYPE, packet -> {
-			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
 			handlePatting(packet, true);
 		});
 
 		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacketV2.TYPE, packet -> {
-			PatPatClientProxLibManager.disableIfEnabledBecauseReceivedPacketFromServer();
 			handlePatting(packet, true);
 		});
 	}
@@ -82,7 +80,7 @@ public class PatPatClientPacketManager {
 			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
 		}
 		HelloPatPatServerC2SPacket pongPacket = packet.getPongPacket();
-		LOGGER.debug("[PONG] Sending {} packet to the server...", pongPacket.getClass().getName());
+		LOGGER.debug("[PONG] Sending {} packet to the server...", pongPacket.getClass().getSimpleName());
 		PatPatClientNetworkManager.sendPacketToServer(pongPacket);
 	}
 
@@ -106,13 +104,13 @@ public class PatPatClientPacketManager {
 			LOGGER.debug("Packet declined, because patted entity in not LivingEntity");
 			return;
 		}
-		LOGGER.debug("Patted entity with name {} ", pattedEntity.getName());
+		LOGGER.debug("Patted entity with name {} ", pattedEntity.getName().getString());
 		Entity whoPattedEntity = packet.getWhoPattedEntity(clientWorld);
 		if(whoPattedEntity == null) {
 			LOGGER.debug("Packet declined, because who patted entity is null");
 			return;
 		}
-		LOGGER.debug("Who patted entity with name {}", whoPattedEntity.getName());
+		LOGGER.debug("Who patted entity with name {}", whoPattedEntity.getName().getString());
 		if (!(whoPattedEntity instanceof Player)) {
 			LOGGER.debug("Packet declined, because who patted entity in not PlayerEntity");
 			return;

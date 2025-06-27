@@ -61,7 +61,7 @@ public class PatPatServerListChangeCommand {
 			String name = gameProfile.getName();
 			UUID uuid = gameProfile.getId();
 
-			PatPatCommonListChangeCommand.changeList(add, map, uuid, name, (component) -> context.sendMsg(component, true));
+			PatPatCommonListChangeCommand.changeList(add, map, uuid, name, (component) -> context.sendMsg(component));
 		}
 
 		config.save();

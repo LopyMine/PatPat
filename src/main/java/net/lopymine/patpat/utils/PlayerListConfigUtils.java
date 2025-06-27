@@ -11,8 +11,8 @@ public class PlayerListConfigUtils {
 
 	public static void create(File config, PatLogger logger) {
 		try {
-			if (config.createNewFile()) {
-				logger.error("Invoked create player-list.txt config, but config already exists!");
+			if (!config.createNewFile()) {
+				logger.error("Invoked player list config creation, but config already exists!");
 			}
 		} catch (Exception e) {
 			logger.error("Failed to create player-list.txt config!", e);

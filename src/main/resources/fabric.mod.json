@@ -22,6 +22,9 @@
 		"client": [
 			"net.lopymine.patpat.client.PatPatClient"
 		],
+		"server": [
+			"net.lopymine.patpat.dedicated.PatPatDedicatedServer"
+		],
 		"modmenu": [
 			"net.lopymine.patpat.modmenu.ModMenuIntegration"
 		]

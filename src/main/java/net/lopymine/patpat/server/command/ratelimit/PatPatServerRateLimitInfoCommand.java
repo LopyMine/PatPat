@@ -12,6 +12,7 @@ import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
 import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.utils.*;
+import net.lopymine.patpat.*;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -47,7 +48,7 @@ public class PatPatServerRateLimitInfoCommand {
 	public static int info(CommandContext<CommandSourceStack> context) {
 		PatPatServerRateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
 
-		Component statusComponent = TextUtils.text("formatter.enabled_or_disabled." + config.isEnabled()).withStyle(ChatFormatting.GOLD);
+		Component statusComponent = PatTranslation.text("formatter.enabled_or_disabled." + config.isEnabled()).withStyle(ChatFormatting.GOLD);
 		Object limitComponent = config.getTokenLimit();
 		Object incrementComponent = config.getTokenIncrement();
 		Object intervalComponent = config.getTokenIncrementInterval().toString();

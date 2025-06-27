@@ -1,6 +1,7 @@
 package net.lopymine.patpat.utils;
 
 import java.util.*;
+import net.lopymine.patpat.PatTranslation;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -32,7 +33,7 @@ public class CommandText {
 
 	private CommandText(String key, Object... args) {
 		this.key  = key;
-		this.text = TextUtils.text(key, args);
+		this.text = PatTranslation.text(key, args);
 	}
 
 	public static CommandText text(String key, Object... args) {
@@ -66,7 +67,7 @@ public class CommandText {
 	}
 
 	public CommandText withHoverText(Object... args) {
-		MutableComponent hoverText = TextUtils.text(this.key + ".hover_text", args);
+		MutableComponent hoverText = PatTranslation.text(this.key + ".hover_text", args);
 		HoverEvent hoverEvent = getHoverEvent(Action.SHOW_TEXT, hoverText);
 		return this.withHoverEvent(hoverEvent);
 	}

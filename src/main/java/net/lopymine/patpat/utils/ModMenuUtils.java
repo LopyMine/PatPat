@@ -1,5 +1,6 @@
 package net.lopymine.patpat.utils;
 
+import net.lopymine.patpat.PatTranslation;
 import net.lopymine.patpat.modmenu.yacl.custom.utils.SimpleContent;
 
 import net.minecraft.ChatFormatting;
@@ -22,11 +23,11 @@ public class ModMenuUtils {
 	}
 
 	public static MutableComponent getName(String key) {
-		return TextUtils.text(key + ".name");
+		return PatTranslation.text(key + ".name");
 	}
 
 	public static MutableComponent getDescription(String key) {
-		return TextUtils.text(key + ".description");
+		return PatTranslation.text(key + ".description");
 	}
 
 	public static MutableComponent getOptionName(String optionId) {
@@ -38,7 +39,7 @@ public class ModMenuUtils {
 	}
 
 	public static MutableComponent getModTitle() {
-		return TextUtils.text("modmenu.title");
+		return PatTranslation.text("modmenu.title");
 	}
 
 	public static ResourceLocation getContentId(SimpleContent content, String contentId) {
@@ -46,10 +47,10 @@ public class ModMenuUtils {
 	}
 
 	public static Function<Boolean, Component> getEnabledOrDisabledFormatter() {
-		return state -> TextUtils.text("formatter.enabled_or_disabled." + Boolean.TRUE.equals(state));
+		return state -> PatTranslation.text("formatter.enabled_or_disabled." + Boolean.TRUE.equals(state));
 	}
 
 	public static Function<Boolean, Component> getEnabledOrDisabledFormatterColored() {
-		return state -> TextUtils.text("formatter.enabled_or_disabled." + Boolean.TRUE.equals(state)).withStyle(Boolean.TRUE.equals(state) ? ChatFormatting.GREEN : ChatFormatting.RED);
+		return state -> PatTranslation.text("formatter.enabled_or_disabled." + Boolean.TRUE.equals(state)).withStyle(Boolean.TRUE.equals(state) ? ChatFormatting.GREEN : ChatFormatting.RED);
 	}
 }

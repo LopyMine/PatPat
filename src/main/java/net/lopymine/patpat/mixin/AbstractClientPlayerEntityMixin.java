@@ -11,18 +11,17 @@ import com.llamalad7.mixinextras.injector.wrapoperation.*;
 import net.minecraft.client.resources.PlayerSkin;
 //?} else {
 /*import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.jetbrains.annotations.Nullable;
 *///?}
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.utils.IdentifierUtils;
 
-import org.jetbrains.annotations.Nullable;
-
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerEntityMixin {
 
 	@Unique
-	private static final ResourceLocation PAT_PAT_CAPE_ID = IdentifierUtils.modId("textures/cape/patpat_cape_hand.png");
+	private static final ResourceLocation PATPAT_CAPE_ID = IdentifierUtils.modId("textures/cape/patpat_cape_hand.png");
 
 	//? >1.20.1 {
 	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerInfo;getSkin()Lnet/minecraft/client/resources/PlayerSkin;"), method = "getSkin")
@@ -32,7 +31,7 @@ public abstract class AbstractClientPlayerEntityMixin {
 		if (capeTexture != null || !PatPatClient.AUTHORS.contains(instance.getProfile().getId())) {
 			return call;
 		}
-		return new PlayerSkin(call.texture(), call.textureUrl(), PAT_PAT_CAPE_ID, call.elytraTexture(), call.model(), call.secure());
+		return new PlayerSkin(call.texture(), call.textureUrl(), PATPAT_CAPE_ID, call.elytraTexture(), call.model(), call.secure());
 	}
 	//?} else {
 
@@ -50,7 +49,7 @@ public abstract class AbstractClientPlayerEntityMixin {
 			return;
 		}
 		if (PatPatClient.AUTHORS.contains(playerListEntry.getProfile().getId())) {
-			cir.setReturnValue(PAT_PAT_CAPE_ID);
+			cir.setReturnValue(PATPAT_CAPE_ID);
 		}
 	}
 	*///?}

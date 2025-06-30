@@ -22,8 +22,8 @@ mossyDependencies {
 		// - Or if you want to disable it and handle by yourself, just disable it auto handling:
 		// disable("just_mod_id")
 
-		//override("modCompileOnly", "flashback")
-		//override("modCompileOnly", "replaymod")
+		override("modCompileOnly", "flashback")
+		override("modCompileOnly", "replaymod")
 
 		// Fabric Permissions Api
 		disable("fabric-permissions-api")
@@ -97,8 +97,8 @@ dependencies {
 			modCompileOnly("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
 		}
 	}
-	// TODO: Добавить тесты на версию раньше, чем 1.19.4
-	if (stonecutter.compare(mcVersion, "1.19.4") >= 0) {
+	// TODO: Добавить тесты на версию раньше, чем 1.18.2
+	if (stonecutter.compare(mcVersion, "1.18.2") >= 0) {
 		testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
 	}
 
@@ -108,7 +108,7 @@ dependencies {
 	}
 }
 
-if (stonecutter.compare(stonecutter.current.version.toString(), "1.19.4") >= 0) {
+if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0) {
 	test {
 		useJUnitPlatform()
 	}

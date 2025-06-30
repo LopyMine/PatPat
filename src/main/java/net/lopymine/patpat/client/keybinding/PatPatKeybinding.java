@@ -100,6 +100,9 @@ public class PatPatKeybinding extends KeyMapping {
 		if (this.combination.onlyOneKey()) {
 			this.combination.set(key, pressed);
 			this.setDown(pressed);
+			if(!pressed){
+				PatPatClientManager.setPatCooldown(0);
+			}
 			return this.isDown();
 		}
 
@@ -143,7 +146,7 @@ public class PatPatKeybinding extends KeyMapping {
 
 	public void resetPressedState() {
 		List<Key> keys = this.combination.getKeys();
-		keys.forEach((key) -> {
+		keys.forEach(key -> {
 			if (key.getType() == Type.KEYSYM) {
 				this.combination.set(key, InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), key.getValue()));
 			} else {

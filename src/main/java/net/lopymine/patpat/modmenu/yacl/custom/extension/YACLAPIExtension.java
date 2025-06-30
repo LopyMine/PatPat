@@ -17,10 +17,14 @@ public class YACLAPIExtension {
 
 	private static final String STATE_MANAGER_VERSION = "3.6.0";
 
+	private YACLAPIExtension() {
+		throw new IllegalStateException("Extension class");
+	}
+
 	public static <A> Builder<A> bindingE(Builder<A> builder, Binding<List<A>> binding, boolean instant) {
 		Version currentYACLVersion = getCurrentYACLVersion();
 
-		if (currentYACLVersion.compareTo(getVersion(STATE_MANAGER_VERSION)) >= 0) {
+		if (currentYACLVersion.compareTo(getVersion()) >= 0) {
 			//? if yacl: >=3.6.0 {
 			builder.state(instant ? StateManager.createInstant(binding) : StateManager.createSimple(binding));
 			//?}
@@ -31,10 +35,11 @@ public class YACLAPIExtension {
 		return builder;
 	}
 
+	@SuppressWarnings("deprecation") // Outdated method is used for wider support of YACL
 	public static <A> Option.Builder<A> bindingE(Option.Builder<A> builder, Binding<A> binding, boolean instant) {
 		Version currentYACLVersion = getCurrentYACLVersion();
 
-		if (currentYACLVersion.compareTo(getVersion(STATE_MANAGER_VERSION)) >= 0) {
+		if (currentYACLVersion.compareTo(getVersion()) >= 0) {
 			//? if yacl: >=3.6.0 {
 			builder.stateManager(instant ? StateManager.createInstant(binding) : StateManager.createSimple(binding));
 			//?}
@@ -54,9 +59,9 @@ public class YACLAPIExtension {
 		).getMetadata().getVersion();
 	}
 
-	private static Version getVersion(String version) {
+	private static Version getVersion() {
 		try {
-			return Version.parse(version);
+			return Version.parse(YACLAPIExtension.STATE_MANAGER_VERSION);
 		} catch (Exception ignored) {
 			return new StringVersion("1.0.0");
 		}

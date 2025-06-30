@@ -34,6 +34,7 @@ public class PatPatClientCommandManager {
 						.then(PatPatClientListCommand.get())
 						.then(PatPatClientModEnableCommand.getOff())
 						.then(PatPatClientModEnableCommand.getOn())
+						.then(PatPatClientInfoCommand.get())
 				)
 				/*? >=1.19 {*/))/*?}*/;
 	}

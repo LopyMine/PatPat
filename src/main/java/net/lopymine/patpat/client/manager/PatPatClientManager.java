@@ -104,7 +104,7 @@ public class PatPatClientManager {
 			return;
 		}
 
-		if (patCooldown != 0 || !PatPatClientKeybindingManager.PAT_KEYBINDING.isDown()) {
+		if (patCooldown != 0 || !PatPatClientKeybindingManager.getPatKeybinding().isDown()) {
 			return;
 		}
 
@@ -123,7 +123,7 @@ public class PatPatClientManager {
 		GameProfile profile = /*? if >=1.20.2 {*/ minecraft.getGameProfile(); /*?} else {*/ /*minecraft.getUser().getGameProfile(); *//*?}*/
 
 		PlayerConfig whoPatted = PlayerConfig.of(profile.getName(), profile.getId());
-		PatPatClientRenderer.clientPats.add(new PacketPat(pattedEntity, whoPatted, player, false));
+		PatPatClientRenderer.registerClientPacket(new PacketPat(pattedEntity, whoPatted, player, false));
 
 		PatPatClientManager.patCooldown = 4;
 	}
@@ -133,7 +133,7 @@ public class PatPatClientManager {
 		if (!config.getMainConfig().isModEnabled()) {
 			return false;
 		}
-		if (!PatPatClientKeybindingManager.PAT_KEYBINDING.isDown()) {
+		if (!PatPatClientKeybindingManager.getPatKeybinding().isDown()) {
 			return false;
 		}
 		return getPatEntityFromHitResult() != null;
@@ -144,6 +144,10 @@ public class PatPatClientManager {
 		Minecraft minecraft = Minecraft.getInstance();
 		LocalPlayer player = minecraft.player;
 		if (player == null || minecraft.level == null || player.isDeadOrDying()) {
+			return null;
+		}
+
+		if(!player.getMainHandItem().isEmpty()){
 			return null;
 		}
 

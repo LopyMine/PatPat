@@ -14,16 +14,20 @@ import net.lopymine.patpat.client.manager.PatPatClientManager;
 @Mixin(KeyMapping.class)
 public class KeybindingMixin {
 
+	private KeybindingMixin() {
+		throw new IllegalStateException("Mixin class");
+	}
+
 	@Inject(at = @At("HEAD"), method = "click", cancellable = true)
 	private static void cancelClickForPatPatKeybinding(InputConstants.Key key, CallbackInfo ci) {
-		if (PatPatClientKeybindingManager.PAT_KEYBINDING.onKeyAction(key, true) && PatPatClientManager.canPat()) {
+		if (PatPatClientKeybindingManager.getPatKeybinding().onKeyAction(key, true) && PatPatClientManager.canPat()) {
 			ci.cancel();
 		}
 	}
 
 	@Inject(at = @At("HEAD"), method = "set", cancellable = true)
 	private static void processSetForPatPatKeybinding(InputConstants.Key key, boolean pressed, CallbackInfo ci) {
-		if (PatPatClientKeybindingManager.PAT_KEYBINDING.onKeyAction(key, pressed) && PatPatClientManager.canPat()) {
+		if (PatPatClientKeybindingManager.getPatKeybinding().onKeyAction(key, pressed) && PatPatClientManager.canPat()) {
 			ci.cancel();
 		}
 	}

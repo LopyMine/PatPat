@@ -19,15 +19,15 @@ public class NoConfigLibrariesScreen {
 		throw new IllegalStateException("Screen class, use NoConfigLibrariesScreen.createScreen(...) method!");
 	}
 
+	private static final String YACL_MODRINTH_LINK = "https://modrinth.com/mod/yacl?version=%s&loader=fabric#download";
+	private static final String CLOTH_CONFIG_API_MODRINTH_LINK = "https://modrinth.com/mod/cloth-config?version=%s&loader=fabric#download";
+
 	private static final Component TITLE;
 	private static final Component MESSAGE;
 	private static final Component OPEN_YACL_PAGE;
 	private static final Component OPEN_CLOTH_CONFIG_PAGE;
 
 	private static final Set<String> ALLOWED_PROTOCOLS = Set.of("http", "https");
-
-	private static final String YACL_MODRINTH_LINK = "https://modrinth.com/mod/yacl?version=%s&loader=fabric#download";
-	private static final String CLOTH_CONFIG_API_MODRINTH_LINK = "https://modrinth.com/mod/cloth-config?version=%s&loader=fabric#download";
 
 	public static Screen createScreen(Screen parent) {
 		return new ConfirmScreen(NoConfigLibrariesScreen::onConfirm, NoConfigLibrariesScreen.TITLE, NoConfigLibrariesScreen.MESSAGE, NoConfigLibrariesScreen.OPEN_YACL_PAGE, NoConfigLibrariesScreen.OPEN_CLOTH_CONFIG_PAGE) {

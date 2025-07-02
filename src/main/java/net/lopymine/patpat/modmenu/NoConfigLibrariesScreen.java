@@ -72,7 +72,7 @@ public class NoConfigLibrariesScreen {
 		Component closeText = PatTranslation.text("modmenu.no_config_libraries_screen.close").withStyle(ChatFormatting.GRAY);
 
 		TITLE = ModMenuUtils.getModTitle();
-		MESSAGE        = PatTranslation.text("modmenu.no_config_libraries_screen.message", yaclFull, clothConfig, closeText);
+		MESSAGE        = PatTranslation.text("modmenu.no_config_libraries_screen.message", yaclFull, clothConfig).append("\n\n").append(closeText);
 		OPEN_YACL_PAGE = PatTranslation.text("modmenu.no_config_libraries_screen.open_page", yaclShort);
 		OPEN_CLOTH_CONFIG_PAGE = PatTranslation.text("modmenu.no_config_libraries_screen.open_page", clothConfig);
 	}

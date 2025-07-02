@@ -128,8 +128,8 @@ public class ClothConfigConfigurationScreen {
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(ModMenuUtils.getOptionName("hand_offset_x"), config.getAnimationOffsets().getX())
-						.setTooltip(ModMenuUtils.getOptionDescription("hand_offset_x"))
+				entryBuilder.startFloatField(ModMenuUtils.getOptionName("animation_offset_x"), config.getAnimationOffsets().getX())
+						.setTooltip(ModMenuUtils.getOptionDescription("animation_offset_x"))
 						.setDefaultValue(defConfig.getAnimationOffsets().getX())
 						.setMin(-5)
 						.setMax(5)
@@ -137,8 +137,8 @@ public class ClothConfigConfigurationScreen {
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(ModMenuUtils.getOptionName("hand_offset_y"), config.getAnimationOffsets().getY())
-						.setTooltip(ModMenuUtils.getOptionDescription("hand_offset_y"))
+				entryBuilder.startFloatField(ModMenuUtils.getOptionName("animation_offset_y"), config.getAnimationOffsets().getY())
+						.setTooltip(ModMenuUtils.getOptionDescription("animation_offset_y"))
 						.setDefaultValue(defConfig.getAnimationOffsets().getY())
 						.setMin(-5)
 						.setMax(5)
@@ -146,8 +146,8 @@ public class ClothConfigConfigurationScreen {
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startFloatField(ModMenuUtils.getOptionName("hand_offset_z"), config.getAnimationOffsets().getZ())
-						.setTooltip(ModMenuUtils.getOptionDescription("hand_offset_z"))
+				entryBuilder.startFloatField(ModMenuUtils.getOptionName("animation_offset_z"), config.getAnimationOffsets().getZ())
+						.setTooltip(ModMenuUtils.getOptionDescription("animation_offset_z"))
 						.setDefaultValue(defConfig.getAnimationOffsets().getZ())
 						.setMin(-5)
 						.setMax(5)
@@ -187,8 +187,8 @@ public class ClothConfigConfigurationScreen {
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("bypass_server_resource_pack_priority_enabled"), config.isBypassServerResourcePackPriorityEnabled())
-						.setTooltip(ModMenuUtils.getOptionDescription("bypass_server_resource_pack_priority_enabled"))
+				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("bypass_server_animations_priority_enabled"), config.isBypassServerResourcePackPriorityEnabled())
+						.setTooltip(ModMenuUtils.getOptionDescription("bypass_server_animations_priority_enabled"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLED_FORMATTER)
 						.setDefaultValue(defConfig.isBypassServerResourcePackPriorityEnabled())
 						.setSaveConsumer(config::setBypassServerResourcePackEnabled)

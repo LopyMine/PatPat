@@ -9,6 +9,7 @@ import net.lopymine.patpat.client.PatPatClient;
 
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public record Version(int major, int minor, int patch) {
 
 	public static final Version INVALID = new Version(-1, -1, -1);

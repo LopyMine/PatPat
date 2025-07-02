@@ -30,7 +30,7 @@ public class YACLConfigurationScreen {
 	}
 
 	private static ConfigCategory getGeneralCategory(PatPatClientConfig defConfig, PatPatClientConfig config) {
-		return SimpleCategory.startBuilder("general")
+		return SimpleCategory.startBuilder("main")
 				.groups(getMainGroup(defConfig.getMainConfig(), config.getMainConfig()))
 				.groups(getResourcePacksGroup(defConfig.getResourcePacksConfig(), config.getResourcePacksConfig()))
 				.groups(getSoundGroup(defConfig.getSoundsConfig(), config.getSoundsConfig()))
@@ -92,17 +92,17 @@ public class YACLConfigurationScreen {
 						.withController()
 						.withDescription(SimpleContent.NONE)
 						.build(),
-				SimpleOption.<Float>startBuilder("hand_offset_x")
+				SimpleOption.<Float>startBuilder("animation_offset_x")
 						.withBinding(defConfig.getAnimationOffsets().getX(), config.getAnimationOffsets()::getX, config.getAnimationOffsets()::setX, false)
 						.withController(-5F, 5F, 0.01F)
 						.withDescription(SimpleContent.IMAGE)
 						.build(),
-				SimpleOption.<Float>startBuilder("hand_offset_y")
+				SimpleOption.<Float>startBuilder("animation_offset_y")
 						.withBinding(defConfig.getAnimationOffsets().getY(), config.getAnimationOffsets()::getY, config.getAnimationOffsets()::setY, false)
 						.withController(-5F, 5F, 0.01F)
 						.withDescription(SimpleContent.IMAGE)
 						.build(),
-				SimpleOption.<Float>startBuilder("hand_offset_z")
+				SimpleOption.<Float>startBuilder("animation_offset_z")
 						.withBinding(defConfig.getAnimationOffsets().getZ(), config.getAnimationOffsets()::getZ, config.getAnimationOffsets()::setZ, false)
 						.withController(-5F, 5F, 0.01F)
 						.withDescription(SimpleContent.IMAGE)
@@ -127,7 +127,7 @@ public class YACLConfigurationScreen {
 						.withController()
 						.withDescription(SimpleContent.NONE)
 						.build(),
-				SimpleOption.<Boolean>startBuilder("bypass_server_resource_pack_priority_enabled")
+				SimpleOption.<Boolean>startBuilder("bypass_server_animations_priority_enabled")
 						.withBinding(defConfig.isBypassServerResourcePackPriorityEnabled(), config::isBypassServerResourcePackPriorityEnabled, config::setBypassServerResourcePackEnabled, false)
 						.withController()
 						.withDescription(SimpleContent.NONE)

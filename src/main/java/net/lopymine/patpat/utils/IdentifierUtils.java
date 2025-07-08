@@ -30,9 +30,7 @@ public class IdentifierUtils {
 
 		//? >=1.21 {
 		return ResourceLocation.fromNamespaceAndPath(name, location);
-		//?} elif >=1.19 {
-		/*return new ResourceLocation(name, location);
-		*///?} else {
+		//?} else {
 		/*return new ResourceLocation(name, location);
 		*///?}
 	}

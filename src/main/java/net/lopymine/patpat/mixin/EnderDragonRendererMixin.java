@@ -3,7 +3,6 @@ package net.lopymine.patpat.mixin;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EnderDragonRenderer;
 
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -31,7 +30,7 @@ public class EnderDragonRendererMixin {
 		}
 	//?} else {
 	/*@Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"), method = "render(Lnet/minecraft/world/entity/boss/enderdragon/EnderDragon;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V")
-	private void makeDragonPattableBecauseWhyNot(EnderDragon livingEntity, float f, float tickDelta, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
+	private void makeDragonPattableBecauseWhyNot(net.minecraft.world.entity.boss.enderdragon.EnderDragon livingEntity, float f, float tickDelta, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
 	*///?}
 		PatPatClientRenderer.scaleEntityIfPatted(livingEntity, poseStack, tickDelta);
 	}

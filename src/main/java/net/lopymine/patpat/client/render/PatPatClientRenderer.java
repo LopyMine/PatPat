@@ -35,17 +35,26 @@ import net.lopymine.patpat.compat.replaymod.ReplayModCompat;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.extension.VertexConsumerExtension;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import org.jetbrains.annotations.Nullable;
 
 @ExtensionMethod(VertexConsumerExtension.class)
 public class PatPatClientRenderer {
 
-	public static final List<PacketPat> serverPats = new ArrayList<>();
-	public static final List<PacketPat> clientPats = new ArrayList<>();
+	private static final Queue<PacketPat> serverPats = new ConcurrentLinkedQueue<>();
+	private static final Queue<PacketPat> clientPats = new ConcurrentLinkedQueue<>();
 
-	public record PacketPat(LivingEntity pattedEntity, PlayerConfig playerConfig, LocalPlayer player, boolean replayModPacket) {
+	public static void registerServerPacket(PacketPat packet) {
+		serverPats.offer(packet);
+	}
+
+	public static void registerClientPacket(PacketPat packet) {
+		clientPats.offer(packet);
+	}
+
+	public record PacketPat(LivingEntity pattedEntity, PlayerConfig playerConfig, LocalPlayer player,
+	                        boolean replayModPacket) {
 
 		@Override
 		public String toString() {
@@ -64,8 +73,9 @@ public class PatPatClientRenderer {
 			boolean frozen = /*? if >1.20.2 {*/ client.tickRateManager().isFrozen(); /*?} else {*/ /*false; *//*?}*/
 			PatPatClientConfig config = PatPatClientConfig.getInstance();
 
+			PacketPat packet;
 			if (!frozen) {
-				serverPats.forEach((packet) -> {
+				while ((packet = serverPats.poll()) != null) {
 					LivingEntity pattedEntity = packet.pattedEntity();
 					PlayerConfig playerConfig = packet.playerConfig();
 					PatEntity patEntity = PatPatClientManager.pat(pattedEntity, playerConfig);
@@ -73,14 +83,13 @@ public class PatPatClientRenderer {
 					if (config.getSoundsConfig().isSoundsEnabled() && !packet.replayModPacket()) {
 						PatPatClientSoundManager.playSound(patEntity, packet.player(), config.getSoundsConfig().getSoundsVolume());
 					}
-				});
-				serverPats.clear();
+				}
 			}
 
-			clientPats.forEach((patPacket) -> {
-				LocalPlayer player = patPacket.player();
-				LivingEntity pattedEntity = patPacket.pattedEntity();
-				PlayerConfig playerConfig = patPacket.playerConfig();
+			while ((packet = clientPats.poll()) != null) {
+				LocalPlayer player = packet.player();
+				LivingEntity pattedEntity = packet.pattedEntity();
+				PlayerConfig playerConfig = packet.playerConfig();
 
 				PatPatClientNetworkManager.sendPacketToServer(PatPatClientPacketManager.getPatPacket(pattedEntity));
 				PatEntity patEntity = PatPatClientManager.pat(pattedEntity, playerConfig);
@@ -99,8 +108,7 @@ public class PatPatClientRenderer {
 				if (config.getSoundsConfig().isSoundsEnabled()) {
 					PatPatClientSoundManager.playSound(patEntity, player, config.getSoundsConfig().getSoundsVolume());
 				}
-			});
-			clientPats.clear();
+			}
 
 			if (!frozen) {
 				PatPatClientManager.tickEntities();
@@ -145,15 +153,10 @@ public class PatPatClientRenderer {
 			return RenderResult.FAILED;
 		}
 
-		PatEntity patEntity = providedPatEntity == null
-				?
-				entity instanceof LivingEntity livingEntity
-						?
-						PatPatClientManager.getPatEntity(livingEntity)
-						:
-						null
-				:
-				providedPatEntity;
+		PatEntity patEntity = providedPatEntity;
+		if(patEntity == null && entity instanceof LivingEntity livingEntity){
+			patEntity = PatPatClientManager.getPatEntity(livingEntity);
+		}
 
 		if (patEntity == null) {
 			return RenderResult.FAILED;
@@ -168,7 +171,7 @@ public class PatPatClientRenderer {
 		/*float nameLabelHeight = entity != null ? entity.getBbHeight() : 0.0F;
 		 *///?} else {
 		net.minecraft.world.phys.Vec3 vec3d = entity != null ? entity.getAttachments().getNullable(net.minecraft.world.entity.EntityAttachment.NAME_TAG, 0, entity.getViewYRot(tickDelta)) : null;
-		float nameLabelHeight = vec3d != null ? (float) vec3d.y: 0.0F;
+		float nameLabelHeight = vec3d != null ? (float) vec3d.y : 0.0F;
 		//?}
 
 		matrices.pushPose();
@@ -207,7 +210,8 @@ public class PatPatClientRenderer {
 		float v2 = 1.0F;
 
 		Pose peek = matrices.last();
-		/*? >=1.19.3 {*/org.joml.Matrix4f/*?} else {*/ /*com.mojang.math.Matrix4f*//*?}*/ matrix4f = peek.pose();
+		/*? >=1.19.3 {*/
+		org.joml.Matrix4f/*?} else {*/ /*com.mojang.math.Matrix4f*//*?}*/ matrix4f = peek.pose();
 		VertexConsumer buffer = provider.getBuffer(RenderType.entityTranslucent(animation.getTexture()));
 
 		buffer.withVertex(matrix4f, x1, y1, z).withColor(255, 255, 255, 255).withUv(u1, v1).withOverlay(OverlayTexture.NO_OVERLAY).withLight(light).withNormal(0, 1, 0).end();
@@ -223,7 +227,7 @@ public class PatPatClientRenderer {
 		return RenderResult.RENDERED;
 	}
 
-	public static void scaleEntityIfPatted(LivingEntity livingEntity, PoseStack matrixStack, float tickDelta){
+	public static void scaleEntityIfPatted(LivingEntity livingEntity, PoseStack matrixStack, float tickDelta) {
 		PatEntity patEntity = PatPatClientManager.getPatEntity(livingEntity);
 		if (patEntity == null) {
 			return;
@@ -246,17 +250,17 @@ public class PatPatClientRenderer {
 	private static void enableBlend() {
 		//? <=1.21.4 {
 		/*RenderSystem.enableBlend();
-		*//*?} else {*/
+		 *//*?} else {*/
 		GlStateManager._enableBlend();
-		 /*?}*/
+		/*?}*/
 	}
 
 	private static void disableBlend() {
 		//? <=1.21.4 {
 		/*RenderSystem.disableBlend();
-		*//*?} else {*/
+		 *//*?} else {*/
 		GlStateManager._disableBlend();
-		 /*?}*/
+		/*?}*/
 	}
 
 }

@@ -14,6 +14,10 @@ public class PatPatCommonListChangeCommand {
 
 	public static final Style EMPTY_TEXT_STYLE = Style.EMPTY.withColor(ChatFormatting.GRAY).withItalic(true);
 
+	private PatPatCommonListChangeCommand() {
+		throw new IllegalStateException("Command class");
+	}
+
 	public static void changeList(boolean add, Map<UUID, String> map, UUID uuid, String nickname, Consumer<Component> sendFeedback) {
 		boolean success = add ? !map.containsKey(uuid) && map.put(uuid, nickname) == null : map.containsKey(uuid) && map.remove(uuid) != null;
 
@@ -26,7 +30,11 @@ public class PatPatCommonListChangeCommand {
 				.withCopyToClipboard(uuid)
 				.finish();
 
-		sendFeedback.accept(success ? text.withStyle(add ? ChatFormatting.GREEN : ChatFormatting.RED) : text);
+		if (success) {
+			sendFeedback.accept(text.withStyle(add ? ChatFormatting.GREEN : ChatFormatting.RED));
+			return;
+		}
+		sendFeedback.accept(text);
 	}
 
 	public static void sendInfo(Map<UUID, String> map, ListMode listMode, Consumer<Component> sendFeedback) {

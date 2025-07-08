@@ -21,26 +21,26 @@ public class PatPatClientSoundManager {
 		throw new IllegalStateException("Manager class");
 	}
 
-	private static SoundEvent PAT_PAT_SOUND_EVENT;
-	private static SoundEvent LOPI_SOUND_EVENT;
+	private static SoundEvent patPatSoundEvent;
+	private static SoundEvent lopiSoundEvent;
 
 	public static void register() {
-		LOPI_SOUND_EVENT = getLopiSoundEvent();
-		PAT_PAT_SOUND_EVENT = getPatPatSoundEvent();
+		lopiSoundEvent   = getLopiSoundEvent();
+		patPatSoundEvent = getPatPatSoundEvent();
 	}
 
 	public static SoundEvent getLopiSoundEvent() {
-		if (LOPI_SOUND_EVENT == null) {
-			return LOPI_SOUND_EVENT = registerModSound("lopi");
+		if (lopiSoundEvent == null) {
+			lopiSoundEvent = registerModSound("lopi");
 		}
-		return LOPI_SOUND_EVENT;
+		return lopiSoundEvent;
 	}
 
 	public static SoundEvent getPatPatSoundEvent() {
-		if (PAT_PAT_SOUND_EVENT == null) {
-			return PAT_PAT_SOUND_EVENT = registerModSound("patpat");
+		if (patPatSoundEvent == null) {
+			patPatSoundEvent = registerModSound("patpat");
 		}
-		return PAT_PAT_SOUND_EVENT;
+		return patPatSoundEvent;
 	}
 
 	private static SoundEvent registerModSound(String id) {

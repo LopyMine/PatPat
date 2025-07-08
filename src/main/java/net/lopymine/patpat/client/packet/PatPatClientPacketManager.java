@@ -50,13 +50,9 @@ public class PatPatClientPacketManager {
 			handlePatting(packet, FlashbackManager.isInReplay() || ReplayModManager.isInReplay());
 		});
 
-		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacket.TYPE, packet -> {
-			handlePatting(packet, true);
-		});
+		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacket.TYPE, packet -> handlePatting(packet, true));
 
-		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacketV2.TYPE, packet -> {
-			handlePatting(packet, true);
-		});
+		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacketV2.TYPE, packet -> handlePatting(packet, true));
 	}
 
 	private static void handleHelloPacket(HelloPatPatPlayerS2CPacket packet) {
@@ -127,7 +123,7 @@ public class PatPatClientPacketManager {
 			return;
 		}
 		PacketPat patPacket = new PacketPat(pattedLivingEntity, PlayerConfig.of(whoPattedEntity.getName().getString(), whoPattedUuid), player, replayModPacket);
-		PatPatClientRenderer.serverPats.add(patPacket);
+		PatPatClientRenderer.registerServerPacket(patPacket);
 		LOGGER.debug("Packet handled! Packet Data: {}", patPacket.toString());
 	}
 

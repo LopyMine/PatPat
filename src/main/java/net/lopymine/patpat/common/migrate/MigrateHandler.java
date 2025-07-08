@@ -8,5 +8,4 @@ public interface MigrateHandler {
 
 	boolean migrate();
 
-
 }

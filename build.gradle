@@ -126,13 +126,6 @@ stonecutter {
 	swap("build_code_time", "\"${buildCodeTime}\";")
 }
 
-tasks.register("submodulesUpdate", Exec) {
-	commandLine = ["git", "submodule", "update", "--init", "--force", "--remote"]
-}
-tasks.named("rebuildLibs") {
-	dependsOn("submodulesUpdate")
-}
-
 jar {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 

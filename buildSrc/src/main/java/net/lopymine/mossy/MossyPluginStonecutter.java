@@ -9,6 +9,7 @@ import org.gradle.api.initialization.Settings;
 import org.gradle.api.invocation.Gradle;
 import org.gradle.api.tasks.TaskContainer;
 
+import java.io.IOException;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,8 +21,17 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 		TaskContainer tasks = project.getTasks();
 		StonecutterControllerExtension controller = project.getExtensions().getByType(StonecutterControllerExtension.class);
 
+		tasks.register("submodulesUpdate", task -> task.doFirst(a->{
+			try {
+				Runtime.getRuntime().exec(new String[]{"git", "submodule", "update", "--init", "--force", "--remote"});
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}));
+
 		for (StonecutterProject version : controller.getVersions()) {
 			tasks.register("buildAndCollect+%s".formatted(version.getProject()), (task) -> {
+				task.dependsOn("submodulesUpdate");
 				task.dependsOn(":%s:buildAndCollect".formatted(version.getProject()));
 				task.setGroup("mossy-build");
 			});
@@ -35,6 +45,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 		}
 
 		tasks.register("buildAndCollect+All", (task) -> {
+			task.dependsOn("submodulesUpdate");
 			controller.getVersions().forEach((version) -> {
 				task.dependsOn(":%s:buildAndCollect".formatted(version.getProject()));
 			});

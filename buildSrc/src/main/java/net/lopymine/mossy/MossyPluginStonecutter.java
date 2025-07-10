@@ -21,7 +21,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 		TaskContainer tasks = project.getTasks();
 		StonecutterControllerExtension controller = project.getExtensions().getByType(StonecutterControllerExtension.class);
 
-		tasks.register("subModulesUpdate", (task) -> {
+		tasks.register("submodulesUpdate", (task) -> {
 			task.doFirst((a) -> {
 				try {
 					Runtime.getRuntime().exec(new String[]{"git", "submodule", "update", "--init", "--force", "--remote"});
@@ -33,7 +33,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 
 		for (StonecutterProject version : controller.getVersions()) {
 			tasks.register("buildAndCollect+%s".formatted(version.getProject()), (task) -> {
-				task.dependsOn("subModulesUpdate");
+				task.dependsOn("submodulesUpdate");
 				task.dependsOn(":%s:buildAndCollect".formatted(version.getProject()));
 				task.setGroup("mossy-build");
 			});
@@ -47,7 +47,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 		}
 
 		tasks.register("buildAndCollect+All", (task) -> {
-			task.dependsOn("subModulesUpdate");
+			task.dependsOn("submodulesUpdate");
 			controller.getVersions().forEach((version) -> {
 				task.dependsOn(":%s:buildAndCollect".formatted(version.getProject()));
 			});

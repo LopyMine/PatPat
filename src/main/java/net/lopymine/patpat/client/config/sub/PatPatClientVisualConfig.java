@@ -17,14 +17,16 @@ public class PatPatClientVisualConfig {
 
 	public static final Codec<PatPatClientVisualConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			option("hidingNicknameEnabled", true, Codec.BOOL, PatPatClientVisualConfig::isHidingNicknameEnabled),
-			option("swingHandEnabled", true, Codec.BOOL, PatPatClientVisualConfig::isSwingHandEnabled),
+			option("clientSwingHandEnabled", true, Codec.BOOL, PatPatClientVisualConfig::isClientSwingHandEnabled),
+			option("serverSwingHandEnabled", true, Codec.BOOL, PatPatClientVisualConfig::isServerSwingHandEnabled),
 			option("animationOffsets", new Vec3f(), Vec3f.CODEC, PatPatClientVisualConfig::getAnimationOffsets),
 			option("cameraShackingEnabled", true, Codec.BOOL, PatPatClientVisualConfig::isCameraShackingEnabled),
 			option("patWeight", 0.425F, Codec.FLOAT, PatPatClientVisualConfig::getPatWeight)
 	).apply(instance, PatPatClientVisualConfig::new));
 
 	private boolean hidingNicknameEnabled;
-	private boolean swingHandEnabled;
+	private boolean clientSwingHandEnabled;
+	private boolean serverSwingHandEnabled;
 	private Vec3f animationOffsets;
 	private boolean cameraShackingEnabled;
 	private float patWeight;

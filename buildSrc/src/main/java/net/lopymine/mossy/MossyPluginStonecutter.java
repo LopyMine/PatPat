@@ -2,6 +2,7 @@ package net.lopymine.mossy;
 
 import dev.kikugie.stonecutter.controller.StonecutterControllerExtension;
 import dev.kikugie.stonecutter.data.StonecutterProject;
+import java.io.IOException;
 import lombok.experimental.ExtensionMethod;
 import org.gradle.*;
 import org.gradle.api.*;
@@ -20,8 +21,19 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 		TaskContainer tasks = project.getTasks();
 		StonecutterControllerExtension controller = project.getExtensions().getByType(StonecutterControllerExtension.class);
 
+		tasks.register("subModulesUpdate", (task) -> {
+			task.doFirst((a) -> {
+				try {
+					Runtime.getRuntime().exec(new String[]{"git", "submodule", "update", "--init", "--force", "--remote"});
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			});
+		});
+
 		for (StonecutterProject version : controller.getVersions()) {
 			tasks.register("buildAndCollect+%s".formatted(version.getProject()), (task) -> {
+				task.dependsOn("subModulesUpdate");
 				task.dependsOn(":%s:buildAndCollect".formatted(version.getProject()));
 				task.setGroup("mossy-build");
 			});
@@ -35,6 +47,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 		}
 
 		tasks.register("buildAndCollect+All", (task) -> {
+			task.dependsOn("subModulesUpdate");
 			controller.getVersions().forEach((version) -> {
 				task.dependsOn(":%s:buildAndCollect".formatted(version.getProject()));
 			});

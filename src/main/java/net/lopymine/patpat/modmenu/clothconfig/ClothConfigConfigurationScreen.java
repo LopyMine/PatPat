@@ -120,11 +120,19 @@ public class ClothConfigConfigurationScreen {
 						.build()
 		);
 		subcategory.add(
-				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("swing_hand_enabled"), config.isSwingHandEnabled())
+				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("client_swing_hand_enabled"), config.isClientSwingHandEnabled())
 						.setTooltip(ModMenuUtils.getOptionDescription("swing_hand_enabled"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLED_FORMATTER)
-						.setDefaultValue(defConfig.isSwingHandEnabled())
-						.setSaveConsumer(config::setSwingHandEnabled)
+						.setDefaultValue(defConfig.isClientSwingHandEnabled())
+						.setSaveConsumer(config::setClientSwingHandEnabled)
+						.build()
+		);
+		subcategory.add(
+				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("server_swing_hand_enabled"), config.isServerSwingHandEnabled())
+						.setTooltip(ModMenuUtils.getOptionDescription("swing_hand_enabled"))
+						.setYesNoTextSupplier(ENABLED_OR_DISABLED_FORMATTER)
+						.setDefaultValue(defConfig.isServerSwingHandEnabled())
+						.setSaveConsumer(config::setServerSwingHandEnabled)
 						.build()
 		);
 		subcategory.add(

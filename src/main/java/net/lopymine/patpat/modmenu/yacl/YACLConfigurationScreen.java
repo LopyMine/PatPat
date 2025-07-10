@@ -87,8 +87,13 @@ public class YACLConfigurationScreen {
 						.withController()
 						.withDescription(SimpleContent.NONE)
 						.build(),
-				SimpleOption.<Boolean>startBuilder("swing_hand_enabled")
-						.withBinding(defConfig.isSwingHandEnabled(), config::isSwingHandEnabled, config::setSwingHandEnabled, false)
+				SimpleOption.<Boolean>startBuilder("client_swing_hand_enabled")
+						.withBinding(defConfig.isClientSwingHandEnabled(), config::isClientSwingHandEnabled, config::setClientSwingHandEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Boolean>startBuilder("server_swing_hand_enabled")
+						.withBinding(defConfig.isServerSwingHandEnabled(), config::isServerSwingHandEnabled, config::setServerSwingHandEnabled, false)
 						.withController()
 						.withDescription(SimpleContent.NONE)
 						.build(),

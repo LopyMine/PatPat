@@ -119,7 +119,8 @@ public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHand
 			visualConfig.setCameraShackingEnabled(cameraShackingEnabled);
 		}
 		if (swingHandEnabled != null) {
-			visualConfig.setSwingHandEnabled(swingHandEnabled);
+			visualConfig.setClientSwingHandEnabled(swingHandEnabled);
+			visualConfig.setServerSwingHandEnabled(swingHandEnabled);
 		}
 		if (hidingNicknameEnabled != null) {
 			visualConfig.setHidingNicknameEnabled(hidingNicknameEnabled);

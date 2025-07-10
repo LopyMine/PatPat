@@ -94,6 +94,7 @@ public class MossyPlugin implements Plugin<Project> {
 		});
 		project.getTasks().register("rebuildLibs", Delete.class, task -> {
 			task.setGroup("build");
+			task.mustRunAfter(":subModulesUpdate");
 			String modName = getProperty(project, "data.mod_name").replace(" ", "");
 			String version = project.getVersion().toString();
 

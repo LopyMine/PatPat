@@ -1,6 +1,7 @@
 package net.lopymine.patpat.client.render;
 
 import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.client.config.sub.PatPatClientVisualConfig;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -8,6 +9,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -97,8 +99,12 @@ public class PatPatClientRenderer {
 				PatPatStatsConfig statsConfig = PatPatStatsConfig.getInstance();
 				statsConfig.count(pattedEntity);
 
-				if (config.getVisualConfig().isSwingHandEnabled()) {
-					player.swing(InteractionHand.MAIN_HAND);
+				PatPatClientVisualConfig visualConfig = config.getVisualConfig();
+				if (visualConfig.isClientSwingHandEnabled()) {
+					player.swing(InteractionHand.MAIN_HAND, false);
+				}
+				if (visualConfig.isServerSwingHandEnabled()) {
+					player.connection.send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
 				}
 
 				ReplayModCompat.onPat(pattedEntity.getId(), player.getId());

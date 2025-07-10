@@ -53,7 +53,8 @@ public class PatPatClientConfigMigrateTests {
 			visualConfig.setPatWeight(0);
 			visualConfig.setAnimationOffsets(new Vec3f());
 			visualConfig.setCameraShackingEnabled(false);
-			visualConfig.setSwingHandEnabled(false);
+			visualConfig.setClientSwingHandEnabled(false);
+			visualConfig.setServerSwingHandEnabled(false);
 			visualConfig.setHidingNicknameEnabled(false);
 
 			PatPatClientResourcePacksConfig resourcePacksConfig = config.getResourcePacksConfig();
@@ -89,7 +90,8 @@ public class PatPatClientConfigMigrateTests {
 
 			// Visual config
 			Assertions.assertTrue(visualConfig.isCameraShackingEnabled());
-			Assertions.assertTrue(visualConfig.isSwingHandEnabled());
+			Assertions.assertTrue(visualConfig.isClientSwingHandEnabled());
+			Assertions.assertTrue(visualConfig.isServerSwingHandEnabled());
 			Assertions.assertTrue(visualConfig.isHidingNicknameEnabled());
 			Assertions.assertEquals(1.234F, visualConfig.getPatWeight());
 			Assertions.assertEquals(new Vec3f(1.0F, 1.2F, 1.23F), config.getVisualConfig().getAnimationOffsets());

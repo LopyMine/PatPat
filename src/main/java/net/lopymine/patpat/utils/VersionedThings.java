@@ -2,9 +2,12 @@ package net.lopymine.patpat.utils;
 
 import com.mojang.serialization.Codec;
 import java.util.UUID;
+
+import lombok.experimental.UtilityClass;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 
+@UtilityClass
 public class VersionedThings {
 
 	public static final Codec<UUID> UUID_CODEC =
@@ -25,8 +28,4 @@ public class VersionedThings {
 			.SOUND_EVENT;
 
 	public static final String CLOTH_CONFIG_ID = /*? >=1.18 {*/"cloth-config"/*?} else {*//*"cloth-config2"*//*?}*/;
-
-	private VersionedThings() {
-		throw new IllegalStateException("Utility class");
-	}
 }

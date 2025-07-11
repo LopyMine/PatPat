@@ -3,6 +3,7 @@ package net.lopymine.patpat.client.command;
 import lombok.experimental.ExtensionMethod;
 
 import net.lopymine.patpat.*;
+import net.lopymine.patpat.client.command.ignore.PatPatClientIgnoreCommand;
 import net.lopymine.patpat.client.command.list.*;
 import net.lopymine.patpat.client.command.mod.PatPatClientModEnableCommand;
 import net.lopymine.patpat.extension.TextExtension;
@@ -35,6 +36,7 @@ public class PatPatClientCommandManager {
 						.then(PatPatClientModEnableCommand.getOff())
 						.then(PatPatClientModEnableCommand.getOn())
 						.then(PatPatClientInfoCommand.get())
+						.then(PatPatClientIgnoreCommand.get())
 				)
 				/*? >=1.19 {*/))/*?}*/;
 	}

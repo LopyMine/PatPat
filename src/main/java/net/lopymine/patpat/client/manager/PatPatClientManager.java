@@ -1,9 +1,24 @@
 package net.lopymine.patpat.client.manager;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.ExtensionMethod;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+
+import com.mojang.authlib.GameProfile;
+
 import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.IgnoreMobListConfig;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
-import net.lopymine.patpat.client.config.resourcepack.*;
+import net.lopymine.patpat.client.config.resourcepack.CustomAnimationSettingsConfig;
+import net.lopymine.patpat.client.config.resourcepack.PlayerConfig;
 import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
@@ -11,18 +26,9 @@ import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.extension.EntityExtension;
 import net.lopymine.patpat.utils.ProfilerUtils;
 
-import lombok.*;
-import lombok.experimental.ExtensionMethod;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.phys.*;
-
-import com.mojang.authlib.GameProfile;
-
 import java.util.*;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @ExtensionMethod(EntityExtension.class)
 public class PatPatClientManager {
@@ -98,6 +104,7 @@ public class PatPatClientManager {
 		PAT_ENTITIES.clear();
 	}
 
+	// TODO: раставить логи
 	public static void requestPat() {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		if (!config.getMainConfig().isModEnabled()) {
@@ -147,7 +154,7 @@ public class PatPatClientManager {
 			return null;
 		}
 
-		if(!player.getMainHandItem().isEmpty()){
+		if (!player.getMainHandItem().isEmpty()) {
 			return null;
 		}
 
@@ -161,14 +168,14 @@ public class PatPatClientManager {
 		double blockInteractionRange = player.blockInteractionRange();
 		double entityInteractionRange = player.entityInteractionRange();
 		//?}
-		
+
 		//? if >=1.21.2 {
 		float tickDelta = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
 		//?} elif >=1.21 {
 		/*float tickDelta = minecraft.getTimer().getGameTimeDeltaPartialTick(false);
-		*///?} else {
+		 *///?} else {
 		/*float tickDelta = minecraft.getFrameTime();
-		*///?}
+		 *///?}
 
 		cameraEntity.mark(true);
 		//? if >=1.20.5 {
@@ -187,6 +194,10 @@ public class PatPatClientManager {
 		}
 
 		if (pattedEntity.isInvisible()) {
+			return null;
+		}
+
+		if (IgnoreMobListConfig.getInstance().isIgnored(pattedEntity.getType())) {
 			return null;
 		}
 

@@ -54,6 +54,11 @@ public class PatLogger {
 		this.logger.warn(text, args);
 	}
 
+	public void error(String text, Throwable error) {
+		text = prepare(text);
+		this.logger.error(text, error);
+	}
+
 	public void error(String text, Object... args) {
 		text = prepare(text);
 		this.logger.error(text, args);

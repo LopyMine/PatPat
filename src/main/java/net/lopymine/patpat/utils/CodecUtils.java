@@ -1,6 +1,7 @@
 package net.lopymine.patpat.utils;
 
 import com.google.gson.*;
+import lombok.experimental.UtilityClass;
 
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -12,6 +13,7 @@ import java.util.*;
 import java.util.function.*;
 
 @SuppressWarnings("unused")
+@UtilityClass
 public final class CodecUtils {
 
 	public static <A> A parseNewInstanceHacky(Codec<A> codec) {
@@ -23,15 +25,30 @@ public final class CodecUtils {
 	}
 
 	public static <A, B> RecordCodecBuilder<A, B> option(String optionId, B defValue, Codec<B> codec, Function<A, B> getter) {
-		return codec.optionalFieldOf(optionId).xmap((o) -> o.orElse(defValue), Optional::ofNullable).forGetter(getter);
+		return codec.optionalFieldOf(optionId).xmap(o -> o.orElse(defValue), Optional::ofNullable).forGetter(getter);
 	}
 
-	public static <A, B> RecordCodecBuilder<A, HashSet<B>> option(String optionId, HashSet<B> defValue, Codec<B> codec, Function<A, HashSet<B>> getter) {
-		return codec.listOf().xmap(HashSet::new, ArrayList::new).optionalFieldOf(optionId).xmap((o) -> o.orElse(defValue), Optional::ofNullable).forGetter(getter);
+	public static <A, B> RecordCodecBuilder<A, Set<B>> option(
+			String optionId,
+			Set<B> defValue,
+			Codec<B> codec,
+			Function<A, Set<B>> getter
+	) {
+		Codec<Set<B>> setCodec = codec.listOf().xmap(
+				HashSet::new,
+				ArrayList::new
+		);
+		return setCodec
+				.optionalFieldOf(optionId)
+				.xmap(
+						optional -> optional.orElse(new HashSet<>(defValue)),
+						Optional::of
+				)
+				.forGetter(getter);
 	}
 
 	public static <T, A, B> RecordCodecBuilder<T, HashMap<A, B>> option(String optionId, HashMap<A, B> defValue, Codec<A> codecA, Codec<B> codecB, Function<T, HashMap<A, B>> getter) {
-		return Codec.unboundedMap(codecA, codecB).xmap(HashMap::new, HashMap::new).optionalFieldOf(optionId).xmap((o) -> o.orElse(defValue), Optional::ofNullable).forGetter(getter);
+		return Codec.unboundedMap(codecA, codecB).xmap(HashMap::new, HashMap::new).optionalFieldOf(optionId).xmap(o -> o.orElse(defValue), Optional::ofNullable).forGetter(getter);
 	}
 
 

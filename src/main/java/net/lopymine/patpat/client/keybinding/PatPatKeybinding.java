@@ -36,7 +36,7 @@ public class PatPatKeybinding extends KeyMapping {
 	}
 
 	public void startBinding() {
-		this.resetPressedState();
+		//this.refreshPressedState();
 		this.combination.setAttributeKey(null);
 		this.combination.setKey(null);
 		this.binding         = true;
@@ -51,7 +51,7 @@ public class PatPatKeybinding extends KeyMapping {
 			return true;
 		}
 		if (key.getValue() == GLFW.GLFW_KEY_ESCAPE) {
-			this.resetPressedState();
+			this.refreshPressedState();
 			this.combination.setKey(null);
 			this.combination.setAttributeKey(null);
 			return true;
@@ -70,7 +70,6 @@ public class PatPatKeybinding extends KeyMapping {
 
 	public void sendBindingKeys() {
 		this.saveCombination();
-		this.resetPressedState();
 		this.combination.setAll(false);
 		this.binding         = false;
 		this.canStartBinding = true;
@@ -79,7 +78,7 @@ public class PatPatKeybinding extends KeyMapping {
 	@Override
 	public void setKey(InputConstants.Key boundKey) {
 		if (boundKey.equals(this.getDefaultKey())) {
-			this.resetPressedState();
+			this.refreshPressedState();
 			this.combination.setAttributeKey(DEFAULT_COMBINATION.getAttributeKey());
 			this.combination.setKey(DEFAULT_COMBINATION.getKey());
 			this.saveCombination();
@@ -144,7 +143,7 @@ public class PatPatKeybinding extends KeyMapping {
 		return this.combination.getCombinationLocalizedComponent(!this.isBinding());
 	}
 
-	public void resetPressedState() {
+	public void refreshPressedState() {
 		List<Key> keys = this.combination.getKeys();
 		keys.forEach(key -> {
 			if (key.getType() == Type.KEYSYM) {

@@ -14,18 +14,18 @@ public class ReplayModCompat {
 
 	public static void onPat(int pattedEntityId, int whoPattedId) {
 		//? if replaymod {
-		/*if (!LoadedMods.REPLAY_MOD_LOADED) {
+		if (!LoadedMods.REPLAY_MOD_LOADED) {
 			return;
 		}
 		PatEntityForReplayModS2CPacketV2 packet = new PatEntityForReplayModS2CPacketV2(pattedEntityId, whoPattedId);
 		//? >=1.20.2 {
 		ReplayModManager.sendDummyPacket(ServerPlayNetworking.createS2CPacket(packet));
 		//?} else {
-		/^FriendlyByteBuf buf = PacketByteBufs.create();
+		/*FriendlyByteBuf buf = PacketByteBufs.create();
 		packet.write(buf);
 		ReplayModManager.sendDummyPacket(ServerPlayNetworking.createS2CPacket(packet.getPatPatType().getId(), buf));
-		^///?}
-		PatPatClientPacketManager.LOGGER.debug("Saved packet to ReplayMod");
 		*///?}
+		PatPatClientPacketManager.LOGGER.debug("Saved packet to ReplayMod");
+		//?}
 	}
 }

@@ -31,7 +31,7 @@ public class EntityRendererMixin {
 
 	//? <1.21.2 {
 	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;shouldShowName(Lnet/minecraft/world/entity/Entity;)Z"), method = "render")
-	private boolean render(EntityRenderer instance, Entity entity, Operation<Boolean> original, @Local(argsOnly = true) PoseStack matrices, @Local(argsOnly = true) MultiBufferSource provider, @Local(argsOnly = true) int light, @Local(argsOnly = true, ordinal = 1) float tickDelta) {
+	private boolean render(EntityRenderer<?> instance, Entity entity, Operation<Boolean> original, @Local(argsOnly = true) PoseStack matrices, @Local(argsOnly = true) MultiBufferSource provider, @Local(argsOnly = true) int light, @Local(argsOnly = true, ordinal = 1) float tickDelta) {
 		boolean bl = original.call(instance, entity);
 	*///?} else {
 	@Inject(at = @At(value = "HEAD", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;renderNameTag(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"), method = "render", cancellable = true)

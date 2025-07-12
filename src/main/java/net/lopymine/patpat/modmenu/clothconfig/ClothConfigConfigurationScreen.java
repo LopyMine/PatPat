@@ -42,8 +42,8 @@ public class ClothConfigConfigurationScreen {
 		general.addEntry(getVisualGroup(entryBuilder, config.getVisualConfig(), defConfig.getVisualConfig()));
 		general.addEntry(getMultiplayerGroup(entryBuilder, config.getMultiPlayerConfig(), defConfig.getMultiPlayerConfig()));
 		//? if proxlib {
-		general.addEntry(getProximityPacketsGroup(entryBuilder, config.getProximityPacketsConfig(), defConfig.getProximityPacketsConfig()));
-		//?}
+		/*general.addEntry(getProximityPacketsGroup(entryBuilder, config.getProximityPacketsConfig(), defConfig.getProximityPacketsConfig()));
+		*///?}
 
 		builder.setSavingRunnable(config::saveAsync);
 

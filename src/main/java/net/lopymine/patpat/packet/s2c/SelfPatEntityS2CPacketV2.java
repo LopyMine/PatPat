@@ -10,21 +10,21 @@ import net.lopymine.patpat.utils.*;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
-public class PatEntityForReplayModS2CPacketV2 implements S2CPatPacket<PatEntityForReplayModS2CPacketV2> {
+public class SelfPatEntityS2CPacketV2 implements S2CPatPacket<SelfPatEntityS2CPacketV2> {
 
 	public static final String PACKET_ID = "pat_entity_for_replay_s2c_packet_v2";
 
-	public static final PatPatPacketType<PatEntityForReplayModS2CPacketV2> TYPE = new PatPatPacketType<>(IdentifierUtils.modId(PACKET_ID), PatEntityForReplayModS2CPacketV2::new);
+	public static final PatPatPacketType<SelfPatEntityS2CPacketV2> TYPE = new PatPatPacketType<>(IdentifierUtils.modId(PACKET_ID), SelfPatEntityS2CPacketV2::new);
 
 	private final int pattedEntityId;
 	private final int whoPattedId;
 
-	public PatEntityForReplayModS2CPacketV2(int pattedEntityId, int whoPattedId) {
+	public SelfPatEntityS2CPacketV2(int pattedEntityId, int whoPattedId) {
 		this.pattedEntityId = pattedEntityId;
 		this.whoPattedId    = whoPattedId;
 	}
 
-	public PatEntityForReplayModS2CPacketV2(FriendlyByteBuf buf) {
+	public SelfPatEntityS2CPacketV2(FriendlyByteBuf buf) {
 		this.pattedEntityId = buf.readVarInt();
 		this.whoPattedId    = buf.readVarInt();
 	}
@@ -48,7 +48,7 @@ public class PatEntityForReplayModS2CPacketV2 implements S2CPatPacket<PatEntityF
 	}
 
 	@Override
-	public PatPatPacketType<PatEntityForReplayModS2CPacketV2> getPatPatType() {
+	public PatPatPacketType<SelfPatEntityS2CPacketV2> getPatPatType() {
 		return TYPE;
 	}
 }

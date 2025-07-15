@@ -11,21 +11,21 @@ import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
-public class PatEntityForReplayModS2CPacket implements S2CPatPacket<PatEntityForReplayModS2CPacket> {
+public class SelfPatEntityS2CPacket implements S2CPatPacket<SelfPatEntityS2CPacket> {
 
 	public static final String PACKET_ID = "pat_entity_for_replay_s2c_packet";
 
-	public static final PatPatPacketType<PatEntityForReplayModS2CPacket> TYPE = new PatPatPacketType<>(IdentifierUtils.modId(PACKET_ID), PatEntityForReplayModS2CPacket::new);
+	public static final PatPatPacketType<SelfPatEntityS2CPacket> TYPE = new PatPatPacketType<>(IdentifierUtils.modId(PACKET_ID), SelfPatEntityS2CPacket::new);
 
 	private final UUID pattedEntityUuid;
 	private final UUID whoPattedUuid;
 
-	public PatEntityForReplayModS2CPacket(UUID pattedEntityUuid, UUID whoPattedUuid) {
+	public SelfPatEntityS2CPacket(UUID pattedEntityUuid, UUID whoPattedUuid) {
 		this.pattedEntityUuid = pattedEntityUuid;
 		this.whoPattedUuid    = whoPattedUuid;
 	}
 
-	public PatEntityForReplayModS2CPacket(FriendlyByteBuf buf) {
+	public SelfPatEntityS2CPacket(FriendlyByteBuf buf) {
 		this.pattedEntityUuid = buf.readUUID();
 		this.whoPattedUuid    = buf.readUUID();
 	}
@@ -49,7 +49,7 @@ public class PatEntityForReplayModS2CPacket implements S2CPatPacket<PatEntityFor
 	}
 
 	@Override
-	public PatPatPacketType<PatEntityForReplayModS2CPacket> getPatPatType() {
+	public PatPatPacketType<SelfPatEntityS2CPacket> getPatPatType() {
 		return TYPE;
 	}
 }

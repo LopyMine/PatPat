@@ -17,7 +17,7 @@ public class ReplayModCompat {
 		if (!LoadedMods.REPLAY_MOD_LOADED) {
 			return;
 		}
-		PatEntityForReplayModS2CPacketV2 packet = new PatEntityForReplayModS2CPacketV2(pattedEntityId, whoPattedId);
+		SelfPatEntityS2CPacketV2 packet = new SelfPatEntityS2CPacketV2(pattedEntityId, whoPattedId);
 		//? >=1.20.2 {
 		ReplayModManager.sendDummyPacket(ServerPlayNetworking.createS2CPacket(packet));
 		//?} else {

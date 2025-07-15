@@ -50,9 +50,9 @@ public class PatPatClientPacketManager {
 			handlePatting(packet, FlashbackManager.isInReplay() || ReplayModManager.isInReplay());
 		});
 
-		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacket.TYPE, packet -> handlePatting(packet, true));
+		PatPatClientNetworkManager.registerReceiver(SelfPatEntityS2CPacket.TYPE, packet -> handlePatting(packet, true));
 
-		PatPatClientNetworkManager.registerReceiver(PatEntityForReplayModS2CPacketV2.TYPE, packet -> handlePatting(packet, true));
+		PatPatClientNetworkManager.registerReceiver(SelfPatEntityS2CPacketV2.TYPE, packet -> handlePatting(packet, true));
 	}
 
 	private static void handleHelloPacket(HelloPatPatPlayerS2CPacket packet) {

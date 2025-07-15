@@ -92,12 +92,12 @@ public class PatPatServerPacketManager {
 		// v2
 		registerC2SPacket(PatEntityC2SPacketV2.TYPE);
 		registerS2CPacket(PatEntityS2CPacketV2.TYPE);
-		registerS2CPacket(PatEntityForReplayModS2CPacketV2.TYPE);
+		registerS2CPacket(SelfPatEntityS2CPacketV2.TYPE);
 
 		// v1
 		registerC2SPacket(PatEntityC2SPacket.TYPE);
 		registerS2CPacket(PatEntityS2CPacket.TYPE);
-		registerS2CPacket(PatEntityForReplayModS2CPacket.TYPE);
+		registerS2CPacket(SelfPatEntityS2CPacket.TYPE);
 		//?}
 	}
 

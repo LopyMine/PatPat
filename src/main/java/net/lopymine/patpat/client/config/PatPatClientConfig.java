@@ -2,19 +2,20 @@ package net.lopymine.patpat.client.config;
 
 import lombok.*;
 
-import com.mojang.serialization.*;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.Version;
-import net.lopymine.patpat.common.config.*;
-import net.lopymine.patpat.utils.*;
-import net.lopymine.patpat.*;
+import net.lopymine.patpat.common.config.PatPatConfigManager;
+import net.lopymine.patpat.utils.CodecUtils;
+import net.lopymine.patpat.utils.ConfigUtils;
 
-import java.io.*;
+import java.io.File;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 import static net.lopymine.patpat.utils.CodecUtils.option;
 
@@ -22,14 +23,24 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @AllArgsConstructor
 public class PatPatClientConfig {
 
+	public static final PatPatClientConfig DEFAULT = new PatPatClientConfig(
+			Version.CLIENT_CONFIG_VERSION,
+			PatPatClientMainConfig.DEFAULT,
+			PatPatClientResourcePacksConfig.DEFAULT,
+			PatPatClientSoundsConfig.DEFAULT,
+			PatPatClientVisualConfig.DEFAULT,
+			PatPatClientMultiplayerConfig.DEFAULT,
+			PatPatClientProximityPacketsConfig.DEFAULT
+	);
+
 	public static final Codec<PatPatClientConfig> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-			option("version", Version.CLIENT_CONFIG_VERSION, Version.CODEC, PatPatClientConfig::getVersion),
-			option("main", PatPatClientMainConfig.getNewInstance(), PatPatClientMainConfig.CODEC, PatPatClientConfig::getMainConfig),
-			option("resourcePacks", PatPatClientResourcePacksConfig.getNewInstance(), PatPatClientResourcePacksConfig.CODEC, PatPatClientConfig::getResourcePacksConfig),
-			option("sounds", PatPatClientSoundsConfig.getNewInstance(), PatPatClientSoundsConfig.CODEC, PatPatClientConfig::getSoundsConfig),
-			option("visual", PatPatClientVisualConfig.getNewInstance(), PatPatClientVisualConfig.CODEC, PatPatClientConfig::getVisualConfig),
-			option("multiplayer", PatPatClientMultiplayerConfig.getNewInstance(), PatPatClientMultiplayerConfig.CODEC, PatPatClientConfig::getMultiPlayerConfig),
-			option("proximityPackets", PatPatClientProximityPacketsConfig.getNewInstance(), PatPatClientProximityPacketsConfig.CODEC, PatPatClientConfig::getProximityPacketsConfig)
+			option("version", DEFAULT.version, Version.CODEC, PatPatClientConfig::getVersion),
+			option("main", (Supplier<PatPatClientMainConfig>) () -> DEFAULT.mainConfig.copy(), PatPatClientMainConfig.CODEC, PatPatClientConfig::getMainConfig),
+			option("resourcePacks", (Supplier<PatPatClientResourcePacksConfig>) () -> DEFAULT.resourcePacksConfig.copy(), PatPatClientResourcePacksConfig.CODEC, PatPatClientConfig::getResourcePacksConfig),
+			option("sounds", (Supplier<PatPatClientSoundsConfig>) () -> DEFAULT.soundsConfig.copy(), PatPatClientSoundsConfig.CODEC, PatPatClientConfig::getSoundsConfig),
+			option("visual", (Supplier<PatPatClientVisualConfig>) () -> DEFAULT.visualConfig.copy(), PatPatClientVisualConfig.CODEC, PatPatClientConfig::getVisualConfig),
+			option("multiplayer", (Supplier<PatPatClientMultiplayerConfig>) () -> DEFAULT.multiPlayerConfig.copy(), PatPatClientMultiplayerConfig.CODEC, PatPatClientConfig::getMultiPlayerConfig),
+			option("proximityPackets", (Supplier<PatPatClientProximityPacketsConfig>) () -> DEFAULT.proximityPacketsConfig.copy(), PatPatClientProximityPacketsConfig.CODEC, PatPatClientConfig::getProximityPacketsConfig)
 	).apply(inst, PatPatClientConfig::new));
 
 	private static final PatLogger LOGGER = PatPatClient.LOGGER.extend("Config");
@@ -43,10 +54,6 @@ public class PatPatClientConfig {
 	private PatPatClientVisualConfig visualConfig;
 	private PatPatClientMultiplayerConfig multiPlayerConfig;
 	private PatPatClientProximityPacketsConfig proximityPacketsConfig;
-
-	private PatPatClientConfig() {
-		throw new IllegalArgumentException();
-	}
 
 	public static PatPatClientConfig getInstance() {
 		return instance == null ? reload() : instance;

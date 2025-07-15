@@ -37,8 +37,9 @@ public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHand
 			JsonObject object = GSON.fromJson(new JsonReader(new FileReader(migrateFile)), JsonObject.class);
 			return !object.has("version");
 		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
+			getLogger().error("[MigrateVersion0] Not found file for migrate", e);
 		}
+		return false;
 	}
 
 	@Override
@@ -46,13 +47,14 @@ public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHand
 		try {
 			File migrateFile = this.getMigrateFile().toFile();
 			JsonObject object = GSON.fromJson(new JsonReader(new FileReader(migrateFile)), JsonObject.class);
-			PatPatClientConfig config = this.config == null ? PatPatClientConfig.getInstance() : this.config;
-			PatPatClientPlayerListConfig playerListConfig = this.playerListConfig == null ? PatPatClientPlayerListConfig.getInstance() : this.playerListConfig;
-			this.migrateFields(object, config, playerListConfig);
+			PatPatClientConfig clientConfig = this.config == null ? PatPatClientConfig.getInstance() : this.config;
+			PatPatClientPlayerListConfig clientPlayerListConfig = this.playerListConfig == null ? PatPatClientPlayerListConfig.getInstance() : this.playerListConfig;
+			this.migrateFields(object, clientConfig, clientPlayerListConfig);
 			return true;
 		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
+			getLogger().error("[MigrateVersion0] Not found file for migrate", e);
 		}
+		return false;
 	}
 
 	private void migrateFields(JsonObject object, PatPatClientConfig config, PatPatClientPlayerListConfig playerListConfig) {

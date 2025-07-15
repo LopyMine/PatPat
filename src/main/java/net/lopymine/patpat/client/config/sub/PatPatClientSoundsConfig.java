@@ -14,20 +14,28 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @AllArgsConstructor
 public class PatPatClientSoundsConfig {
 
+	public static final PatPatClientSoundsConfig DEFAULT = new PatPatClientSoundsConfig(
+			true,
+			1.0F
+	);
+
 	public static final Codec<PatPatClientSoundsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			option("soundsEnabled", true, Codec.BOOL, PatPatClientSoundsConfig::isSoundsEnabled),
-			option("soundsVolume", 1.0F, Codec.FLOAT, PatPatClientSoundsConfig::getSoundsVolume)
+			option("soundsEnabled", DEFAULT.soundsEnabled, Codec.BOOL, PatPatClientSoundsConfig::isSoundsEnabled),
+			option("soundsVolume", DEFAULT.soundsVolume, Codec.FLOAT, PatPatClientSoundsConfig::getSoundsVolume)
 	).apply(instance, PatPatClientSoundsConfig::new));
 
 	private boolean soundsEnabled;
 	private float soundsVolume;
 
-	private PatPatClientSoundsConfig() {
-		throw new IllegalArgumentException();
-	}
-
 	public static PatPatClientSoundsConfig getNewInstance() {
 		return CodecUtils.parseNewInstanceHacky(CODEC);
+	}
+
+	public PatPatClientSoundsConfig copy() {
+		return new PatPatClientSoundsConfig(
+				this.soundsEnabled,
+				this.soundsVolume
+		);
 	}
 
 }

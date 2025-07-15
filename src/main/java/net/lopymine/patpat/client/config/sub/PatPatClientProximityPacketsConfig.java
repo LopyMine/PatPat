@@ -15,25 +15,33 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @AllArgsConstructor
 public class PatPatClientProximityPacketsConfig {
 
+	public static final PatPatClientProximityPacketsConfig DEFAULT = new PatPatClientProximityPacketsConfig(
+			true,
+			10
+	);
+
 	public static final Codec<PatPatClientProximityPacketsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			option("proximityPacketsEnabled", true, Codec.BOOL, PatPatClientProximityPacketsConfig::isProximityPacketsEnabled),
-			option("maxPacketsPerSecond", 10, Codec.INT, PatPatClientProximityPacketsConfig::getMaxPacketsPerSecond)
+			option("proximityPacketsEnabled", DEFAULT.proximityPacketsEnabled, Codec.BOOL, PatPatClientProximityPacketsConfig::isProximityPacketsEnabled),
+			option("maxPacketsPerSecond", DEFAULT.maxPacketsPerSecond, Codec.INT, PatPatClientProximityPacketsConfig::getMaxPacketsPerSecond)
 	).apply(instance, PatPatClientProximityPacketsConfig::new));
 
 	private boolean proximityPacketsEnabled;
 	private int maxPacketsPerSecond;
 
-	private PatPatClientProximityPacketsConfig() {
-		throw new IllegalArgumentException();
-	}
-
 	public static PatPatClientProximityPacketsConfig getNewInstance() {
 		return CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
-	public void setProximityPacketsEnabled(boolean value){
+	public void setProximityPacketsEnabled(boolean value) {
 		this.proximityPacketsEnabled = value;
 		PatPatClientProxLibManager.setEnabled(value);
+	}
+
+	public PatPatClientProximityPacketsConfig copy() {
+		return new PatPatClientProximityPacketsConfig(
+				this.proximityPacketsEnabled,
+				this.maxPacketsPerSecond
+		);
 	}
 
 }

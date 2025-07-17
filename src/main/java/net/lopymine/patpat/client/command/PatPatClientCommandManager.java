@@ -4,6 +4,7 @@ import lombok.experimental.ExtensionMethod;
 
 import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.command.ignore.PatPatClientIgnoreCommand;
+import net.lopymine.patpat.client.command.info.PatPatClientInfoCommand;
 import net.lopymine.patpat.client.command.list.*;
 import net.lopymine.patpat.client.command.mod.PatPatClientModEnableCommand;
 import net.lopymine.patpat.extension.TextExtension;

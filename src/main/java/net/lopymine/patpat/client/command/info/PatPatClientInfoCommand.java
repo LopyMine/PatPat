@@ -1,4 +1,4 @@
-package net.lopymine.patpat.client.command;
+package net.lopymine.patpat.client.command.info;
 
 import lombok.experimental.ExtensionMethod;
 

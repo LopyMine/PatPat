@@ -38,15 +38,6 @@ public class PatPatClient implements ClientModInitializer {
 		PatPatClientKeybindingManager.register();
 		PatPatStatsConfig.registerSaveHooks();
 
-		ClientTickEvents.END_WORLD_TICK.register(client -> {
-			//? >1.20.2 {
-			if (client.getTickManager().isFrozen()) {
-				return;
-			}
-			//?}
-			PatPatClientManager.tickEntities();
-		});
-
 		LOGGER.info("PatPat Client Initialized");
 		LOGGER.debug("Debug Mode Enabled");
 	}

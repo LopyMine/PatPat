@@ -140,6 +140,7 @@ public class YACLConfigurationScreen {
 		).build();
 	}
 
+	/*? if proxlib {*//*
 	private static OptionGroup getProximityPatPacketsGroup(PatPatClientProximityPacketsConfig defConfig, PatPatClientProximityPacketsConfig config) {
 		return SimpleGroup.startBuilder("proximity_packets").options(
 				SimpleOption.<Boolean>startBuilder("proximity_packets_enabled")
@@ -154,6 +155,7 @@ public class YACLConfigurationScreen {
 						.build()
 		).build();
 	}
+	*//*?}*/
 }
 //?} else {
 /*public class YACLConfigurationScreen {

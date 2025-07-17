@@ -112,7 +112,7 @@ def createGradleProperties(String version, ArrayList<String> additionalDepends) 
 		writer.write("# and reload Gradle to update only it's value.\n")
 		writer.write("\n")
 		writer.write("# Fabric Properties, check https://fabricmc.net/develop/\n")
-		writer.write("build.yarn=${getYarnVersion(version)}\n")
+		//writer.write("build.yarn=${getYarnVersion(version)}\n")
 		// writer.write("build.fabric_loader=${getFabricLoaderVersion(version)}\n")
 		writer.write("build.fabric_api=${getDependVersion("fabric-api", version)}")
 		if (!additionalDepends.isEmpty()) {

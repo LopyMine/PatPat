@@ -1,7 +1,9 @@
 package net.lopymine.patpat.client.packet;
 
+/*? if <1.19.4 {*//*
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+*//*?}*/
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.*;

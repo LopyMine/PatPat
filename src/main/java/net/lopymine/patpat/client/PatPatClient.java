@@ -1,6 +1,7 @@
 package net.lopymine.patpat.client;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.command.PatPatClientCommandManager;
@@ -36,6 +37,15 @@ public class PatPatClient implements ClientModInitializer {
 		PatPatClientRenderer.register();
 		PatPatClientKeybindingManager.register();
 		PatPatStatsConfig.registerSaveHooks();
+
+		ClientTickEvents.END_WORLD_TICK.register(client -> {
+			//? >1.20.2 {
+			if (client.getTickManager().isFrozen()) {
+				return;
+			}
+			//?}
+			PatPatClientManager.tickEntities();
+		});
 
 		LOGGER.info("PatPat Client Initialized");
 		LOGGER.debug("Debug Mode Enabled");

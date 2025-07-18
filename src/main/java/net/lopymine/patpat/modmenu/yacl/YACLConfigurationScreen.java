@@ -36,7 +36,7 @@ public class YACLConfigurationScreen {
 				.groups(getSoundGroup(defConfig.getSoundsConfig(), config.getSoundsConfig()))
 				.groups(getVisualGroup(defConfig.getVisualConfig(), config.getVisualConfig()))
 				.groups(getMultiplayerGroup(defConfig.getMultiPlayerConfig(), config.getMultiPlayerConfig()))
-				/*? if proxlib {*//*.groups(getProximityPatPacketsGroup(defConfig.getProximityPacketsConfig(), config.getProximityPacketsConfig())) *//*?}*/
+				/*? if proxlib {*/.groups(getProximityPatPacketsGroup(defConfig.getProximityPacketsConfig(), config.getProximityPacketsConfig())) /*?}*/
 				.build();
 	}
 
@@ -140,7 +140,7 @@ public class YACLConfigurationScreen {
 		).build();
 	}
 
-	/*? if proxlib {*//*
+	/*? if proxlib {*/
 	private static OptionGroup getProximityPatPacketsGroup(PatPatClientProximityPacketsConfig defConfig, PatPatClientProximityPacketsConfig config) {
 		return SimpleGroup.startBuilder("proximity_packets").options(
 				SimpleOption.<Boolean>startBuilder("proximity_packets_enabled")
@@ -155,7 +155,7 @@ public class YACLConfigurationScreen {
 						.build()
 		).build();
 	}
-	*//*?}*/
+	/*?}*/
 }
 //?} else {
 /*public class YACLConfigurationScreen {

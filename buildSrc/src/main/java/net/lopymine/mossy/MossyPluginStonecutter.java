@@ -41,6 +41,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 
 		for (StonecutterProject version : controller.getVersions()) {
 			tasks.register("publish+%s".formatted(version.getProject()), (task) -> {
+				task.dependsOn("submodulesUpdate");
 				task.dependsOn(":%s:publishMods".formatted(version.getProject()));
 				task.setGroup("mossy-publish");
 			});
@@ -55,6 +56,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 		});
 
 		tasks.register("buildAndCollect+Specified", (task) -> {
+			task.dependsOn("submodulesUpdate");
 			List<String> versionsSpecifications = project.getVersionsSpecifications();
 			controller.getVersions().forEach((version) -> {
 				if (!versionsSpecifications.contains(version.getProject())) {
@@ -66,6 +68,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 		});
 
 		tasks.register("publish+All", (task) -> {
+			task.dependsOn("submodulesUpdate");
 			controller.getVersions().forEach((version) -> {
 				task.dependsOn(":%s:publishMods".formatted(version.getProject()));
 			});
@@ -73,6 +76,7 @@ public class MossyPluginStonecutter implements Plugin<Project> {
 		});
 
 		tasks.register("publish+Specified", (task) -> {
+			task.dependsOn("submodulesUpdate");
 			List<String> versionsSpecifications = project.getVersionsSpecifications();
 			controller.getVersions().forEach((version) -> {
 				if (!versionsSpecifications.contains(version.getProject())) {

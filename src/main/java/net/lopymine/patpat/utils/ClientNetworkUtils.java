@@ -1,10 +1,11 @@
 package net.lopymine.patpat.utils;
 
-import net.minecraft.client.network.*;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.PlayerInfo;
 
-import net.lopymine.patpat.config.client.PatPatClientConfig;
+import net.lopymine.patpat.client.config.PatPatClientPlayerListConfig;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.*;
 
@@ -14,12 +15,16 @@ public class ClientNetworkUtils {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static List<String> getOnlinePlayersFromUuids(@Nullable ClientPlayNetworkHandler networkHandler, @NotNull PatPatClientConfig config) {
+	public static List<String> getOnlinePlayersFromUuids(@Nullable ClientPacketListener networkHandler) {
 		if (networkHandler == null) {
-			return List.of();
+			return Collections.emptyList();
 		}
-		return config.getPlayers().entrySet().stream().flatMap(entry -> {
-			PlayerListEntry playerListEntry = networkHandler.getPlayerListEntry(entry.getKey());
+		PatPatClientPlayerListConfig playerListConfig = PatPatClientPlayerListConfig.getInstance();
+		if (playerListConfig == null) {
+			return Collections.emptyList();
+		}
+		return playerListConfig.getMap().entrySet().stream().flatMap(entry -> {
+			PlayerInfo playerListEntry = networkHandler.getPlayerInfo(entry.getKey());
 			if (playerListEntry == null) {
 				return Stream.of(entry.getValue());
 			}

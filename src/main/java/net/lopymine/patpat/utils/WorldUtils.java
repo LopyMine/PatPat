@@ -1,9 +1,8 @@
 package net.lopymine.patpat.utils;
 
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-
 import java.util.UUID;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.*;
 
 public class WorldUtils {
@@ -13,9 +12,9 @@ public class WorldUtils {
 	}
 
 	@Nullable
-	public static Entity getEntity(@NotNull ClientWorld world, @NotNull UUID uuid) {
-		for (Entity entity : world.getEntities()) {
-			if (entity.getUuid().equals(uuid)) {
+	public static Entity getEntity(@NotNull ClientLevel world, @NotNull UUID uuid) {
+		for (Entity entity : world.entitiesForRendering()) {
+			if (entity.getUUID().equals(uuid)) {
 				return entity;
 			}
 		}

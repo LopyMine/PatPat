@@ -1,2 +1,7 @@
 accessWidener v2 named
 # 1.21.5 AW
+
+accessible field net/minecraft/client/Camera eyeHeightOld F
+accessible field net/minecraft/client/Camera eyeHeight F
+
+accessible method net/minecraft/client/renderer/GameRenderer pick (Lnet/minecraft/world/entity/Entity;DDF)Lnet/minecraft/world/phys/HitResult;

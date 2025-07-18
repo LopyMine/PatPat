@@ -1,0 +1,21 @@
+// no j52j
+{
+	"offsetX": 1.0,
+	"offsetY": 1.2,
+	"offsetZ": 1.23,
+	"patWeight": 1.234,
+	"soundsVolume": 1.2346,
+	"listMode": "WHITELIST",
+	"list": {
+		"192e3748-12d5-4573-a8a5-479cd394a1dc": "LopyMine"
+	},
+	"modEnabled": true,
+	"patMeEnabled": true,
+	"soundsEnabled": true,
+	"debugLogEnabled": true,
+	"swingHandEnabled": true,
+	"cameraShackingEnabled": true,
+	"hidingNicknameEnabled": true,
+	"skipOldAnimationsEnabled": true,
+	"bypassServerResourcePackPriorityEnabled": true
+}

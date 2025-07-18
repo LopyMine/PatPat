@@ -4,9 +4,8 @@ import com.terraformersmc.modmenu.api.*;
 
 import net.fabricmc.loader.api.FabricLoader;
 
-import net.lopymine.patpat.modmenu.screen.NoConfigLibrariesScreen;
-import net.lopymine.patpat.modmenu.screen.clothconfig.ClothConfigConfigurationScreen;
-import net.lopymine.patpat.modmenu.screen.yacl.YACLConfigurationScreen;
+import net.lopymine.patpat.modmenu.clothconfig.ClothConfigConfigurationScreen;
+import net.lopymine.patpat.modmenu.yacl.YACLConfigurationScreen;
 import net.lopymine.patpat.utils.VersionedThings;
 
 public class ModMenuIntegration implements ModMenuApi {

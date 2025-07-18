@@ -1,36 +1,77 @@
 package net.lopymine.patpat.utils;
 
-import net.minecraft.text.*;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.*;
 
 import net.lopymine.patpat.PatPat;
 
+import java.util.*;
+import java.util.regex.*;
+
 public class TextUtils {
+
+	public static final Pattern ARGUMENT_PATTERN = Pattern.compile("\\{\\d+}");
 
 	private TextUtils() {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static MutableText translatable(String key, Object... args) {
+	public static MutableComponent translatable(String key, Object... args) {
+		return processWithArgs(Language.getInstance().getOrDefault(key), args);
+	}
+
+	public static MutableComponent literal(Object text) {
 		//? >=1.19 {
-		return Text.translatable(key, args);
+		return Component.literal(String.valueOf(text));
 		//?} else {
-		/*return new TranslatableText(key, args);
+		/*return new TextComponent(String.valueOf(text));
 		*///?}
 	}
 
-	public static MutableText literal(String key) {
-		//? >=1.19 {
-		return Text.literal(key);
-		//?} else {
-		/*return new LiteralText(key);
-		*///?}
+	public static Component of(String key) {
+		return Component.nullToEmpty(key);
 	}
 
-	public static Text of(String key) {
-		return Text.of(key);
+	public static MutableComponent processWithArgs(String text, Object... args) {
+		LinkedList<String> parts = new LinkedList<>();
+
+		Matcher matcher = ARGUMENT_PATTERN.matcher(text);
+
+		int lastEnd = 0;
+		while (matcher.find()) {
+			parts.add(text.substring(lastEnd, matcher.start()));
+			parts.add(matcher.group());
+			lastEnd = matcher.end();
+		}
+		parts.add(text.substring(lastEnd));
+
+		String[] array = parts.toArray(new String[0]);
+
+		MutableComponent result = literal("");
+
+		for (String part : array) {
+			boolean argument = false;
+			for (int i = 0; i < args.length; i++) {
+				Object arg = args[i];
+				if (part.equals("{" + i + "}")) {
+					result.append(getArgument(arg));
+					argument = true;
+					break;
+				}
+			}
+			if (!argument) {
+				result.append(part);
+			}
+		}
+
+		return result;
 	}
 
-	public static MutableText text(String path, Object... args) {
-		return TextUtils.translatable(String.format("%s.%s", PatPat.MOD_ID, path), args);
+	private static Component getArgument(Object arg) {
+		if (arg instanceof Component component) {
+			return component;
+		}
+		return TextUtils.literal(String.valueOf(arg));
 	}
+
 }

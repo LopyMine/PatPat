@@ -1,18 +1,9 @@
 package net.lopymine.patpat.entity;
 
 import lombok.*;
-import net.minecraft.entity.LivingEntity;
-
-import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.config.resourcepack.*;
-
+import net.lopymine.patpat.client.config.resourcepack.*;
+import net.minecraft.world.entity.LivingEntity;
 import java.util.*;
-
-//? >1.20.2 {
-import net.minecraft.world.tick.TickManager;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
-//?}
 
 @Getter
 public class PatEntity {
@@ -38,20 +29,20 @@ public class PatEntity {
 
 	public void tick() {
 		this.tickProgress += 1;
-		if (tickProgress == Integer.MAX_VALUE) {
-			tickProgress = 0;
+		if (this.tickProgress == Integer.MAX_VALUE) {
+			this.tickProgress = 0;
 		}
 	}
 
 	public float getProgress(float tickDelta) {
 		//? >1.20.2 {
-		ClientWorld world = MinecraftClient.getInstance().world;
+		net.minecraft.client.multiplayer.ClientLevel world = net.minecraft.client.Minecraft.getInstance().level;
 		if (world == null) {
 			return 0;
 		}
 
-		TickManager tickManager = world.getTickManager();
-		float tickMillis = tickManager.getTickRate() > 20 ? (2500F / tickManager.getMillisPerTick()) : 50F;
+		net.minecraft.world.TickRateManager tickManager = world.tickRateManager();
+		float tickMillis = tickManager.tickrate() > 20 ? (2500F / tickManager.millisecondsPerTick()) : 50F;
 		float v = Math.max(this.tickProgress, 0) * tickMillis;
 		float v1 = tickManager.isFrozen() ? 0 : tickDelta * tickMillis;
 		//?} else {
@@ -62,11 +53,11 @@ public class PatEntity {
 	}
 
 	public boolean is(LivingEntity entity) {
-		return this.is(entity.getUuid());
+		return this.is(entity.getUUID());
 	}
 
 	private boolean is(UUID uuid) {
-		return this.entity.getUuid().equals(uuid);
+		return this.entity.getUUID().equals(uuid);
 	}
 
 	@Override
@@ -79,6 +70,16 @@ public class PatEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.entity.getUuid());
+		return Objects.hash(this.entity.getUUID());
+	}
+
+	@Override
+	public String toString() {
+		return "PatEntity{" +
+				"entity=" + this.entity.toString() +
+				", animation=" + this.animation.toString() +
+				", currentFrame=" + this.currentFrame +
+				", tickProgress=" + this.tickProgress +
+				'}';
 	}
 }

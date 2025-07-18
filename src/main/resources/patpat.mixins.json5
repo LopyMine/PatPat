@@ -12,9 +12,18 @@
 		/*"TitleScreenMixin",*/
 		/*? >=1.21.2*/
 		"EntityRenderStateMixin",
+		/*? <1.19.3*/
+		/*"ScreenMixin",*/
 		"MinecraftClientMixin",
 		"CameraMixin",
-		"AbstractClientPlayerEntityMixin"
+		"AbstractClientPlayerEntityMixin",
+		"ControlsListWidgetMixin",
+		"KeybindingMixin",
+		"ParentElementMixin",
+		"KeyBindsScreenMixin",
+		"GameRendererMixin",
+		"EntityMixin",
+		"EnderDragonRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

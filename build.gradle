@@ -1,75 +1,60 @@
-buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath 'de.marhali:json5-java:2.0.0'
-	}
-}
-
-// TODO Move methods with j5tj in buildSrc and use kotlin lang
-import de.marhali.json5.Json5
-import de.marhali.json5.Json5Element
+import net.lopymine.mossy.MossyPlugin
 
 plugins {
-	id("fabric-loom") version "1.10-SNAPSHOT"
-	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
+	id("net.lopymine.mossy-plugin")
 }
 
-def modId = prop("mod_id")
-def modName = prop("mod_name")
-def modVersion = prop("mod_version")
-def modGroup = prop("mod_group")
-def modMavenGroup = prop("mod_maven_group")
-def modDescription = prop("mod_description")
-def modAuthors = prop("mod_authors")
-def modLicense = prop("mod_license")
-def lombokVersion = prop("lombok_version")
+mossyDependencies {
+	def mcVersion = stonecutter.current.version.toString()
+	minecraft = mcVersion
+	mappings = prop("build.yarn")
+	lombok = prop("base.lombok_version")
+	fabricApi = prop("build.fabric_api")
+	fabricLoader = prop("build.fabric_loader")
 
-def mcVersion = stonecutter.current.version.toString() // Current MC version from "./versions/" folder
-def currentMultiVersion = getCurrentMultiVersion(mcVersion)
-println "[${mcVersion}] Supported Minecraft Versions: ${currentMultiVersion.toVersionRange()}"
+	additional {
+		// - By default, every additional project dependency ("dep.modId" from gradle.properties) will use
+		// - Modrinth Maven and "modImplementation" configuration name
+		// - If you want to override mod configuration name, you can do this:
+		// override("modCompileOnly", "just_mod_id")
+		// - It will do this:
+		// - modImplementation("maven.modrinth:modId:version") -> modCompileOnly("maven.modrinth:modId:version")
+		// - Or if you want to disable it and handle by yourself, just disable it auto handling:
+		// disable("just_mod_id")
 
-def javaVersionAsInt = getJavaVersionAsInteger(mcVersion)
-def javaVersion = JavaVersion.toVersion(javaVersionAsInt)
-println "[${mcVersion}] Using Java: ${javaVersion.toString()}"
+		override("modCompileOnly", "flashback")
+		override("modCompileOnly", "replaymod")
 
-version = "${modVersion}+${currentMultiVersion.projectVersion}"
-group = modMavenGroup
+		// Fabric Permissions Api
+		disable("fabric-permissions-api")
+		// Cloth-Config
+		disable("cloth-config")
+		// GeckoLib
+		disable("geckolib")
+		// ProxLib
+		disable("proxlib")
+		// Replay Mod
+	}
+}
 
-base {
-	archivesName = modName
+mossyResources {
+	//expandFiles = ["custom", "file", "patterns", "here"]
 }
 
 repositories {
-	maven { url "https://maven.quiltmc.org/repository/release/" } // Stil for YACL
-	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" } // Stil for YACL
 	maven {
-		name "Terraformers" // ModMenu
-		url "https://maven.terraformersmc.com/"
-	}
-	maven {
-		name 'Xander Maven' // YACL
-		url 'https://maven.isxander.dev/releases'
-	}
-	maven {
-		url "https://maven.nucleoid.xyz/"
-		name "Nucleoid"
-	}
-	// For Mod Menu, because at 1.20.4 it needs PlaceHolder API, see https://github.com/TerraformersMC/ModMenu/issues/752
-	maven {
-		name "Cloth Config"
-		url "https://maven.shedaniel.me/"
+		name = "Cloth Config"
+		url = "https://maven.shedaniel.me/"
 	} // Cloth Config
 
 	maven {
-		name "Modrinth"
-		url "https://api.modrinth.com/maven"
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
 	} // Replay Mod
 
 	maven {
 		name = 'GeckoLib'
-		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
 		content {
 			includeGroupByRegex("software\\.bernie.*")
 			includeGroup("com.eliotlash.mclib")
@@ -79,572 +64,83 @@ repositories {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${mcVersion}"
-	mappings "net.fabricmc:yarn:${prop("build.yarn")}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${prop("build.fabric_loader")}"
+	def mcVersion = stonecutter.current.version.toString()
 
-	// Lombok
-	compileOnly "org.projectlombok:lombok:${lombokVersion}"
-	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+	mappings loom.officialMojangMappings()
 
-	// Fabric API
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${prop("build.fabric_api")}"
-
-	// Mod Menu
-	modImplementation "com.terraformersmc:modmenu:${prop("dep.modmenu")}"
-
-	// Flashback
-	def flashbackLibVersion = prop("dep.flashback")
-	if(flashbackLibVersion != "unknown"){
-		modCompileOnly("maven.modrinth:flashback:${flashbackLibVersion}")
-	}
-
-	// YACL
-	if (stonecutter.compare("1.20.1", mcVersion) != 1) {
-		def minecraftVersionsWithOldYACLMaven = Set.of("1.19.4", "1.20", "1.20.2", "1.20.3")
-		def yaclVersion = prop("dep.yacl")
-		if (minecraftVersionsWithOldYACLMaven.contains(mcVersion)) {
-			modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${substringBeforeLast(yaclVersion.toString(), "-")}"
-		} else {
-			modImplementation "dev.isxander:yet-another-config-lib:${yaclVersion}"
-		}
+	// Fabric permission api
+	def fpaVersion = prop("build.fabric-permissions-api")
+	include(modImplementation('me.lucko:fabric-permissions-api:' + fpaVersion)){
+		exclude(group: "net.fabricmc.fabric-api")
 	}
 
 	// Cloth Config
-	def clothConfigVersion = findProperty("dep.cloth-config")
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${stonecutter.compare("1.19", mcVersion) == 1 ? clothConfigVersion : substringBefore(clothConfigVersion, "+")}") {
+	def clothConfigVersion = prop("dep.cloth-config")
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${stonecutter.compare("1.19", mcVersion) == 1 ? clothConfigVersion : MossyPlugin.substringBefore(clothConfigVersion, "+")}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
 	// GeckoLib
 	def geckoLibVersion = prop("dep.geckolib")
 	if (geckoLibVersion != "unknown") {
-		if (mcVersion == "1.17.1") {
-			modImplementation("software.bernie.geckolib:geckolib-fabric-1.17:${geckoLibVersion}")
+		if (mcVersion == "1.16.5") {
+			modCompileOnly("software.bernie.geckolib:geckolib-forge-${mcVersion}:${geckoLibVersion}")
+		} else if (mcVersion == "1.17.1") {
+			modCompileOnly("software.bernie.geckolib:geckolib-1.17.1-forge:${geckoLibVersion}")
 		} else if (mcVersion == "1.18.2") {
-			modImplementation("software.bernie.geckolib:geckolib-fabric-1.18:${geckoLibVersion}")
+			modCompileOnly("software.bernie.geckolib:geckolib-forge-1.18:${geckoLibVersion}")
 		} else if (mcVersion == "1.19.1" || mcVersion == "1.19.2") {
-			modImplementation("software.bernie.geckolib:geckolib-fabric-1.19:${geckoLibVersion}")
+			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.19:${geckoLibVersion}")
 		} else if (mcVersion == "1.20") {
-			modImplementation("software.bernie.geckolib:geckolib-fabric-1.20.1:${geckoLibVersion}")
+			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.20.1:${geckoLibVersion}")
 		} else {
-			modImplementation("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
+			modCompileOnly("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
 		}
 	}
+	// TODO: Добавить тесты на версию раньше, чем 1.18.2
+	if (stonecutter.compare(mcVersion, "1.18.2") >= 0) {
+		testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
+	}
 
-	if (!(stonecutter.compare("1.20.5", mcVersion) == 0)) {
-		// Replay Mod
-		modCompileOnly("maven.modrinth:replaymod:${findProperty("dep.replaymod")}")
+	def proxlibVersion = prop("dep.proxlib")
+	if (proxlibVersion != "unknown") {
+		include(modApi("maven.modrinth:proxlib:${proxlibVersion}"))
 	}
 }
 
-loom {
-	mixin {
-		defaultRefmapName.set("${modId}.refmap.json")
-	}
-
-	def accessWidenerFile = project.rootProject.file("src/main/resources/aws/${mcVersion}.accesswidener")
-	if (accessWidenerFile.exists()) {
-		accessWidenerPath = accessWidenerFile
-	}
-
-	def personalProperties = getPersonalProperties()
-	def pathToSpongeMixin = personalProperties.get("absolute_path_to_sponge_mixin")
-	def quickPlay = personalProperties.get("quick_play")
-	def playerNickname = getNickname(personalProperties.get("player_nickname"))
-	def playerUuid = getUUID(personalProperties.get("player_uuid"))
-
-	runConfigs.configureEach { config ->
-		config.setIdeConfigGenerated(true) // generate IDE tasks for running client, server and testmod, datagen if those are present
-		config.setRunDir("../../runs/${config.environment}") // use different run directory for all environments
-
-		if (config.getEnvironment() == "client") { // setting player properties from "./personal/personal.properties" file
-			if (playerNickname != null && playerNickname.toString() != "none") {
-				config.programArgs("--username", playerNickname.toString())
-			}
-			if (playerUuid != null && playerUuid.toString() != "none") {
-				config.programArgs("--uuid", playerUuid.toString())
-			}
-			if (quickPlay != null && quickPlay.toString() != "none") {
-				config.programArgs("--quickPlaySingleplayer", quickPlay.toString())
-			}
-			if (pathToSpongeMixin != null && pathToSpongeMixin.toString() != "none") {
-				config.vmArg("-javaagent:${pathToSpongeMixin.toString()}")
-			}
-		}
+if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0) {
+	test {
+		useJUnitPlatform()
 	}
 }
 
-processResources {
-	def props = [:]
-	props.put("mod_id", modId.toString())
-	props.put("mod_authors", modAuthors.toString())
-	props.put("mod_version", modVersion)
-	props.put("mod_group", modGroup)
-	props.put("mod_description", modDescription.toString())
-	props.put("mod_name", modName.toString())
-	props.put("mod_license", modLicense.toString())
-	props.put("version", version.toString())
-	props.put("fabric_loader", prop("build.fabric_loader").toString())
-	props.put("minecraft", mcVersion.toString())
-	props.put("java", javaVersionAsInt.toString())
-//	props.put("fabric_api", substringBefore(prop("build.fabric_api").toString(), "+"))
-	props.put("fabric_api_id", stonecutter.compare("1.19.1", mcVersion) >= 0 ? "fabric" : "fabric-api")
-
-	props.each { key, value ->
-		inputs.property key, value
-	}
-
-	filesMatching(["fabric.mod.json", "${modId}.mixins.json5".toString(), "${modId}-geckolib.mixins.json5".toString(), "assets/${modId}/lang/*.json".toString(), "assets/${modId}/textures/easter/egg.json".toString()]) {
-		expand(props)
-	}
-
-	filesMatching("aws/*.accesswidener") {
-		if (!it.getName().startsWith(mcVersion)) {
-			it.exclude()
-		}
+configurations.configureEach {
+	resolutionStrategy {
+		force("net.fabricmc:fabric-loader:${prop("build.fabric_loader")}")
 	}
 }
 
 stonecutter {
-	swap("mod_version", "\"${prop("mod_version")}\";")
-	swap("mod_id", "\"${prop("mod_id")}\";")
-	swap("mod_name", "\"${prop("mod_name")}\";")
-	stonecutter.const("geckolib", prop("dep.geckolib") != "unknown")
-	stonecutter.const("flashback", prop("dep.flashback") != "unknown")
+	var buildTime = (int) (System.currentTimeMillis() / 10000) - 174611089
+	var buildCodeTime = String.format("%07x", buildTime & 0xFFFFFFF)
+	swap("build_code_time", "\"${buildCodeTime}\";")
 }
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = (javaVersionAsInt as int)
-}
-
-tasks.named("processResources") {
-	doLast {
-		//println "[Json5 Converter] Converting Started..."
-		def versionedResourceFolder = project.rootDir.toPath().resolve("versions").resolve(mcVersion).resolve("build").resolve("resources").resolve("main")
-
-		fileTree(versionedResourceFolder).getFiles().collect { it.toPath() }.findAll { it.toString().endsWith(".json5") }.forEach { path ->
-			def fileName = path.getFileName()
-			if (fileName == null) {
-				//println "[Json5 Converter] Failed to get json5 file name at: ${path}"
-				return
-			}
-			def name = fileName.toString()
-
-			def parent = path.getParent()
-			def json5Path = parent.resolve(name).toString()
-			def json5File = file(json5Path)
-			if (!json5File.exists()) {
-				//println "[Json5 Converter] Failed to get json5 file at: ${json5Path}"
-				return
-			}
-
-			def json5Text = json5File.text
-			if (json5Text.startsWith("// no j52j")) {
-				//println "[Json5 Converter] Skipped ${json5Path}"
-				return
-			}
-
-			Json5 json5 = Json5.builder(options -> options.allowInvalidSurrogate().build());
-			Json5Element obj = json5.parse(json5Text)
-			String json = json5.serialize(obj)
-
-			String jsonPath = parent.resolve(substringBeforeLast(name, ".") + ".json").toString()
-			File jsonFile = new File(jsonPath)
-
-			jsonFile.parentFile.mkdirs()
-			jsonFile.write(json)
-
-			json5File.delete()
-			//println "[Json5 Converter] Converted ${json5Path}"
-		}
-
-		//println "[Json5 Converter] Converting Finished"
-	}
-}
-
-tasks.register('generatePublishWorkflowsForEachVersion') {
-	group = 'project'
-	doFirst {
-		def workflowsFolder = project.rootProject.file(".github/workflows/generated/")
-		if (!workflowsFolder.exists() && !workflowsFolder.mkdirs()) {
-			return
-		}
-		def versions = prop("multi_versions").split(" ")
-		versions.each { version ->
-			def publishVersionWorkflow = workflowsFolder.toPath().resolve("publish_${version.toString()}.yml").toFile()
-			if (!publishVersionWorkflow.exists()) {
-				publishVersionWorkflow.createNewFile()
-				publishVersionWorkflow.text =
-						"""
-					# Generated workflow by task
-
-					name: Publish ${version.toString()} Version
-					on: [workflow_dispatch] # Manual trigger
-					
-					permissions:
-					  contents: write
-					
-					jobs:
-					  build:
-					    runs-on: ubuntu-22.04
-					    container:
-					      image: mcr.microsoft.com/openjdk/jdk:21-ubuntu
-					      options: --user root
-					    steps:
-					      - uses: actions/checkout@v4
-					      - name: make gradle wrapper executable
-					        run: chmod +x ./gradlew
-					      - name: Publish ${version.toString()} Mod Version
-					        run: ./gradlew chiseledBuildAndCollect+${version.toString()} chiseledPublish+${version.toString()}
-					        env:
-					          CURSEFORGE_API_KEY: \${{ secrets.CURSEFORGE_API_KEY }}
-					          MODRINTH_API_KEY: \${{ secrets.MODRINTH_API_KEY }}
-					""".stripIndent().strip()
-			}
-		}
-	}
-}
-
-tasks.register('generatePersonalProperties') {
-	group = 'project'
-
-	doFirst {
-		def folder = project.rootProject.file("personal/")
-		if (folder.exists() || folder.mkdirs()) {
-			def props = project.rootProject.file("personal/personal.properties")
-			props.createNewFile()
-			props.text =
-					"""
-					# # # # # # # # # # # # # #
-					#   Personal Properties   #
-					# # # # # # # # # # # # # #
-					
-					# If you don't want to set up any property, just set it to "none".
-					# Remember to run "regenerateRunConfigurations" task after changing this file!
-					
-					# Player properties
-					player_nickname=Steve
-					player_uuid=8667ba71-b85a-4004-af54-457a9734eed7
-					
-					# Hot Swapping
-					absolute_path_to_sponge_mixin=none
-					
-					# Quick Play
-					world_name=none
-					""".stripIndent().strip()
-		}
-	}
-}
-
-tasks.register('regenerateRunConfigurations', Delete) {
-	group = 'project'
-	delete(project.rootProject.file(".idea/runConfigurations"))
-	finalizedBy("ideaSyncTask")
-}
-
-tasks.register('buildAndCollect', Copy) {
-	group = 'build'
-	from(tasks.remapJar.archiveFile)
-	into(project.rootProject.file("libs/"))
-	dependsOn('rebuildLibs')
-}
-
-tasks.register('rebuildLibs', Delete) {
-	group = 'build'
-	delete(project.rootProject.file("libs/${modName}-${version}.jar"))
-	delete(project.file("libs/${modName}-${version}.jar"))
-	delete(project.file("libs/${modName}-${version}-sources.jar"))
-	finalizedBy("build")
-}
-
-java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
-
-	sourceCompatibility = javaVersion
-	targetCompatibility = javaVersion
-}
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}" }
-	}
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-publishMods {
-	def loaders = prop("loaders").toString().split(" ")
-	def modrinthProjectId = prop("modrinth_id").toString()
-	def embedsDepends = prop("embeds").toString().split(" ")
-	def curseForgeProjectId = prop("curseforge_id").toString()
-	def requiresDepends = prop("requires").toString().split(" ")
-	def optionalDepends = prop("optional").toString().split(" ")
-	def incompatibleDepends = prop("incompatible").toString().split(" ")
-	def versionTypeProperty = prop("version_type").toString()
-	def maxJavaVersion = JavaVersion.toVersion(prop("max_java_version"))
-	def isClient = Boolean.parseBoolean(prop("is_for_client").toString())
-	def isTesting = Boolean.parseBoolean(prop("test_publish").toString())
-	def isServer = Boolean.parseBoolean(prop("is_for_server").toString())
-	def versionName = "[${currentMultiVersion.toVersionRange()}] ${prop("mod_name")} v${prop("mod_version")}"
-	def curseForgeApiKeyIsPresent = providers.environmentVariable("CURSEFORGE_API_KEY").getOrNull() == null
-	def modrinthApiKeyIsPresent = providers.environmentVariable("MODRINTH_API_KEY").getOrNull() == null
-	def bl3 = isTesting || curseForgeApiKeyIsPresent || modrinthApiKeyIsPresent
-
-	println "[PublishMods] Configuring '${versionName}' for publishing"
-	displayName = versionName
-	file = getVerifiedOrDefaultJar(prop("mod_name"), prop("mod_version"), mcVersion)
-	changelog = getChangeLog()
-	if (versionTypeProperty == "RELEASE") {
-		type = STABLE
-	} else if (versionTypeProperty == "BETA") {
-		type = BETA
-	} else if (versionTypeProperty == "ALPHA") {
-		type = ALPHA
-	}
-	modLoaders.addAll(loaders)
-	dryRun = bl3
-
-	if (bl3) {
-		println "[PublishMods] Test Mode Enabled!"
-	}
-
-	curseforge {
-		projectId = curseForgeProjectId
-		accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
-
-		for (i in javaVersion.ordinal()..<maxJavaVersion.ordinal() + 1) {
-			javaVersions.add(JavaVersion.values()[i])
-		}
-
-		clientRequired = isClient
-		serverRequired = isServer
-
-		if (currentMultiVersion.minVersion != currentMultiVersion.maxVersion) {
-			minecraftVersionRange {
-				start = currentMultiVersion.minVersion
-				end = currentMultiVersion.maxVersion
-			}
-		} else {
-			minecraftVersions.add(currentMultiVersion.maxVersion)
-		}
-
-		if (requiresDepends.first() != "none") {
-			requires(requiresDepends)
-		}
-		if (optionalDepends.first() != "none") {
-			optional(optionalDepends)
-		}
-		if (incompatibleDepends.first() != "none") {
-			incompatible(incompatibleDepends)
-		}
-		if (embedsDepends.first() != "none") {
-			embeds(embedsDepends)
-		}
-	}
-
-	modrinth {
-		projectId = modrinthProjectId
-		accessToken = providers.environmentVariable("MODRINTH_API_KEY")
-
-		if (currentMultiVersion.minVersion != currentMultiVersion.maxVersion) {
-			minecraftVersionRange {
-				start = currentMultiVersion.minVersion
-				end = currentMultiVersion.maxVersion
-			}
-		} else {
-			minecraftVersions.add(currentMultiVersion.maxVersion)
-		}
-
-		if (requiresDepends.first() != "none") {
-			requires(requiresDepends)
-		}
-		if (optionalDepends.first() != "none") {
-			optional(optionalDepends)
-		}
-		if (incompatibleDepends.first() != "none") {
-			incompatible(incompatibleDepends)
-		}
-		if (embedsDepends.first() != "none") {
-			embeds(embedsDepends)
-		}
-	}
-}
-
-static String substringBefore(Object o, String ch) {
-	if (o == null) {
-		return "null"
-	}
-	def string = o.toString()
-	def i = string.indexOf(ch)
-	if (i == -1) {
-		return string
-	} else {
-		return string.substring(0, i)
-	}
-}
-
-static String substringBeforeLast(Object o, String ch) {
-	if (o == null) {
-		return "null"
-	}
-	def string = o.toString()
-	def i = string.lastIndexOf(ch)
-	if (i == -1) {
-		return string
-	} else {
-		return string.substring(0, i)
-	}
-}
-
-String getNickname(Object nickname) {
-	if (nickname == null || nickname == "null" || nickname == "none") {
-		return null
-	}
-	if (!nickname.toString().matches('^[a-zA-Z0-9_]{2,16}$')) {
-		println "WARNING — Your nickname is wrong, using default nickname 'Player'"
-		return "Player"
-	}
-	return nickname.toString()
-}
-
-UUID getUUID(Object uuid) {
-	if (uuid == null || uuid.toString() == "null" || uuid.toString() == "none") {
-		return null
-	}
-	try {
-		if (uuid.toString().indexOf("-") == -1) {
-			return UUID.fromString(uuid.toString().replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", '$1-$2-$3-$4-$5'))
-		}
-		return UUID.fromString(uuid.toString())
-	} catch (Exception e) {
-		e.printStackTrace()
-	}
-	println "WARNING — Your UUID is wrong, failed to parse it"
-	return null
-}
-
-@SuppressWarnings('GrMethodMayBeStatic') // Method cannot be static
-int getJavaVersionAsInteger(String minecraftVersion) {
-	return stonecutter.compare("1.20.5", minecraftVersion) == 1 ?
-			stonecutter.compare("1.18", minecraftVersion) == 1 ?
-					stonecutter.compare("1.16.5", minecraftVersion) == 1 ?
-							8
-							:
-							16
-					:
-					17
-			:
-			21
-}
-
-Properties getPersonalProperties() {
-	def personalProperties = new Properties()
-	def personalPropertiesFile = project.rootProject.file("personal/personal.properties")
-	if (personalPropertiesFile.exists()) {
-		personalPropertiesFile.withInputStream { stream ->
-			personalProperties.load(stream)
-		}
-
-		for (line in personalPropertiesFile.readLines()) {
-			def key = "absolute_path_to_sponge_mixin"
-			if (line.startsWith(key)) {
-				def substring = line.substring(key.length() + 1)
-				if (!substring.isEmpty()) {
-					personalProperties.setProperty(key, substring)
-				}
-			}
-		}
-
-	}
-	return personalProperties
-}
-
-MultiVersion getCurrentMultiVersion(String minecraftVersion) {
-	def versions = prop("publication_versions").toString().split(" ")
-	for (version in versions) {
-		def split = version.substring(0, version.length() - 1).split("\\[")
-		def project = split[0]
-		if (project == minecraftVersion) {
-			def supportedVersionsString = split[1]
-			if (supportedVersionsString.contains("-")) {
-				def supportedVersions = supportedVersionsString.split("-")
-				return new MultiVersion(projectVersion: minecraftVersion, minVersion: supportedVersions[0], maxVersion: supportedVersions[1])
-			} else if (supportedVersionsString.contains(".")) {
-				return new MultiVersion(projectVersion: minecraftVersion, minVersion: minecraftVersion, maxVersion: supportedVersionsString)
-			} else {
-				def a = project.indexOf(".")
-				def i = project.lastIndexOf(".")
-				if (a == i) {
-					i = project.length()
-				}
-				def p = project.substring(0, i)
-				def supportedMaxVersion = "${p}.${supportedVersionsString}"
-				return new MultiVersion(projectVersion: minecraftVersion, minVersion: minecraftVersion, maxVersion: supportedMaxVersion)
+processResources {
+	from("../../patpat-languages-files/lang") {
+		into "assets/${prop("data.mod_id")}/lang/"
+		eachFile { file ->
+			if (!file.isDirectory()) {
+				// Client requires lang files in lower case
+				file.name = file.name.toLowerCase()
 			}
 		}
 	}
-	return new MultiVersion(projectVersion: minecraftVersion, minVersion: minecraftVersion, maxVersion: minecraftVersion)
-}
-
-class MultiVersion {
-	String projectVersion
-	String minVersion
-	String maxVersion
-
-	String toString() {
-		if (minVersion != maxVersion) {
-			return "${projectVersion}[${minVersion}-${maxVersion}]"
-		}
-		return "${projectVersion}[${maxVersion}]"
-	}
-
-	String toVersionRange() {
-		if (minVersion == maxVersion) {
-			return maxVersion
-		}
-		def aMin = minVersion.indexOf(".")
-		def bMin = minVersion.lastIndexOf(".")
-		if (aMin == bMin) {
-			bMin = minVersion.length()
-		}
-		def minMain = minVersion.substring(0, bMin)
-
-		def aMax = maxVersion.indexOf(".")
-		def bMax = maxVersion.lastIndexOf(".")
-		if (aMax == bMax) {
-			bMax = maxVersion.length()
-		}
-		def maxMain = maxVersion.substring(0, bMax)
-		def maxMinor = maxVersion.substring(bMax + 1, maxVersion.length())
-		if (minMain == maxMain) {
-			return "${minVersion}-${maxMinor}"
-		}
-		return "${minVersion}-${maxVersion}"
-	}
-}
-
-def getVerifiedOrDefaultJar(String modName, String modVersion, String minecraftVersion) {
-	def path = "libs/${modName}-${modVersion}+${minecraftVersion}.jar"
-	def provider = project.rootProject.layout.buildDirectory.file(path)
-	def regularFile = provider.orNull
-	if (regularFile == null || !regularFile.getAsFile().exists()) {
-		println "[PublishMods] Failed to find jar file at '${path}'! Using archive file!"
-		return remapJar.archiveFile
-	}
-	return regularFile.getAsFile()
-}
-
-String getChangeLog() {
-	def file = project.rootProject.file("CHANGELOG.md")
-	if (file.exists()) {
-		def text = file.getText()
-		if (!text.isBlank()) {
-			return text
-		}
-	}
-	return "No changelog specified."
 }
 
 String prop(String key) {

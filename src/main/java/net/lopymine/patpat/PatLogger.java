@@ -1,15 +1,13 @@
 package net.lopymine.patpat;
 
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.config.client.PatPatClientConfig;
+import org.jetbrains.annotations.Nullable;
+import lombok.*;
 
-import lombok.Getter;
-
-//? >=1.17 {
+//? if >=1.17 {
 import org.slf4j.*;
 //?} else {
 /*import org.apache.logging.log4j.*;
- *///?}
+*///?}
 
 public class PatLogger {
 
@@ -17,33 +15,57 @@ public class PatLogger {
 	private final Logger logger;
 	private final String name;
 
+	@Nullable
+	private final PatLogger parent;
+
+	@Setter
+	private boolean debugMode = false;
+
 	public PatLogger(String name) {
-		this.name = name;
-		logger    = /*? if >=1.17 {*/LoggerFactory/*?} else {*//*LogManager*//*?}*/.getLogger(this.name);
+		this.name   = name;
+		this.logger = /*? if >=1.17 {*/LoggerFactory/*?} else {*//*LogManager*//*?}*/.getLogger(this.name);
+		this.parent = null;
+	}
+
+	public PatLogger(String name, @Nullable PatLogger parent) {
+		this.name   = name;
+		this.logger = /*? if >=1.17 {*/LoggerFactory/*?} else {*//*LogManager*//*?}*/.getLogger(this.name);
+		this.parent = parent;
 	}
 
 	public void debug(String text, Object... args) {
-		PatPatClientConfig config = PatPatClient.getConfig();
-		if (config != null && config.isDebugLogEnabled()) {
+		if (isDebugModeEnabled()) {
 			text = "[%s/DEBUG]: %s".formatted(this.name, text);
-			logger.info(text, args);
+			this.logger.info(text, args);
 		}
+	}
+
+	private boolean isDebugModeEnabled() {
+		return this.debugMode || (this.parent != null && this.parent.isDebugModeEnabled());
 	}
 
 	public void info(String text, Object... args) {
 		text = prepare(text);
-		logger.info(text, args);
-
+		this.logger.info(text, args);
 	}
 
 	public void warn(String text, Object... args) {
 		text = prepare(text);
-		logger.warn(text, args);
+		this.logger.warn(text, args);
+	}
+
+	public void error(String text, Throwable error) {
+		text = prepare(text);
+		this.logger.error(text, error);
 	}
 
 	public void error(String text, Object... args) {
 		text = prepare(text);
-		logger.error(text, args);
+		this.logger.error(text, args);
+	}
+
+	public PatLogger extend(String name) {
+		return new PatLogger("%s/%s".formatted(this.name, name), this);
 	}
 
 	private String prepare(String text) {

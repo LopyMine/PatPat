@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "${mod_id}",
-	"version": "${version}",
+	"version": "${mod_version}",
 	"name": "${mod_name}",
 	"description": "${mod_description}",
 	"authors": [
@@ -9,7 +9,8 @@
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/${mod_id}",
-		"issues": "https://github.com/LopyMine/${mod_id}"
+		"sources": "https://github.com/LopyMine/${mod_id}",
+		"issues": "https://github.com/LopyMine/${mod_id}/issues"
 	},
 	"license": "${mod_license}",
 	"icon": "icon/icon.png",
@@ -20,6 +21,9 @@
 		],
 		"client": [
 			"net.lopymine.patpat.client.PatPatClient"
+		],
+		"server": [
+			"net.lopymine.patpat.dedicated.PatPatDedicatedServer"
 		],
 		"modmenu": [
 			"net.lopymine.patpat.modmenu.ModMenuIntegration"
@@ -35,5 +39,17 @@
 	"mixins": [
 		"${mod_id}.mixins.json",
 		"${mod_id}-geckolib.mixins.json"
-	]
+	],
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.discord": "https://discord.gg/NZzxdkrV4s"
+			},
+			"credits": {
+				"translator": "Test"
+			},
+
+			"update_checker": true
+		}
+	}
 }

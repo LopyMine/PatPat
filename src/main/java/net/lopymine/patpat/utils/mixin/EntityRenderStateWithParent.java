@@ -1,7 +1,6 @@
 package net.lopymine.patpat.utils.mixin;
 
-//? >=1.21.2 {
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 @SuppressWarnings("java:S100")
 public interface EntityRenderStateWithParent {
@@ -14,4 +13,3 @@ public interface EntityRenderStateWithParent {
 
 	float patPat$getTickDelta();
 }
-//?}

@@ -1,47 +1,46 @@
 package net.lopymine.patpat.mixin.geckolib;
 
-//? geckolib {
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.*;
+//? if geckolib {
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.lopymine.patpat.renderer.PatAnimationRenderer;
-//? =1.16.5 {
-/*import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer;
-*///?} elif >=1.17.1 && <=1.19.2 {
-/*import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-*///?} else {
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import net.lopymine.patpat.client.render.PatPatClientRenderer;
+
+//? if >=1.19.3 {
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import net.minecraft.world.entity.Entity;
 //?}
 
-//? >=1.21.2 {
-import net.minecraft.client.render.entity.state.EntityRenderState;
-import net.lopymine.patpat.utils.mixin.EntityRenderStateWithParent;
-//?}
-
-@Mixin(GeoEntityRenderer.class)
+@Pseudo
+@Mixin(/*? if <1.19.3 {*/ /*targets = "software.bernie.geckolib3.renderer.geo.GeoEntityRenderer" *//*?} else {*/ GeoEntityRenderer.class /*?}*/)
 public abstract class GeoEntityRendererMixin {
 
-	@Inject(at=@At(value = "HEAD"), method = "render")
-	//? if <=1.16.5 {
-	/*private void render(LivingEntity livingEntity, float entityYaw, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider bufferIn, int packedLightIn, CallbackInfo ci) {
-	*///?} elif <1.21.2 {
-	/*private void render(Entity entity, float entityYaw, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider bufferSource, int packedLight, CallbackInfo ci) {
-		*///?} else {
-	
-	private void render(EntityRenderState entityRenderState, MatrixStack matrixStack, VertexConsumerProvider bufferSource, int packedLight, CallbackInfo ci) {
-		Entity entity = ((EntityRenderStateWithParent) entityRenderState).patPat$getEntity();
-		float tickDelta = ((EntityRenderStateWithParent) entityRenderState).patPat$getTickDelta();
-		//?}
-		//? if >1.16.5 {
+	//? if >=1.21.2 {
+	@Inject(at = @At(value = "HEAD"), method = "render")
+	private void render(net.minecraft.client.renderer.entity.state.EntityRenderState entityRenderState, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
+		Entity entity = ((net.lopymine.patpat.utils.mixin.EntityRenderStateWithParent) entityRenderState).patPat$getEntity();
+		float partialTick = ((net.lopymine.patpat.utils.mixin.EntityRenderStateWithParent) entityRenderState).patPat$getTickDelta();
 		if (!(entity instanceof LivingEntity livingEntity)) {
 			return;
 		}
-		//?}
-		PatAnimationRenderer.scaleEntityIfPatted(livingEntity, matrixStack, tickDelta);
+	//?} elif >=1.19.3 {
+	/*@Inject(at = @At("HEAD"), method = "render")
+	private void render(Entity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
+	if (!(entity instanceof LivingEntity livingEntity)) {
+			return;
+	}
+	*///?} else {
+	/*@Dynamic
+	@Inject(at = @At("HEAD"), method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V")
+	private void render(LivingEntity livingEntity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
+	*///?}
+		PatPatClientRenderer.scaleEntityIfPatted(livingEntity, poseStack, partialTick);
 	}
 }
 //?}
+

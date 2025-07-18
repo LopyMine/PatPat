@@ -1,6 +1,6 @@
 package net.lopymine.patpat.extension;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 public class TextExtension {
 
@@ -8,7 +8,7 @@ public class TextExtension {
 		throw new IllegalStateException("Extension class");
 	}
 
-	public static String asString(Text text) {
+	public static String asString(Component text) {
 		return text.getString().replaceAll("§[A-Za-z0-9]", "");
 	}
 }

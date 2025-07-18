@@ -1,33 +1,44 @@
 package net.lopymine.patpat.compat.replaymod;
 
+import net.minecraft.network.protocol.Packet;
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.compat.LoadedMods;
 
-//? >=1.19.4 {
-import net.minecraft.network.packet.Packet;
-//?} else {
-/*import net.minecraft.network.Packet;
- *///?}
+//? replaymod {
+import com.replaymod.recording.ReplayModRecording;
+import com.replaymod.recording.packet.PacketListener;
+import com.replaymod.replay.ReplayModReplay;
+//?}
 
-/**
- * !!--------------------------!!
- * <p>
- * YOU CAN'T INVOKE THIS CLASS OR THEIR METHODS DIRECTLY, MOD WILL CRASH AT PROD
- * <p>
- * YOU ONLY CAN USE {@link ReplayModCompat} TO INVOKE METHODS OF THIS CLASS
- * <p>
- * !!--------------------------!!
- */
 public class ReplayModManager {
 
 	public static void sendDummyPacket(Packet<?> packet) {
-		//? !(=1.20.5) {
-		if (com.replaymod.recording.ReplayModRecording.instance.getConnectionEventHandler() != null) {
+		//? replaymod {
+		if (!LoadedMods.REPLAY_MOD_LOADED) {
+			return;
+		}
+		if (ReplayModRecording.instance.getConnectionEventHandler() != null) {
 			PatPatClient.LOGGER.debug("Sent dummy packet for Replay Mod");
-			com.replaymod.recording.packet.PacketListener packetListener = com.replaymod.recording.ReplayModRecording.instance.getConnectionEventHandler().getPacketListener();
+			PacketListener packetListener = ReplayModRecording.instance.getConnectionEventHandler().getPacketListener();
 			if (packetListener != null) {
 				packetListener.save(packet);
 			}
 		}
 		//?}
+	}
+
+	public static boolean isInReplay() {
+		//? replaymod {
+		if (!LoadedMods.REPLAY_MOD_LOADED) {
+			return false;
+		}
+		ReplayModReplay instance = ReplayModReplay.instance;
+		if (instance == null) {
+			return false;
+		}
+		return instance.getReplayHandler() != null;
+		//?} else {
+		/*return false;
+		 *///?}
 	}
 }

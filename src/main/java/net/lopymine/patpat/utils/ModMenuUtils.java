@@ -1,28 +1,56 @@
 package net.lopymine.patpat.utils;
 
-import net.minecraft.util.Identifier;
+import net.lopymine.patpat.PatTranslation;
+import net.lopymine.patpat.modmenu.yacl.custom.utils.SimpleContent;
 
-import net.lopymine.patpat.modmenu.screen.yacl.simple.SimpleContent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.*;
+import net.minecraft.resources.ResourceLocation;
+import java.util.function.Function;
 
 public class ModMenuUtils {
 
-	private ModMenuUtils() {
-		throw new IllegalStateException("Utility class");
+	public static String getOptionKey(String optionId) {
+		return String.format("modmenu.option.%s", optionId);
 	}
 
-	public static String getGroupTitleKey(String groupId) {
-		return "patpat.modmenu." + groupId;
+	public static String getCategoryKey(String categoryId) {
+		return String.format("modmenu.category.%s", categoryId);
 	}
 
-	public static String getOptionKey(String groupId, String optionId) {
-		return "patpat.modmenu." + groupId + ".option." + optionId;
+	public static String getGroupKey(String groupId) {
+		return String.format("modmenu.group.%s", groupId);
 	}
 
-	public static String getDescriptionKey(String key) {
-		return key + ".description";
+	public static MutableComponent getName(String key) {
+		return PatTranslation.text(key + ".name");
 	}
 
-	public static Identifier getContentId(SimpleContent content, String optionId) {
-		return IdentifierUtils.textureId(String.format("config/%s/%s.%s", content.getFolder(), optionId, content.getFileExtension()));
+	public static MutableComponent getDescription(String key) {
+		return PatTranslation.text(key + ".description");
+	}
+
+	public static MutableComponent getOptionName(String optionId) {
+		return getName(getOptionKey(optionId));
+	}
+
+	public static MutableComponent getOptionDescription(String optionId) {
+		return getDescription(getOptionKey(optionId));
+	}
+
+	public static MutableComponent getModTitle() {
+		return PatTranslation.text("modmenu.title");
+	}
+
+	public static ResourceLocation getContentId(SimpleContent content, String contentId) {
+		return IdentifierUtils.modId(String.format("textures/config/%s.%s", contentId, content.getFileExtension()));
+	}
+
+	public static Function<Boolean, Component> getEnabledOrDisabledFormatter() {
+		return state -> PatTranslation.text("formatter.enabled_or_disabled." + Boolean.TRUE.equals(state));
+	}
+
+	public static Function<Boolean, Component> getEnabledOrDisabledFormatterColored() {
+		return state -> PatTranslation.text("formatter.enabled_or_disabled." + Boolean.TRUE.equals(state)).withStyle(Boolean.TRUE.equals(state) ? ChatFormatting.GREEN : ChatFormatting.RED);
 	}
 }

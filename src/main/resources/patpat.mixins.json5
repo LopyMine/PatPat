@@ -23,7 +23,8 @@
 		"KeyBindsScreenMixin",
 		"GameRendererMixin",
 		"EntityMixin",
-		"EnderDragonRendererMixin"
+		"EnderDragonRendererMixin",
+		"ModMenuMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

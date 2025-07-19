@@ -16,7 +16,7 @@
 
 ## Misc
 - Updated to 1.21.6–7 (mod still supports all MC versions from 1.16.5–1.21.7!)
-- Updated translations and created a special site for easy translating the PatPat mod! You can find it here: https://weblate.nik51.name/project/patpat
+- Updated translations and created a special site for easy translating the PatPat mod! You can find it here: https://weblate.nik51.name/projects/patpat
 - Now if someone is patting you, you will be able to see their pats above your head in the first person.
 - The project has been migrated to mojmap mappings (for future compatibility with other loaders).
 - Added automatic config migration from an older version.

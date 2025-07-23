@@ -76,15 +76,15 @@ public class PatPatClientIgnoreCommand {
 		if (success) {
 			config.saveAsync();
 			if (add) {
-				text = CommandText.text("ignore.add.success", entityTypeStringed).finish();
+				text = CommandText.goldenArgs("ignore.add.success", entityTypeStringed).finish();
 			} else {
-				text = CommandText.text("ignore.remove.success", entityTypeStringed).finish();
+				text = CommandText.goldenArgs("ignore.remove.success", entityTypeStringed).finish();
 			}
 		} else {
 			if (add) {
-				text = CommandText.text("ignore.add.already", entityTypeStringed).finish();
+				text = CommandText.goldenArgs("ignore.add.already", entityTypeStringed).finish();
 			} else {
-				text = CommandText.text("ignore.remove.already", entityTypeStringed).finish();
+				text = CommandText.goldenArgs("ignore.remove.already", entityTypeStringed).finish();
 			}
 		}
 		context.sendMsg(text);

@@ -11,6 +11,8 @@ import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.utils.ModMenuUtils;
 import net.lopymine.patpat.modmenu.yacl.custom.extension.YACLAPIExtension;
 import net.lopymine.patpat.modmenu.yacl.custom.utils.SimpleContent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 import java.util.function.*;
@@ -21,6 +23,10 @@ public class SimpleOption {
 
 	public static <T> Builder<T> startBuilder(String optionId) {
 		return new Builder<>(optionId);
+	}
+
+	public static <T> Builder<T> startBuilderWithRedColor(String optionId) {
+		return new Builder<>(optionId, ChatFormatting.RED);
 	}
 
 	public static ButtonBuilder startButtonBuilder(String optionId, BiConsumer<YACLScreen, ButtonOption> biConsumer) {
@@ -45,6 +51,13 @@ public class SimpleOption {
 					.name(ModMenuUtils.getName(this.optionKey));
 		}
 
+		public Builder(String optionId, ChatFormatting chatFormatting) {
+			this.optionId      = optionId;
+			this.optionKey     = ModMenuUtils.getOptionKey(optionId);
+			this.optionBuilder = Option.<T>createBuilder()
+					.name(ModMenuUtils.getName(this.optionKey).withStyle(chatFormatting));
+		}
+
 		public Builder<T> withDescription(SimpleContent content) {
 			OptionDescription.Builder builder = OptionDescription.createBuilder().text(ModMenuUtils.getDescription(this.optionKey));
 			if (content == SimpleContent.IMAGE) {
@@ -53,6 +66,12 @@ public class SimpleOption {
 			if (content == SimpleContent.WEBP) {
 				builder.webpImage(ModMenuUtils.getContentId(content, this.optionId));
 			}
+			this.optionBuilder.description(builder.build());
+			return this;
+		}
+
+		public Builder<T> withWarn() {
+			OptionDescription.Builder builder = OptionDescription.createBuilder().text(ModMenuUtils.getDescriptionWithWarn(this.optionKey));
 			this.optionBuilder.description(builder.build());
 			return this;
 		}

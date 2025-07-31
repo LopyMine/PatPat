@@ -16,8 +16,8 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 public class PatPatClientProximityPacketsConfig {
 
 	public static final PatPatClientProximityPacketsConfig DEFAULT = new PatPatClientProximityPacketsConfig(
-			true,
-			10
+			false,
+			5
 	);
 
 	public static final Codec<PatPatClientProximityPacketsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(

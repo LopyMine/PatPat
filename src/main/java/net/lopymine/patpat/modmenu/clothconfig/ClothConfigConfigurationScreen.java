@@ -3,6 +3,7 @@ package net.lopymine.patpat.modmenu.clothconfig;
 import me.shedaniel.clothconfig2.api.*;
 import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.*;
 
@@ -209,8 +210,8 @@ public class ClothConfigConfigurationScreen {
 	private static SubCategoryListEntry getProximityPacketsGroup(ConfigEntryBuilder entryBuilder, PatPatClientProximityPacketsConfig config, PatPatClientProximityPacketsConfig defConfig) {
 		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(getGroupName("proximity_packets"));
 		subcategory.add(
-				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("proximity_packets_enabled"), config.isProximityPacketsEnabled())
-						.setTooltip(ModMenuUtils.getOptionDescription("proximity_packets_enabled"))
+				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("proximity_packets_enabled").withStyle(ChatFormatting.RED), config.isProximityPacketsEnabled())
+						.setTooltip(ModMenuUtils.getOptionDescriptionWithWarn("proximity_packets_enabled"))
 						.setYesNoTextSupplier(ENABLED_OR_DISABLED_FORMATTER)
 						.setDefaultValue(defConfig.isProximityPacketsEnabled())
 						.setSaveConsumer(config::setProximityPacketsEnabled)
@@ -220,8 +221,8 @@ public class ClothConfigConfigurationScreen {
 				entryBuilder.startIntField(ModMenuUtils.getOptionName("max_packets_per_second"), config.getMaxPacketsPerSecond())
 						.setTooltip(ModMenuUtils.getOptionDescription("max_packets_per_second"))
 						.setDefaultValue(defConfig.getMaxPacketsPerSecond())
-						.setMin(0)
-						.setMax(100)
+						.setMin(1)
+						.setMax(50)
 						.setSaveConsumer(config::setMaxPacketsPerSecond)
 						.build()
 		);

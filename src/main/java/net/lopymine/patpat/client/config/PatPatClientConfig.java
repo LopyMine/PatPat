@@ -47,6 +47,7 @@ public class PatPatClientConfig {
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(PatPat.MOD_ID + "-client.json5").toFile();
 	private static PatPatClientConfig instance;
 
+	@Setter
 	private Version version;
 	private PatPatClientMainConfig mainConfig;
 	private PatPatClientResourcePacksConfig resourcePacksConfig;

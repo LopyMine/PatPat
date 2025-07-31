@@ -143,14 +143,14 @@ public class YACLConfigurationScreen {
 	/*? if proxlib {*/
 	private static OptionGroup getProximityPatPacketsGroup(PatPatClientProximityPacketsConfig defConfig, PatPatClientProximityPacketsConfig config) {
 		return SimpleGroup.startBuilder("proximity_packets").options(
-				SimpleOption.<Boolean>startBuilder("proximity_packets_enabled")
+				SimpleOption.<Boolean>startBuilderWithRedColor("proximity_packets_enabled")
 						.withBinding(defConfig.isProximityPacketsEnabled(), config::isProximityPacketsEnabled, config::setProximityPacketsEnabled, false)
 						.withController()
-						.withDescription(SimpleContent.NONE)
+						.withWarn()
 						.build(),
 				SimpleOption.<Integer>startBuilder("max_packets_per_second")
 						.withBinding(defConfig.getMaxPacketsPerSecond(), config::getMaxPacketsPerSecond, config::setMaxPacketsPerSecond, false)
-						.withController(1, 100, 1)
+						.withController(1, 50, 1)
 						.withDescription(SimpleContent.NONE)
 						.build()
 		).build();

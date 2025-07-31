@@ -3,8 +3,9 @@ package net.lopymine.patpat.modmenu.yacl;
 import net.minecraft.client.gui.screens.Screen;
 
 //? >=1.20.1 {
-import dev.isxander.yacl3.api.*;
 import lombok.experimental.ExtensionMethod;
+import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.sub.*;
@@ -12,6 +13,10 @@ import net.lopymine.patpat.modmenu.yacl.custom.base.*;
 import net.lopymine.patpat.modmenu.yacl.custom.extension.SimpleOptionExtension;
 import net.lopymine.patpat.modmenu.yacl.custom.screen.SimpleYACLScreen;
 import net.lopymine.patpat.modmenu.yacl.custom.utils.*;
+import net.lopymine.patpat.PatTranslation;
+import net.lopymine.patpat.client.config.ProximityPacketServersWhitelistConfig;
+
+import java.util.ArrayList;
 
 @ExtensionMethod(SimpleOptionExtension.class)
 public class YACLConfigurationScreen {
@@ -36,7 +41,10 @@ public class YACLConfigurationScreen {
 				.groups(getSoundGroup(defConfig.getSoundsConfig(), config.getSoundsConfig()))
 				.groups(getVisualGroup(defConfig.getVisualConfig(), config.getVisualConfig()))
 				.groups(getMultiplayerGroup(defConfig.getMultiPlayerConfig(), config.getMultiPlayerConfig()))
-				/*? if proxlib {*/.groups(getProximityPatPacketsGroup(defConfig.getProximityPacketsConfig(), config.getProximityPacketsConfig())) /*?}*/
+				/*? if proxlib {*/
+				.groups(getProximityPatPacketsGroup(defConfig.getProximityPacketsConfig(), config.getProximityPacketsConfig()))
+				.groups(getProximityPacketServerWhitelistGroup())
+				/*?}*/
 				.build();
 	}
 
@@ -152,8 +160,28 @@ public class YACLConfigurationScreen {
 						.withBinding(defConfig.getMaxPacketsPerSecond(), config::getMaxPacketsPerSecond, config::setMaxPacketsPerSecond, false)
 						.withController(1, 50, 1)
 						.withDescription(SimpleContent.NONE)
+						.build(),
+				SimpleOption.<Boolean>startBuilderWithRedColor("proximity_packets_list_is_blacklist")
+						.withBinding(defConfig.isBlacklist(), config::isBlacklist, config::setBlacklist, false)
+						.withController()
+						.withWarn()
 						.build()
 		).build();
+	}
+
+	private static OptionGroup getProximityPacketServerWhitelistGroup(){
+		return ListOption.<String>createBuilder()
+				.name(PatTranslation.text("modmenu.option.proximity_packets_servers_whitelist.name"))
+				.description(OptionDescription.of(PatTranslation.text("modmenu.option.proximity_packets_servers_whitelist.description")))
+				.initial("")
+				.binding(
+						ProximityPacketServersWhitelistConfig.DEFAULT_VALUES,
+						() -> new ArrayList<>(ProximityPacketServersWhitelistConfig.getInstance().getServers()),
+						ProximityPacketServersWhitelistConfig::rewriteServersList
+				)
+				.controller(StringControllerBuilder::create)
+				.maximumNumberOfEntries(2000)
+				.build();
 	}
 	/*?}*/
 }

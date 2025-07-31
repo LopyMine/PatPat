@@ -2,22 +2,26 @@ package net.lopymine.patpat.utils;
 
 import lombok.experimental.UtilityClass;
 import net.lopymine.patpat.PatLogger;
+import net.lopymine.patpat.client.config.ProximityPacketServersWhitelistConfig;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Set;
+import java.util.List;
 
 
 // TODO: Merge all utils in one universal
 @UtilityClass
-public class ProximityPacketServerWhitelistConfigUtils {
+public class ProximityPacketServersWhitelistConfigUtils {
 
 	public static void create(File config, PatLogger logger) {
 		try {
-			if (!config.createNewFile()) {
+			if (config.createNewFile()) {
+				try (FileWriter writer = new FileWriter(config, StandardCharsets.UTF_8)) {
+					writer.write(String.join("\n", ProximityPacketServersWhitelistConfig.DEFAULT_VALUES));
+				} catch (IOException e) {
+					logger.error("Failed to write default values in %s config!".formatted(config.getName()), e);
+				}
+			} else {
 				logger.error("Invoked server whitelist config creation, but config already exists!");
 			}
 		} catch (Exception e) {
@@ -26,10 +30,9 @@ public class ProximityPacketServerWhitelistConfigUtils {
 	}
 
 
-	public static void read(File config, PatLogger logger, Set<String> set) {
+	public static void read(File config, PatLogger logger, List<String> list) {
 		if (!config.exists()) {
-			ProximityPacketServerWhitelistConfigUtils.create(config, logger);
-			return;
+			ProximityPacketServersWhitelistConfigUtils.create(config, logger);
 		}
 
 		int lineNumber = 0;
@@ -38,7 +41,7 @@ public class ProximityPacketServerWhitelistConfigUtils {
 			line = reader.readLine();
 			while (line != null) {
 				lineNumber++;
-				set.add(line);
+				list.add(line);
 				line = reader.readLine();
 			}
 		} catch (Exception e) {
@@ -46,9 +49,9 @@ public class ProximityPacketServerWhitelistConfigUtils {
 		}
 	}
 
-	public static void save(File config, PatLogger logger, Set<String> set) {
+	public static void save(File config, PatLogger logger, List<String> list) {
 		try (FileWriter writer = new FileWriter(config, StandardCharsets.UTF_8)) {
-			String collect = String.join("\n", set);
+			String collect = String.join("\n", list);
 			logger.debug("Saving proximity packet server whitelist config:");
 			logger.debug(collect);
 			writer.write(collect);

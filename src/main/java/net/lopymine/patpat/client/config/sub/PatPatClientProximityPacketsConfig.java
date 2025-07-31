@@ -17,16 +17,19 @@ public class PatPatClientProximityPacketsConfig {
 
 	public static final PatPatClientProximityPacketsConfig DEFAULT = new PatPatClientProximityPacketsConfig(
 			false,
-			5
+			5,
+			false
 	);
 
 	public static final Codec<PatPatClientProximityPacketsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			option("proximityPacketsEnabled", DEFAULT.proximityPacketsEnabled, Codec.BOOL, PatPatClientProximityPacketsConfig::isProximityPacketsEnabled),
-			option("maxPacketsPerSecond", DEFAULT.maxPacketsPerSecond, Codec.INT, PatPatClientProximityPacketsConfig::getMaxPacketsPerSecond)
+			option("maxPacketsPerSecond", DEFAULT.maxPacketsPerSecond, Codec.INT, PatPatClientProximityPacketsConfig::getMaxPacketsPerSecond),
+			option("isBlacklist", DEFAULT.isBlacklist, Codec.BOOL, PatPatClientProximityPacketsConfig::isBlacklist)
 	).apply(instance, PatPatClientProximityPacketsConfig::new));
 
 	private boolean proximityPacketsEnabled;
 	private int maxPacketsPerSecond;
+	private boolean isBlacklist;
 
 	public static PatPatClientProximityPacketsConfig getNewInstance() {
 		return CodecUtils.parseNewInstanceHacky(CODEC);
@@ -40,7 +43,8 @@ public class PatPatClientProximityPacketsConfig {
 	public PatPatClientProximityPacketsConfig copy() {
 		return new PatPatClientProximityPacketsConfig(
 				this.proximityPacketsEnabled,
-				this.maxPacketsPerSecond
+				this.maxPacketsPerSecond,
+				this.isBlacklist
 		);
 	}
 

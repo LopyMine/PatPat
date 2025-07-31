@@ -1,7 +1,6 @@
 package net.lopymine.patpat.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.command.PatPatClientCommandManager;

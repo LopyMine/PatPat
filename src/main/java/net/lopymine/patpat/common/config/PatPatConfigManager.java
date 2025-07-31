@@ -6,6 +6,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.ProximityPacketServersWhitelistConfig;
 import net.lopymine.patpat.client.config.migrate.PatPatClientConfigMigrateManager;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.server.config.migrate.PatPatServerConfigMigrateManager;
@@ -41,6 +42,7 @@ public class PatPatConfigManager {
 	public static void reloadClient() {
 		PatPatClientConfigMigrateManager.getInstance().migrate();
 		PatPatClientConfig config = PatPatClientConfig.reload();
+		ProximityPacketServersWhitelistConfig.reload();
 		PatPatClient.LOGGER.setDebugMode(config.getMainConfig().isDebugLogEnabled());
 	}
 }

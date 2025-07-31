@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 // TODO: Update method for future config updates
+// TODO: Write test on this migration
 @Setter
 public class PatPatClientConfigMigrateVersion100 extends AbstractConfigMigrateHandler {
 
@@ -32,7 +33,7 @@ public class PatPatClientConfigMigrateVersion100 extends AbstractConfigMigrateHa
 			File migrateFile = this.getMigrateFile().toFile();
 			JsonObject object = GSON.fromJson(new JsonReader(new FileReader(migrateFile)), JsonObject.class);
 			JsonElement versionElement = object.get("version");
-			if(versionElement==null){
+			if (versionElement == null) {
 				return false;
 			}
 			Version version = Version.of(versionElement.getAsString());

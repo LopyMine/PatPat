@@ -3,6 +3,7 @@ package net.lopymine.patpat.modmenu.clothconfig;
 import me.shedaniel.clothconfig2.api.*;
 import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
+import net.lopymine.patpat.client.config.ProximityPacketServersWhitelistConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.*;
@@ -11,6 +12,7 @@ import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.utils.*;
 
+import java.util.ArrayList;
 import java.util.function.Function;
 
 public class ClothConfigConfigurationScreen {
@@ -207,6 +209,7 @@ public class ClothConfigConfigurationScreen {
 		return subcategory.build();
 	}
 
+	//? if proxlib {
 	private static SubCategoryListEntry getProximityPacketsGroup(ConfigEntryBuilder entryBuilder, PatPatClientProximityPacketsConfig config, PatPatClientProximityPacketsConfig defConfig) {
 		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(getGroupName("proximity_packets"));
 		subcategory.add(
@@ -226,9 +229,27 @@ public class ClothConfigConfigurationScreen {
 						.setSaveConsumer(config::setMaxPacketsPerSecond)
 						.build()
 		);
+		subcategory.add(
+				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("proximity_packets_list_is_blacklist").withStyle(ChatFormatting.RED), config.isBlacklist())
+						.setTooltip(ModMenuUtils.getOptionDescriptionWithWarn("proximity_packets_list_is_blacklist"))
+						.setYesNoTextSupplier(ENABLED_OR_DISABLED_FORMATTER)
+						.setDefaultValue(defConfig.isBlacklist())
+						.setSaveConsumer(config::setBlacklist)
+						.build()
+		);
+		subcategory.add(
+			entryBuilder.startStrList(ModMenuUtils.getOptionName("proximity_packets_servers_whitelist"), new ArrayList<>(ProximityPacketServersWhitelistConfig.getInstance().getServers()))
+					.setTooltip(ModMenuUtils.getOptionDescription("proximity_packets_servers_whitelist"))
+					.setDefaultValue(ProximityPacketServersWhitelistConfig.DEFAULT_VALUES)
+					.setDeleteButtonEnabled(true)
+					.setExpanded(true)
+					.setSaveConsumer(ProximityPacketServersWhitelistConfig::rewriteServersList)
+					.build()
+		);
 		subcategory.setExpanded(true);
 		return subcategory.build();
 	}
+	/*?}*/
 
 	public static MutableComponent getCategoryName(String categoryId) {
 		return ModMenuUtils.getName(ModMenuUtils.getCategoryKey(categoryId)).withStyle(NAME_STYLE);

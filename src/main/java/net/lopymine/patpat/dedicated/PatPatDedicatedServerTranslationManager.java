@@ -6,16 +6,19 @@ import java.util.*;
 import net.fabricmc.loader.api.*;
 import net.lopymine.patpat.PatPat;
 import net.minecraft.locale.Language;
-import org.jetbrains.annotations.*;
 
 public class PatPatDedicatedServerTranslationManager {
 
 	private static final Map<String, String> EN_US = new HashMap<>();
 
+	private PatPatDedicatedServerTranslationManager() {
+		throw new IllegalStateException("Manager class");
+	}
+
 	public static void reload() {
 		EN_US.clear();
 
-		ModContainer modContainer = PatPatDedicatedServerTranslationManager.getModContainer();
+		ModContainer modContainer = FabricLoader.getInstance().getModContainer(PatPat.MOD_ID).orElse(null);
 		if (modContainer == null) {
 			PatPatDedicatedServer.LOGGER.error("Failed to get PatPat language files for server-side, because PatPat mod container doesn't exits!");
 			return;
@@ -39,12 +42,4 @@ public class PatPatDedicatedServerTranslationManager {
 		return PatPatDedicatedServerTranslationManager.EN_US.getOrDefault(key, key);
 	}
 
-	@Nullable
-	private static ModContainer getModContainer() {
-		try {
-			return FabricLoader.getInstance().getModContainer(PatPat.MOD_ID).orElseThrow();
-		} catch (Exception e) {
-			return null;
-		}
-	}
 }

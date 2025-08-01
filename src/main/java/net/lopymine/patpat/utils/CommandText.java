@@ -41,20 +41,27 @@ public class CommandText {
 	}
 
 	public static CommandText goldenArgs(String key, Object... args) {
-		return new CommandText("command." + key, getGoldenArgs(args));
+		return new CommandText("command." + key, getColoredArgs(ChatFormatting.GOLD, args));
 	}
 
-	private static Object[] getGoldenArgs(Object... args) {
+	public static Object[] getColoredArgs(ChatFormatting color, Object... args) {
 		Object[] objects = new Object[args.length];
 		for (int i = 0; i < args.length; i++) {
 			Object arg = args[i];
 			if (arg instanceof MutableComponent component) {
 				objects[i] = component;
 			} else {
-				objects[i] = TextUtils.literal(arg).withStyle(ChatFormatting.GOLD);
+				objects[i] = TextUtils.literal(arg).withStyle(color);
 			}
 		}
 		return objects;
+	}
+
+	public static MutableComponent getColoredArg(ChatFormatting color, Object arg) {
+		if (arg instanceof MutableComponent component) {
+			return component;
+		}
+		return TextUtils.literal(arg).withStyle(color);
 	}
 
 	public CommandText withShowEntity(EntityType<?> type, UUID uuid, String name) {

@@ -30,12 +30,27 @@ public class ModMenuUtils {
 		return PatTranslation.text(key + ".description");
 	}
 
+	public static MutableComponent getWarn(String key) {
+		return PatTranslation.text(key + ".warn");
+	}
+
+	public static MutableComponent getDescriptionWithWarn(String key) {
+		return TextUtils.empty()
+				.append(ModMenuUtils.getWarn(key).withStyle(ChatFormatting.RED))
+				.append(TextUtils.literal("\n\n"))
+				.append(ModMenuUtils.getDescription(key));
+	}
+
 	public static MutableComponent getOptionName(String optionId) {
 		return getName(getOptionKey(optionId));
 	}
 
 	public static MutableComponent getOptionDescription(String optionId) {
 		return getDescription(getOptionKey(optionId));
+	}
+
+	public static MutableComponent getOptionDescriptionWithWarn(String optionId) {
+		return getDescriptionWithWarn(getOptionKey(optionId));
 	}
 
 	public static MutableComponent getModTitle() {

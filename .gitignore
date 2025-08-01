@@ -43,3 +43,4 @@ replay_*.log
 
 versions/**/logs
 versions/**/logs/**
+versions/**/fabricloader.log

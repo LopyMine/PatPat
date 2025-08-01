@@ -20,6 +20,14 @@ public class TextUtils {
 		return processWithArgs(Language.getInstance().getOrDefault(key), args);
 	}
 
+	public static MutableComponent empty() {
+		//? >=1.19 {
+		return Component.empty();
+		//?} else {
+		/*return TextComponent.EMPTY.plainCopy();
+		 *///?}
+	}
+
 	public static MutableComponent literal(Object text) {
 		//? >=1.19 {
 		return Component.literal(String.valueOf(text));

@@ -41,12 +41,15 @@
 		"${mod_id}-geckolib.mixins.json"
 	],
 	"custom": {
+		"translators": {
+			"MrLemonHog": "Ukrainian"
+		},
 		"modmenu": {
 			"links": {
-				"modmenu.discord": "https://discord.gg/NZzxdkrV4s"
-			},
-			"credits": {
-				"translator": "Test"
+				"modmenu.discord": "https://discord.gg/NZzxdkrV4s",
+				"modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/${mod_id}",
+				"modmenu.modrinth": "https://modrinth.com/mod/${mod_id}",
+				"Weblate": "https://weblate.nik51.name/projects/${mod_id}"
 			},
 
 			"update_checker": true

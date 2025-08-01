@@ -3,6 +3,7 @@
 	"package": "net.lopymine.patpat.mixin",
 	"refmap": "${mod_id}.refmap.json",
 	"compatibilityLevel": "JAVA_${java}",
+	"plugin": "net.lopymine.patpat.mixin.PatPatMixinConfigPlugin",
 	"mixins": [
 	],
 	"client": [
@@ -23,7 +24,8 @@
 		"KeyBindsScreenMixin",
 		"GameRendererMixin",
 		"EntityMixin",
-		"EnderDragonRendererMixin"
+		"EnderDragonRendererMixin",
+		"ModMenuMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

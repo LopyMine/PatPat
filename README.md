@@ -26,7 +26,7 @@ Also this mod supports multiplayer, just by adding this mod at the server you ca
 
 # ⚡ PatPat Plugin
 
-If you have non-Fabric server, you can install PatPat Plugin on your Bukkit/Spigot/Paper server! This Plugin just provides the server-side functionality of the PatPat for non-Fabric Servers.
+If you have non-Fabric server, you can install PatPat Plugin on your Bukkit/Spigot/Paper server! This Plugin just provides the **server-side** functionality of the PatPat for non-Fabric Servers. 
 
 For now, the PatPat Plugin should support most of the currently available server cores, such as Bukkit, Spigot, Paper and on other their forks. I recommend just to test it on your server.
 

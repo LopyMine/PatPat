@@ -48,7 +48,7 @@ public class PatPatClientProxLibManager {
 			return false;
 		}
 		return PatPatClientConfig.getInstance().getProximityPacketsConfig().isBlacklist()
-				!= ProximityPacketServersWhitelistConfig.getInstance().isWhitelisted(serverData.ip);
+				!= ProximityPacketServersWhitelistConfig.getInstance().contains(serverData.ip);
 	}
 
 	public static void setEnabled(boolean enabled) {

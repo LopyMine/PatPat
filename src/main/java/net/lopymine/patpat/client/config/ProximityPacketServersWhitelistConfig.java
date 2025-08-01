@@ -37,7 +37,7 @@ public class ProximityPacketServersWhitelistConfig {
 		instance = config;
 	}
 
-	public static void rewriteServersList(List<String> serversList){
+	public static void rewriteServersList(List<String> serversList) {
 		ProximityPacketServersWhitelistConfig serverWhitelistConfig = ProximityPacketServersWhitelistConfig.getInstance();
 		List<String> servers = serverWhitelistConfig.getServers();
 		servers.clear();
@@ -61,8 +61,8 @@ public class ProximityPacketServersWhitelistConfig {
 		servers.addAll(servers_ip);
 	}
 
-	public boolean isWhitelisted(@NotNull String address){
-		return servers.isEmpty() || servers.contains(address);
+	public boolean contains(@NotNull String address) {
+		return servers.contains(address);
 	}
 
 	public void saveAsync() {

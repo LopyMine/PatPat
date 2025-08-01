@@ -15,3 +15,4 @@ We still believe in this feature, so we are not removing it from the mod at this
 ## Misc
 - Fixed permission for `ratelimit` command
 - In output ignore command changed color for entity type to gold
+- Updated ProxLib to 0.2.4

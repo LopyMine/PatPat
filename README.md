@@ -32,7 +32,7 @@ For now, the PatPat Plugin should support most of the currently available server
 
 **If you see that this plugin doesn't work at your server, please open issue about it at [**Github Issues**](https://github.com/LopyMine/PatPat-Plugin/issues) page.** Currently, in plans to add support for Velocity servers.
 
-# Translation
+# 🇺🇳 Translation <a href="https://weblate.nik51.name/engage/patpat/"><img src="https://weblate.nik51.name/widget/patpat/patpat/svg-badge.svg" alt="Translation status" /></a>
 
 You can help translate this mod via Weblate here: https://weblate.nik51.name/projects/patpat/
 

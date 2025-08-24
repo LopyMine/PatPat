@@ -11,7 +11,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.command.argument.EntityTypeArgumentType;
-import net.lopymine.patpat.client.config.IgnoreMobListConfig;
+import net.lopymine.patpat.client.config.list.PatPatClientIgnoreMobListConfig;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.CommandText;
 import net.lopymine.patpat.utils.VersionedThings;
@@ -58,7 +58,7 @@ public class PatPatClientIgnoreCommand {
 		return literal("remove")
 				.then(argument(ENTITY_TYPE_ARGUMENT_NAME, EntityTypeArgumentType.entityType())
 						.suggests((context, builder) -> SharedSuggestionProvider
-								.suggestResource(IgnoreMobListConfig.getInstance().getIgnoredMobs().stream().toList(),
+								.suggestResource(PatPatClientIgnoreMobListConfig.getInstance().getValues().stream().toList(),
 										builder,
 										EntityType::getKey,
 										EntityType::getDescription
@@ -69,7 +69,7 @@ public class PatPatClientIgnoreCommand {
 
 	private static int onIgnoreChange(CommandContext<FabricClientCommandSource> context, boolean add) {
 		EntityType<?> entityType = EntityTypeArgumentType.getEntityType(ENTITY_TYPE_ARGUMENT_NAME, context);
-		IgnoreMobListConfig config = IgnoreMobListConfig.getInstance();
+		PatPatClientIgnoreMobListConfig config = PatPatClientIgnoreMobListConfig.getInstance();
 		boolean success = add ? config.addMob(entityType) : config.removeMob(entityType);
 		String entityTypeStringed = Objects.requireNonNull(VersionedThings.ENTITY_TYPE.getKey(entityType)).toString();
 		Component text;

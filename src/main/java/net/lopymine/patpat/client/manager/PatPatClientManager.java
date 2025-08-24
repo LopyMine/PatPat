@@ -15,7 +15,7 @@ import com.mojang.authlib.GameProfile;
 
 import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.IgnoreMobListConfig;
+import net.lopymine.patpat.client.config.list.PatPatClientIgnoreMobListConfig;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.CustomAnimationSettingsConfig;
 import net.lopymine.patpat.client.config.resourcepack.PlayerConfig;
@@ -104,7 +104,6 @@ public class PatPatClientManager {
 		PAT_ENTITIES.clear();
 	}
 
-	// TODO: раставить логи
 	public static void requestPat() {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		if (!config.getMainConfig().isModEnabled()) {
@@ -118,7 +117,7 @@ public class PatPatClientManager {
 		Minecraft minecraft = Minecraft.getInstance();
 		LocalPlayer player = minecraft.player;
 
-		if (minecraft.player == null || minecraft.player.isDeadOrDying()) {
+		if (player == null || player.isDeadOrDying()) {
 			return;
 		}
 
@@ -197,7 +196,7 @@ public class PatPatClientManager {
 			return null;
 		}
 
-		if (IgnoreMobListConfig.getInstance().isIgnored(pattedEntity.getType())) {
+		if (PatPatClientIgnoreMobListConfig.getInstance().isIgnored(pattedEntity.getType())) {
 			return null;
 		}
 

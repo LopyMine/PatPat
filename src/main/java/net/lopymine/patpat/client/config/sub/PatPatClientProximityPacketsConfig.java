@@ -37,7 +37,6 @@ public class PatPatClientProximityPacketsConfig {
 
 	public void setProximityPacketsEnabled(boolean value) {
 		this.proximityPacketsEnabled = value;
-		PatPatClientProxLibManager.setEnabled(value);
 	}
 
 	public PatPatClientProximityPacketsConfig copy() {

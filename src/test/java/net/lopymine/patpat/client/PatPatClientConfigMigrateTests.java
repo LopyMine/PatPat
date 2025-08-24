@@ -1,6 +1,7 @@
 //? >=1.19.4 {
 package net.lopymine.patpat.client;
 
+import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
 import org.junit.jupiter.api.*;
@@ -86,7 +87,7 @@ public class PatPatClientConfigMigrateTests {
 			Assertions.assertTrue(serverConfig.isPatMeEnabled());
 			Assertions.assertTrue(serverConfig.isBypassServerResourcePackPriorityEnabled());
 			Assertions.assertEquals(ListMode.WHITELIST, serverConfig.getListMode());
-			Assertions.assertEquals(Map.of(UUID.fromString("192e3748-12d5-4573-a8a5-479cd394a1dc"), "LopyMine"), playerListConfig.getMap());
+			Assertions.assertEquals(Map.of(UUID.fromString("192e3748-12d5-4573-a8a5-479cd394a1dc"), "LopyMine"), playerListConfig.getValues());
 
 			// Visual config
 			Assertions.assertTrue(visualConfig.isCameraShackingEnabled());

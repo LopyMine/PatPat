@@ -27,7 +27,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.*;
 
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
-import net.lopymine.patpat.client.config.PatPatStatsConfig;
+import net.lopymine.patpat.client.config.PatPatClientStatsConfig;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.client.packet.*;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
@@ -96,14 +96,14 @@ public class PatPatClientRenderer {
 				PatPatClientNetworkManager.sendPacketToServer(PatPatClientPacketManager.getPatPacket(pattedEntity));
 				PatEntity patEntity = PatPatClientManager.pat(pattedEntity, playerConfig);
 
-				PatPatStatsConfig statsConfig = PatPatStatsConfig.getInstance();
+				PatPatClientStatsConfig statsConfig = PatPatClientStatsConfig.getInstance();
 				statsConfig.count(pattedEntity);
 
 				PatPatClientVisualConfig visualConfig = config.getVisualConfig();
 				if (visualConfig.isClientSwingHandEnabled()) {
 					player.swing(InteractionHand.MAIN_HAND, false);
 				}
-				if (visualConfig.isServerSwingHandEnabled()) {
+				if (visualConfig.isServerSwingHandEnabled() && !player.isSpectator()) {
 					player.connection.send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
 				}
 

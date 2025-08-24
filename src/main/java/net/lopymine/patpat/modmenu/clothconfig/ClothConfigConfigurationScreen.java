@@ -3,7 +3,7 @@ package net.lopymine.patpat.modmenu.clothconfig;
 import me.shedaniel.clothconfig2.api.*;
 import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
-import net.lopymine.patpat.client.config.ProximityPacketServersWhitelistConfig;
+import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelistConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.*;
@@ -238,12 +238,12 @@ public class ClothConfigConfigurationScreen {
 						.build()
 		);
 		subcategory.add(
-			entryBuilder.startStrList(ModMenuUtils.getOptionName("proximity_packets_servers_whitelist"), new ArrayList<>(ProximityPacketServersWhitelistConfig.getInstance().getServers()))
+			entryBuilder.startStrList(ModMenuUtils.getOptionName("proximity_packets_servers_whitelist"), new ArrayList<>(PatPatClientProxLibServersWhitelistConfig.getInstance().getValues()))
 					.setTooltip(ModMenuUtils.getOptionDescription("proximity_packets_servers_whitelist"))
-					.setDefaultValue(ProximityPacketServersWhitelistConfig.DEFAULT_VALUES)
+					.setDefaultValue(PatPatClientProxLibServersWhitelistConfig.DEFAULT_VALUES)
 					.setDeleteButtonEnabled(true)
 					.setExpanded(true)
-					.setSaveConsumer(ProximityPacketServersWhitelistConfig::rewriteServersList)
+					.setSaveConsumer(PatPatClientProxLibServersWhitelistConfig::rewriteServersList)
 					.build()
 		);
 		subcategory.setExpanded(true);

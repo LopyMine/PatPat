@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.networking.v1.*;
 import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
-import net.lopymine.patpat.client.config.ProximityPacketServersWhitelistConfig;
+import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelistConfig;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.compat.flashback.FlashbackManager;
 import net.lopymine.patpat.compat.replaymod.ReplayModManager;
@@ -20,7 +20,7 @@ public class PatPatClientProxLibManager {
 
 	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("ProxLibManager");
 
-	private static boolean enabled;
+	private static boolean disabledBecauseReceivedPacketFromServer;
 
 	public static void register() {
 		PatPatClientProxLibManager.reset();
@@ -32,12 +32,14 @@ public class PatPatClientProxLibManager {
 	}
 
 	private static void reset() {
-		PatPatClientProxLibManager.setEnabled(LoadedMods.PROX_LIB_MOD_LOADED);
+		disabledBecauseReceivedPacketFromServer = false;
 	}
 
-	// TODO: rewrite this, use getCurrentServer when call isEnabled is not good solution
 	public static boolean isEnabled() {
-		if (!enabled) {
+		if (disabledBecauseReceivedPacketFromServer) {
+			return false;
+		}
+		if (!LoadedMods.PROX_LIB_MOD_LOADED) {
 			return false;
 		}
 		if (!PatPatClientConfig.getInstance().getProximityPacketsConfig().isProximityPacketsEnabled()) {
@@ -48,19 +50,14 @@ public class PatPatClientProxLibManager {
 			return false;
 		}
 		return PatPatClientConfig.getInstance().getProximityPacketsConfig().isBlacklist()
-				!= ProximityPacketServersWhitelistConfig.getInstance().contains(serverData.ip);
+				!= PatPatClientProxLibServersWhitelistConfig.getInstance().contains(serverData.ip);
 	}
 
-	public static void setEnabled(boolean enabled) {
-		PatPatClientProxLibManager.enabled = enabled;
-		LOGGER.debug(enabled ? "Proximity Packets Enabled" : "Proximity Packets Disabled");
-	}
-
-	public static void setEnabledIfNotInReplay(boolean enabled) {
+	public static void disableIfNotInReplayModBecauseReceivedHelloPacketFromServer() {
 		if (FlashbackManager.isInReplay() || ReplayModManager.isInReplay()) {
 			return;
 		}
-		PatPatClientProxLibManager.setEnabled(enabled);
+		disabledBecauseReceivedPacketFromServer = true;
 	}
 
 	public static void disableIfEnabledBecauseReceivedPacketFromServer() {
@@ -68,7 +65,7 @@ public class PatPatClientProxLibManager {
 			LOGGER.debug("--------------------------------------");
 			LOGGER.debug("Received pat packet from server with enabled Proximity Packets, looks like server has old PatPat Plugin/Mod installed. Automatically disabling Proximity Packets to avoid packet duplication...");
 			LOGGER.debug("--------------------------------------");
-			PatPatClientProxLibManager.setEnabled(false);
+			disabledBecauseReceivedPacketFromServer = true;
 		}
 	}
 }

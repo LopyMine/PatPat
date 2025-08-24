@@ -8,6 +8,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.config.*;
+import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.ClientCommandExtension;
@@ -24,14 +25,14 @@ public class PatPatClientListInfoCommand {
 	}
 
 	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
-		return literal("get")
+		return literal("info")
 				.executes(PatPatClientListInfoCommand::onInfo);
 	}
 
 	private static int onInfo(CommandContext<FabricClientCommandSource> context) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		PatPatClientMultiplayerConfig serverConfig = config.getMultiPlayerConfig();
-		Map<UUID, String> map = PatPatClientPlayerListConfig.getInstance().getMap();
+		Map<UUID, String> map = PatPatClientPlayerListConfig.getInstance().getValues();
 		PatPatCommonListChangeCommand.sendInfo(map, serverConfig.getListMode(), (component) -> context.sendMsg(component));
 		return Command.SINGLE_SUCCESS;
 	}

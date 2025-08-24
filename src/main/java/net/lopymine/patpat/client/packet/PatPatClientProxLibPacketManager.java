@@ -44,10 +44,8 @@ public class PatPatClientProxLibPacketManager {
 
 	public static void onPat(int pattedEntityId) {
 		//? if proxlib {
-		if (!LoadedMods.PROX_LIB_MOD_LOADED) {
-			return;
-		}
 		if (!PatPatClientProxLibManager.isEnabled()) {
+			LOGGER.debug("Trying to make proximity pat, but proximity packets disabled!");
 			return;
 		}
 		if (PatPatClientProxLibPacketRateLimitManager.isLimitExceeded()) {

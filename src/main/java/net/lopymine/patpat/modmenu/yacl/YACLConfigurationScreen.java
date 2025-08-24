@@ -14,7 +14,7 @@ import net.lopymine.patpat.modmenu.yacl.custom.extension.SimpleOptionExtension;
 import net.lopymine.patpat.modmenu.yacl.custom.screen.SimpleYACLScreen;
 import net.lopymine.patpat.modmenu.yacl.custom.utils.*;
 import net.lopymine.patpat.PatTranslation;
-import net.lopymine.patpat.client.config.ProximityPacketServersWhitelistConfig;
+import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelistConfig;
 
 import java.util.ArrayList;
 
@@ -175,9 +175,9 @@ public class YACLConfigurationScreen {
 				.description(OptionDescription.of(PatTranslation.text("modmenu.option.proximity_packets_servers_whitelist.description")))
 				.initial("")
 				.binding(
-						ProximityPacketServersWhitelistConfig.DEFAULT_VALUES,
-						() -> new ArrayList<>(ProximityPacketServersWhitelistConfig.getInstance().getServers()),
-						ProximityPacketServersWhitelistConfig::rewriteServersList
+						PatPatClientProxLibServersWhitelistConfig.DEFAULT_VALUES,
+						() -> new ArrayList<>(PatPatClientProxLibServersWhitelistConfig.getInstance().getValues()),
+						PatPatClientProxLibServersWhitelistConfig::rewriteServersList
 				)
 				.controller(StringControllerBuilder::create)
 				.maximumNumberOfEntries(2000)

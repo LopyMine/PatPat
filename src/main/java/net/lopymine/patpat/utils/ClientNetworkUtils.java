@@ -3,7 +3,7 @@ package net.lopymine.patpat.utils;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 
-import net.lopymine.patpat.client.config.PatPatClientPlayerListConfig;
+import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -19,11 +19,8 @@ public class ClientNetworkUtils {
 		if (networkHandler == null) {
 			return Collections.emptyList();
 		}
-		PatPatClientPlayerListConfig playerListConfig = PatPatClientPlayerListConfig.getInstance();
-		if (playerListConfig == null) {
-			return Collections.emptyList();
-		}
-		return playerListConfig.getMap().entrySet().stream().flatMap(entry -> {
+
+		return PatPatClientPlayerListConfig.getInstance().getValues().entrySet().stream().flatMap(entry -> {
 			PlayerInfo playerListEntry = networkHandler.getPlayerInfo(entry.getKey());
 			if (playerListEntry == null) {
 				return Stream.of(entry.getValue());

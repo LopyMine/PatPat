@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/
 
 import net.lopymine.patpat.client.command.argument.*;
 import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
-import net.lopymine.patpat.client.config.PatPatClientPlayerListConfig;
+import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.*;
@@ -46,7 +46,7 @@ public class PatPatClientListChangeCommand {
 
 	private static int onListChange(CommandContext<FabricClientCommandSource> context, boolean add) {
 		PatPatClientPlayerListConfig config = PatPatClientPlayerListConfig.getInstance();
-		Map<UUID, String> map = config.getMap();
+		Map<UUID, String> map = config.getValues();
 		PlayerInfo playerInfo = PlayerInfoArgumentType.getPlayerInfo(PLAYER_ARGUMENT_NAME, context);
 		UUID uuid = playerInfo.uuid();
 		String name = playerInfo.nickname();

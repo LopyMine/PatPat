@@ -9,7 +9,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.*;
-import net.lopymine.patpat.server.config.PatPatServerPlayerListConfig;
+import net.lopymine.patpat.server.config.list.PatPatServerPlayerListConfig;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -54,7 +54,7 @@ public class PatPatServerListChangeCommand {
 
 	private static int onListChange(CommandContext<CommandSourceStack> context, boolean add) throws CommandSyntaxException {
 		PatPatServerPlayerListConfig config = PatPatServerPlayerListConfig.getInstance();
-		Map<UUID, String> map = config.getMap();
+		Map<UUID, String> map = config.getValues();
 		Collection<GameProfile> profile = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
 
 		for (GameProfile gameProfile : profile) {

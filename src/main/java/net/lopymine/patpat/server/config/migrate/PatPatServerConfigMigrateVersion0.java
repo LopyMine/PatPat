@@ -8,7 +8,7 @@ import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.common.migrate.AbstractConfigMigrateHandler;
 import net.lopymine.patpat.server.config.*;
-import net.lopymine.patpat.server.config.PatPatServerPlayerListConfig;
+import net.lopymine.patpat.server.config.list.PatPatServerPlayerListConfig;
 
 import java.io.*;
 import java.util.*;
@@ -58,7 +58,7 @@ public class PatPatServerConfigMigrateVersion0 extends AbstractConfigMigrateHand
 			PatPatServerConfig.reload();
 
 			this.playerListConfig.saveAsync();
-			PatPatServerPlayerListConfig.reload();
+			PatPatServerPlayerListConfig.getInstance().reload();
 		}
 
 	}
@@ -74,7 +74,7 @@ public class PatPatServerConfigMigrateVersion0 extends AbstractConfigMigrateHand
 			config.setListMode(ListMode.getByIdOrDefault(listModeStr, ListMode.DISABLED));
 
 			PatPatServerPlayerListConfig playerListConfig = this.listConfig == null ? new PatPatServerPlayerListConfig() : this.listConfig;
-			Map<UUID, String> map = playerListConfig.getMap();
+			Map<UUID, String> map = playerListConfig.getValues();
 			Map<UUID, String> oldConfigMap = new HashMap<>();
 			JsonObject jsonObject = rootObj.getAsJsonObject("list");
 

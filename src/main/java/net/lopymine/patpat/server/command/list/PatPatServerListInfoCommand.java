@@ -10,7 +10,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.server.config.PatPatServerConfig;
-import net.lopymine.patpat.server.config.PatPatServerPlayerListConfig;
+import net.lopymine.patpat.server.config.list.PatPatServerPlayerListConfig;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ public class PatPatServerListInfoCommand {
 
 	private static int onInfo(CommandContext<CommandSourceStack> context) {
 		PatPatServerConfig config = PatPatServerConfig.getInstance();
-		Map<UUID, String> map = PatPatServerPlayerListConfig.getInstance().getMap();
+		Map<UUID, String> map = PatPatServerPlayerListConfig.getInstance().getValues();
 		PatPatCommonListChangeCommand.sendInfo(map, config.getListMode(), (component) -> context.sendMsg(component));
 		return Command.SINGLE_SUCCESS;
 	}

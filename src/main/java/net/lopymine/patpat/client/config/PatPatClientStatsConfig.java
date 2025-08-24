@@ -23,21 +23,21 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PatPatStatsConfig {
+public class PatPatClientStatsConfig {
 
-	public static final Codec<PatPatStatsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			option("totalPatsCounter", new PatsCounter(0), PatsCounter.CODEC, PatPatStatsConfig::getTotalPatsCounter),
-			option("entities", new HashMap<>(), Codec.STRING, PatsCounter.CODEC, PatPatStatsConfig::getPatsPerEntity)
-	).apply(instance, PatPatStatsConfig::new));
+	public static final Codec<PatPatClientStatsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			option("totalPatsCounter", new PatsCounter(0), PatsCounter.CODEC, PatPatClientStatsConfig::getTotalPatsCounter),
+			option("entities", new HashMap<>(), Codec.STRING, PatsCounter.CODEC, PatPatClientStatsConfig::getPatsPerEntity)
+	).apply(instance, PatPatClientStatsConfig::new));
 
 	private static final PatLogger LOGGER = PatPatClient.LOGGER.extend("StatsConfig");
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve(PatPat.MOD_ID + "-client-stats.json5").toFile();
-	private static PatPatStatsConfig instance;
+	private static PatPatClientStatsConfig instance;
 
 	private PatsCounter totalPatsCounter;
 	private HashMap<String, PatsCounter> patsPerEntity;
 
-	private PatPatStatsConfig() {
+	private PatPatClientStatsConfig() {
 		throw new IllegalArgumentException();
 	}
 
@@ -60,24 +60,24 @@ public class PatPatStatsConfig {
 	public static void registerSaveHooks() {
 		AutoSaveManager.start();
 		ClientLifecycleEvents.CLIENT_STOPPING.register((client) -> {
-			PatPatStatsConfig.getInstance().save();
+			PatPatClientStatsConfig.getInstance().save();
 		});
 	}
 
-	public static PatPatStatsConfig getInstance() {
+	public static PatPatClientStatsConfig getInstance() {
 		return instance == null ? reload() : instance;
 	}
 
-	public static PatPatStatsConfig reload() {
-		instance = PatPatStatsConfig.read();
+	public static PatPatClientStatsConfig reload() {
+		instance = PatPatClientStatsConfig.read();
 		return instance;
 	}
 
-	public static PatPatStatsConfig getNewInstance() {
+	public static PatPatClientStatsConfig getNewInstance() {
 		return CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
-	private static PatPatStatsConfig read() {
+	private static PatPatClientStatsConfig read() {
 		return ConfigUtils.readConfig(CODEC, CONFIG_FILE, LOGGER);
 	}
 
@@ -110,7 +110,7 @@ public class PatPatStatsConfig {
 				if (!AutoSaveManager.shouldSave || !PatPatClientConfig.getInstance().getMainConfig().isModEnabled()) {
 					return;
 				}
-				PatPatStatsConfig.getInstance().save();
+				PatPatClientStatsConfig.getInstance().save();
 				AutoSaveManager.shouldSave = false;
 			};
 

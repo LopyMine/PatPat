@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.*;
+import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.config.vector.Vec3f;
@@ -104,7 +105,7 @@ public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHand
 			serverConfig.setListMode(listMode);
 		}
 		if (list != null) {
-			Map<UUID, String> map = playerListConfig.getMap();
+			Map<UUID, String> map = playerListConfig.getValues();
 			map.clear();
 			map.putAll(list);
 		}

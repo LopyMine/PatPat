@@ -13,7 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
-import net.lopymine.patpat.client.config.PatPatClientPlayerListConfig;
+import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
 import net.lopymine.patpat.common.Version;
@@ -61,7 +61,7 @@ public class PatPatClientPacketManager {
 		Version version = packet.getVersion();
 		if (version.isInvalid()) {
 			LOGGER.warn("Received invalid server version in hello packet!");
-			PatPatClientProxLibManager.setEnabledIfNotInReplay(false);
+			PatPatClientProxLibManager.disableIfNotInReplayModBecauseReceivedHelloPacketFromServer();
 			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
 			// Since v2 packet version we started sending hello packets
 			return;
@@ -72,7 +72,7 @@ public class PatPatClientPacketManager {
 		// 	 // stuff
 		// } else
 		if (version.isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
-			PatPatClientProxLibManager.setEnabledIfNotInReplay(false);
+			PatPatClientProxLibManager.disableIfNotInReplayModBecauseReceivedHelloPacketFromServer();
 			PatPatClientPacketManager.setCurrentPatPatServerPacketVersion(Version.PACKET_V2_VERSION);
 		}
 		HelloPatPatServerC2SPacket pongPacket = packet.getPongPacket();
@@ -133,8 +133,8 @@ public class PatPatClientPacketManager {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		PatPatClientPlayerListConfig playerListConfig = PatPatClientPlayerListConfig.getInstance();
 
-		return (config.getMultiPlayerConfig().getListMode() == ListMode.WHITELIST && !playerListConfig.getMap().containsKey(playerUuid))
-				|| (config.getMultiPlayerConfig().getListMode() == ListMode.BLACKLIST && playerListConfig.getMap().containsKey(playerUuid))
+		return (config.getMultiPlayerConfig().getListMode() == ListMode.WHITELIST && !playerListConfig.getValues().containsKey(playerUuid))
+				|| (config.getMultiPlayerConfig().getListMode() == ListMode.BLACKLIST && playerListConfig.getValues().containsKey(playerUuid))
 				|| socialManager.isBlocked(playerUuid)
 				|| socialManager.isHidden(playerUuid)
 				/*? >=1.17 {*/ || socialManager.shouldHideMessageFrom(playerUuid)/*?}*/;

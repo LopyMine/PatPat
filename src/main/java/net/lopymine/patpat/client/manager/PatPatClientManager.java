@@ -110,19 +110,31 @@ public class PatPatClientManager {
 			return;
 		}
 
-		if (patCooldown != 0 || !PatPatClientKeybindingManager.getPatKeybinding().isDown()) {
+		if (!PatPatClientKeybindingManager.getPatKeybinding().isDown()) {
+			return;
+		}
+
+		if (patCooldown != 0) {
+			LOGGER.debug("Pat rejected: Cooldown");
 			return;
 		}
 
 		Minecraft minecraft = Minecraft.getInstance();
 		LocalPlayer player = minecraft.player;
 
-		if (player == null || player.isDeadOrDying()) {
+		if (player == null) {
+			LOGGER.debug("Pat rejected: Player is null");
+			return;
+		}
+
+		if (player.isDeadOrDying()) {
+			LOGGER.debug("Pat rejected: Player is dead");
 			return;
 		}
 
 		LivingEntity pattedEntity = PatPatClientManager.getPatEntityFromHitResult();
 		if (pattedEntity == null) {
+			LOGGER.debug("Pat rejected: Patted entity is null");
 			return;
 		}
 
@@ -154,11 +166,13 @@ public class PatPatClientManager {
 		}
 
 		if (!player.getMainHandItem().isEmpty()) {
+			LOGGER.debug("Pat rejected: Main hand is not empty");
 			return null;
 		}
 
 		Entity cameraEntity = minecraft.getCameraEntity();
 		if (cameraEntity == null) {
+			LOGGER.debug("Pat rejected: Camera entity is null");
 			return null;
 		}
 
@@ -188,15 +202,22 @@ public class PatPatClientManager {
 		cameraEntity.mark(false);
 		ProfilerUtils.pop();
 
-		if (!(result instanceof EntityHitResult hitResult) || !(hitResult.getEntity() instanceof LivingEntity pattedEntity)) {
+		if (!(result instanceof EntityHitResult hitResult)) {
+			LOGGER.debug("Pat rejected: No entity in crosshair");
+			return null;
+		}
+		if (!(hitResult.getEntity() instanceof LivingEntity pattedEntity)) {
+			LOGGER.debug("Pat rejected: Entity is not LivingEntity");
 			return null;
 		}
 
 		if (pattedEntity.isInvisible()) {
+			LOGGER.debug("Pat rejected: Patted entity is invisible");
 			return null;
 		}
 
 		if (PatPatClientIgnoreMobListConfig.getInstance().isIgnored(pattedEntity.getType())) {
+			LOGGER.debug("Pat rejected: Entity type in IgnoreMobList");
 			return null;
 		}
 

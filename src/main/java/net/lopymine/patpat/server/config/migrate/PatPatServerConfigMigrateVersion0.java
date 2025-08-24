@@ -70,7 +70,7 @@ public class PatPatServerConfigMigrateVersion0 extends AbstractConfigMigrateHand
 			JsonObject rootObj = /*? <=1.17.1 {*//*new JsonParser().parse*//*?} else {*/JsonParser.parseReader/*?}*/(reader).getAsJsonObject();
 
 			String listModeStr = rootObj.get("listMode").getAsString();
-			PatPatServerConfig config = this.config == null ? PatPatServerConfig.getNewInstance() : this.config;
+			PatPatServerConfig config = this.config == null ? PatPatServerConfig.getNewInstance().get() : this.config;
 			config.setListMode(ListMode.getByIdOrDefault(listModeStr, ListMode.DISABLED));
 
 			PatPatServerPlayerListConfig playerListConfig = this.listConfig == null ? new PatPatServerPlayerListConfig() : this.listConfig;

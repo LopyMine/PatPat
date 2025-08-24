@@ -1,5 +1,6 @@
 package net.lopymine.patpat.client.config.sub;
 
+import java.util.function.Supplier;
 import lombok.*;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -15,16 +16,10 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @AllArgsConstructor
 public class PatPatClientMultiplayerConfig {
 
-	public static final PatPatClientMultiplayerConfig DEFAULT = new PatPatClientMultiplayerConfig(
-			false,
-			true,
-			ListMode.DISABLED
-	);
-
 	public static final Codec<PatPatClientMultiplayerConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			option("bypassServerResourcePackPriorityEnabled", DEFAULT.bypassServerResourcePackPriorityEnabled, Codec.BOOL, PatPatClientMultiplayerConfig::isBypassServerResourcePackPriorityEnabled),
-			option("patMeEnabled", DEFAULT.patMeEnabled, Codec.BOOL, PatPatClientMultiplayerConfig::isPatMeEnabled),
-			option("listMode", DEFAULT.listMode, ListMode.CODEC, PatPatClientMultiplayerConfig::getListMode)
+			option("bypassServerResourcePackPriorityEnabled", false, Codec.BOOL, PatPatClientMultiplayerConfig::isBypassServerResourcePackPriorityEnabled),
+			option("patMeEnabled", true, Codec.BOOL, PatPatClientMultiplayerConfig::isPatMeEnabled),
+			option("listMode", ListMode.DISABLED, ListMode.CODEC, PatPatClientMultiplayerConfig::getListMode)
 	).apply(instance, PatPatClientMultiplayerConfig::new));
 
 	@Setter(value = AccessLevel.PRIVATE)
@@ -32,10 +27,11 @@ public class PatPatClientMultiplayerConfig {
 	private boolean patMeEnabled;
 	private ListMode listMode;
 
-	public static PatPatClientMultiplayerConfig getNewInstance() {
-		return CodecUtils.parseNewInstanceHacky(CODEC);
+	public static Supplier<PatPatClientMultiplayerConfig> getNewInstance() {
+		return () -> CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	public void setBypassServerResourcePackEnabled(boolean value) {
 		this.bypassServerResourcePackPriorityEnabled = value;
 		Minecraft client = Minecraft.getInstance();

@@ -1,5 +1,6 @@
 package net.lopymine.patpat.server.config;
 
+import java.util.function.Supplier;
 import lombok.*;
 
 import com.mojang.serialization.*;
@@ -25,7 +26,7 @@ public class PatPatServerConfig {
 			option("debug", false, Codec.BOOL, PatPatServerConfig::isDebugModeEnabled),
 			option("version", Version.SERVER_CONFIG_VERSION, Version.CODEC, PatPatServerConfig::getVersion),
 			option("listMode", ListMode.DISABLED, ListMode.CODEC, PatPatServerConfig::getListMode),
-			option("rateLimit", new PatPatServerRateLimitConfig(), PatPatServerRateLimitConfig.CODEC, PatPatServerConfig::getRateLimitConfig)
+			option("rateLimit", PatPatServerRateLimitConfig.getNewInstance(), PatPatServerRateLimitConfig.CODEC, PatPatServerConfig::getRateLimitConfig)
 	).apply(inst, PatPatServerConfig::new));
 
 	private static final PatLogger LOGGER = PatPat.LOGGER.extend("Config");
@@ -51,8 +52,8 @@ public class PatPatServerConfig {
 		return INSTANCE = PatPatServerConfig.read();
 	}
 
-	public static PatPatServerConfig getNewInstance() {
-		return CodecUtils.parseNewInstanceHacky(CODEC);
+	public static Supplier<PatPatServerConfig> getNewInstance() {
+		return () -> CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
 	private static PatPatServerConfig read() {

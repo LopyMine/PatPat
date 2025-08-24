@@ -1,23 +1,29 @@
 package net.lopymine.patpat.server.config.sub;
 
+import java.util.function.Supplier;
 import lombok.*;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.common.config.time.Time;
+import net.lopymine.patpat.server.config.PatPatServerConfig;
+import net.lopymine.patpat.utils.CodecUtils;
+import static net.lopymine.patpat.utils.CodecUtils.option;
 
 @Getter
 @Setter
 @AllArgsConstructor
 public class PatPatServerRateLimitConfig {
 
+	public static final String STANDARD_PERMISSION = "patpat.ratelimit.bypass";
+
 	public static final Codec<PatPatServerRateLimitConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.BOOL.fieldOf("enable").forGetter(PatPatServerRateLimitConfig::isEnabled),
-			Codec.INT.fieldOf("tokenLimit").forGetter(PatPatServerRateLimitConfig::getTokenLimit),
-			Codec.INT.fieldOf("tokenIncrement").forGetter(PatPatServerRateLimitConfig::getTokenIncrement),
-			Time.CODEC.fieldOf("tokenIncrementInterval").forGetter(PatPatServerRateLimitConfig::getTokenIncrementInterval),
-			Codec.STRING.fieldOf("permissionBypass").forGetter(PatPatServerRateLimitConfig::getPermissionBypass)
+			option("enable", false, Codec.BOOL, PatPatServerRateLimitConfig::isEnabled),
+			option("tokenLimit", 20, Codec.INT, PatPatServerRateLimitConfig::getTokenLimit),
+			option("tokenIncrement", 1, Codec.INT, PatPatServerRateLimitConfig::getTokenIncrement),
+			option("tokenIncrementInterval", Time.of("1sec"), Time.CODEC, PatPatServerRateLimitConfig::getTokenIncrementInterval),
+			option("permissionBypass", STANDARD_PERMISSION, Codec.STRING, PatPatServerRateLimitConfig::getPermissionBypass)
 	).apply(instance, PatPatServerRateLimitConfig::new));
 
 	private boolean enabled;
@@ -26,12 +32,8 @@ public class PatPatServerRateLimitConfig {
 	private Time tokenIncrementInterval;
 	private String permissionBypass;
 
-	public PatPatServerRateLimitConfig() {
-		this.enabled                = false;
-		this.tokenLimit             = 20;
-		this.tokenIncrement         = 1;
-		this.tokenIncrementInterval = Time.of("1sec");
-		this.permissionBypass       = "patpat.ratelimit.bypass";
+	public static Supplier<PatPatServerRateLimitConfig> getNewInstance() {
+		return () -> CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
 }

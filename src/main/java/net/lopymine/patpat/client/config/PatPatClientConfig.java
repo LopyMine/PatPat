@@ -23,24 +23,14 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @AllArgsConstructor
 public class PatPatClientConfig {
 
-	public static final PatPatClientConfig DEFAULT = new PatPatClientConfig(
-			Version.CLIENT_CONFIG_VERSION,
-			PatPatClientMainConfig.DEFAULT,
-			PatPatClientResourcePacksConfig.DEFAULT,
-			PatPatClientSoundsConfig.DEFAULT,
-			PatPatClientVisualConfig.DEFAULT,
-			PatPatClientMultiplayerConfig.DEFAULT,
-			PatPatClientProximityPacketsConfig.DEFAULT
-	);
-
 	public static final Codec<PatPatClientConfig> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-			option("version", DEFAULT.version, Version.CODEC, PatPatClientConfig::getVersion),
-			option("main", (Supplier<PatPatClientMainConfig>) () -> DEFAULT.mainConfig.copy(), PatPatClientMainConfig.CODEC, PatPatClientConfig::getMainConfig),
-			option("resourcePacks", (Supplier<PatPatClientResourcePacksConfig>) () -> DEFAULT.resourcePacksConfig.copy(), PatPatClientResourcePacksConfig.CODEC, PatPatClientConfig::getResourcePacksConfig),
-			option("sounds", (Supplier<PatPatClientSoundsConfig>) () -> DEFAULT.soundsConfig.copy(), PatPatClientSoundsConfig.CODEC, PatPatClientConfig::getSoundsConfig),
-			option("visual", (Supplier<PatPatClientVisualConfig>) () -> DEFAULT.visualConfig.copy(), PatPatClientVisualConfig.CODEC, PatPatClientConfig::getVisualConfig),
-			option("multiplayer", (Supplier<PatPatClientMultiplayerConfig>) () -> DEFAULT.multiPlayerConfig.copy(), PatPatClientMultiplayerConfig.CODEC, PatPatClientConfig::getMultiPlayerConfig),
-			option("proximityPackets", (Supplier<PatPatClientProximityPacketsConfig>) () -> DEFAULT.proximityPacketsConfig.copy(), PatPatClientProximityPacketsConfig.CODEC, PatPatClientConfig::getProximityPacketsConfig)
+			option("version", Version.CLIENT_CONFIG_VERSION, Version.CODEC, PatPatClientConfig::getVersion),
+			option("main", PatPatClientMainConfig.getNewInstance(), PatPatClientMainConfig.CODEC, PatPatClientConfig::getMainConfig),
+			option("resourcePacks", PatPatClientResourcePacksConfig.getNewInstance(), PatPatClientResourcePacksConfig.CODEC, PatPatClientConfig::getResourcePacksConfig),
+			option("sounds", PatPatClientSoundsConfig.getNewInstance(), PatPatClientSoundsConfig.CODEC, PatPatClientConfig::getSoundsConfig),
+			option("visual", PatPatClientVisualConfig.getNewInstance(), PatPatClientVisualConfig.CODEC, PatPatClientConfig::getVisualConfig),
+			option("multiplayer", PatPatClientMultiplayerConfig.getNewInstance(), PatPatClientMultiplayerConfig.CODEC, PatPatClientConfig::getMultiPlayerConfig),
+			option("proximityPackets", PatPatClientProximityPacketsConfig.getNewInstance(), PatPatClientProximityPacketsConfig.CODEC, PatPatClientConfig::getProximityPacketsConfig)
 	).apply(inst, PatPatClientConfig::new));
 
 	private static final PatLogger LOGGER = PatPatClient.LOGGER.extend("Config");
@@ -65,8 +55,8 @@ public class PatPatClientConfig {
 		return instance;
 	}
 
-	public static PatPatClientConfig getNewInstance() {
-		return CodecUtils.parseNewInstanceHacky(CODEC);
+	public static Supplier<PatPatClientConfig> getNewInstance() {
+		return () -> CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
 	private static PatPatClientConfig read() {

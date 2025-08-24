@@ -28,7 +28,7 @@ public class ClothConfigConfigurationScreen {
 
 	public static Screen createScreen(Screen parent) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
-		PatPatClientConfig defConfig = PatPatClientConfig.getNewInstance();
+		PatPatClientConfig defConfig = PatPatClientConfig.getNewInstance().get();
 
 		ConfigBuilder builder = ConfigBuilder.create()
 				.setParentScreen(parent)

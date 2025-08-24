@@ -27,7 +27,7 @@ public class YACLConfigurationScreen {
 
 	public static Screen createScreen(Screen parent) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
-		PatPatClientConfig defConfig = PatPatClientConfig.getNewInstance();
+		PatPatClientConfig defConfig = PatPatClientConfig.getNewInstance().get();
 
 		return SimpleYACLScreen.startBuilder(parent, config::saveAsync)
 				.categories(getGeneralCategory(defConfig, config))

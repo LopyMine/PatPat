@@ -18,10 +18,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class PatPatKeybinding extends KeyMapping {
 
-	public static final KeybindingCombination DEFAULT_COMBINATION = new KeybindingCombination(
-			InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_LEFT_SHIFT),
-			InputConstants.Type.MOUSE.getOrCreate(GLFW.GLFW_MOUSE_BUTTON_2)
-	);
+	public static final KeybindingCombination DEFAULT_COMBINATION = getDefaultCombination();
+
+	private static @NotNull KeybindingCombination getDefaultCombination() {
+		return new KeybindingCombination(
+				Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_LEFT_SHIFT),
+				Type.MOUSE.getOrCreate(GLFW.GLFW_MOUSE_BUTTON_2)
+		);
+	}
 
 	private final PressableKeybindingCombination combination = new PressableKeybindingCombination();
 	@Getter

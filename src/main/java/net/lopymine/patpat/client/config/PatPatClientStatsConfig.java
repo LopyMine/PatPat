@@ -1,5 +1,6 @@
 package net.lopymine.patpat.client.config;
 
+import java.util.function.Supplier;
 import lombok.*;
 import net.lopymine.patpat.*;
 import net.minecraft.resources.ResourceLocation;
@@ -73,8 +74,8 @@ public class PatPatClientStatsConfig {
 		return instance;
 	}
 
-	public static PatPatClientStatsConfig getNewInstance() {
-		return CodecUtils.parseNewInstanceHacky(CODEC);
+	public static Supplier<PatPatClientStatsConfig> getNewInstance() {
+		return () -> CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
 	private static PatPatClientStatsConfig read() {

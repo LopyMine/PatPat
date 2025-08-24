@@ -16,17 +16,11 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @AllArgsConstructor
 public class PatPatClientMainConfig {
 
-	public static final PatPatClientMainConfig DEFAULT = new PatPatClientMainConfig(
-			true,
-			false,
-			PatPatKeybinding.DEFAULT_COMBINATION
-	);
-
 	public static final Codec<PatPatClientMainConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-					option("modEnabled", DEFAULT.modEnabled, Codec.BOOL, PatPatClientMainConfig::isModEnabled),
-					option("debugLogEnabled", DEFAULT.debugLogEnabled, Codec.BOOL, PatPatClientMainConfig::isDebugLogEnabled),
-					option("patCombination", DEFAULT.patCombination, KeybindingCombination.CODEC, PatPatClientMainConfig::getPatCombination))
-			.apply(instance, PatPatClientMainConfig::new));
+					option("modEnabled", true, Codec.BOOL, PatPatClientMainConfig::isModEnabled),
+					option("debugLogEnabled", false, Codec.BOOL, PatPatClientMainConfig::isDebugLogEnabled),
+					option("patCombination", PatPatKeybinding.DEFAULT_COMBINATION, KeybindingCombination.CODEC, PatPatClientMainConfig::getPatCombination)
+	).apply(instance, PatPatClientMainConfig::new));
 
 	private boolean modEnabled;
 	private boolean debugLogEnabled;

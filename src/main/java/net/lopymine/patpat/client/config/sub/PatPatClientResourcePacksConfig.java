@@ -1,5 +1,6 @@
 package net.lopymine.patpat.client.config.sub;
 
+import java.util.function.Supplier;
 import lombok.*;
 
 import com.mojang.serialization.Codec;
@@ -14,18 +15,14 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @AllArgsConstructor
 public class PatPatClientResourcePacksConfig {
 
-	public static final PatPatClientResourcePacksConfig DEFAULT = new PatPatClientResourcePacksConfig(
-			false
-	);
-
 	public static final Codec<PatPatClientResourcePacksConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			option("skipOldAnimationsEnabled", DEFAULT.skipOldAnimationsEnabled, Codec.BOOL, PatPatClientResourcePacksConfig::isSkipOldAnimationsEnabled)
+			option("skipOldAnimationsEnabled", false, Codec.BOOL, PatPatClientResourcePacksConfig::isSkipOldAnimationsEnabled)
 	).apply(instance, PatPatClientResourcePacksConfig::new));
 
 	private boolean skipOldAnimationsEnabled;
 
-	public static PatPatClientResourcePacksConfig getNewInstance() {
-		return CodecUtils.parseNewInstanceHacky(CODEC);
+	public static Supplier<PatPatClientResourcePacksConfig> getNewInstance() {
+		return () -> CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
 	public PatPatClientResourcePacksConfig copy() {

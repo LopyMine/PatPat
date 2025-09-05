@@ -27,11 +27,4 @@ public class PatPatClientSoundsConfig {
 		return () -> CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
-	public PatPatClientSoundsConfig copy() {
-		return new PatPatClientSoundsConfig(
-				this.soundsEnabled,
-				this.soundsVolume
-		);
-	}
-
 }

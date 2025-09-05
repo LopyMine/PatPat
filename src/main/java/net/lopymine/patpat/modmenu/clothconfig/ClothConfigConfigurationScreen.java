@@ -44,6 +44,7 @@ public class ClothConfigConfigurationScreen {
 		general.addEntry(getSoundGroup(entryBuilder, config.getSoundsConfig(), defConfig.getSoundsConfig()));
 		general.addEntry(getVisualGroup(entryBuilder, config.getVisualConfig(), defConfig.getVisualConfig()));
 		general.addEntry(getMultiplayerGroup(entryBuilder, config.getMultiPlayerConfig(), defConfig.getMultiPlayerConfig()));
+		general.addEntry(getFunGroup(entryBuilder, config.getFunConfig(), defConfig.getFunConfig()));
 		//? if proxlib {
 		general.addEntry(getProximityPacketsGroup(entryBuilder, config.getProximityPacketsConfig(), defConfig.getProximityPacketsConfig()));
 		//?}
@@ -203,6 +204,20 @@ public class ClothConfigConfigurationScreen {
 						.setYesNoTextSupplier(ENABLED_OR_DISABLED_FORMATTER)
 						.setDefaultValue(defConfig.isBypassServerResourcePackPriorityEnabled())
 						.setSaveConsumer(config::setBypassServerResourcePackEnabled)
+						.build()
+		);
+		subcategory.setExpanded(true);
+		return subcategory.build();
+	}
+
+	private static SubCategoryListEntry getFunGroup(ConfigEntryBuilder entryBuilder, PatPatClientFunConfig config, PatPatClientFunConfig defConfig) {
+		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(getGroupName("multiplayer"));
+		subcategory.add(
+				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("pvp_mode_enabled"), config.isPvpModeEnabled())
+						.setTooltip(ModMenuUtils.getOptionDescription("pvp_mode_enabled"))
+						.setYesNoTextSupplier(ENABLED_OR_DISABLED_FORMATTER)
+						.setDefaultValue(defConfig.isPvpModeEnabled())
+						.setSaveConsumer(config::setPvpModeEnabled)
 						.build()
 		);
 		subcategory.setExpanded(true);

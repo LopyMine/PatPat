@@ -35,11 +35,4 @@ public class PatPatClientMainConfig {
 		PatPatClient.LOGGER.setDebugMode(debugLogEnabled);
 	}
 
-	public PatPatClientMainConfig copy() {
-		return new PatPatClientMainConfig(
-				this.modEnabled,
-				this.debugLogEnabled,
-				this.patCombination
-		);
-	}
 }

@@ -31,12 +31,4 @@ public class PatPatClientProximityPacketsConfig {
 		return () -> CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
-	public PatPatClientProximityPacketsConfig copy() {
-		return new PatPatClientProximityPacketsConfig(
-				this.proximityPacketsEnabled,
-				this.maxPacketsPerSecond,
-				this.isBlacklist
-		);
-	}
-
 }

@@ -48,11 +48,4 @@ public class PatPatClientMultiplayerConfig {
 		}
 	}
 
-	public PatPatClientMultiplayerConfig copy() {
-		return new PatPatClientMultiplayerConfig(
-				this.bypassServerResourcePackPriorityEnabled,
-				this.patMeEnabled,
-				this.listMode
-		);
-	}
 }

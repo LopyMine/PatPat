@@ -30,4 +30,5 @@ public abstract class MinecraftClientMixin {
 	private void clearPatPatKeybinding(Screen screen, CallbackInfo ci) {
 		PatPatClientKeybindingManager.getPatKeybinding().refreshPressedState();
 	}
+
 }

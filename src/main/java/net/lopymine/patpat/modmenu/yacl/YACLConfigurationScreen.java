@@ -41,6 +41,7 @@ public class YACLConfigurationScreen {
 				.groups(getSoundGroup(defConfig.getSoundsConfig(), config.getSoundsConfig()))
 				.groups(getVisualGroup(defConfig.getVisualConfig(), config.getVisualConfig()))
 				.groups(getMultiplayerGroup(defConfig.getMultiPlayerConfig(), config.getMultiPlayerConfig()))
+				.groups(getFunGroup(defConfig.getFunConfig(), config.getFunConfig()))
 				/*? if proxlib {*/
 				.groups(getProximityPatPacketsGroup(defConfig.getProximityPacketsConfig(), config.getProximityPacketsConfig()))
 				.groups(getProximityPacketServerWhitelistGroup())
@@ -142,6 +143,16 @@ public class YACLConfigurationScreen {
 						.build(),
 				SimpleOption.<Boolean>startBuilder("bypass_server_animations_priority_enabled")
 						.withBinding(defConfig.isBypassServerResourcePackPriorityEnabled(), config::isBypassServerResourcePackPriorityEnabled, config::setBypassServerResourcePackEnabled, false)
+						.withController()
+						.withDescription(SimpleContent.NONE)
+						.build()
+		).build();
+	}
+
+	private static OptionGroup getFunGroup(PatPatClientFunConfig defConfig, PatPatClientFunConfig config) {
+		return SimpleGroup.startBuilder("fun").options(
+				SimpleOption.<Boolean>startBuilder("pvp_mode_enabled")
+						.withBinding(defConfig.isPvpModeEnabled(), config::isPvpModeEnabled, config::setPvpModeEnabled, false)
 						.withController()
 						.withDescription(SimpleContent.NONE)
 						.build()

@@ -30,7 +30,8 @@ public class PatPatClientConfig {
 			option("sounds", PatPatClientSoundsConfig.getNewInstance(), PatPatClientSoundsConfig.CODEC, PatPatClientConfig::getSoundsConfig),
 			option("visual", PatPatClientVisualConfig.getNewInstance(), PatPatClientVisualConfig.CODEC, PatPatClientConfig::getVisualConfig),
 			option("multiplayer", PatPatClientMultiplayerConfig.getNewInstance(), PatPatClientMultiplayerConfig.CODEC, PatPatClientConfig::getMultiPlayerConfig),
-			option("proximityPackets", PatPatClientProximityPacketsConfig.getNewInstance(), PatPatClientProximityPacketsConfig.CODEC, PatPatClientConfig::getProximityPacketsConfig)
+			option("proximityPackets", PatPatClientProximityPacketsConfig.getNewInstance(), PatPatClientProximityPacketsConfig.CODEC, PatPatClientConfig::getProximityPacketsConfig),
+			option("fun", PatPatClientFunConfig.getNewInstance(), PatPatClientFunConfig.CODEC, PatPatClientConfig::getFunConfig)
 	).apply(inst, PatPatClientConfig::new));
 
 	private static final PatLogger LOGGER = PatPatClient.LOGGER.extend("Config");
@@ -45,6 +46,7 @@ public class PatPatClientConfig {
 	private PatPatClientVisualConfig visualConfig;
 	private PatPatClientMultiplayerConfig multiPlayerConfig;
 	private PatPatClientProximityPacketsConfig proximityPacketsConfig;
+	private PatPatClientFunConfig funConfig;
 
 	public static PatPatClientConfig getInstance() {
 		return instance == null ? reload() : instance;

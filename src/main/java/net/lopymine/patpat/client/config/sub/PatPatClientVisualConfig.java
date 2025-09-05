@@ -36,15 +36,4 @@ public class PatPatClientVisualConfig {
 		return () -> CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
-	public PatPatClientVisualConfig copy() {
-		return new PatPatClientVisualConfig(
-				this.hidingNicknameEnabled,
-				this.clientSwingHandEnabled,
-				this.serverSwingHandEnabled,
-				this.animationOffsets,
-				this.cameraShackingEnabled,
-				this.patWeight
-		);
-	}
-
 }

@@ -25,10 +25,4 @@ public class PatPatClientResourcePacksConfig {
 		return () -> CodecUtils.parseNewInstanceHacky(CODEC);
 	}
 
-	public PatPatClientResourcePacksConfig copy() {
-		return new PatPatClientResourcePacksConfig(
-				this.skipOldAnimationsEnabled
-		);
-	}
-
 }

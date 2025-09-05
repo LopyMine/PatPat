@@ -25,7 +25,8 @@
 		"GameRendererMixin",
 		"EntityMixin",
 		"EnderDragonRendererMixin",
-		"ModMenuMixin"
+		"ModMenuMixin",
+		"MultiPlayerGameModeMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

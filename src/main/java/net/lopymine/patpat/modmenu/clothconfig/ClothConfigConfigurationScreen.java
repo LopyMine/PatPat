@@ -4,6 +4,8 @@ import me.shedaniel.clothconfig2.api.*;
 import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelistConfig;
+import net.lopymine.patpat.client.config.sub.PatPatClientFunConfig.PvpMode;
+import net.lopymine.patpat.modmenu.yacl.custom.utils.EnumWithText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.*;
@@ -211,13 +213,13 @@ public class ClothConfigConfigurationScreen {
 	}
 
 	private static SubCategoryListEntry getFunGroup(ConfigEntryBuilder entryBuilder, PatPatClientFunConfig config, PatPatClientFunConfig defConfig) {
-		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(getGroupName("multiplayer"));
+		SubCategoryBuilder subcategory = entryBuilder.startSubCategory(getGroupName("fun"));
 		subcategory.add(
-				entryBuilder.startBooleanToggle(ModMenuUtils.getOptionName("pvp_mode_enabled"), config.isPvpModeEnabled())
-						.setTooltip(ModMenuUtils.getOptionDescription("pvp_mode_enabled"))
-						.setYesNoTextSupplier(ENABLED_OR_DISABLED_FORMATTER)
-						.setDefaultValue(defConfig.isPvpModeEnabled())
-						.setSaveConsumer(config::setPvpModeEnabled)
+				entryBuilder.startEnumSelector(ModMenuUtils.getOptionName("pvp_mode"), PvpMode.class, config.getPvpMode())
+						.setTooltip(ModMenuUtils.getOptionDescription("pvp_mode"))
+						.setEnumNameProvider((mode) -> PvpMode.valueOf(mode.name().toUpperCase()).getText())
+						.setDefaultValue(defConfig.getPvpMode())
+						.setSaveConsumer(config::setPvpMode)
 						.build()
 		);
 		subcategory.setExpanded(true);

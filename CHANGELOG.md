@@ -1,18 +1,16 @@
-# v1.2.1 Update
+# v1.2.2 Update
 
-This update was created primarily to protect you from unexpected bans from servers and their anti-cheat systems. [About problem](https://discord.com/channels/1090757125514461276/1090758804913803304/1400210342470221905)
+## Important (About false bans)
+First, in this version we fixed sending hand swing packets in spectator mode,
+which may cause false bans on server (CubeCraft especially).
+Also, happy news, proximity packets allowed on CubeCraft, you won't be banned from CubeCraft anti-cheat by using it.
+Can't say about other servers, just letting you know.
+In fact, if you were banned for these proximity packets on CubeCraft, it was for the hand swing packets.
+This was revealed after talking to the CubeCraft developers.
+But remember, that's only for CubeCraft, can't say anything about other servers!!!
 
-## Proximity packets
-- Option has been forcibly disabled (it can be re-enabled in the settings)
-- Added editable whitelist/blacklist of servers on which Proximity Packets will work
+## Added
+- Added a new "PVP Mode" option in "Fun" group. With it, you can also pat the entity after attacking it (that's really funny, try it)
 
-We still believe in this feature, so we are not removing it from the mod at this time, but you should be aware of the risks when using it! (This applies more to large servers with anti-cheat software)
-
-## Translation
-- Added Ukrainian language (MrLemonHog)
-- Added translators in Mod Menu
-
-## Misc
-- Fixed permission for `ratelimit` command
-- In output ignore command changed color for entity type to gold
-- Updated ProxLib to 0.2.4
+## Translations
+- Updated en_us and ru_ru for this update

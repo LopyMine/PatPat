@@ -38,7 +38,7 @@ public class PatPatClientConfigMigrateTests {
 			File file = this.getConfigFolder().resolve("test_1.json5").toFile();
 			Assertions.assertTrue(file.exists());
 
-			PatPatClientConfig config = PatPatClientConfig.getNewInstance();
+			PatPatClientConfig config = PatPatClientConfig.getNewInstance().get();
 			PatPatClientMainConfig mainConfig = config.getMainConfig();
 			mainConfig.setModEnabled(false);
 			mainConfig.setDebugLogEnabled(false);

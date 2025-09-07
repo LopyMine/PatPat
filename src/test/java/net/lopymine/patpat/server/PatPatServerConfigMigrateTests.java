@@ -27,7 +27,7 @@ class PatPatServerConfigMigrateTests {
 			File file = this.getConfigFolder().resolve("test_1.json5").toFile();
 			Assertions.assertTrue(file.exists());
 
-			PatPatServerConfig config = PatPatServerConfig.getNewInstance();
+			PatPatServerConfig config = PatPatServerConfig.getNewInstance().get();
 			config.setListMode(ListMode.DISABLED);
 			PatPatServerPlayerListConfig listConfig = new PatPatServerPlayerListConfig();
 
@@ -51,7 +51,7 @@ class PatPatServerConfigMigrateTests {
 			File file = this.getConfigFolder().resolve("test_2.json5").toFile();
 			Assertions.assertTrue(file.exists());
 
-			PatPatServerConfig config = PatPatServerConfig.getNewInstance();
+			PatPatServerConfig config = PatPatServerConfig.getNewInstance().get();
 			config.setListMode(ListMode.DISABLED);
 			PatPatServerPlayerListConfig listConfig = new PatPatServerPlayerListConfig();
 			listConfig.getValues().put(UUID.randomUUID(), "NotLopyMine");

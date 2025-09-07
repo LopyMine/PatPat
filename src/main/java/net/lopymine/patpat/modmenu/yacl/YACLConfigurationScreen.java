@@ -1,5 +1,6 @@
 package net.lopymine.patpat.modmenu.yacl;
 
+import net.lopymine.patpat.client.config.sub.PatPatClientFunConfig.PvpMode;
 import net.minecraft.client.gui.screens.Screen;
 
 //? >=1.20.1 {
@@ -151,9 +152,9 @@ public class YACLConfigurationScreen {
 
 	private static OptionGroup getFunGroup(PatPatClientFunConfig defConfig, PatPatClientFunConfig config) {
 		return SimpleGroup.startBuilder("fun").options(
-				SimpleOption.<Boolean>startBuilder("pvp_mode_enabled")
-						.withBinding(defConfig.isPvpModeEnabled(), config::isPvpModeEnabled, config::setPvpModeEnabled, false)
-						.withController()
+				SimpleOption.<PvpMode>startBuilder("pvp_mode")
+						.withBinding(defConfig.getPvpMode(), config::getPvpMode, config::setPvpMode, false)
+						.withController(PvpMode.class)
 						.withDescription(SimpleContent.NONE)
 						.build()
 		).build();

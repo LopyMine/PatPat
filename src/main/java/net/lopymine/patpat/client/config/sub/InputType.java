@@ -1,5 +1,6 @@
 package net.lopymine.patpat.client.config.sub;
 
+import net.lopymine.patpat.client.PatPatClient;
 import net.minecraft.util.StringRepresentable;
 
 import com.mojang.blaze3d.platform.InputConstants;
@@ -20,7 +21,7 @@ public enum InputType implements StringRepresentable {
 		try {
 			return InputType.valueOf(name.toUpperCase());
 		} catch (Exception e) {
-			e.printStackTrace();
+			PatPatClient.LOGGER.error("Failed to get enum by name \"{}\":", name, e);
 			return null;
 		}
 	}

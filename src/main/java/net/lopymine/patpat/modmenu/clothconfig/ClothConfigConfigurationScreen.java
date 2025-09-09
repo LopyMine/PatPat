@@ -5,12 +5,11 @@ import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelistConfig;
 import net.lopymine.patpat.client.config.sub.PatPatClientFunConfig.PvpMode;
-import net.lopymine.patpat.modmenu.yacl.custom.utils.EnumWithText;
+import net.lopymine.patpat.modmenu.bridge.ClothConfigBridge;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.*;
 
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.utils.*;
 
@@ -23,37 +22,40 @@ public class ClothConfigConfigurationScreen {
 
 	public static final Style NAME_STYLE = Style.EMPTY.withBold(true);
 
+	private static final ClothConfigBridge bridge = new ClothConfigBridge();
+
 	private ClothConfigConfigurationScreen() {
 		throw new IllegalStateException("Screen class");
 	}
 
-
 	public static Screen createScreen(Screen parent) {
-		PatPatClientConfig config = PatPatClientConfig.getInstance();
-		PatPatClientConfig defConfig = PatPatClientConfig.getNewInstance().get();
+//		PatPatClientConfig config = PatPatClientConfig.getInstance();
+//		PatPatClientConfig defConfig = PatPatClientConfig.getNewInstance().get();
+//
+//		ConfigBuilder builder = ConfigBuilder.create()
+//				.setParentScreen(parent)
+//				.setTitle(ModMenuUtils.getModTitle());
+//
+//		ConfigEntryBuilder entryBuilder = builder.entryBuilder();
+//		MutableComponent title = getCategoryName("general")
+//				.withStyle(NAME_STYLE);
+//		ConfigCategory general = builder.getOrCreateCategory(title);
+//
+//		general.addEntry(getMainGroup(entryBuilder, config.getMainConfig(), defConfig.getMainConfig()));
+//		general.addEntry(getResourcePackGroup(entryBuilder, config.getResourcePacksConfig(), defConfig.getResourcePacksConfig()));
+//		general.addEntry(getSoundGroup(entryBuilder, config.getSoundsConfig(), defConfig.getSoundsConfig()));
+//		general.addEntry(getVisualGroup(entryBuilder, config.getVisualConfig(), defConfig.getVisualConfig()));
+//		general.addEntry(getMultiplayerGroup(entryBuilder, config.getMultiPlayerConfig(), defConfig.getMultiPlayerConfig()));
+//		general.addEntry(getFunGroup(entryBuilder, config.getFunConfig(), defConfig.getFunConfig()));
+//		//? if proxlib {
+//		general.addEntry(getProximityPacketsGroup(entryBuilder, config.getProximityPacketsConfig(), defConfig.getProximityPacketsConfig()));
+//		//?}
+//
+//		builder.setSavingRunnable(config::saveAsync);
+//
+//		return builder.build();
 
-		ConfigBuilder builder = ConfigBuilder.create()
-				.setParentScreen(parent)
-				.setTitle(ModMenuUtils.getModTitle());
-
-		ConfigEntryBuilder entryBuilder = builder.entryBuilder();
-		MutableComponent title = getCategoryName("general")
-				.withStyle(NAME_STYLE);
-		ConfigCategory general = builder.getOrCreateCategory(title);
-
-		general.addEntry(getMainGroup(entryBuilder, config.getMainConfig(), defConfig.getMainConfig()));
-		general.addEntry(getResourcePackGroup(entryBuilder, config.getResourcePacksConfig(), defConfig.getResourcePacksConfig()));
-		general.addEntry(getSoundGroup(entryBuilder, config.getSoundsConfig(), defConfig.getSoundsConfig()));
-		general.addEntry(getVisualGroup(entryBuilder, config.getVisualConfig(), defConfig.getVisualConfig()));
-		general.addEntry(getMultiplayerGroup(entryBuilder, config.getMultiPlayerConfig(), defConfig.getMultiPlayerConfig()));
-		general.addEntry(getFunGroup(entryBuilder, config.getFunConfig(), defConfig.getFunConfig()));
-		//? if proxlib {
-		general.addEntry(getProximityPacketsGroup(entryBuilder, config.getProximityPacketsConfig(), defConfig.getProximityPacketsConfig()));
-		//?}
-
-		builder.setSavingRunnable(config::saveAsync);
-
-		return builder.build();
+		return ClothConfigBridge.getScreen(parent);
 	}
 
 	private static SubCategoryListEntry getMainGroup(ConfigEntryBuilder entryBuilder, PatPatClientMainConfig config, PatPatClientMainConfig defConfig) {

@@ -1,6 +1,7 @@
 package net.lopymine.patpat.modmenu.yacl;
 
 import net.lopymine.patpat.client.config.sub.PatPatClientFunConfig.PvpMode;
+import net.lopymine.patpat.modmenu.bridge.YACLBridge;
 import net.minecraft.client.gui.screens.Screen;
 
 //? >=1.20.1 {
@@ -12,7 +13,6 @@ import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.modmenu.yacl.custom.base.*;
 import net.lopymine.patpat.modmenu.yacl.custom.extension.SimpleOptionExtension;
-import net.lopymine.patpat.modmenu.yacl.custom.screen.SimpleYACLScreen;
 import net.lopymine.patpat.modmenu.yacl.custom.utils.*;
 import net.lopymine.patpat.PatTranslation;
 import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelistConfig;
@@ -27,12 +27,13 @@ public class YACLConfigurationScreen {
 	}
 
 	public static Screen createScreen(Screen parent) {
-		PatPatClientConfig config = PatPatClientConfig.getInstance();
-		PatPatClientConfig defConfig = PatPatClientConfig.getNewInstance().get();
-
-		return SimpleYACLScreen.startBuilder(parent, config::saveAsync)
-				.categories(getGeneralCategory(defConfig, config))
-				.build();
+//		PatPatClientConfig config = PatPatClientConfig.getInstance();
+//		PatPatClientConfig defConfig = PatPatClientConfig.getNewInstance().get();
+//
+//		return SimpleYACLScreen.startBuilder(parent, config::saveAsync)
+//				.categories(getGeneralCategory(defConfig, config))
+//				.build();
+		return YACLBridge.getScreen(parent);
 	}
 
 	private static ConfigCategory getGeneralCategory(PatPatClientConfig defConfig, PatPatClientConfig config) {

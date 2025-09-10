@@ -1,4 +1,4 @@
-package net.lopymine.patpat.modmenu.pipec.option;
+package net.lopymine.patpat.modmenu.common.option;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -13,6 +13,7 @@ public class PatListOption<T> extends PatOption<List<T>> {
 	private final int maxEntries;
 	private final T initial;
 
+	@Override
 	public Class<?> getType() {
 		return initial.getClass();
 	}

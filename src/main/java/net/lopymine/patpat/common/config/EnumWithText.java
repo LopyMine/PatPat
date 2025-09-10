@@ -1,4 +1,4 @@
-package net.lopymine.patpat.modmenu.yacl.custom.utils;
+package net.lopymine.patpat.common.config;
 
 import net.minecraft.network.chat.Component;
 

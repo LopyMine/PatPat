@@ -1,20 +1,29 @@
 package net.lopymine.patpat.modmenu.bridge;
 
+//? >=1.20.1 {
+
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
-import dev.isxander.yacl3.gui.image.ImageRenderer;
-import net.lopymine.patpat.modmenu.pipec.*;
-import net.lopymine.patpat.modmenu.pipec.image.AbstractPatImage;
-import net.lopymine.patpat.modmenu.pipec.image.PatImage;
-import net.lopymine.patpat.modmenu.pipec.image.PatRenderer;
-import net.lopymine.patpat.modmenu.pipec.option.*;
-import net.minecraft.client.gui.GuiGraphics;
+
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+
+import net.lopymine.patpat.modmenu.common.*;
+import net.lopymine.patpat.modmenu.common.image.*;
+import net.lopymine.patpat.modmenu.common.option.*;
+
 import org.jetbrains.annotations.Nullable;
 
+//? if yacl: >=3.6.6 {
+import dev.isxander.yacl3.gui.image.ImageRenderer;
+import net.minecraft.client.gui.GuiGraphics;
+//?}
 
 public class YACLBridge {
+
+	private YACLBridge() {
+		throw new IllegalStateException("Bridge class");
+	}
 
 	public static Screen getScreen(@Nullable Screen parent) {
 		PatConfig patConfig = PatConfig.generate();
@@ -90,84 +99,94 @@ public class YACLBridge {
 				option.getSetter()
 		);
 
-		switch (option) {
-			case SliderNumberOption<?> sliderNumberOption -> builder.controller(opt -> {
-				Class<?> type = sliderNumberOption.getType();
-				if (type == Float.class) {
-					SliderNumberOption<Float> sliderFloatOption = (SliderNumberOption<Float>) sliderNumberOption;
-					return (ControllerBuilder<T>) FloatSliderControllerBuilder
-							.create((Option<Float>) opt)
-							.range(sliderFloatOption.getMin(), sliderFloatOption.getMax())
-							.step(sliderFloatOption.getStep());
-				}
-				if (type == Long.class) {
-					SliderNumberOption<Long> sliderLongOption = (SliderNumberOption<Long>) sliderNumberOption;
-					return (ControllerBuilder<T>) LongSliderControllerBuilder
-							.create((Option<Long>) opt)
-							.range(sliderLongOption.getMin(), sliderLongOption.getMax())
-							.step(sliderLongOption.getStep());
-				}
-				if (type == Double.class) {
-					SliderNumberOption<Double> sliderDoubleOption = (SliderNumberOption<Double>) sliderNumberOption;
-					return (ControllerBuilder<T>) DoubleSliderControllerBuilder
-							.create((Option<Double>) opt)
-							.range(sliderDoubleOption.getMin(), sliderDoubleOption.getMax())
-							.step(sliderDoubleOption.getStep());
-				}
-				if (type == Integer.class) {
-					SliderNumberOption<Integer> sliderIntegerOption = (SliderNumberOption<Integer>) sliderNumberOption;
-					return (ControllerBuilder<T>) IntegerSliderControllerBuilder
-							.create((Option<Integer>) opt)
-							.range(sliderIntegerOption.getMin(), sliderIntegerOption.getMax())
-							.step(sliderIntegerOption.getStep());
-				}
-
-				throw new IllegalArgumentException("Unsupported SliderNumberOption type: " + type);
-			});
-			case NumberOption<?> numberOption -> builder.controller(opt -> {
-				Class<?> type = numberOption.getType();
-				if (type == Float.class) {
-					NumberOption<Float> floatOption = (NumberOption<Float>) numberOption;
-					return (ControllerBuilder<T>) FloatFieldControllerBuilder
-							.create((Option<Float>) opt)
-							.range(floatOption.getMin(), floatOption.getMax());
-				}
-				if (type == Long.class) {
-					NumberOption<Long> longOption = (NumberOption<Long>) numberOption;
-					return (ControllerBuilder<T>) LongFieldControllerBuilder
-							.create((Option<Long>) opt)
-							.range(longOption.getMin(), longOption.getMax());
-				}
-				if (type == Double.class) {
-					NumberOption<Double> doubleOption = (NumberOption<Double>) numberOption;
-					return (ControllerBuilder<T>) DoubleFieldControllerBuilder
-							.create((Option<Double>) opt)
-							.range(doubleOption.getMin(), doubleOption.getMax());
-				}
-				if (type == Integer.class) {
-					NumberOption<Integer> integerOption = (NumberOption<Integer>) numberOption;
-					return (ControllerBuilder<T>) IntegerFieldControllerBuilder
-							.create((Option<Integer>) opt)
-							.range(integerOption.getMin(), integerOption.getMax());
-				}
-
-				throw new IllegalArgumentException("Unsupported NumberOption type: " + type);
-			});
-			case BooleanOption booleanOption ->
-					builder.controller(opt -> (ControllerBuilder<T>) BooleanControllerBuilder.create((Option<Boolean>) opt).coloured(true));
+		if (option instanceof SliderNumberOption<?> sliderNumberOption) {
+			addSliderNumberOption(builder, sliderNumberOption);
+		} else if (option instanceof NumberOption<?> numberOption) {
+			addNumberOption(builder, numberOption);
+		} else if (option instanceof BooleanOption) {
+			builder.controller(opt -> (ControllerBuilder<T>) BooleanControllerBuilder.create((Option<Boolean>) opt).coloured(true));
+		} else if (option instanceof EnumOption enumOption) {
 			// TODO: Исправить предупреждения о сырых использованиях параметризованных классов
-			case EnumOption enumOption -> {
-				((Option.Builder<? extends Enum>) builder).controller(opt -> EnumControllerBuilder.create(opt)
-						.enumClass(enumOption.getEnumClass())
-						.formatValue(o -> (Component) enumOption
-								.getEnumNameProvider()
-								.apply(o)
-						)
-				);
-			}
-			default -> throw new IllegalArgumentException("Unsupported Option type: " + option);
+			((Option.Builder<? extends Enum>) builder).controller(opt -> EnumControllerBuilder.create(opt)
+					.enumClass(enumOption.getEnumClass())
+					.formatValue(o -> (Component) enumOption
+							.getEnumNameProvider()
+							.apply(o)
+					)
+			);
+		} else {
+			throw new IllegalArgumentException("Unsupported Option type: " + option);
 		}
 		return builder.build();
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> void addSliderNumberOption(Option.Builder<T> builder, SliderNumberOption<?> sliderNumberOption) {
+		builder.controller(opt -> {
+			Class<?> type = sliderNumberOption.getType();
+			if (type == Float.class) {
+				SliderNumberOption<Float> sliderFloatOption = (SliderNumberOption<Float>) sliderNumberOption;
+				return (ControllerBuilder<T>) FloatSliderControllerBuilder
+						.create((Option<Float>) opt)
+						.range(sliderFloatOption.getMin(), sliderFloatOption.getMax())
+						.step(sliderFloatOption.getStep());
+			}
+			if (type == Long.class) {
+				SliderNumberOption<Long> sliderLongOption = (SliderNumberOption<Long>) sliderNumberOption;
+				return (ControllerBuilder<T>) LongSliderControllerBuilder
+						.create((Option<Long>) opt)
+						.range(sliderLongOption.getMin(), sliderLongOption.getMax())
+						.step(sliderLongOption.getStep());
+			}
+			if (type == Double.class) {
+				SliderNumberOption<Double> sliderDoubleOption = (SliderNumberOption<Double>) sliderNumberOption;
+				return (ControllerBuilder<T>) DoubleSliderControllerBuilder
+						.create((Option<Double>) opt)
+						.range(sliderDoubleOption.getMin(), sliderDoubleOption.getMax())
+						.step(sliderDoubleOption.getStep());
+			}
+			if (type == Integer.class) {
+				SliderNumberOption<Integer> sliderIntegerOption = (SliderNumberOption<Integer>) sliderNumberOption;
+				return (ControllerBuilder<T>) IntegerSliderControllerBuilder
+						.create((Option<Integer>) opt)
+						.range(sliderIntegerOption.getMin(), sliderIntegerOption.getMax())
+						.step(sliderIntegerOption.getStep());
+			}
+			throw new IllegalArgumentException("Unsupported SliderNumberOption type: " + type);
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> void addNumberOption(Option.Builder<T> builder, NumberOption<?> numberOption) {
+		builder.controller(opt -> {
+			Class<?> type = numberOption.getType();
+			if (type == Float.class) {
+				NumberOption<Float> floatOption = (NumberOption<Float>) numberOption;
+				return (ControllerBuilder<T>) FloatFieldControllerBuilder
+						.create((Option<Float>) opt)
+						.range(floatOption.getMin(), floatOption.getMax());
+			}
+			if (type == Long.class) {
+				NumberOption<Long> longOption = (NumberOption<Long>) numberOption;
+				return (ControllerBuilder<T>) LongFieldControllerBuilder
+						.create((Option<Long>) opt)
+						.range(longOption.getMin(), longOption.getMax());
+			}
+			if (type == Double.class) {
+				NumberOption<Double> doubleOption = (NumberOption<Double>) numberOption;
+				return (ControllerBuilder<T>) DoubleFieldControllerBuilder
+						.create((Option<Double>) opt)
+						.range(doubleOption.getMin(), doubleOption.getMax());
+			}
+			if (type == Integer.class) {
+				NumberOption<Integer> integerOption = (NumberOption<Integer>) numberOption;
+				return (ControllerBuilder<T>) IntegerFieldControllerBuilder
+						.create((Option<Integer>) opt)
+						.range(integerOption.getMin(), integerOption.getMax());
+			}
+
+			throw new IllegalArgumentException("Unsupported NumberOption type: " + type);
+		});
 	}
 
 	@SuppressWarnings("unchecked")
@@ -204,8 +223,15 @@ public class YACLBridge {
 		if (abstractImage == null) {
 			return builder.build();
 		}
-		switch (abstractImage) {
-			case PatRenderer renderer -> builder.customImage(
+
+		if (abstractImage instanceof PatImage image) {
+			switch (image.getType()) {
+				case WEBP -> builder.webpImage(image.getResource());
+				case IMAGE -> builder.image(image.getResource(), image.getWidth(), image.getHeight());
+				default -> throw new IllegalArgumentException("Unsupported type for PatImage: " + image.getType());
+			}
+		}/*? if yacl: >=3.6.6 {*/ else if (abstractImage instanceof PatRenderer renderer) {
+			builder.customImage(
 					new ImageRenderer() {
 						@Override
 						public int render(GuiGraphics graphics, int x, int y, int renderWidth, float delta) {
@@ -214,18 +240,15 @@ public class YACLBridge {
 
 						@Override
 						public void close() {
+							// NO-OP
 						}
 					}
 			);
-			case PatImage image -> {
-				switch (image.getType()) {
-					case WEBP -> builder.webpImage(image.getResource());
-					case IMAGE -> builder.image(image.getResource(), image.getWidth(), image.getHeight());
-				}
-			}
-			default -> throw new IllegalStateException("Value is not image: " + abstractImage);
+		}/*?}*/ else {
+			throw new IllegalStateException("Value is not image: " + abstractImage);
 		}
 		return builder.build();
 	}
 
 }
+//?}

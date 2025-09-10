@@ -1,4 +1,4 @@
-package net.lopymine.patpat.modmenu.pipec.option;
+package net.lopymine.patpat.modmenu.common.option;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;

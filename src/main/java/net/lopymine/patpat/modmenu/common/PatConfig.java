@@ -1,4 +1,4 @@
-package net.lopymine.patpat.modmenu.pipec;
+package net.lopymine.patpat.modmenu.common;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,9 +6,9 @@ import lombok.Singular;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelistConfig;
 import net.lopymine.patpat.client.config.sub.PatPatClientFunConfig;
-import net.lopymine.patpat.modmenu.pipec.image.ImageType;
-import net.lopymine.patpat.modmenu.pipec.image.PatImage;
-import net.lopymine.patpat.modmenu.pipec.option.*;
+import net.lopymine.patpat.modmenu.common.image.ImageType;
+import net.lopymine.patpat.modmenu.common.image.PatImage;
+import net.lopymine.patpat.modmenu.common.option.*;
 import net.lopymine.patpat.utils.ModMenuUtils;
 import net.lopymine.patpat.utils.TextUtils;
 import net.minecraft.ChatFormatting;
@@ -199,16 +199,12 @@ public class PatConfig {
 								)
 								.build()
 						)
+						//? if proxlib {
 						.addElement(PatGroup.builder()
 								.key("proximity_packets")
 								.addOption(BooleanOption.builder()
 										.name(ModMenuUtils.getOptionName("proximity_packets_enabled"))
-										.description(PatDescription.of(
-												TextUtils.empty()
-														.append(ModMenuUtils.getCustom(ModMenuUtils.getOptionKey("proximity_packets_enabled"),"warn").withStyle(ChatFormatting.RED))
-														.append("\n\n")
-														.append(ModMenuUtils.getOptionDescription("proximity_packets_enabled"))
-										))
+										.description(getDescriptionWithWarn("proximity_packets_enabled"))
 										.defaultValue(defConfig.getProximityPacketsConfig().isProximityPacketsEnabled())
 										.getter(() -> config.getProximityPacketsConfig().isProximityPacketsEnabled())
 										.setter(config.getProximityPacketsConfig()::setProximityPacketsEnabled)
@@ -230,7 +226,8 @@ public class PatConfig {
 										.build()
 								)
 								.addOption(PatListOption.<String>builder()
-										.key("proximity_packets_servers_whitelist")
+										.name(ModMenuUtils.getOptionName("proximity_packets_servers_whitelist"))
+										.description(getDescriptionWithWarn("proximity_packets_servers_whitelist"))
 										.defaultValue(PatPatClientProxLibServersWhitelistConfig.DEFAULT_VALUES)
 										.getter(() -> new ArrayList<>(PatPatClientProxLibServersWhitelistConfig.getInstance().getValues()))
 										.setter(PatPatClientProxLibServersWhitelistConfig::rewriteServersList)
@@ -240,8 +237,18 @@ public class PatConfig {
 								)
 								.build()
 						)
+						//?}
 						.build()
 				)
 				.build();
+	}
+
+	public static PatDescription getDescriptionWithWarn(String key) {
+		return PatDescription.of(
+				TextUtils.empty()
+						.append(ModMenuUtils.getCustom(ModMenuUtils.getOptionKey(key),"warn").withStyle(ChatFormatting.RED))
+						.append("\n\n")
+						.append(ModMenuUtils.getOptionDescription(key))
+		);
 	}
 }

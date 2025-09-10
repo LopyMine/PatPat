@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import lombok.*;
 import net.lopymine.patpat.PatTranslation;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.modmenu.yacl.custom.utils.EnumWithText;
+import net.lopymine.patpat.common.config.EnumWithText;
 import net.lopymine.patpat.utils.CodecUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;

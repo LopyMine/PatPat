@@ -1,10 +1,10 @@
-package net.lopymine.patpat.modmenu.pipec.option;
+package net.lopymine.patpat.modmenu.common.option;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import net.lopymine.patpat.modmenu.pipec.PatDescription;
-import net.lopymine.patpat.modmenu.pipec.PatElement;
-import net.lopymine.patpat.modmenu.pipec.image.AbstractPatImage;
+import net.lopymine.patpat.modmenu.common.PatDescription;
+import net.lopymine.patpat.modmenu.common.PatElement;
+import net.lopymine.patpat.modmenu.common.image.AbstractPatImage;
 import net.lopymine.patpat.utils.ModMenuUtils;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;

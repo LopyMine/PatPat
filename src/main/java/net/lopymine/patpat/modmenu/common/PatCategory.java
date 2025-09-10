@@ -1,4 +1,4 @@
-package net.lopymine.patpat.modmenu.pipec;
+package net.lopymine.patpat.modmenu.common;
 
 import lombok.Builder;
 import lombok.Getter;

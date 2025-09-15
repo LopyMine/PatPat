@@ -6,17 +6,16 @@ import lombok.experimental.ExtensionMethod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.*;
 
 import com.mojang.authlib.GameProfile;
 
 import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.list.PatPatClientIgnoreMobListConfig;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.list.PatPatClientIgnoreMobListConfig;
 import net.lopymine.patpat.client.config.resourcepack.CustomAnimationSettingsConfig;
 import net.lopymine.patpat.client.config.resourcepack.PlayerConfig;
 import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
@@ -25,6 +24,7 @@ import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.extension.EntityExtension;
 import net.lopymine.patpat.utils.ProfilerUtils;
+import net.lopymine.patpat.utils.VersionedThings;
 
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
@@ -206,6 +206,12 @@ public class PatPatClientManager {
 			LOGGER.debug("Pat rejected: No entity in crosshair");
 			return null;
 		}
+
+		if (hasActiveLeash(player)) {
+			LOGGER.debug("Pat rejected: Player has lead");
+			return null;
+		}
+
 		if (!(hitResult.getEntity() instanceof LivingEntity pattedEntity)) {
 			LOGGER.debug("Pat rejected: Entity is not LivingEntity");
 			return null;
@@ -222,5 +228,30 @@ public class PatPatClientManager {
 		}
 
 		return pattedEntity;
+	}
+
+
+	private static boolean hasActiveLeash(Player player) {
+		double d = 32.0F;
+		AABB aABB = VersionedThings.getAABBFromPosition(player.getPosition(0), d, d, d);
+
+		for (Entity entity : VersionedThings.getLevel(player).getEntitiesOfClass(Entity.class, aABB)) {
+			//? >1.20.6 {
+			if (!(entity instanceof Leashable leashable)) {
+				continue;
+			}
+			if (leashable.getLeashHolder() == player) {
+				return true;
+			}
+			//?} else {
+			/*if (!(entity instanceof Mob mob)) {
+				continue;
+			}
+			if (mob.getLeashHolder() == player) {
+				return true;
+			}
+			*///?}
+		}
+		return false;
 	}
 }

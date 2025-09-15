@@ -97,10 +97,7 @@ dependencies {
 			modCompileOnly("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
 		}
 	}
-	// TODO: Добавить тесты на версию раньше, чем 1.18.2
-	if (stonecutter.compare(mcVersion, "1.18.2") >= 0) {
-		testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
-	}
+	testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
 
 	def proxlibVersion = prop("dep.proxlib")
 	if (proxlibVersion != "unknown") {
@@ -108,6 +105,7 @@ dependencies {
 	}
 }
 
+// TODO: Добавить тесты на версию раньше, чем 1.18.2
 if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0) {
 	test {
 		useJUnitPlatform()

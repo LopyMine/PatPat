@@ -4,13 +4,13 @@ import me.shedaniel.clothconfig2.api.*;
 import me.shedaniel.clothconfig2.gui.entries.*;
 import me.shedaniel.clothconfig2.impl.builders.*;
 import net.lopymine.patpat.modmenu.PatConfig;
+import net.lopymine.patpat.utils.*;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 
 import net.lopymine.patpat.modmenu.common.*;
 import net.lopymine.patpat.modmenu.common.option.*;
-import net.lopymine.patpat.utils.ModMenuUtils;
 
 import java.util.function.Function;
 import org.jetbrains.annotations.*;
@@ -184,7 +184,7 @@ public class ClothConfigBridge {
 						Component apply = enumOption.getEnumNameProvider().apply((T) e);
 						return apply;
 					}
-					return Component.literal("Unknown Enum");
+					return TextUtils.of("Unknown Enum Value");
 				})
 				.setDefaultValue(enumOption.getDefaultValue())
 				.setSaveConsumer(enumOption.getSetter());

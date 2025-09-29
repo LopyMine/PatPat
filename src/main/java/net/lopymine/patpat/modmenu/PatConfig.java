@@ -1,21 +1,16 @@
-package net.lopymine.patpat.modmenu.common;
+package net.lopymine.patpat.modmenu;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Singular;
+import java.util.*;
+import lombok.*;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelistConfig;
 import net.lopymine.patpat.client.config.sub.PatPatClientFunConfig;
-import net.lopymine.patpat.modmenu.common.image.ImageType;
-import net.lopymine.patpat.modmenu.common.image.PatImage;
+import net.lopymine.patpat.modmenu.common.*;
+import net.lopymine.patpat.modmenu.common.image.*;
 import net.lopymine.patpat.modmenu.common.option.*;
-import net.lopymine.patpat.utils.ModMenuUtils;
-import net.lopymine.patpat.utils.TextUtils;
+import net.lopymine.patpat.utils.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Builder
@@ -158,12 +153,12 @@ public class PatConfig {
 										.setter(config.getVisualConfig()::setCameraShackingEnabled)
 										.build()
 								)
-								.addOption(DecimalOption.<Float>builder()
+								.addOption(NumberOption.<Float>builder()
 										.key("pat_weight")
 										.defaultValue(defConfig.getVisualConfig().getPatWeight())
 										.getter(() -> config.getVisualConfig().getPatWeight())
 										.setter(config.getVisualConfig()::setPatWeight)
-										.min(0F).max(5F).step(0.01F)
+										.min(0F).max(5F)
 										.build()
 								)
 								.build()
@@ -246,7 +241,7 @@ public class PatConfig {
 	public static PatDescription getDescriptionWithWarn(String key) {
 		return PatDescription.of(
 				TextUtils.empty()
-						.append(ModMenuUtils.getCustom(ModMenuUtils.getOptionKey(key),"warn").withStyle(ChatFormatting.RED))
+						.append(ModMenuUtils.getCustom(ModMenuUtils.getOptionKey(key), "warn").withStyle(ChatFormatting.RED))
 						.append("\n\n")
 						.append(ModMenuUtils.getOptionDescription(key))
 		);

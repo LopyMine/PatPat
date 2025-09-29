@@ -19,6 +19,7 @@ public class PatGroup implements PatElement {
     private @Nullable PatDescription description;
     private boolean collapsed;
 
+	@SuppressWarnings("unused")
     public static class PatGroupBuilder {
 
         public PatGroupBuilder key(String key) {

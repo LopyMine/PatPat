@@ -16,6 +16,7 @@ public abstract class AbstractPatOption<T> implements PatElement {
     private final Component name;
     private @Nullable PatDescription description;
 
+	@SuppressWarnings("unused")
     public abstract static class AbstractPatOptionBuilder<T,
             C extends AbstractPatOption<T>,
             B extends AbstractPatOptionBuilder<T, C, B>> {

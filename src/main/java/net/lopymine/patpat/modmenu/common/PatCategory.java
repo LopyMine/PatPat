@@ -17,6 +17,7 @@ public class PatCategory {
     private final Component name;
     private @Nullable Component description;
 
+	@SuppressWarnings("unused")
     public static class PatCategoryBuilder {
 
         public PatCategoryBuilder key(String key) {

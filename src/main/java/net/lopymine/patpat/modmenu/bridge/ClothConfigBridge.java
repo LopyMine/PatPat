@@ -1,8 +1,9 @@
 package net.lopymine.patpat.modmenu.bridge;
 
 import me.shedaniel.clothconfig2.api.*;
-import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
+import me.shedaniel.clothconfig2.gui.entries.*;
 import me.shedaniel.clothconfig2.impl.builders.*;
+import net.lopymine.patpat.modmenu.PatConfig;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -12,7 +13,7 @@ import net.lopymine.patpat.modmenu.common.option.*;
 import net.lopymine.patpat.utils.ModMenuUtils;
 
 import java.util.function.Function;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 public class ClothConfigBridge {
 
@@ -96,7 +97,6 @@ public class ClothConfigBridge {
 				return sliderBuilder.build();
 			}
 			if (type == Float.class) {
-				// В ClothConfig нет слайдеров с вещественными числами
 				NumberOption<Float> floatNumberOption = (NumberOption<Float>) sliderNumberOption;
 				FloatFieldBuilder fieldBuilder = entryBuilder.startFloatField(option.getName(), floatNumberOption.getGetter().get())
 						.setMin(floatNumberOption.getMin())
@@ -170,18 +170,28 @@ public class ClothConfigBridge {
 				toggleBuilder.setTooltip(description.getText());
 			}
 			return toggleBuilder.build();
-		} else if (option instanceof EnumOption enumOption) {
-			// TODO: Исправить предупреждения о сырых использованиях параметризованных классов
-			EnumSelectorBuilder<?> enumBuilder = entryBuilder.startEnumSelector(option.getName(), enumOption.getEnumClass(), (Enum<?>) enumOption.getGetter().get())
-					.setEnumNameProvider(enumOption.getEnumNameProvider())
-					.setDefaultValue((Enum<?>) enumOption.getDefaultValue())
-					.setSaveConsumer(enumOption.getSetter());
-			if (description != null) {
-				enumBuilder.setTooltip(description.getText());
-			}
-			return enumBuilder.build();
+		} else if (option instanceof EnumOption<?> enumOption) {
+			return getEnumListEntry(option, entryBuilder, enumOption, description);
 		}
 		throw new IllegalStateException("Unexpected PatOption: " + option);
+	}
+
+	private static <T extends Enum<T>> @NotNull EnumListEntry<T> getEnumListEntry(AbstractPatOption<?> option, ConfigEntryBuilder entryBuilder, EnumOption<T> enumOption, PatDescription description) {
+		EnumSelectorBuilder<T> enumBuilder = entryBuilder.startEnumSelector(option.getName(), enumOption.getEnumClass(), enumOption.getGetter().get())
+				.setEnumNameProvider((e) -> {
+					if (enumOption.getEnumClass().isInstance(e)) {
+						@SuppressWarnings("unchecked")
+						Component apply = enumOption.getEnumNameProvider().apply((T) e);
+						return apply;
+					}
+					return Component.literal("Unknown Enum");
+				})
+				.setDefaultValue(enumOption.getDefaultValue())
+				.setSaveConsumer(enumOption.getSetter());
+		if (description != null) {
+			enumBuilder.setTooltip(description.getText());
+		}
+		return enumBuilder.build();
 	}
 
 	@SuppressWarnings("unchecked")

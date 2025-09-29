@@ -5,6 +5,7 @@ package net.lopymine.patpat.modmenu.bridge;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 
+import net.lopymine.patpat.modmenu.PatConfig;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -28,9 +29,7 @@ public class YACLBridge {
 	public static Screen getScreen(@Nullable Screen parent) {
 		PatConfig patConfig = PatConfig.generate();
 		YetAnotherConfigLib.Builder builder = YetAnotherConfigLib.createBuilder();
-		builder
-				.title(patConfig.getTitle())
-				.save(patConfig.getOnSave());
+		builder.title(patConfig.getTitle()).save(patConfig.getOnSave());
 		for (PatCategory category : patConfig.getCategories()) {
 			builder.category(getCategory(category));
 		}
@@ -48,7 +47,6 @@ public class YACLBridge {
 		for (PatElement element : category.getElements()) {
 			if (element instanceof PatGroup group) {
 				builder.group(getGroup(group));
-				// Костыль, чтобы листовые параметры не попадали в группу, спасибо isXander
 				group.getOptions().forEach(option -> {
 					if (option instanceof PatListOption<?> patListOption) {
 						builder.option(getOption(patListOption));
@@ -71,7 +69,6 @@ public class YACLBridge {
 		}
 
 		for (AbstractPatOption<?> option : group.getOptions()) {
-			// Костыль, чтобы листовые параметры не попадали в группу, спасибо isXander
 			if (option instanceof PatListOption<?>) {
 				continue;
 			}
@@ -80,7 +77,7 @@ public class YACLBridge {
 		return builder.build();
 	}
 
-	@SuppressWarnings("unchecked,raw")
+	@SuppressWarnings(value = {"unchecked", "rawtypes"})
 	private static <T> Option<T> getOption(AbstractPatOption<T> abstractOption) {
 		if (abstractOption instanceof PatListOption<?> listOption) {
 			return (Option<T>) getListOption(listOption);
@@ -106,7 +103,6 @@ public class YACLBridge {
 		} else if (option instanceof BooleanOption) {
 			builder.controller(opt -> (ControllerBuilder<T>) BooleanControllerBuilder.create((Option<Boolean>) opt).coloured(true));
 		} else if (option instanceof EnumOption enumOption) {
-			// TODO: Исправить предупреждения о сырых использованиях параметризованных классов
 			((Option.Builder<? extends Enum>) builder).controller(opt -> EnumControllerBuilder.create(opt)
 					.enumClass(enumOption.getEnumClass())
 					.formatValue(o -> (Component) enumOption
@@ -223,7 +219,6 @@ public class YACLBridge {
 		if (abstractImage == null) {
 			return builder.build();
 		}
-
 		if (abstractImage instanceof PatImage image) {
 			switch (image.getType()) {
 				case WEBP -> builder.webpImage(image.getResource());

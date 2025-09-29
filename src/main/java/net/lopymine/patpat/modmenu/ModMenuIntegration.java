@@ -11,14 +11,14 @@ public class ModMenuIntegration implements ModMenuApi {
 
 	@Override
 	public ConfigScreenFactory<?> getModConfigScreenFactory() {
-		if (FabricLoader.getInstance().isModLoaded(VersionedThings.CLOTH_CONFIG_ID)) {
-			return ClothConfigBridge::getScreen;
-		}
 		//? >=1.20.1 {
 		if (FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")) {
 			return YACLBridge::getScreen;
 		}
 		//?}
+		if (FabricLoader.getInstance().isModLoaded(VersionedThings.CLOTH_CONFIG_ID)) {
+			return ClothConfigBridge::getScreen;
+		}
 		return NoConfigLibrariesScreen::createScreen;
 	}
 }

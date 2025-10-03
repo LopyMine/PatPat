@@ -1,6 +1,8 @@
 package net.lopymine.patpat.client.command.argument;
 
+import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.client.command.PatPatClientCommandManager;
+import net.lopymine.patpat.extension.GameProfileExtension;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.util.Tuple;
@@ -17,6 +19,7 @@ import net.lopymine.patpat.utils.CommandText;
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
 
+@ExtensionMethod(GameProfileExtension.class)
 public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 
 	public static final DynamicCommandExceptionType FAILED_PARSING = new DynamicCommandExceptionType(o -> CommandText.text("error.failed_when_parsing", o).finish());
@@ -51,12 +54,12 @@ public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 			for (net.minecraft.client.multiplayer.PlayerInfo entry : networkHandler.getOnlinePlayers()) {
 				GameProfile profile = entry.getProfile();
 				if (profile.getName().equals(s)) {
-					PlayerInfo playerInfo = new PlayerInfo(s, profile.getId());
+					PlayerInfo playerInfo = new PlayerInfo(s, profile.getUUID());
 					PatPatClientCommandManager.LOGGER.debug("Found PlayerInfo by nickname from PlayerInfoArgumentType, parsed: {}", playerInfo);
 					return playerInfo;
 				} else {
 					UUID uuid = UUID.fromString(s);
-					if (profile.getId().equals(uuid)) {
+					if (profile.getUUID().equals(uuid)) {
 						PlayerInfo playerInfo = new PlayerInfo(profile.getName(), uuid);
 						PatPatClientCommandManager.LOGGER.debug("Found PlayerInfo by uuid from PlayerInfoArgumentType, parsed: {}", playerInfo);
 						return playerInfo;

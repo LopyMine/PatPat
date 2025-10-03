@@ -15,6 +15,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import java.util.*;
+import net.minecraft.server.players.NameAndId;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -55,12 +56,19 @@ public class PatPatServerListChangeCommand {
 	private static int onListChange(CommandContext<CommandSourceStack> context, boolean add) throws CommandSyntaxException {
 		PatPatServerPlayerListConfig config = PatPatServerPlayerListConfig.getInstance();
 		Map<UUID, String> map = config.getValues();
-		Collection<GameProfile> profile = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
+		//? if >=1.21.9 {
+		Collection<NameAndId> profile = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
+
+		for (NameAndId nameAndId : profile) {
+			String name = nameAndId.name();
+			UUID uuid = nameAndId.id();
+		//?} else {
+		/*Collection<GameProfile> profile = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
 
 		for (GameProfile gameProfile : profile) {
 			String name = gameProfile.getName();
 			UUID uuid = gameProfile.getId();
-
+		*///?}
 			PatPatCommonListChangeCommand.changeList(add, map, uuid, name, (component) -> context.sendMsg(component));
 		}
 

@@ -1,11 +1,14 @@
 package net.lopymine.patpat.mixin;
 
 
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.Camera;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.state.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -19,7 +22,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.lopymine.patpat.utils.mixin.EntityRenderStateWithParent;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
 //?}
 
 @Mixin(EntityRenderer.class)
@@ -29,15 +31,17 @@ public class EntityRendererMixin {
 	@Final
 	protected EntityRenderDispatcher entityRenderDispatcher;
 
-	//? <1.21.2 {
+	//? if >=1.21.9 {
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;submitNameTag(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V"), method = "submit", cancellable = true)
+	private void render(EntityRenderState state, PoseStack matrices, SubmitNodeCollector submitNodeCollector, net.minecraft.client.renderer.state.CameraRenderState cameraRenderState, CallbackInfo ci) {
+	//?} elif >=1.21.2 {
+	/*@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;renderNameTag(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"), method = "render", cancellable = true)
+	private void render(EntityRenderState state, PoseStack matrices, MultiBufferSource provider, int light, CallbackInfo ci) {
+	}*///?} else {
 	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;shouldShowName(Lnet/minecraft/world/entity/Entity;)Z"), method = "render")
 	private boolean render(EntityRenderer<?> instance, Entity entity, Operation<Boolean> original, @Local(argsOnly = true) PoseStack matrices, @Local(argsOnly = true) MultiBufferSource provider, @Local(argsOnly = true) int light, @Local(argsOnly = true, ordinal = 1) float tickDelta) {
 		boolean bl = original.call(instance, entity);
-	*///?} else {
-	@Inject(at = @At(value = "HEAD", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;renderNameTag(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"), method = "render", cancellable = true)
-	private void render(EntityRenderState state, PoseStack matrices, MultiBufferSource provider, int light, CallbackInfo ci) {
-	//?}
-
+	*///?}
 		//? >=1.21.2 {
 		EntityRenderStateWithParent stateWithParent = (EntityRenderStateWithParent) state;
 		Entity entity = stateWithParent.patPat$getEntity();
@@ -48,7 +52,9 @@ public class EntityRendererMixin {
 			return /*? if <1.21.2 {*/ /*bl *//*?}*/;
 		}
 
-		RenderResult result = PatPatClientRenderer.render(matrices, provider, this.entityRenderDispatcher, null, entity, null, tickDelta, light);
+		Camera camera = this.entityRenderDispatcher.camera;
+
+		RenderResult result = PatPatClientRenderer.render(matrices, camera == null ? new Quaternionf() : camera.rotation(), null, entity, null, tickDelta, /*? if >=1.21.9 {*/ state.lightCoords /*?} else {*//* light *//*?}*/);
 		//? if >=1.21.2 {
 		if (result == RenderResult.RENDERER_SHOULD_CANCEL) {
 			ci.cancel();

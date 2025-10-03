@@ -1,7 +1,6 @@
 package net.lopymine.patpat.client.keybinding;
 
 import lombok.*;
-import net.lopymine.patpat.utils.TextUtils;
 import net.minecraft.client.*;
 import net.minecraft.network.chat.*;
 import org.lwjgl.glfw.GLFW;
@@ -9,7 +8,6 @@ import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.InputConstants.*;
 
-import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 
@@ -34,7 +32,7 @@ public class PatPatKeybinding extends KeyMapping {
 	private boolean canStartBinding = true;
 
 	public PatPatKeybinding(KeybindingCombination patCombination) {
-		super("patpat.keybinding.pat", -1, PatPat.MOD_NAME);
+		super("patpat.keybinding.pat", -1, /*? if >=1.21.9 {*/ PatPatClientKeybindingManager.CATEGORY /*?} else {*//* PatPat.MOD_NAME *//*?}*/);
 		this.combination.setAttributeKey(patCombination.getAttributeKey());
 		this.combination.setKey(patCombination.getKey());
 	}
@@ -151,9 +149,9 @@ public class PatPatKeybinding extends KeyMapping {
 		List<Key> keys = this.combination.getKeys();
 		keys.forEach(key -> {
 			if (key.getType() == Type.KEYSYM) {
-				this.combination.set(key, InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), key.getValue()));
+				this.combination.set(key, InputConstants.isKeyDown(Minecraft.getInstance().getWindow()/*? if <=1.21.8 {*//*.getWindow() *//*?}*/, key.getValue()));
 			} else {
-				this.combination.set(key, GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().getWindow(), key.getValue()) == 1);
+				this.combination.set(key, GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow()/*? if <=1.21.8 {*//*.getWindow() *//*?} else {*/ .handle() /*?}*/, key.getValue()) == 1);
 			}
 		});
 		boolean allPressed = this.combination.allPressed();

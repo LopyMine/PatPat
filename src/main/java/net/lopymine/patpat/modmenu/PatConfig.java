@@ -195,7 +195,7 @@ public class PatConfig {
 								.build()
 						)
 						//? if proxlib {
-						.addElement(PatGroup.builder()
+						/*.addElement(PatGroup.builder()
 								.key("proximity_packets")
 								.addOption(BooleanOption.builder()
 										.name(ModMenuUtils.getOptionName("proximity_packets_enabled"))
@@ -232,7 +232,7 @@ public class PatConfig {
 								)
 								.build()
 						)
-						//?}
+						*///?}
 						.build()
 				)
 				.build();

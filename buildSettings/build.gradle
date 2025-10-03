@@ -4,7 +4,6 @@ plugins {
 }
 
 def mainModuleId = property("main_module_id").toString()
-def stonecutterModuleId = property("stonecutter_module_id").toString()
 def pluginMavenPackage = property("plugin_maven_package").toString()
 def pluginPackage = property("plugin_package").toString()
 def pluginClass = property("plugin_class").toString()
@@ -35,10 +34,9 @@ dependencies {
 	compileOnly "org.projectlombok:lombok:${property("lombok_version")}"
 	annotationProcessor "org.projectlombok:lombok:${property("lombok_version")}"
 
-	implementation "me.modmuss50.mod-publish-plugin:me.modmuss50.mod-publish-plugin.gradle.plugin:${property("mod_publish_plugin_version")}"
+	implementation "com.google.code.gson:gson:${property("gson_version")}"
+
 	implementation "dev.kikugie.stonecutter:dev.kikugie.stonecutter.gradle.plugin:${property("stonecutter_version")}"
-	implementation "dev.kikugie.fletching-table:dev.kikugie.fletching-table.gradle.plugin:${property("fletching_table_version")}"
-	implementation "fabric-loom:fabric-loom.gradle.plugin:${property("fabric_loom_version")}"
 }
 
 test {
@@ -49,10 +47,6 @@ gradlePlugin {
 		create(mainModuleId) {
 			id                  = "${pluginMavenPackage}.${mainModuleId}"
 			implementationClass = "${pluginPackage}.${pluginClass}"
-		}
-		create(stonecutterModuleId) {
-			id                  = "${pluginMavenPackage}.${stonecutterModuleId}"
-			implementationClass = "${pluginPackage}.${pluginClass}Stonecutter"
 		}
 	}
 }

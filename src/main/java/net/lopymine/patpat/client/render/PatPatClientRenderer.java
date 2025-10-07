@@ -15,9 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-//? <=1.21.4 {
-/*import com.mojang.blaze3d.systems.RenderSystem;
-*//*?}*/
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -39,7 +37,15 @@ import net.lopymine.patpat.extension.VertexConsumerExtension;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.jetbrains.annotations.Nullable;
+
+//? if <=1.21.4 {
+/*import com.mojang.blaze3d.systems.RenderSystem;
+ *//*?}*/
+
+//? if >1.21.8 {
 import org.joml.Quaternionf;
+/*?}*/
+
 
 @ExtensionMethod(VertexConsumerExtension.class)
 public class PatPatClientRenderer {
@@ -124,20 +130,35 @@ public class PatPatClientRenderer {
 		});
 	}
 
-	public static void renderPatOnYourself() {
+	public static void renderPatOnYourself(/*? if <1.21.9 {*//*WorldRenderContext context*//*?}*/) {
 		if (!PatPatClientConfig.getInstance().getVisualConfig().isCameraShackingEnabled()) {
 			return;
 		}
 
 		LocalPlayer player = Minecraft.getInstance().player;
+		/*? if <=1.21.8 {*/
+		/*MultiBufferSource consumers = context.consumers();
+		PoseStack matrices = context.matrixStack();
+		if (matrices == null || consumers == null) {
+			return;
+		}
+		Camera camera = context.camera();
+		*//*?} else {*/
 		Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-
+		/*?}*/
 		if (player == null || camera.isDetached()) {
 			return;
 		}
 
 		EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-		float tickDelta = Minecraft.getInstance().getDeltaTracker()./*? if >=1.21 {*/ getGameTimeDeltaPartialTick(false); /*?} else {*/ /*tickDelta(); *//*?}*/
+
+		/*? if <1.21 {*/
+		/*float tickDelta = context.tickDelta();
+		*//*?} elif <1.21.9 {*/
+		/*float tickDelta = context.tickCounter().getGameTimeDeltaPartialTick(false);
+		*//*?} else {*/
+		float tickDelta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
+		/*?}*/
 		int light = dispatcher.getPackedLightCoords(player, tickDelta);
 
 		PatEntity patEntity = PatPatClientManager.getPatEntity(player);
@@ -150,10 +171,10 @@ public class PatPatClientRenderer {
 			return;
 		}
 
-		PatPatClientRenderer.render(new PoseStack(), camera.rotation(), patEntity, player, new Vec3f(0.0F, Mth.lerp(tickDelta, camera.eyeHeightOld, camera.eyeHeight) - 0.2F, 0.0F), tickDelta, light);
+		PatPatClientRenderer.render(/*? if <=1.21.8 {*//*matrices, consumers, dispatcher*//*?} else {*/new PoseStack(), camera.rotation()/*?}*/, patEntity, player, new Vec3f(0.0F, Mth.lerp(tickDelta, camera.eyeHeightOld, camera.eyeHeight) - 0.2F, 0.0F), tickDelta, light);
 	}
 
-	public static RenderResult render(PoseStack matrices, Quaternionf cameraRotation, @Nullable PatEntity providedPatEntity, @Nullable Entity entity, @Nullable Vec3f overrideOffset, float tickDelta, int light) {
+	public static RenderResult render(PoseStack matrices, /*? if <=1.21.8 {*//*MultiBufferSource provider, EntityRenderDispatcher dispatcher*//*?} else {*/Quaternionf cameraRotation/*?}*/, @Nullable PatEntity providedPatEntity, @Nullable Entity entity, @Nullable Vec3f overrideOffset, float tickDelta, int light) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		if (!config.getMainConfig().isModEnabled()) {
 			return RenderResult.FAILED;
@@ -168,12 +189,12 @@ public class PatPatClientRenderer {
 			return RenderResult.FAILED;
 		}
 
-		int numberToMirrorTexture = /*? >=1.21 {*/1/*?} else {*/ /*-1*//*?}*/;
+		int numberToMirrorTexture = /*? if >=1.21 {*/1/*?} else {*/ /*-1*//*?}*/;
 
 		CustomAnimationSettingsConfig animation = patEntity.getAnimation();
 		FrameConfig frameConfig = animation.getFrameConfig();
 		enableBlend();
-		//? <=1.20.4 {
+		//? if <=1.20.4 {
 		/*float nameLabelHeight = entity != null ? entity.getBbHeight() : 0.0F;
 		 *///?} else {
 		net.minecraft.world.phys.Vec3 vec3d = entity != null ? entity.getAttachments().getNullable(net.minecraft.world.entity.EntityAttachment.NAME_TAG, 0, entity.getViewYRot(tickDelta)) : null;
@@ -186,7 +207,7 @@ public class PatPatClientRenderer {
 				overrideOffset != null ? overrideOffset.getY() : (nameLabelHeight * PatPatClientManager.getAnimationProgress(patEntity, tickDelta)) + 0.11F - frameConfig.offsetY() - config.getVisualConfig().getAnimationOffsets().getY(),
 				0.0F
 		);
-		matrices.mulPose(cameraRotation);
+		matrices.mulPose(/*? if <=1.21.8 {*//*dispatcher.cameraOrientation()*//*?} else {*/cameraRotation/*?}*/);
 		matrices.scale(0.85F * numberToMirrorTexture, -0.85F, 0.85F);
 
 		int frameWidth = animation.getTextureWidth() / frameConfig.totalFrames();
@@ -215,8 +236,18 @@ public class PatPatClientRenderer {
 		float v1 = 0.0F;
 		float v2 = 1.0F;
 
-		PatFeatureRenderer.getInstance().request(animation.getTexture(), matrices.last(), x1, y1, x2, y2, z, u1, v1, u2, v2, light);
+		/*? if <=1.21.8 {*/
+		/*Pose peek = matrices.last();
+		/^? if >=1.19.3 {^/org.joml.Matrix4f/^?} else {^/ /^com.mojang.math.Matrix4f^//^?}^/ matrix4f = peek.pose();
+		VertexConsumer buffer = provider.getBuffer(RenderType.entityTranslucent(animation.getTexture()));
 
+		buffer.withVertex(matrix4f, x1, y1, z).withColor(255, 255, 255, 255).withUv(u1, v1).withOverlay(OverlayTexture.NO_OVERLAY).withLight(light).withNormal(0, 1, 0).end();
+		buffer.withVertex(matrix4f, x1, y2, z).withColor(255, 255, 255, 255).withUv(u1, v2).withOverlay(OverlayTexture.NO_OVERLAY).withLight(light).withNormal(0, 1, 0).end();
+		buffer.withVertex(matrix4f, x2, y2, z).withColor(255, 255, 255, 255).withUv(u2, v2).withOverlay(OverlayTexture.NO_OVERLAY).withLight(light).withNormal(0, 1, 0).end();
+		buffer.withVertex(matrix4f, x2, y1, z).withColor(255, 255, 255, 255).withUv(u2, v1).withOverlay(OverlayTexture.NO_OVERLAY).withLight(light).withNormal(0, 1, 0).end();
+		*//*?} else {*/
+		PatFeatureRenderer.getInstance().request(animation.getTexture(), matrices.last(), x1, y1, x2, y2, z, u1, v1, u2, v2, light);
+		/*?}*/
 		matrices.popPose();
 		disableBlend();
 		if (config.getVisualConfig().isHidingNicknameEnabled()) {
@@ -246,13 +277,13 @@ public class PatPatClientRenderer {
 	}
 
 	private static void enableBlend() {
-		//? <=1.21.4 {
+		//? if <=1.21.4 {
 		/*RenderSystem.enableBlend();
 		*//*?}*/
 	}
 
 	private static void disableBlend() {
-		//? <=1.21.4 {
+		//? if <=1.21.4 {
 		/*RenderSystem.disableBlend();
 		*//*?}*/
 	}

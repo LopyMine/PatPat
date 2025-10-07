@@ -1,6 +1,7 @@
 package net.lopymine.patpat.client.keybinding;
 
 import lombok.*;
+import net.lopymine.patpat.utils.TextUtils;
 import net.minecraft.client.*;
 import net.minecraft.network.chat.*;
 import org.lwjgl.glfw.GLFW;
@@ -8,6 +9,7 @@ import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.InputConstants.*;
 
+import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 
@@ -32,7 +34,7 @@ public class PatPatKeybinding extends KeyMapping {
 	private boolean canStartBinding = true;
 
 	public PatPatKeybinding(KeybindingCombination patCombination) {
-		super("patpat.keybinding.pat", -1, /*? if >=1.21.9 {*/ PatPatClientKeybindingManager.CATEGORY /*?} else {*//* PatPat.MOD_NAME *//*?}*/);
+		super("patpat.keybinding.pat", -1, /*? if <1.21.9 {*//*PatPat.MOD_NAME*//*?} else {*/PatPatClientKeybindingManager.CATEGORY/*?}*/);
 		this.combination.setAttributeKey(patCombination.getAttributeKey());
 		this.combination.setKey(patCombination.getKey());
 	}

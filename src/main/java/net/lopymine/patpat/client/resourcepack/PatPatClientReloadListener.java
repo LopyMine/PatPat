@@ -11,6 +11,7 @@ import net.lopymine.patpat.utils.IdentifierUtils;
 
 import java.util.*;
 
+// TODO: Change deprecated interface
 public class PatPatClientReloadListener implements SimpleSynchronousResourceReloadListener {
 
 	public static void register() {

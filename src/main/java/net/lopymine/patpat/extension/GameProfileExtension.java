@@ -2,7 +2,6 @@ package net.lopymine.patpat.extension;
 
 import com.mojang.authlib.GameProfile;
 import java.util.UUID;
-import net.minecraft.server.players.NameAndId;
 
 public class GameProfileExtension {
 
@@ -24,15 +23,11 @@ public class GameProfileExtension {
 
 	//? if >=1.21.9 {
 	public static String getName(net.minecraft.server.players.NameAndId profile) {
-
 		return profile.name();
-
 	}
 
 	public static UUID getUUID(net.minecraft.server.players.NameAndId profile) {
-
 		return profile.id();
-
 	}
 	//?}
 

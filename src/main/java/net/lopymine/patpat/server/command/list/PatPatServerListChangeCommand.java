@@ -15,7 +15,10 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import java.util.*;
+
+/*? if >=1.21.9 {*/
 import net.minecraft.server.players.NameAndId;
+/*?}*/
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;

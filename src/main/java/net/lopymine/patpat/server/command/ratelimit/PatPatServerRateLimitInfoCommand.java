@@ -22,7 +22,9 @@ import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.HoverEvent.Action;
 
 import java.util.Collection;
+/*? if >=1.21.9 {*/
 import net.minecraft.server.players.NameAndId;
+/*?}*/
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -107,11 +109,11 @@ public class PatPatServerRateLimitInfoCommand {
 			sendInfo(context, profile, arg);
 		});
 		*///?}
-		// todo add permissions api for >=1.21.9 when it will be updated to 1.21.9
+		// TODO: add permissions api for >=1.21.9 when it will be updated to 1.21.9
 		return Command.SINGLE_SUCCESS;
 	}
 
-	private static void sendInfo(CommandContext<CommandSourceStack> context, NameAndId profile, Object tokens) {
+	private static void sendInfo(CommandContext<CommandSourceStack> context, /*? if >=1.21.9 {*/NameAndId/*?} else {*//*GameProfile*//*?}*/ profile, Object tokens) {
 		Component text = CommandText.goldenArgs("ratelimit.info.player", profile.getName()).finish();
 		context.sendMsg(text);
 		Component text2 = CommandText.goldenArgs("ratelimit.info.tokens", tokens).finish();

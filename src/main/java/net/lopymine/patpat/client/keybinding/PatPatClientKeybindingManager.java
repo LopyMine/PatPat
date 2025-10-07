@@ -1,14 +1,16 @@
 package net.lopymine.patpat.client.keybinding;
 
 import lombok.Getter;
-import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.utils.IdentifierUtils;
 import net.minecraft.client.KeyMapping;
 
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
+//? if >=1.21.9 {
+import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.utils.IdentifierUtils;
+//?}
 
 public class PatPatClientKeybindingManager {
 

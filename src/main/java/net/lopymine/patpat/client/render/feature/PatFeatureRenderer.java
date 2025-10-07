@@ -1,5 +1,5 @@
 package net.lopymine.patpat.client.render.feature;
-
+//? if >=1.21.9 {
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import java.util.*;
@@ -28,7 +28,7 @@ public class PatFeatureRenderer {
 		for (PatFeatureRequest request : this.requests) {
 			VertexConsumer buffer = source.getBuffer(RenderType.entityTranslucent(request.texture()));
 
-			/*? >=1.19.3 {*/ org.joml.Matrix4f /*?} else {*/ /*com.mojang.math.Matrix4f*//*?}*/ matrix = request.poseStack().pose();
+			/*? if >=1.19.3 {*/ org.joml.Matrix4f /*?} else {*/ /*com.mojang.math.Matrix4f*//*?}*/ matrix = request.poseStack().pose();
 			buffer.withVertex(matrix, request.x1(), request.y1(), request.z()).withColor(255, 255, 255, 255).withUv(request.u1(), request.v1()).withOverlay(OverlayTexture.NO_OVERLAY).withLight(request.light()).withNormal(0, 1, 0).end();
 			buffer.withVertex(matrix, request.x1(), request.y2(), request.z()).withColor(255, 255, 255, 255).withUv(request.u1(), request.v2()).withOverlay(OverlayTexture.NO_OVERLAY).withLight(request.light()).withNormal(0, 1, 0).end();
 			buffer.withVertex(matrix, request.x2(), request.y2(), request.z()).withColor(255, 255, 255, 255).withUv(request.u2(), request.v2()).withOverlay(OverlayTexture.NO_OVERLAY).withLight(request.light()).withNormal(0, 1, 0).end();
@@ -57,3 +57,4 @@ public class PatFeatureRenderer {
 	}
 
 }
+//?}

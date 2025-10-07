@@ -9,11 +9,11 @@
 	"client": [
 		"EntityRendererMixin",
 		"LivingEntityRendererMixin",
-		/*? =1.16.5*/
+		/*? if =1.16.5*/
 		/*"TitleScreenMixin",*/
-		/*? >=1.21.2*/
+		/*? if >=1.21.2*/
 		"EntityRenderStateMixin",
-		/*? <1.19.3*/
+		/*? if <1.19.3*/
 		/*"ScreenMixin",*/
 		"MinecraftClientMixin",
 		"CameraMixin",
@@ -27,8 +27,10 @@
 		"EnderDragonRendererMixin",
 		"ModMenuMixin",
 		"MultiPlayerGameModeMixin",
+		/*? if >=1.21.9 {*/
 		"LevelRendererMixin",
 		"FeatureRenderDispatcherMixin"
+		/*?}*/
 	],
 	"injectors": {
 		"defaultRequire": 1

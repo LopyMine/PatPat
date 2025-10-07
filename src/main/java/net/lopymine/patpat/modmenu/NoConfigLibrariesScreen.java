@@ -4,7 +4,6 @@ import net.minecraft.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.*;
 
 import net.lopymine.patpat.client.PatPatClient;
@@ -13,6 +12,9 @@ import net.lopymine.patpat.*;
 
 import java.net.*;
 import java.util.*;
+/*? if >=1.21.9 {*/
+import net.minecraft.client.input.KeyEvent;
+/*?}*/
 
 public class NoConfigLibrariesScreen {
 

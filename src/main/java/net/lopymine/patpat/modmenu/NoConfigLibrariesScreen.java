@@ -13,8 +13,8 @@ import net.lopymine.patpat.*;
 import java.net.*;
 import java.util.*;
 /*? if >=1.21.9 {*/
-/*import net.minecraft.client.input.KeyEvent;
-*//*?}*/
+import net.minecraft.client.input.KeyEvent;
+/*?}*/
 
 public class NoConfigLibrariesScreen {
 
@@ -36,7 +36,7 @@ public class NoConfigLibrariesScreen {
 		return new ConfirmScreen(NoConfigLibrariesScreen::onConfirm, NoConfigLibrariesScreen.TITLE, NoConfigLibrariesScreen.MESSAGE, NoConfigLibrariesScreen.OPEN_YACL_PAGE, NoConfigLibrariesScreen.OPEN_CLOTH_CONFIG_PAGE) {
 			//? if >=1.21.9 {
 
-			/*@Override
+			@Override
 			public boolean keyPressed(KeyEvent keyEvent) {
 				if (keyEvent.key() == 256 && this.shouldCloseOnEsc()) {
 					Minecraft.getInstance().setScreen(parent);
@@ -45,8 +45,8 @@ public class NoConfigLibrariesScreen {
 				return super.keyPressed(keyEvent);
 			}
 
-			*///?} else {
-			@Override
+			//?} else {
+			/*@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 				if (keyCode == 256 && this.shouldCloseOnEsc()) {
 					Minecraft.getInstance().setScreen(parent);
@@ -54,7 +54,7 @@ public class NoConfigLibrariesScreen {
 				}
 				return super.keyPressed(keyCode, scanCode, modifiers);
 			}
-			//?}
+			*///?}
 
 			@Override
 			public boolean shouldCloseOnEsc() {

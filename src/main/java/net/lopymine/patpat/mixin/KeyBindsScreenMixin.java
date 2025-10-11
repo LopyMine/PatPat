@@ -24,9 +24,9 @@ public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 	//?}
 
 	@Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
-	private void handlePatPatKeybindingOnKeyPressed(/*? if >=1.21.9 {*//*net.minecraft.client.input.KeyEvent event, *//*?} else {*/ int keyCode, int scanCode, int modifiers, /*?}*/ CallbackInfoReturnable<Boolean> cir) {
+	private void handlePatPatKeybindingOnKeyPressed(/*? if >=1.21.9 {*/net.minecraft.client.input.KeyEvent event, /*?} else {*/ /*int keyCode, int scanCode, int modifiers, *//*?}*/ CallbackInfoReturnable<Boolean> cir) {
 		if (this.selectedKey instanceof PatPatKeybinding keybinding) {
-			boolean bl = keybinding.addBindingKey(InputConstants.getKey(/*? if >=1.21.9 {*//*event*//*?} else {*/  keyCode, scanCode  /*?}*/));
+			boolean bl = keybinding.addBindingKey(InputConstants.getKey(/*? if >=1.21.9 {*/event/*?} else {*/  /*keyCode, scanCode  *//*?}*/));
 			if (bl) {
 				keybinding.sendBindingKeys();
 				this.selectedKey = null;
@@ -39,9 +39,9 @@ public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 	}
 
 	@Inject(at = @At("HEAD"), method = "mouseClicked", cancellable = true)
-	private void handlePatPatKeybindingOnMouseClick(/*? if >=1.21.9 {*//*net.minecraft.client.input.MouseButtonEvent event, boolean b, *//*?} else {*/ double mouseX, double mouseY, int button, /*?}*/ CallbackInfoReturnable<Boolean> cir) {
+	private void handlePatPatKeybindingOnMouseClick(/*? if >=1.21.9 {*/net.minecraft.client.input.MouseButtonEvent event, boolean b, /*?} else {*/ /*double mouseX, double mouseY, int button, *//*?}*/ CallbackInfoReturnable<Boolean> cir) {
 		if (this.selectedKey instanceof PatPatKeybinding keybinding) {
-			boolean bl = keybinding.addBindingKey(InputConstants.Type.MOUSE.getOrCreate(/*? if >=1.21.9 {*/ /*event.button() *//*?} else {*/ button /*?}*/));
+			boolean bl = keybinding.addBindingKey(InputConstants.Type.MOUSE.getOrCreate(/*? if >=1.21.9 {*/ event.button() /*?} else {*/ /*button *//*?}*/));
 			if (bl) {
 				keybinding.sendBindingKeys();
 				this.selectedKey = null;

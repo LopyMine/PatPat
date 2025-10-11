@@ -4,14 +4,14 @@ import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import java.util.*;
 import lombok.experimental.ExtensionMethod;
-import net.lopymine.patpat.extension.VertexConsumerExtension;
+import net.lopymine.patpat.extension.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
-@ExtensionMethod(VertexConsumerExtension.class)
+@ExtensionMethod(value = {VertexConsumerExtension.class, PoseExtension.class})
 public class PatFeatureRenderer {
 
 	private final List<PatFeatureRequest> requests = new ArrayList<>();

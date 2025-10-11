@@ -7,3 +7,5 @@ accessible field net/minecraft/client/Camera eyeHeight F
 accessible field net/minecraft/client/gui/components/Button onTooltip Lnet/minecraft/client/gui/components/Button$OnTooltip;
 mutable field net/minecraft/client/gui/components/Button onTooltip Lnet/minecraft/client/gui/components/Button$OnTooltip;
 accessible field net/minecraft/client/gui/screens/controls/ControlList controlsScreen Lnet/minecraft/client/gui/screens/controls/ControlsScreen;
+
+accessible method com/mojang/blaze3d/vertex/PoseStack$Pose <init> (Lcom/mojang/math/Matrix4f;Lcom/mojang/math/Matrix3f;)V

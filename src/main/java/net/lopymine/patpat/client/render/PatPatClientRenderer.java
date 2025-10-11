@@ -31,15 +31,19 @@ import net.lopymine.patpat.extension.VertexConsumerExtension;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.jetbrains.annotations.Nullable;
+//? if <=1.19.2 {
+/*import com.mojang.math.Quaternion;
+*///?} else {
 import org.joml.Quaternionf;
+//?}
 
 //? if <=1.21.4 {
 /*import com.mojang.blaze3d.systems.RenderSystem;
  *//*?}*/
 
 //? if <=1.21.8 {
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-/*?}*/
+/*import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+*//*?}*/
 
 
 @ExtensionMethod(VertexConsumerExtension.class)
@@ -72,11 +76,11 @@ public class PatPatClientRenderer {
 
 	public static void register() {
 		//? if <=1.21.8 {
-		WorldRenderEvents.AFTER_ENTITIES.register((__) -> {
+		/*WorldRenderEvents.AFTER_ENTITIES.register((__) -> {
 			PatPatClientRenderer.renderPatOnYourself();
 			PatFeatureRenderer.getInstance().render();
 		});
-		//?}
+		*///?}
 		ClientTickEvents.END_WORLD_TICK.register(client -> {
 			boolean frozen = /*? if >1.20.2 {*/ client.tickRateManager().isFrozen(); /*?} else {*/ /*false; *//*?}*/
 			PatPatClientConfig config = PatPatClientConfig.getInstance();
@@ -151,8 +155,10 @@ public class PatPatClientRenderer {
 		EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
 		//? if >=1.21.2 {
 		float tickDelta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
-		//?} else {
+		//?} elif >=1.21 {
 		/*float tickDelta = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
+		*///?} else {
+		/*float tickDelta = Minecraft.getInstance().getFrameTime();
 		*///?}
 		int light = dispatcher.getPackedLightCoords(player, tickDelta);
 
@@ -169,7 +175,7 @@ public class PatPatClientRenderer {
 		PatPatClientRenderer.render(new PoseStack(), camera.rotation(), patEntity, player, new Vec3f(0.0F, Mth.lerp(tickDelta, camera.eyeHeightOld, camera.eyeHeight) - 0.2F, 0.0F), tickDelta, light);
 	}
 
-	public static RenderResult render(PoseStack matrices, Quaternionf cameraRotation, @Nullable PatEntity providedPatEntity, @Nullable Entity entity, @Nullable Vec3f overrideOffset, float tickDelta, int light) {
+	public static RenderResult render(PoseStack matrices, /*? if >=1.19.3 {*/ Quaternionf /*?} else {*/ /*Quaternion *//*?}*/ cameraRotation, @Nullable PatEntity providedPatEntity, @Nullable Entity entity, @Nullable Vec3f overrideOffset, float tickDelta, int light) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		if (!config.getMainConfig().isModEnabled()) {
 			return RenderResult.FAILED;

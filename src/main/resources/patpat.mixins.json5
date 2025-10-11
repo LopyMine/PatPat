@@ -28,9 +28,9 @@
 		"ModMenuMixin",
 		"MultiPlayerGameModeMixin",
 		/*? if >=1.21.9 {*/
-		/*"LevelRendererMixin",
+		"LevelRendererMixin",
 		"FeatureRenderDispatcherMixin"
-		*//*?}*/
+		/*?}*/
 	],
 	"injectors": {
 		"defaultRequire": 1

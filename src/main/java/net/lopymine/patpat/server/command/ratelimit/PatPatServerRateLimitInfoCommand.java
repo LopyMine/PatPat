@@ -23,8 +23,8 @@ import net.minecraft.network.chat.HoverEvent.Action;
 
 import java.util.Collection;
 /*? if >=1.21.9 {*/
-import net.minecraft.server.players.NameAndId;
-/*?}*/
+/*import net.minecraft.server.players.NameAndId;
+*//*?}*/
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -75,10 +75,10 @@ public class PatPatServerRateLimitInfoCommand {
 
 	public static int infoWithUser(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		//? if >=1.21.9 {
-		Collection<net.minecraft.server.players.NameAndId> profiles = GameProfileArgument.getGameProfiles(context, "profile");
-		//?} else {
-		/*Collection<GameProfile> profiles = GameProfileArgument.getGameProfiles(context, "profile");
-		*///?}
+		/*Collection<net.minecraft.server.players.NameAndId> profiles = GameProfileArgument.getGameProfiles(context, "profile");
+		*///?} else {
+		Collection<GameProfile> profiles = GameProfileArgument.getGameProfiles(context, "profile");
+		//?}
 		if (profiles.size() != 1) {
 			Component text = CommandText.text("error.only_one_player").finish();
 			context.sendMsg(text);
@@ -86,10 +86,10 @@ public class PatPatServerRateLimitInfoCommand {
 
 		PatPatServerRateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
 		//? if >=1.21.9 {
-		net.minecraft.server.players.NameAndId profile = profiles.iterator().next();
-		//?} else {
-		/*GameProfile profile = profiles.iterator().next();
-		*///?}
+		/*net.minecraft.server.players.NameAndId profile = profiles.iterator().next();
+		*///?} else {
+		GameProfile profile = profiles.iterator().next();
+		//?}
 		if (!context.getSource().getOnlinePlayerNames().contains(profile.getName())) {
 			Component text = CommandText.goldenArgs("error.player_not_exist", profile.getName()).finish();
 			context.sendMsg(text);
@@ -98,9 +98,9 @@ public class PatPatServerRateLimitInfoCommand {
 
 		int availablePats = PatPatServerRateLimitManager.getAvailablePats(profile.getUUID());
 		//? if >=1.21.9 {
-		sendInfo(context, profile, availablePats);
-		//?} else {
-		/*profile.hasPermission(config.getPermissionBypass(), context).thenAcceptAsync(result -> {
+		/*sendInfo(context, profile, availablePats);
+		*///?} else {
+		profile.hasPermission(config.getPermissionBypass(), context).thenAcceptAsync(result -> {
 			Object arg = result ?
 					CommandText.text("ratelimit.info.tokens.bypass").finish().withStyle(ChatFormatting.GOLD)
 					:
@@ -108,12 +108,12 @@ public class PatPatServerRateLimitInfoCommand {
 
 			sendInfo(context, profile, arg);
 		});
-		*///?}
+		//?}
 		// TODO: add permissions api for >=1.21.9 when it will be updated to 1.21.9
 		return Command.SINGLE_SUCCESS;
 	}
 
-	private static void sendInfo(CommandContext<CommandSourceStack> context, /*? if >=1.21.9 {*/NameAndId/*?} else {*//*GameProfile*//*?}*/ profile, Object tokens) {
+	private static void sendInfo(CommandContext<CommandSourceStack> context, /*? if >=1.21.9 {*//*NameAndId*//*?} else {*/GameProfile/*?}*/ profile, Object tokens) {
 		Component text = CommandText.goldenArgs("ratelimit.info.player", profile.getName()).finish();
 		context.sendMsg(text);
 		Component text2 = CommandText.goldenArgs("ratelimit.info.tokens", tokens).finish();

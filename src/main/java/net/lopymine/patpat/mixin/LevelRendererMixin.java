@@ -2,7 +2,7 @@ package net.lopymine.patpat.mixin;
 
 //? if >=1.21.9 {
 
-import net.lopymine.patpat.client.render.PatPatClientRenderer;
+/*import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
@@ -18,4 +18,4 @@ public class LevelRendererMixin {
 	}
 
 }
-//?}
+*///?}

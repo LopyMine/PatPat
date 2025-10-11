@@ -3,7 +3,7 @@
 	"package": "net.lopymine.patpat.mixin",
 	"refmap": "${mod_id}.refmap.json",
 	"compatibilityLevel": "JAVA_${java}",
-	"plugin": "net.lopymine.patpat.mixin.PatPatMixinConfigPlugin",
+	"plugin": "net.lopymine.patpat.compat.PatPatMixinConfigPlugin",
 	"mixins": [
 	],
 	"client": [
@@ -28,9 +28,9 @@
 		"ModMenuMixin",
 		"MultiPlayerGameModeMixin",
 		/*? if >=1.21.9 {*/
-		"LevelRendererMixin",
+		/*"LevelRendererMixin",
 		"FeatureRenderDispatcherMixin"
-		/*?}*/
+		*//*?}*/
 	],
 	"injectors": {
 		"defaultRequire": 1

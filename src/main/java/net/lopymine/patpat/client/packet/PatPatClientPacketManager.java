@@ -15,7 +15,7 @@ import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
-import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
+import net.lopymine.patpat.client.render.PatPatClientRenderer.PatPacket;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.compat.flashback.FlashbackManager;
 import net.lopymine.patpat.compat.replaymod.ReplayModManager;
@@ -122,7 +122,7 @@ public class PatPatClientPacketManager {
 			LOGGER.debug("Packet declined, because option 'Pat Me' is disabled");
 			return;
 		}
-		PacketPat patPacket = new PacketPat(pattedLivingEntity, PlayerConfig.of(whoPattedEntity.getName().getString(), whoPattedUuid), player, replayModPacket);
+		PatPacket patPacket = new PatPacket(pattedLivingEntity, PlayerConfig.of(whoPattedEntity.getName().getString(), whoPattedUuid), player, replayModPacket);
 		PatPatClientRenderer.registerServerPacket(patPacket);
 		LOGGER.debug("Packet handled! Packet Data: {}", patPacket.toString());
 	}
@@ -140,7 +140,7 @@ public class PatPatClientPacketManager {
 				/*? >=1.17 {*/ || socialManager.shouldHideMessageFrom(playerUuid)/*?}*/;
 	}
 
-	public static PatPacket<ServerLevel, ?> getPatPacket(Entity pattedEntity) {
+	public static net.lopymine.patpat.packet.PatPacket<ServerLevel, ?> getPatPacket(Entity pattedEntity) {
 		if (PatPatClientPacketManager.getCurrentPatPatServerPacketVersion().isGreaterOrEqualThan(Version.PACKET_V2_VERSION)) {
 			LOGGER.debug("Getting pat packet... Using V2 version");
 			return new PatEntityC2SPacketV2(pattedEntity);

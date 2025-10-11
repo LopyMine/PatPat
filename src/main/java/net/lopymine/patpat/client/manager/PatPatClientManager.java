@@ -3,6 +3,7 @@ package net.lopymine.patpat.client.manager;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.ExtensionMethod;
+import net.fabricmc.loader.api.FabricLoader;
 import net.lopymine.patpat.extension.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -21,7 +22,7 @@ import net.lopymine.patpat.client.config.resourcepack.CustomAnimationSettingsCon
 import net.lopymine.patpat.client.config.resourcepack.PlayerConfig;
 import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
-import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
+import net.lopymine.patpat.client.render.PatPatClientRenderer.PatPacket;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.utils.ProfilerUtils;
 import net.lopymine.patpat.utils.VersionedThings;
@@ -138,10 +139,7 @@ public class PatPatClientManager {
 			return;
 		}
 
-		GameProfile profile = /*? if >=1.20.2 {*/ minecraft.getGameProfile(); /*?} else {*/ /*minecraft.getUser().getGameProfile(); *//*?}*/
-
-		PlayerConfig whoPatted = PlayerConfig.of(profile.getName(), profile.getUUID());
-		PatPatClientRenderer.registerClientPacket(new PacketPat(pattedEntity, whoPatted, player, false));
+		PatPatClientRenderer.registerClientPacket(new PatPacket(pattedEntity, PlayerConfig.currentSession(), player, false));
 
 		PatPatClientManager.patCooldown = 4;
 	}

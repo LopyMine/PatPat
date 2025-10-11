@@ -1,5 +1,5 @@
 package net.lopymine.patpat.client.render.feature;
-//? if >=1.21.9 {
+
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import java.util.*;
@@ -57,4 +57,3 @@ public class PatFeatureRenderer {
 	}
 
 }
-//?}

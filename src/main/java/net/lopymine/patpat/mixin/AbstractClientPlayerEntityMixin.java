@@ -7,14 +7,14 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 
 //? if >=1.21.9 {
-import com.llamalad7.mixinextras.injector.wrapoperation.*;
+/*import com.llamalad7.mixinextras.injector.wrapoperation.*;
 import net.minecraft.world.entity.player.PlayerSkin;
 import net.minecraft.core.ClientAsset;
 import net.minecraft.core.ClientAsset.*;
-//?} elif >1.20.1 {
-/*import com.llamalad7.mixinextras.injector.wrapoperation.*;
+*///?} elif >1.20.1 {
+import com.llamalad7.mixinextras.injector.wrapoperation.*;
 import net.minecraft.client.resources.PlayerSkin;
-*///?} else {
+//?} else {
 /*import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.jetbrains.annotations.Nullable;
 *///?}
@@ -29,7 +29,7 @@ public abstract class AbstractClientPlayerEntityMixin {
 	private static final ResourceLocation PATPAT_CAPE_ID = IdentifierUtils.modId("textures/cape/patpat_cape_hand.png");
 
 	//? if >=1.21.9 {
-	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerInfo;getSkin()Lnet/minecraft/world/entity/player/PlayerSkin;"), method = "getSkin")
+	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerInfo;getSkin()Lnet/minecraft/world/entity/player/PlayerSkin;"), method = "getSkin")
 	private PlayerSkin customCape(PlayerInfo instance, Operation<PlayerSkin> original) {
 		PlayerSkin call = original.call(instance);
 		ClientAsset.Texture capeTexture = call.cape();
@@ -38,8 +38,8 @@ public abstract class AbstractClientPlayerEntityMixin {
 		}
 		return new PlayerSkin(call.body(), new ResourceTexture(PATPAT_CAPE_ID, PATPAT_CAPE_ID), call.elytra(), call.model(), call.secure());
 	}
-	//?} elif >1.20.1 {
-	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerInfo;getSkin()Lnet/minecraft/client/resources/PlayerSkin;"), method = "getSkin")
+	*///?} elif >1.20.1 {
+	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerInfo;getSkin()Lnet/minecraft/client/resources/PlayerSkin;"), method = "getSkin")
 	private PlayerSkin customCape(PlayerInfo instance, Operation<PlayerSkin> original) {
 		PlayerSkin call = original.call(instance);
 		ResourceLocation capeTexture = call.capeTexture();
@@ -48,7 +48,7 @@ public abstract class AbstractClientPlayerEntityMixin {
 		}
 		return new PlayerSkin(call.texture(), call.textureUrl(), PATPAT_CAPE_ID, call.elytraTexture(), call.model(), call.secure());
 	}
-	*///?} else {
+	//?} else {
 
 
 	/*@Shadow @Nullable protected abstract PlayerInfo getPlayerInfo();

@@ -1,4 +1,4 @@
-package net.lopymine.patpat.mixin;
+package net.lopymine.patpat.compat;
 
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;

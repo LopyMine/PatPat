@@ -1,6 +1,7 @@
 package net.lopymine.patpat.client.render;
 
 import lombok.experimental.ExtensionMethod;
+import net.fabricmc.loader.api.FabricLoader;
 import net.lopymine.patpat.client.config.sub.PatPatClientVisualConfig;
 import net.lopymine.patpat.client.render.feature.*;
 import net.minecraft.client.Camera;
@@ -129,7 +130,7 @@ public class PatPatClientRenderer {
 			}
 
 			LocalPlayer player = Minecraft.getInstance().player;
-			if (!empty && player != null) {
+			if (!empty && player != null && FabricLoader.getInstance().isDevelopmentEnvironment()) {
 				PatPatClientManager.pat(player, PlayerConfig.currentSession());
 				ReplayModCompat.onPat(player.getId(), player.getId());
 				FlashbackCompat.onPat(player.getId(), player.getId());

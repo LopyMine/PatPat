@@ -58,7 +58,13 @@ public class PlayerInfoArgumentType implements ArgumentType<PlayerInfo> {
 					PatPatClientCommandManager.LOGGER.debug("Found PlayerInfo by nickname from PlayerInfoArgumentType, parsed: {}", playerInfo);
 					return playerInfo;
 				} else {
-					UUID uuid = UUID.fromString(s);
+					UUID uuid;
+					try {
+						uuid = UUID.fromString(s);
+					} catch (Exception e) {
+						PatPatClient.LOGGER.debug("Issue occurred after parsing player uuid from string \"{}\":", s, e);
+						continue;
+					}
 					if (profile.getUUID().equals(uuid)) {
 						PlayerInfo playerInfo = new PlayerInfo(profile.getName(), uuid);
 						PatPatClientCommandManager.LOGGER.debug("Found PlayerInfo by uuid from PlayerInfoArgumentType, parsed: {}", playerInfo);

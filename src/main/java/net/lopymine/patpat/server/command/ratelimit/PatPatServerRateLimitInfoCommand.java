@@ -75,9 +75,9 @@ public class PatPatServerRateLimitInfoCommand {
 
 	public static int infoWithUser(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		//? if >=1.21.9 {
-		Collection<net.minecraft.server.players.NameAndId> profiles = GameProfileArgument.getGameProfiles(context, "profile");
+		Collection<net.minecraft.server.players.NameAndId> profiles = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
 		//?} else {
-		/*Collection<GameProfile> profiles = GameProfileArgument.getGameProfiles(context, "profile");
+		/*Collection<GameProfile> profiles = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
 		*///?}
 		if (profiles.size() != 1) {
 			Component text = CommandText.text("error.only_one_player").finish();
@@ -97,10 +97,7 @@ public class PatPatServerRateLimitInfoCommand {
 		}
 
 		int availablePats = PatPatServerRateLimitManager.getAvailablePats(profile.getUUID());
-		//? if >=1.21.9 {
-		sendInfo(context, profile, availablePats);
-		//?} else {
-		/*profile.hasPermission(config.getPermissionBypass(), context).thenAcceptAsync(result -> {
+		profile.hasPermission(config.getPermissionBypass(), context).thenAcceptAsync(result -> {
 			Object arg = result ?
 					CommandText.text("ratelimit.info.tokens.bypass").finish().withStyle(ChatFormatting.GOLD)
 					:
@@ -108,8 +105,6 @@ public class PatPatServerRateLimitInfoCommand {
 
 			sendInfo(context, profile, arg);
 		});
-		*///?}
-		// TODO: add permissions api for >=1.21.9 when it will be updated to 1.21.9
 		return Command.SINGLE_SUCCESS;
 	}
 

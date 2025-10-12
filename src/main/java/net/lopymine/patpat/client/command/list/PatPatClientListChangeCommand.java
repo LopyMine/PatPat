@@ -51,7 +51,7 @@ public class PatPatClientListChangeCommand {
 		UUID uuid = playerInfo.uuid();
 		String name = playerInfo.nickname();
 
-		PatPatCommonListChangeCommand.changeList(add, map, uuid, name, (component) -> context.sendMsg(component));
+		PatPatCommonListChangeCommand.changeList(add, map, uuid, name, component -> context.sendMsg(component));
 
 		config.saveAsync();
 		return Command.SINGLE_SUCCESS;

@@ -164,7 +164,7 @@ public class MossyPlugin implements Plugin<Project> {
 
 		String[] versions = getProperty(currentProject, "versions_specifications").split(" ");
 		for (String version : versions) {
-			String[] split = version.substring(0, version.length()-1).split("\\[");
+			String[] split = (substringBeforeLast(version, ".") + ".").split("\\[");
 			String project = split[0];
 			if (Objects.equals(project, currentMCVersion)) {
 				String supportedVersionsString = split[1];

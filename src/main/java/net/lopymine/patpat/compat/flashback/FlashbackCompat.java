@@ -32,7 +32,7 @@ public class FlashbackCompat {
 			^///?}
 			recorder.writePacketAsync(
 					packet,
-					/^? >1.20.4 {^//^ConnectionProtocol.PLAY^//^?} else {^/NetworkState.PLAY/^?}^/
+					/^? >1.20.4 {^/ConnectionProtocol.PLAY/^?} else {^//^NetworkState.PLAY^//^?}^/
 			);
 			PatPatClientPacketManager.LOGGER.debug("Saved packet to Flashback");
 		}

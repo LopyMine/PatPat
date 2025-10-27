@@ -34,13 +34,12 @@ public class PatPatKeybinding extends KeyMapping {
 	private boolean canStartBinding = true;
 
 	public PatPatKeybinding(KeybindingCombination patCombination) {
-		super("patpat.keybinding.pat", -1, PatPat.MOD_NAME);
+		super("patpat.keybinding.pat", -1, /*? if <1.21.9 {*//*PatPat.MOD_NAME + "." + PatPat.MOD_NAME*//*?} else {*/PatPatClientKeybindingManager.CATEGORY/*?}*/);
 		this.combination.setAttributeKey(patCombination.getAttributeKey());
 		this.combination.setKey(patCombination.getKey());
 	}
 
 	public void startBinding() {
-		//this.refreshPressedState();
 		this.combination.setAttributeKey(null);
 		this.combination.setKey(null);
 		this.binding         = true;
@@ -151,9 +150,9 @@ public class PatPatKeybinding extends KeyMapping {
 		List<Key> keys = this.combination.getKeys();
 		keys.forEach(key -> {
 			if (key.getType() == Type.KEYSYM) {
-				this.combination.set(key, InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), key.getValue()));
+				this.combination.set(key, InputConstants.isKeyDown(Minecraft.getInstance().getWindow()/*? if <=1.21.8 {*//*.getWindow() *//*?}*/, key.getValue()));
 			} else {
-				this.combination.set(key, GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().getWindow(), key.getValue()) == 1);
+				this.combination.set(key, GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow()/*? if <=1.21.8 {*//*.getWindow() *//*?} else {*/ .handle() /*?}*/, key.getValue()) == 1);
 			}
 		});
 		boolean allPressed = this.combination.allPressed();

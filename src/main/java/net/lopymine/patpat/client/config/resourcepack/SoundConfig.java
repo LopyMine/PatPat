@@ -16,10 +16,28 @@ public class SoundConfig {
 
 	public static final Codec<SoundConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.STRING.xmap(SoundUtils::getSoundEvent, SoundUtils::getLocation).fieldOf("id").forGetter(SoundConfig::getSound),
-			Codec.FLOAT.optionalFieldOf("minPitch", 1.0F).forGetter(SoundConfig::getMinPitch),
-			Codec.FLOAT.optionalFieldOf("maxPitch", 1.0F).forGetter(SoundConfig::getMaxPitch),
+			Codec.FLOAT.optionalFieldOf("min_pitch", -1.0F).forGetter(SoundConfig::getMinPitch),
+			Codec.FLOAT.optionalFieldOf("max_pitch", -1.0F).forGetter(SoundConfig::getMaxPitch),
+			Codec.FLOAT.optionalFieldOf("minPitch", -1.0F).forGetter(SoundConfig::getMinPitch),
+			Codec.FLOAT.optionalFieldOf("maxPitch", -1.0F).forGetter(SoundConfig::getMaxPitch),
 			Codec.FLOAT.optionalFieldOf("volume", 1.0F).forGetter(SoundConfig::getVolume)
-	).apply(instance, SoundConfig::new));
+	).apply(instance, (event, minPitch, maxPitch, minPitchTwo, maxPitchTwo, volume) -> {
+		float minP = minPitch == -1.0F ?
+				minPitchTwo == -1.0F ?
+						1.0F
+						:
+						minPitchTwo
+				:
+				minPitch;
+		float maxP = maxPitch == -1.0F ?
+				maxPitchTwo == -1.0F ?
+						1.0F
+						:
+						maxPitchTwo
+				:
+				maxPitch;
+		return new SoundConfig(event, minP, maxP, volume);
+	}));
 
 	public static final Codec<SoundConfig> STRINGED_CODEC = Codec.either(SoundConfig.CODEC, Codec.STRING).xmap(either -> {
 		if (either.left().isPresent()) {

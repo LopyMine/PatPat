@@ -1,25 +1,28 @@
 package net.lopymine.patpat.utils;
 
-import net.lopymine.patpat.PatTranslation;
-import net.lopymine.patpat.modmenu.yacl.custom.utils.SimpleContent;
-
+import lombok.experimental.UtilityClass;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+
+import net.lopymine.patpat.PatTranslation;
+
 import java.util.function.Function;
 
+@UtilityClass
 public class ModMenuUtils {
 
 	public static String getOptionKey(String optionId) {
-		return String.format("modmenu.option.%s", optionId);
+		return "modmenu.option." + optionId;
 	}
 
 	public static String getCategoryKey(String categoryId) {
-		return String.format("modmenu.category.%s", categoryId);
+		return "modmenu.category." + categoryId;
 	}
 
 	public static String getGroupKey(String groupId) {
-		return String.format("modmenu.group.%s", groupId);
+		return "modmenu.group." + groupId;
 	}
 
 	public static MutableComponent getName(String key) {
@@ -28,6 +31,10 @@ public class ModMenuUtils {
 
 	public static MutableComponent getDescription(String key) {
 		return PatTranslation.text(key + ".description");
+	}
+
+	public static MutableComponent getCustom(String key, String custom) {
+		return PatTranslation.text(key + "." + custom);
 	}
 
 	public static MutableComponent getWarn(String key) {
@@ -57,8 +64,8 @@ public class ModMenuUtils {
 		return PatTranslation.text("modmenu.title");
 	}
 
-	public static ResourceLocation getContentId(SimpleContent content, String contentId) {
-		return IdentifierUtils.modId(String.format("textures/config/%s.%s", contentId, content.getFileExtension()));
+	public static ResourceLocation getContentId(String filename) {
+		return IdentifierUtils.modId("textures/config/" + filename);
 	}
 
 	public static Function<Boolean, Component> getEnabledOrDisabledFormatter() {

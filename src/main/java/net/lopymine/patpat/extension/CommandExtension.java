@@ -28,7 +28,7 @@ public class CommandExtension {
 	}
 
 	public static void sendMsg(CommandContext<CommandSourceStack> source, Component text, boolean broadcastToOps) {
-		source.getSource().sendSuccess(/*? >=1.20 {*/() -> /*?}*/ PatPatServerCommandManager.PATPAT_ID.copy().append(text), broadcastToOps);
+		source.getSource().sendSuccess(/*? if >=1.20 {*/() -> /*?}*/ PatPatServerCommandManager.PATPAT_ID.copy().append(text), broadcastToOps);
 	}
 
 	public static boolean hasPatPatPermission(CommandSourceStack context, String permission) {
@@ -44,7 +44,7 @@ public class CommandExtension {
 	}
 
 	public static boolean hasPermission(CommandSourceStack context, String permission, int defaultLevel) {
-		//? <1.17.1 {
+		//? if <1.17.1 {
 		/*return context./^? if >=1.17.1 {^/hasPermissionLevel/^?} else {^//^hasPermission^//^?}^/(defaultLevel);
 		 *///?} else {
 		return Permissions.check(context, permission, defaultLevel);

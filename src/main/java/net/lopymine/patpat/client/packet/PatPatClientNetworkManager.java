@@ -1,7 +1,7 @@
 package net.lopymine.patpat.client.packet;
 
-/*? if <1.19.4 {*//*
-import net.minecraft.network.FriendlyByteBuf;
+/*? if <1.19.4 {*/
+/*import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 *//*?}*/
 

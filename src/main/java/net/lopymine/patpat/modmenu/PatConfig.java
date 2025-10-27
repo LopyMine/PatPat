@@ -69,7 +69,7 @@ public class PatConfig {
 										.build()
 								)
 								.addOption(SliderNumberOption.<Float>builder()
-										.key("enable_sounds")
+										.key("sounds_volume")
 										.defaultValue(defConfig.getSoundsConfig().getSoundsVolume())
 										.getter(() -> config.getSoundsConfig().getSoundsVolume())
 										.setter(config.getSoundsConfig()::setSoundsVolume)

@@ -17,6 +17,12 @@ jobs:
         ]
     runs-on: ubuntu-22.04
     steps:
+      - name: Free up disk on GitHub runner
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          docker image prune -af || true
       - name: checkout repository
         uses: actions/checkout@v4
       - name: Setup Gradle

@@ -74,7 +74,7 @@ public class PatPatServerPacketManager {
 			return;
 		}
 
-        TameUtils.runByChance(entity, sender);
+        TameUtils.runByChance(entity, sender, serverWorld);
 
 		ChunkPos chunkPos = /*? >=1.17 {*/entity.chunkPosition()/*?} else {*//*serverWorld.getChunk(entity./^? if >=1.17 {^/ getBlockPos() /^?} else {^//^blockPosition()^//^?}^/).getPos()*//*?}*/;
 		for (ServerPlayer player : PlayerLookup.tracking(serverWorld, chunkPos)) {

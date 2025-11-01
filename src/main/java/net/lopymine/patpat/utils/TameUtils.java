@@ -21,7 +21,7 @@ public class TameUtils {
     public static void runByChance(Entity entity, ServerPlayer player, ServerLevel serverWorld) {
 
         if (entity instanceof Wolf wolf) {
-            if (!wolf.isTame() && tameChanceDropped(2)) {
+            if (!wolf.isTame() && tameChanceDropped(wolf.isAngry() ? 1 : 2)) {
                 wolf.tame(player);
                 wolf.setOwner(player);
                 wolf.stopBeingAngry(); // Because sounds are still appearing

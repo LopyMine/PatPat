@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import java.util.Random;
 
 public class TameUtils {
+    private static final boolean showParticles = true;
     private static final Random random = new Random();
 
     private static boolean tameChanceDropped(double chance) {
@@ -23,19 +24,36 @@ public class TameUtils {
             if (!wolf.isTame() && tameChanceDropped(2)) {
                 wolf.tame(player);
                 wolf.setOwner(player);
+                showParticles(wolf, serverWorld);
             }
         }
 
 
         if (entity instanceof Cat cat) {
             // It seems to me that in real life cats will be much less likely to become attached to a person if they are simply petted, but this is purely my opinion!
+
             if (!cat.isTame() && tameChanceDropped(1.5)) {
                 cat.tame(player);
                 cat.setOwner(player);
+                showParticles(cat, serverWorld);
             }
         }
+    }
 
+    private static void showParticles(Entity entity, ServerLevel serverWorld) {
+        if (!showParticles) { return; }
 
+        serverWorld.sendParticles(
+                ParticleTypes.HEART,
+                entity.getX(),
+                entity.getY() + 1,
+                entity.getZ(),
+                5,
+                entity.getRandom().nextGaussian() * 0.02,
+                0.5,
+                entity.getRandom().nextGaussian() * 0.02,
+                1.0
+        );
     }
 }
 

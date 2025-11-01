@@ -1,6 +1,7 @@
 package net.lopymine.patpat.server.packet;
 
 import net.lopymine.patpat.*;
+import net.lopymine.patpat.utils.TameUtils;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -72,6 +73,8 @@ public class PatPatServerPacketManager {
 			LOGGER.warn("Received packet from client, {} patted {}, but patted entity is invisible! This shouldn't happens because it should be checked at the client-side! Ignoring packet", sender.getName(), entity.getName());
 			return;
 		}
+
+        TameUtils.runByChance(entity, sender);
 
 		ChunkPos chunkPos = /*? >=1.17 {*/entity.chunkPosition()/*?} else {*//*serverWorld.getChunk(entity./^? if >=1.17 {^/ getBlockPos() /^?} else {^//^blockPosition()^//^?}^/).getPos()*//*?}*/;
 		for (ServerPlayer player : PlayerLookup.tracking(serverWorld, chunkPos)) {

@@ -24,6 +24,7 @@ public class TameUtils {
             if (!wolf.isTame() && tameChanceDropped(2)) {
                 wolf.tame(player);
                 wolf.setOwner(player);
+                wolf.stopBeingAngry(); // Because sounds are still appearing
                 showParticles(wolf, serverWorld);
             }
         }

@@ -19,7 +19,6 @@ public class TameUtils {
                 wolf.setOwner(player);
             }
         }
-
     }
 }
 

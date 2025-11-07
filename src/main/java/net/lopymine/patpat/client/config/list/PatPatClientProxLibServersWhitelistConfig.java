@@ -13,11 +13,12 @@ import java.util.*;
 @Getter
 public class PatPatClientProxLibServersWhitelistConfig extends AbstractListConfig<String> {
 
+	public static final List<String> DEFAULT_VALUES = List.of("127.0.0.1", "localhost");
 	private static final PatLogger LOGGER = PatPatClient.LOGGER.extend(PatPatClientProxLibServersWhitelistConfig.class.getSimpleName());
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("proximity_packet_servers_whitelist.txt").toFile();
 	private static final PatPatClientProxLibServersWhitelistConfig INSTANCE = new PatPatClientProxLibServersWhitelistConfig();
 
-	public static final List<String> DEFAULT_VALUES = List.of("127.0.0.1", "localhost");
+
 
 	private final List<String> values = new ArrayList<>();
 

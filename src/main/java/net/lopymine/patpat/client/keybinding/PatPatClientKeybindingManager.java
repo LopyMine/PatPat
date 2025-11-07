@@ -15,7 +15,7 @@ import net.lopymine.patpat.utils.IdentifierUtils;
 public class PatPatClientKeybindingManager {
 
 	//? if >=1.21.9 {
-	public static net.minecraft.client.KeyMapping.Category CATEGORY = net.minecraft.client.KeyMapping.Category.register(IdentifierUtils.modId(PatPat.MOD_ID));
+	public static final net.minecraft.client.KeyMapping.Category CATEGORY = net.minecraft.client.KeyMapping.Category.register(IdentifierUtils.modId(PatPat.MOD_ID));
 	//?}
 
 	@Getter

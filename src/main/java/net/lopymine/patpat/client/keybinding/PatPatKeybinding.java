@@ -34,7 +34,7 @@ public class PatPatKeybinding extends KeyMapping {
 	private boolean canStartBinding = true;
 
 	public PatPatKeybinding(KeybindingCombination patCombination) {
-		super("patpat.keybinding.pat", -1, /*? if <1.21.9 {*//*PatPat.MOD_NAME + "." + PatPat.MOD_NAME*//*?} else {*/PatPatClientKeybindingManager.CATEGORY/*?}*/);
+		super("patpat.keybinding.pat", -1, /*? if <1.21.9 {*//*PatPat.MOD_NAME*//*?} else {*/PatPatClientKeybindingManager.CATEGORY/*?}*/);
 		this.combination.setAttributeKey(patCombination.getAttributeKey());
 		this.combination.setKey(patCombination.getKey());
 	}

@@ -6,19 +6,21 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import lombok.*;
 import net.lopymine.patpat.PatLogger;
+
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
 @Setter
 public abstract class AbstractListConfig<E> {
 
-	private final Collection<E> standardValues;
+	private final @NotNull Collection<E> standardValues;
 	private final PatLogger logger;
 	private final File configFile;
 
 	private boolean initialized = false;
 
-	public AbstractListConfig(Collection<E> standardValues, PatLogger logger, File configFile) {
+	protected AbstractListConfig(@NotNull Collection<E> standardValues, PatLogger logger, File configFile) {
 		this.standardValues = standardValues;
 		this.logger         = logger;
 		this.configFile     = configFile;
@@ -29,7 +31,7 @@ public abstract class AbstractListConfig<E> {
 			return config;
 		}
 		config.read();
-		config.setInitialized(true);;
+		config.setInitialized(true);
 		return config;
 	}
 

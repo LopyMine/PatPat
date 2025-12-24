@@ -1,7 +1,7 @@
 package net.lopymine.patpat.client.packet;
 
-import lombok.*;
-import net.lopymine.patpat.PatLogger;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.social.PlayerSocialManager;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -10,16 +10,19 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+
+import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
-import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
+import net.lopymine.patpat.client.config.resourcepack.ListMode;
+import net.lopymine.patpat.client.config.resourcepack.PlayerConfig;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.client.render.PatPatClientRenderer.PatPacket;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.compat.flashback.FlashbackManager;
 import net.lopymine.patpat.compat.replaymod.ReplayModManager;
-import net.lopymine.patpat.packet.*;
+import net.lopymine.patpat.packet.S2CPatPacket;
 import net.lopymine.patpat.packet.c2s.*;
 import net.lopymine.patpat.packet.s2c.*;
 
@@ -32,7 +35,7 @@ public class PatPatClientPacketManager {
 	}
 
 	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("PacketManager");
-	
+
 	@Getter
 	@Setter
 	private static Version currentPatPatServerPacketVersion = Version.PACKET_V1_VERSION;
@@ -102,8 +105,19 @@ public class PatPatClientPacketManager {
 		}
 		LOGGER.debug("Patted entity with name {} ", pattedEntity.getName().getString());
 		Entity whoPattedEntity = packet.getWhoPattedEntity(clientWorld);
-		if(whoPattedEntity == null) {
-			LOGGER.debug("Packet declined, because who patted entity is null");
+		if (whoPattedEntity == null) {
+			if (!(packet instanceof PatEntityS2CPacketV2 packetV2)) {
+				LOGGER.debug("Packet declined, because packetV1 and whoPattedEntity is null");
+				return;
+			}
+			if (packetV2.getWhoPattedId() != Integer.MIN_VALUE) {
+				LOGGER.debug("Packet declined, because who patted entity is null");
+				return;
+			}
+
+			PatPacket patPacket = new PatPacket(pattedLivingEntity, PlayerConfig.of(null, null), player, replayModPacket);
+			PatPatClientRenderer.registerServerPacket(patPacket);
+			LOGGER.debug("Packet handled! (Pat from server) Packet Data: {}", patPacket.toString());
 			return;
 		}
 		LOGGER.debug("Who patted entity with name {}", whoPattedEntity.getName().getString());
@@ -137,7 +151,7 @@ public class PatPatClientPacketManager {
 				|| (config.getMultiPlayerConfig().getListMode() == ListMode.BLACKLIST && playerListConfig.getValues().containsKey(playerUuid))
 				|| socialManager.isBlocked(playerUuid)
 				|| socialManager.isHidden(playerUuid)
-				/*? >=1.17 {*/ || socialManager.shouldHideMessageFrom(playerUuid)/*?}*/;
+				/*? if >=1.17 {*/ || socialManager.shouldHideMessageFrom(playerUuid)/*?}*/;
 	}
 
 	public static net.lopymine.patpat.packet.PatPacket<ServerLevel, ?> getPatPacket(Entity pattedEntity) {

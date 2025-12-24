@@ -93,7 +93,7 @@ public final class CustomAnimationSettingsConfig {
 				return;
 			}
 			//?}
-			InputStream inputStream = resource/*? >=1.19 {*/.get().open();/*?} else {*//*.getInputStream()*//*?}*/;
+			InputStream inputStream = resource/*? if >=1.19 {*/.get().open()/*?} else {*//*.getInputStream()*//*?}*/;
 			NativeImage nativeImage = NativeImage.read(inputStream);
 			this.textureWidth  = nativeImage.getWidth();
 			this.textureHeight = nativeImage.getHeight();

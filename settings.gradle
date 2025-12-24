@@ -1,8 +1,5 @@
 pluginManagement {
 	repositories {
-		mavenLocal()
-		mavenCentral()
-		gradlePluginPortal()
 		maven {
 			name "Fabric"
 			url "https://maven.fabricmc.net/"
@@ -15,11 +12,17 @@ pluginManagement {
 			name "Kiku Releases"
 			url "https://maven.kikugie.dev/releases"
 		}
+		maven {
+			name "Mossy Projects"
+			url "https://maven.lopymine.net/releases"
+		}
+		mavenLocal()
+		mavenCentral()
+		gradlePluginPortal()
 	}
-	includeBuild("buildSettings")
 }
 
 plugins {
 	id "dev.kikugie.stonecutter" version "0.7.1"
-	id "net.lopymine.mossy-settings-plugin"
+	id "net.lopymine.mossy-plugin-settings" version "$mossy_plugin_version"
 }

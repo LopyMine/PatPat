@@ -130,7 +130,7 @@ public class PatPatClientRenderer {
 			}
 
 			LocalPlayer player = Minecraft.getInstance().player;
-			if (!empty && player != null && FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			if (!empty && player != null && FabricLoader.getInstance().isDevelopmentEnvironment() && config.getMainConfig().isDebugLogEnabled()) {
 				PatPatClientManager.pat(player, PlayerConfig.currentSession());
 				ReplayModCompat.onPat(player.getId(), player.getId());
 				FlashbackCompat.onPat(player.getId(), player.getId());

@@ -4,7 +4,7 @@ import lombok.Getter;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.packet.*;
-import net.lopymine.patpat.utils.IdentifierUtils;
+import net.lopymine.patpat.utils.RLUtils;
 import net.minecraft.network.FriendlyByteBuf;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -14,7 +14,7 @@ public class HelloPatPatServerC2SPacket implements PongPatPacket<HelloPatPatServ
 
 	public static final String PACKET_ID = "hello_patpat_server_c2s_packet";
 
-	public static final PatPatPacketType<HelloPatPatServerC2SPacket> TYPE = new PatPatPacketType<>(IdentifierUtils.modId(PACKET_ID), HelloPatPatServerC2SPacket::new);
+	public static final PatPatPacketType<HelloPatPatServerC2SPacket> TYPE = new PatPatPacketType<>(RLUtils.modId(PACKET_ID), HelloPatPatServerC2SPacket::new);
 
 	private final Version version;
 

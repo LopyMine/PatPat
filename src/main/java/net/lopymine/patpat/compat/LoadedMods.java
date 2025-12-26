@@ -6,6 +6,7 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 
 public final class LoadedMods {
+
 	public static final boolean REPLAY_MOD_LOADED = FabricLoader.getInstance().isModLoaded("replaymod");
 	public static final boolean FLASHBACK_MOD_LOADED = FabricLoader.getInstance().isModLoaded("flashback");
 	public static final boolean PROX_LIB_MOD_LOADED = FabricLoader.getInstance().isModLoaded("proxlib");

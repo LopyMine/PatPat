@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import net.lopymine.patpat.PatTranslation;
 
@@ -64,8 +64,8 @@ public class ModMenuUtils {
 		return PatTranslation.text("modmenu.title");
 	}
 
-	public static ResourceLocation getContentId(String filename) {
-		return IdentifierUtils.modId("textures/config/" + filename);
+	public static Identifier getContentId(String filename) {
+		return RLUtils.modId("textures/config/" + filename);
 	}
 
 	public static Function<Boolean, Component> getEnabledOrDisabledFormatter() {

@@ -3,7 +3,7 @@ package net.lopymine.patpat.client.config;
 import java.util.function.Supplier;
 import lombok.*;
 import net.lopymine.patpat.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.*;
 
 import com.mojang.serialization.Codec;
@@ -44,7 +44,7 @@ public class PatPatClientStatsConfig {
 
 	public void count(LivingEntity pattedEntity) {
 		this.totalPatsCounter.totalPats++;
-		ResourceLocation id = VersionedThings.ENTITY_TYPE.getKey(pattedEntity.getType());
+		Identifier id = VersionedThings.ENTITY_TYPE.getKey(pattedEntity.getType());
 		if (id == null) {
 			return;
 		}

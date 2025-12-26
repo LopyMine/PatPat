@@ -1,6 +1,11 @@
 package net.lopymine.patpat.client.keybinding;
 
 import lombok.Getter;
+import com.mojang.blaze3d.platform.InputConstants;
+//? if >=1.19.4 {
+import net.lopymine.patpat.mixin.controlling.KeyBindsScreenAccessor;
+//?}
+import net.minecraft.client.gui.screens./*? if >=1.21 {*/options./*?}*/controls.*;
 import net.minecraft.client.KeyMapping;
 
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -9,13 +14,13 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 //? if >=1.21.9 {
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.utils.IdentifierUtils;
+import net.lopymine.patpat.utils.RLUtils;
 //?}
 
 public class PatPatClientKeybindingManager {
 
 	//? if >=1.21.9 {
-	public static final net.minecraft.client.KeyMapping.Category CATEGORY = net.minecraft.client.KeyMapping.Category.register(IdentifierUtils.modId(PatPat.MOD_ID));
+	public static final net.minecraft.client.KeyMapping.Category CATEGORY = net.minecraft.client.KeyMapping.Category.register(RLUtils.modId("keybinding"));
 	//?}
 
 	@Getter
@@ -36,6 +41,49 @@ public class PatPatClientKeybindingManager {
 
 	private static void registerKeybinding(KeyMapping keyBinding) {
 		KeyBindingHelper.registerKeyBinding(keyBinding);
+	}
+
+	public static void handlePatPatKeybindingOnKeyPressed(
+			KeyMapping mapping,
+			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*ControlsScreen *//*?}*/ screen,
+			int keyCode,
+			int scanCode,
+			Runnable cancel
+	) {
+		if (mapping instanceof PatPatKeybinding keybinding) {
+			boolean bl = keybinding.addBindingKey(getKey(keyCode, scanCode));
+			if (bl) {
+				keybinding.sendBindingKeys();
+				screen.selectedKey = null;
+			}
+			//? if >=1.19.4 {
+			((KeyBindsScreenAccessor) (screen)).getList().refreshEntries();
+			//?}
+			cancel.run();
+		}
+	}
+
+	public static void handlePatPatKeybindingOnMouseClick(
+			KeyMapping mapping,
+			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*ControlsScreen *//*?}*/ screen,
+			int button,
+			Runnable cancel
+	) {
+		if (mapping instanceof PatPatKeybinding keybinding) {
+			boolean bl = keybinding.addBindingKey(InputConstants.Type.MOUSE.getOrCreate(button));
+			if (bl) {
+				keybinding.sendBindingKeys();
+				screen.selectedKey = null;
+			}
+			//? if >=1.19.4 {
+			((KeyBindsScreenAccessor) (screen)).getList().refreshEntries();
+			//?}
+			cancel.run();
+		}
+	}
+
+	public static InputConstants.Key getKey(int keyCode, int scanCode) {
+		return keyCode == -1 ? InputConstants.Type.SCANCODE.getOrCreate(scanCode) : InputConstants.Type.KEYSYM.getOrCreate(keyCode);
 	}
 
 }

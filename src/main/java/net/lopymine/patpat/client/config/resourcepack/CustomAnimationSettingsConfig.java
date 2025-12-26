@@ -7,9 +7,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.resourcepack.PatPatClientResourcePackManager;
-import net.lopymine.patpat.utils.IdentifierUtils;
+import net.lopymine.patpat.utils.RLUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.entity.LivingEntity;
 import java.io.*;
@@ -20,20 +20,20 @@ import org.jetbrains.annotations.Nullable;
 public final class CustomAnimationSettingsConfig {
 
 	public static final Codec<CustomAnimationSettingsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.STRING.fieldOf("texture").xmap(IdentifierUtils::vanillaId, ResourceLocation::toString).forGetter(CustomAnimationSettingsConfig::getTexture),
+			Codec.STRING.fieldOf("texture").xmap(RLUtils::vanillaId, Identifier::toString).forGetter(CustomAnimationSettingsConfig::getTexture),
 			Codec.INT.fieldOf("duration").forGetter(CustomAnimationSettingsConfig::getDuration),
 			FrameConfig.CODEC.fieldOf("frame").forGetter(CustomAnimationSettingsConfig::getFrameConfig),
 			SoundConfig.STRINGED_CODEC.optionalFieldOf("sound").forGetter(CustomAnimationSettingsConfig::getOptionalSoundConfig)
 	).apply(instance, CustomAnimationSettingsConfig::new));
 
 	public static final CustomAnimationSettingsConfig DEFAULT_PATPAT_ANIMATION = new CustomAnimationSettingsConfig(
-			IdentifierUtils.modId("textures/default/patpat.png"),
+			RLUtils.modId("textures/default/patpat.png"),
 			240,
 			FrameConfig.DEFAULT_FRAME,
 			Optional.of(SoundConfig.PAT_PAT_SOUND)
 	);
 
-	private final ResourceLocation texture;
+	private final Identifier texture;
 	private final int duration;
 	private final FrameConfig frameConfig;
 	@Nullable
@@ -41,7 +41,7 @@ public final class CustomAnimationSettingsConfig {
 	private int textureWidth;
 	private int textureHeight;
 
-	public CustomAnimationSettingsConfig(ResourceLocation texture, int duration, FrameConfig frameConfig, Optional<SoundConfig> soundConfig) {
+	public CustomAnimationSettingsConfig(Identifier texture, int duration, FrameConfig frameConfig, Optional<SoundConfig> soundConfig) {
 		this.texture     = texture;
 		this.duration    = duration;
 		this.frameConfig = frameConfig;

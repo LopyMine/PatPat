@@ -15,7 +15,7 @@ public class SelfPatEntityS2CPacket implements S2CPatPacket<SelfPatEntityS2CPack
 
 	public static final String PACKET_ID = "pat_entity_for_replay_s2c_packet";
 
-	public static final PatPatPacketType<SelfPatEntityS2CPacket> TYPE = new PatPatPacketType<>(IdentifierUtils.modId(PACKET_ID), SelfPatEntityS2CPacket::new);
+	public static final PatPatPacketType<SelfPatEntityS2CPacket> TYPE = new PatPatPacketType<>(RLUtils.modId(PACKET_ID), SelfPatEntityS2CPacket::new);
 
 	private final UUID pattedEntityUuid;
 	private final UUID whoPattedUuid;

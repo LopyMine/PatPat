@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.*;
 import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -33,7 +33,7 @@ public class PatPatClientResourcePackManager {
 	private PatPatClientResourcePackManager() {
 	}
 
-	public static void parseConfig(String packName, ResourceLocation identifier, Supplier<InputStream> inputStreamInputSupplier, List<CustomAnimationConfig> configs, PatPatClientConfig config) {
+	public static void parseConfig(String packName, Identifier identifier, Supplier<InputStream> inputStreamInputSupplier, List<CustomAnimationConfig> configs, PatPatClientConfig config) {
 		String path = identifier.getPath();
 		if (!path.endsWith(".json") && !path.endsWith(".json5")) {
 			return;

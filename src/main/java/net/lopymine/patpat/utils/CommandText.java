@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 
 //? if >=1.21.6 {
 import net.minecraft.server.dialog.Dialog;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.core.Holder;
 //?}
 
@@ -129,7 +129,7 @@ public class CommandText {
 				yield new OpenFile((String) value);
 			}
 			//? if >=1.21.6 {
-			case CUSTOM -> new Custom((ResourceLocation) value, Optional.empty());
+			case CUSTOM -> new Custom((Identifier) value, Optional.empty());
 			case SHOW_DIALOG -> new ShowDialog((Holder<Dialog>) value);
 			//?}
 		};

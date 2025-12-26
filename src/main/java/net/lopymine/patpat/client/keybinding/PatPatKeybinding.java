@@ -136,7 +136,7 @@ public class PatPatKeybinding extends KeyMapping {
 		/*if (this.combination.onlyOneKey()) {
 			return this.getFullTranslatedKeyMessage();
 		} else {
-			return TextUtils.literal("...");
+			return TextUtils.literal("< ... >");
 		}
 		*///?}
 	}

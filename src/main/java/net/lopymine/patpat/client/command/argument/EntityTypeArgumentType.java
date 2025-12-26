@@ -1,6 +1,6 @@
 package net.lopymine.patpat.client.command.argument;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 
 import com.mojang.brigadier.StringReader;
@@ -33,7 +33,7 @@ public class EntityTypeArgumentType implements ArgumentType<EntityType<?>> {
 	@Override
 	public EntityType<?> parse(@NotNull StringReader reader) throws CommandSyntaxException {
 		try {
-			ResourceLocation s = ResourceLocation.read(reader);
+			Identifier s = Identifier.read(reader);
 			PatPatClientCommandManager.LOGGER.debug("Parsed EntityType from EntityTypeArgumentType: {}", s);
 			EntityType<?> entityType = VersionedThings.ENTITY_TYPE.getOptional(s).orElse(null);
 			if (entityType == null) {

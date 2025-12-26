@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.lopymine.patpat.extension.EntityExtension;
 import net.lopymine.patpat.packet.*;
-import net.lopymine.patpat.utils.IdentifierUtils;
+import net.lopymine.patpat.utils.RLUtils;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +17,7 @@ public class PatEntityC2SPacketV2 implements C2SPatPacket<PatEntityC2SPacketV2> 
 
 	public static final String PACKET_ID = "pat_entity_c2s_packet_v2";
 
-	public static final PatPatPacketType<PatEntityC2SPacketV2> TYPE = new PatPatPacketType<>(IdentifierUtils.modId(PACKET_ID), PatEntityC2SPacketV2::new);
+	public static final PatPatPacketType<PatEntityC2SPacketV2> TYPE = new PatPatPacketType<>(RLUtils.modId(PACKET_ID), PatEntityC2SPacketV2::new);
 
 	private final int pattedEntityId;
 

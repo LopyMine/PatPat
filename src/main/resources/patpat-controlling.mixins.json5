@@ -1,0 +1,48 @@
+{
+	"required": true,
+	"package": "net.lopymine.patpat.mixin.controlling",
+	"refmap": "${mod_id}.refmap.json",
+	"plugin": "net.lopymine.patpat.compat.controlling.ControllingCompatPlugin",
+	"compatibilityLevel": "JAVA_${java}",
+	"mixins": [
+	],
+	"client": [
+		//? controlling && >=1.17.1 {
+
+		//? if >=1.19.4 {
+		"KeyBindsScreenAccessor",
+		//?}
+
+		//? if >=1.21 {
+		"IPlatformHelperMixin",
+		//?} else {
+		/*"NewKeyBindsScreenMixin",
+		*///?}
+
+		//? if <1.19.3 {
+		/*"NewKeyBindsListMixin",
+		*///?}
+
+		//? if =1.17.1 {
+		/*"NewKeyBindsListAccessor",
+		*///?}
+
+		"NewKeyEntryMixin"
+		//?}
+
+		//? if controlling && <=1.17 {
+
+		/*//? if =1.16.5 {
+		/^"ControllingKeyBindingListWidgetNewAccessor",
+		"ControllingKeyEntryMixin",
+		"ControlsSettingsGuiNewMixin",
+		^///?}
+
+		"ControllingOptionsScreenMixin"
+
+		*///?}
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

@@ -142,6 +142,8 @@ public class PatPatClientManager {
 		PatPatClientRenderer.registerClientPacket(new PatPacket(pattedEntity, PlayerConfig.currentSession(), player, false));
 
 		PatPatClientManager.patCooldown = 4;
+		Minecraft.getInstance().options.keyUse.setDown(false);
+		Minecraft.getInstance().options.keyUse.clickCount = 0;
 	}
 
 	public static boolean canPat() {
@@ -175,10 +177,10 @@ public class PatPatClientManager {
 		}
 
 		ProfilerUtils.push("patpat$pick");
-		//? if >=1.20.5 {
-		double blockInteractionRange = player.blockInteractionRange();
+		//? if >=1.20.5 && <=1.21.10 {
+		/*double blockInteractionRange = player.blockInteractionRange();
 		double entityInteractionRange = player.entityInteractionRange();
-		//?}
+		*///?}
 
 		//? if >=1.21.2 {
 		float tickDelta = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
@@ -189,9 +191,11 @@ public class PatPatClientManager {
 		 *///?}
 
 		cameraEntity.mark(true);
-		//? if >=1.20.5 {
-		HitResult result = minecraft.gameRenderer.pick(cameraEntity, blockInteractionRange, entityInteractionRange, tickDelta);
-		//?} else {
+		//? if >=1.21.11 {
+		HitResult result = player.raycastHitResult(tickDelta, cameraEntity);
+		//?} elif >=1.20.5 {
+		/*HitResult result = minecraft.gameRenderer.pick(cameraEntity, blockInteractionRange, entityInteractionRange, tickDelta);
+		*///?} else {
 		/*HitResult oldResult = minecraft.hitResult;
 		minecraft.gameRenderer.pick(tickDelta);
 		HitResult result = minecraft.hitResult;

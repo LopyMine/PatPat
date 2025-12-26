@@ -46,7 +46,7 @@ public class PatPatClientSoundManager {
 	private static SoundEvent registerModSound(String id) {
 		return Registry.register(
 				VersionedThings.SOUND_EVENT,
-				IdentifierUtils.modId(id),
+				RLUtils.modId(id),
 				SoundUtils.getSoundEvent(id)
 		);
 	}

@@ -2,7 +2,7 @@ package net.lopymine.patpat.mixin;
 
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 
@@ -20,13 +20,13 @@ import org.jetbrains.annotations.Nullable;
 *///?}
 
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.utils.IdentifierUtils;
+import net.lopymine.patpat.utils.RLUtils;
 
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerEntityMixin {
 
 	@Unique
-	private static final ResourceLocation PATPAT_CAPE_ID = IdentifierUtils.modId("textures/cape/patpat_cape_hand.png");
+	private static final Identifier PATPAT_CAPE_ID = RLUtils.modId("textures/cape/patpat_cape_hand.png");
 
 	//? if >=1.21.9 {
 	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerInfo;getSkin()Lnet/minecraft/world/entity/player/PlayerSkin;"), method = "getSkin")

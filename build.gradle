@@ -110,6 +110,10 @@ if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0) 
 	}
 }
 
+test {
+	failOnNoDiscoveredTests = false
+}
+
 configurations.configureEach {
 	resolutionStrategy {
 		force("net.fabricmc:fabric-loader:${prop("build.fabric_loader")}")
@@ -119,10 +123,46 @@ configurations.configureEach {
 stonecutter {
 	var buildTime = (int) (System.currentTimeMillis() / 10000) - 174611089
 	var buildCodeTime = String.format("%07x", buildTime & 0xFFFFFFF)
-	swap("build_code_time", "\"${buildCodeTime}\";")
+	swaps["build_code_time"] = "\"${buildCodeTime}\";".toString()
+	dependencies["yacl"] = MossyUtils.substringBefore(prop("dep.yacl"), "+")
 
-	dependency("yacl", MossyUtils.substringBefore(prop("dep.yacl"), "+"))
+//	replacements.regex(current.parsed.matches(">=1.21.11")) {
+//		replace(
+//				"(^|[^A-Za-z0-9_])ResourceLocation([^A-Za-z0-9_]|\$)", "\$1Identifier\$2",
+//				"(^|[^A-Za-z0-9_])Identifier([^A-Za-z0-9_]|\$)", "\$1ResourceLocation\$2"
+//		)
+//	}
+
+	replacements.string(current.parsed < "1.17") {
+		replace("ControllingOptionsScreenMixin", "ControllingOptionsScreenMixin")
+		replace("ControllingOptionsScreen", "ControlsSettingsGuiNew")
+	}
+
+	replacements.string(current.parsed >= "1.21.9") {
+		replace("int keyCode, int scanCode, int modifiers", "net.minecraft.client.input.KeyEvent event")
+		replace("double mouseX, double mouseY, int button", "net.minecraft.client.input.MouseButtonEvent event, boolean bl")
+	}
+
+	replacements.string(current.parsed >= "1.21.11") {
+		replace("ProxPacketIdentifier", "ProxPacketIdentifier")
+		replace("ResourceLocation", "Identifier")
+		replace(".location()", ".identifier()")
+	}
+
+	replacements.string(current.parsed >= "1.18") {
+		replace("KeyBindsScreenAccessor", "KeyBindsScreenAccessor")
+		replace("KeyBindsScreenMixin", "KeyBindsScreenMixin")
+		replace("NewKeyBindsScreen", "NewKeyBindsScreen")
+		replace("ControlsScreen", "KeyBindsScreen")
+	}
+
+	replacements.string(current.parsed >= "1.21") {
+		replace("import net.minecraft.client.gui.screens.controls.*;", "import net.minecraft.client.gui.screens.options.controls.*;")
+	}
+
 }
+
+stonecutter.filters.exclude("**/*.accesswidener")
 
 
 jar {

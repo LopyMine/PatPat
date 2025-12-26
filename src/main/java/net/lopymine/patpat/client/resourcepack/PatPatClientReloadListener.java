@@ -1,14 +1,14 @@
 package net.lopymine.patpat.client.resourcepack;
 
 import net.lopymine.patpat.PatPat;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.*;
 import net.fabricmc.fabric.api.resource.*;
 
 import net.lopymine.patpat.client.config.PatPatClientConfig;
-import net.lopymine.patpat.utils.IdentifierUtils;
+import net.lopymine.patpat.utils.RLUtils;
 
 import java.util.*;
 
@@ -27,8 +27,8 @@ public class PatPatClientReloadListener implements /*? if <=1.21.8 {*/ /*SimpleS
 	}
 
 	/*? if <=1.21.8 {*//*@Override*//*?}*/
-	public /*? if >=1.21.9 {*/ static /*?}*/ ResourceLocation getFabricId() {
-		return IdentifierUtils.modId("%s-reload-listener".formatted(PatPat.MOD_ID));
+	public /*? if >=1.21.9 {*/ static /*?}*/ Identifier getFabricId() {
+		return RLUtils.modId("%s-reload-listener".formatted(PatPat.MOD_ID));
 	}
 
 	@Override

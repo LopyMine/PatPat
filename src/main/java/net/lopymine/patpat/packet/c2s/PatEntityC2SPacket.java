@@ -5,7 +5,7 @@ import net.minecraft.network.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.lopymine.patpat.packet.*;
-import net.lopymine.patpat.utils.IdentifierUtils;
+import net.lopymine.patpat.utils.RLUtils;
 
 import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +15,7 @@ public class PatEntityC2SPacket implements C2SPatPacket<PatEntityC2SPacket> {
 
 	public static final String PACKET_ID = "pat_entity_c2s_packet";
 
-	public static final PatPatPacketType<PatEntityC2SPacket> TYPE = new PatPatPacketType<>(IdentifierUtils.modId(PACKET_ID), PatEntityC2SPacket::new);
+	public static final PatPatPacketType<PatEntityC2SPacket> TYPE = new PatPatPacketType<>(RLUtils.modId(PACKET_ID), PatEntityC2SPacket::new);
 
 	private final UUID pattedEntityUuid;
 

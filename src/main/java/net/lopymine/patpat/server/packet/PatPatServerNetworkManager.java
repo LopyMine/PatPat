@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.*;
 import net.lopymine.patpat.packet.*;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PatPatServerNetworkManager {

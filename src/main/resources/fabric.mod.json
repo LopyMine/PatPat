@@ -37,9 +37,7 @@
 	},
 	"accessWidener": "aws/${minecraft}.accesswidener",
 	"mixins": [
-		"${mod_id}.mixins.json",
-		"${mod_id}-geckolib.mixins.json",
-		"${mod_id}-controlling.mixins.json"
+		"${fabric_trick_mixin_configs}"
 	],
 	"custom": {
 		"translators": {

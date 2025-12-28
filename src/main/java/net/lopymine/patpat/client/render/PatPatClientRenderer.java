@@ -1,11 +1,12 @@
 package net.lopymine.patpat.client.render;
 
 import lombok.experimental.ExtensionMethod;
-import net.fabricmc.loader.api.FabricLoader;
+import net.lopymine.patpat.entrypoint.MultiLoader;
 import net.lopymine.patpat.client.config.sub.PatPatClientVisualConfig;
 import net.lopymine.patpat.client.render.feature.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.protocol.game.ServerboundSwingPacket;
@@ -15,7 +16,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
@@ -50,18 +50,18 @@ import org.joml.Quaternionf;
 @ExtensionMethod(VertexConsumerExtension.class)
 public class PatPatClientRenderer {
 
-	private static final Queue<PatPacket> serverPats = new ConcurrentLinkedQueue<>();
-	private static final Queue<PatPacket> clientPats = new ConcurrentLinkedQueue<>();
+	private static final Queue<PacketPat> serverPats = new ConcurrentLinkedQueue<>();
+	private static final Queue<PacketPat> clientPats = new ConcurrentLinkedQueue<>();
 
-	public static void registerServerPacket(PatPacket packet) {
+	public static void registerServerPacket(PacketPat packet) {
 		serverPats.offer(packet);
 	}
 
-	public static void registerClientPacket(PatPacket packet) {
+	public static void registerClientPacket(PacketPat packet) {
 		clientPats.offer(packet);
 	}
 
-	public record PatPacket(LivingEntity pattedEntity, PlayerConfig playerConfig, LocalPlayer player,
+	public record PacketPat(LivingEntity pattedEntity, PlayerConfig playerConfig, LocalPlayer player,
 	                        boolean replayModPacket) {
 
 		@Override
@@ -77,16 +77,16 @@ public class PatPatClientRenderer {
 
 	public static void register() {
 		//? if <=1.21.8 {
-		/*WorldRenderEvents.AFTER_ENTITIES.register((__) -> {
+		/*MultiLoader.getLoader().registerAfterEntitiesRenderer((source, stack) -> {
 			PatPatClientRenderer.renderPatOnYourself();
 			PatFeatureRenderer.getInstance().render();
 		});
 		*///?}
-		ClientTickEvents.END_WORLD_TICK.register(client -> {
-			boolean frozen = /*? if >1.20.2 {*/ client.tickRateManager().isFrozen(); /*?} else {*/ /*false; *//*?}*/
+		MultiLoader.getInstance().registerAfterWorldTickListener((level) -> {
+			boolean frozen = /*? if >1.20.2 {*/ level.tickRateManager().isFrozen(); /*?} else {*/ /*false; *//*?}*/
 			PatPatClientConfig config = PatPatClientConfig.getInstance();
 
-			PatPacket packet;
+			PacketPat packet;
 			if (!frozen) {
 				while ((packet = serverPats.poll()) != null) {
 					LivingEntity pattedEntity = packet.pattedEntity();
@@ -130,7 +130,7 @@ public class PatPatClientRenderer {
 			}
 
 			LocalPlayer player = Minecraft.getInstance().player;
-			if (!empty && player != null && FabricLoader.getInstance().isDevelopmentEnvironment() && config.getMainConfig().isDebugLogEnabled()) {
+			if (!empty && player != null && MultiLoader.getInstance().isDevelopmentEnvironment() && config.getMainConfig().isDebugLogEnabled()) {
 				PatPatClientManager.pat(player, PlayerConfig.currentSession());
 				ReplayModCompat.onPat(player.getId(), player.getId());
 				FlashbackCompat.onPat(player.getId(), player.getId());

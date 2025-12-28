@@ -1,13 +1,12 @@
 package net.lopymine.patpat.packet.c2s;
 
+import java.util.UUID;
 import lombok.Getter;
-import net.minecraft.network.*;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.RLUtils;
-
-import java.util.UUID;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 @Getter

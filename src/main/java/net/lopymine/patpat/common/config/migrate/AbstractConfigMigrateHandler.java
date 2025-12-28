@@ -1,13 +1,13 @@
-package net.lopymine.patpat.common.migrate;
+package net.lopymine.patpat.common.config.migrate;
 
 import com.google.gson.Gson;
 import lombok.*;
 
-import net.lopymine.patpat.*;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 
 import java.io.*;
 import java.nio.file.*;
+import net.lopymine.patpat.logger.PatLogger;
 
 @Getter
 @Setter

@@ -5,7 +5,6 @@ import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
 
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.extension.ClientCommandExtension;
@@ -15,7 +14,8 @@ import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.Action;
 
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.literal;
+import net.minecraft.commands.CommandSourceStack;
+import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientInfoCommand {
@@ -59,12 +59,12 @@ public class PatPatClientInfoCommand {
 		return instance;
 	}
 
-	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
+	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("info")
 				.executes(context -> PatPatClientInfoCommand.getInstance().version(context));
 	}
 
-	public int version(CommandContext<FabricClientCommandSource> context) {
+	public int version(CommandContext<CommandSourceStack> context) {
 		context.sendMsg(platformText);
 		context.sendMsg(minecraftVersionText);
 		context.sendMsg(versionText);

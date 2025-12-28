@@ -1,9 +1,8 @@
 package net.lopymine.patpat.extension;
 
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
-
 import net.lopymine.patpat.utils.TextUtils;
 
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -16,13 +15,13 @@ public class ClientCommandExtension {
 		throw new IllegalStateException("Extension class");
 	}
 
-	public static void sendMsg(CommandContext<FabricClientCommandSource> context, String feedback) {
+	public static void sendMsg(CommandContext<CommandSourceStack> context, String feedback) {
 		Component text = TextUtils.literal(feedback);
 		sendMsg(context, text);
 	}
 
-	public static void sendMsg(CommandContext<FabricClientCommandSource> context, Component text) {
-		context.getSource().sendFeedback(PATPAT_ID.copy().append(text));
+	public static void sendMsg(CommandContext<CommandSourceStack> context, Component text) {
+		context.getSource().sendSystemMessage(PATPAT_ID.copy().append(text));
 	}
 
 }

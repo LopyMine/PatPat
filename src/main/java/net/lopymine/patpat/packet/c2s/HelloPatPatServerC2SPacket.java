@@ -1,13 +1,11 @@
 package net.lopymine.patpat.packet.c2s;
 
-import lombok.Getter;
+import lombok.*;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.RLUtils;
 import net.minecraft.network.FriendlyByteBuf;
-
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 
 @Getter
 public class HelloPatPatServerC2SPacket implements PongPatPacket<HelloPatPatServerC2SPacket> {
@@ -18,7 +16,8 @@ public class HelloPatPatServerC2SPacket implements PongPatPacket<HelloPatPatServ
 
 	private final Version version;
 
-	private PacketSender sender;
+	@Setter
+	private PacketReply packetReply;
 
 	public HelloPatPatServerC2SPacket() {
 		this.version = Version.CURRENT_MOD_VERSION;
@@ -35,12 +34,6 @@ public class HelloPatPatServerC2SPacket implements PongPatPacket<HelloPatPatServ
 			PatPat.LOGGER.error("Failed to parse client packet version from hello packet:", e);
 			return Version.INVALID;
 		}
-	}
-
-	@Override
-	public HelloPatPatServerC2SPacket setPacketSender(PacketSender sender) {
-		this.sender = sender;
-		return this;
 	}
 
 	@Override

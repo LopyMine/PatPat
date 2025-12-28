@@ -2,13 +2,13 @@ package net.lopymine.patpat.server.config.list;
 
 import lombok.Getter;
 
-import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.common.config.list.*;
 
 import java.io.*;
 import java.util.*;
+import net.lopymine.patpat.logger.PatLogger;
 
 @Getter
 public class PatPatServerPlayerListConfig extends AbstractPatPatPlayerListConfig {

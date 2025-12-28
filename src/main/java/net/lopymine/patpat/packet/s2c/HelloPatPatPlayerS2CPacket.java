@@ -1,15 +1,12 @@
 package net.lopymine.patpat.packet.s2c;
 
-import lombok.Getter;
-import net.minecraft.network.*;
-
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-
+import lombok.*;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.packet.c2s.HelloPatPatServerC2SPacket;
 import net.lopymine.patpat.utils.RLUtils;
+import net.minecraft.network.FriendlyByteBuf;
 
 @Getter
 public class HelloPatPatPlayerS2CPacket implements PingPatPacket<HelloPatPatPlayerS2CPacket, HelloPatPatServerC2SPacket> {
@@ -20,7 +17,8 @@ public class HelloPatPatPlayerS2CPacket implements PingPatPacket<HelloPatPatPlay
 
 	private final Version version;
 
-	private PacketSender sender;
+	@Setter
+	private PacketReply packetReply;
 
 	public HelloPatPatPlayerS2CPacket() {
 		this.version = Version.CURRENT_MOD_VERSION;
@@ -41,12 +39,9 @@ public class HelloPatPatPlayerS2CPacket implements PingPatPacket<HelloPatPatPlay
 
 	@Override
 	public HelloPatPatServerC2SPacket getPongPacket() {
-		return new HelloPatPatServerC2SPacket().setPacketSender(this.sender);
-	}
-
-	@Override
-	public void setPacketSender(PacketSender sender) {
-		this.sender = sender;
+		HelloPatPatServerC2SPacket packet = new HelloPatPatServerC2SPacket();
+		packet.setPacketReply(this.packetReply);
+		return packet;
 	}
 
 	@Override

@@ -26,7 +26,7 @@
 			"net.lopymine.patpat.dedicated.PatPatDedicatedServer"
 		],
 		"modmenu": [
-			"net.lopymine.patpat.modmenu.ModMenuIntegration"
+			"net.lopymine.patpat.modmenu.integration.PatPatModMenuIntegration"
 		]
 	},
 	"depends": {
@@ -35,7 +35,7 @@
 		"java": ">=${java}",
 		"${fabric_api_id}": "*"
 	},
-	"accessWidener": "aws/${minecraft}.accesswidener",
+	"accessWidener": "aws/fabric-${minecraft}.accesswidener",
 	"mixins": [
 		"${fabric_trick_mixin_configs}"
 	],

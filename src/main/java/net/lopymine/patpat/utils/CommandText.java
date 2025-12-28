@@ -1,7 +1,7 @@
 package net.lopymine.patpat.utils;
 
 import java.util.*;
-import net.lopymine.patpat.PatTranslation;
+import net.lopymine.patpat.translation.PatTranslation;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;

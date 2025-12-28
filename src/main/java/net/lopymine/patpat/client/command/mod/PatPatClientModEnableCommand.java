@@ -4,7 +4,6 @@ import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.extension.ClientCommandExtension;
@@ -13,7 +12,8 @@ import net.lopymine.patpat.utils.CommandText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
 
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.literal;
+import net.minecraft.commands.CommandSourceStack;
+import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientModEnableCommand {
@@ -22,17 +22,17 @@ public class PatPatClientModEnableCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<FabricClientCommandSource> getOn() {
+	public static LiteralArgumentBuilder<CommandSourceStack> getOn() {
 		return literal("on")
 				.executes(context -> switchPatPatState(context, true));
 	}
 
-	public static LiteralArgumentBuilder<FabricClientCommandSource> getOff() {
+	public static LiteralArgumentBuilder<CommandSourceStack> getOff() {
 		return literal("off")
 				.executes(context -> switchPatPatState(context, false));
 	}
 
-	private static int switchPatPatState(CommandContext<FabricClientCommandSource> context, boolean state) {
+	private static int switchPatPatState(CommandContext<CommandSourceStack> context, boolean state) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		MutableComponent text;
 		if (config.getMainConfig().isModEnabled() != state) {

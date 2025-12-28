@@ -6,7 +6,7 @@ import net.lopymine.patpat.utils.*;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 
-import net.lopymine.patpat.PatLogger;
+import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 

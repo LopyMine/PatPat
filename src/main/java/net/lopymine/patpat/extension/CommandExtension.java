@@ -1,8 +1,8 @@
 package net.lopymine.patpat.extension;
 
-import me.lucko.fabric.api.permissions.v0.Permissions;
+//import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.lopymine.patpat.server.command.PatPatServerCommandManager;
-import net.lopymine.patpat.utils.TextUtils;
+import net.lopymine.patpat.utils.*;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -47,8 +47,10 @@ public class CommandExtension {
 		//? if <1.17.1 {
 		/*return context./^? if >=1.17.1 {^/hasPermissionLevel/^?} else {^//^hasPermission^//^?}^/(defaultLevel);
 		 *///?} else {
-		return Permissions.check(context, permission, defaultLevel);
+		//return Permissions.check(context, permission, defaultLevel);
 		//?}
+
+		return true;
 	}
 
 }

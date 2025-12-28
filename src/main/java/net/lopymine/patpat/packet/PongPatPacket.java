@@ -1,27 +1,25 @@
 package net.lopymine.patpat.packet;
 
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-
 import org.jetbrains.annotations.Nullable;
 
 public interface PongPatPacket<T extends PongPatPacket<T>> extends BasePatPatPacket<T> {
 
-	T setPacketSender(PacketSender sender);
+	void setPacketReply(PacketReply sender);
 
 	@Nullable
-	PacketSender getSender();
+	PacketReply getPacketReply();
 
 	default boolean canPong() {
-		return this.getSender() != null;
+		return this.getPacketReply() != null;
 	}
 
 	//? if >=1.19.4 {
 	default void pong(BasePatPatPacket<?> packet) {
-		PacketSender sender = this.getSender();
-		if (sender == null) {
+		PacketReply reply = this.getPacketReply();
+		if (reply == null) {
 			return;
 		}
-		sender.sendPacket(packet);
+		reply.reply(packet);
 	}
 	//?} else {
 	/*default void pong(net.minecraft.resources.ResourceLocation id, net.minecraft.network.FriendlyByteBuf buf) {

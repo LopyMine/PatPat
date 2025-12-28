@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.*;
 import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.*;
+import net.lopymine.patpat.logger.PatLogger;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;

@@ -1,9 +1,8 @@
 package net.lopymine.patpat.server.event;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-
-import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.*;
 import net.lopymine.patpat.common.Version;
+import net.lopymine.patpat.entrypoint.MultiLoader;
 import net.lopymine.patpat.packet.s2c.HelloPatPatPlayerS2CPacket;
 import net.lopymine.patpat.server.packet.PatPatServerNetworkManager;
 import net.lopymine.patpat.server.packet.PatPatServerPacketManager;
@@ -17,15 +16,19 @@ public class PatPatServerPlayerEvents {
 	}
 
 	public static void register() {
-		ServerPlayConnectionEvents.INIT.register((handler, server) -> { ServerPlayer player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
-			PatPatServerPacketManager.PLAYER_VERSIONS.put(player.getUUID(), Version.PACKET_V1_VERSION);
-			PatPat.LOGGER.debug("Player {} just joined, sending hello packet...", player.getName().getString());
-			PatPatServerNetworkManager.sendPacketToPlayer(player, new HelloPatPatPlayerS2CPacket());
-		});
-
-		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> { ServerPlayer player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
-			PatPatServerPacketManager.PLAYER_VERSIONS.remove(player.getUUID());
-			PatPat.LOGGER.debug("Player {} disconnected!", player.getName().getString());
+		MultiLoader.getInstance().registerServerPlayerLogListener((loggedIn, player) -> {
+			if (loggedIn) {
+				if(!(player instanceof ServerPlayer serverPlayer)){
+					PatPat.LOGGER.warn("Not instance of ServerPlayer");
+					return;
+				}
+				PatPatServerPacketManager.PLAYER_VERSIONS.put(player.getUUID(), Version.PACKET_V1_VERSION);
+				PatPat.LOGGER.debug("Player {} just joined, sending hello packet...", player.getName().getString());
+				PatPatServerNetworkManager.sendPacketToPlayer(serverPlayer, new HelloPatPatPlayerS2CPacket());
+			} else {
+				PatPatServerPacketManager.PLAYER_VERSIONS.remove(player.getUUID());
+				PatPat.LOGGER.debug("Player {} disconnected!", player.getName().getString());
+			}
 		});
 	}
 

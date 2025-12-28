@@ -4,9 +4,7 @@ import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
 import lombok.Getter;
-import net.lopymine.patpat.PatLogger;
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.common.config.PatPatConfigManager;
+import net.lopymine.patpat.logger.PatLogger;
 import org.jetbrains.annotations.Nullable;
 
 @Getter

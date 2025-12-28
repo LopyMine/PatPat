@@ -1,14 +1,12 @@
 package net.lopymine.patpat.dedicated;
 
-import net.fabricmc.api.DedicatedServerModInitializer;
-import net.lopymine.patpat.*;
+import net.lopymine.patpat.logger.PatLogger;
 
-public class PatPatDedicatedServer implements DedicatedServerModInitializer {
+public class PatPatDedicatedServer {
 
 	public static final PatLogger LOGGER = new PatLogger("PatPat/Dedicated");
 
-	@Override
-	public void onInitializeServer() {
+	public static void onInitializeServer() {
 		PatPatDedicatedServerTranslationManager.reload();
 	}
 }

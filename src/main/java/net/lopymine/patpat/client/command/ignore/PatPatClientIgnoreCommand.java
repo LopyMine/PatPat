@@ -8,7 +8,6 @@ import net.minecraft.world.entity.EntityType;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.command.argument.EntityTypeArgumentType;
 import net.lopymine.patpat.client.config.list.PatPatClientIgnoreMobListConfig;
@@ -18,8 +17,9 @@ import net.lopymine.patpat.utils.VersionedThings;
 
 import java.util.Objects;
 
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.argument;
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.literal;
+import net.minecraft.commands.CommandSourceStack;
+import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.literal;
+import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.argument;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientIgnoreCommand {
@@ -30,13 +30,13 @@ public class PatPatClientIgnoreCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
+	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("ignore")
 				.then(getAdd())
 				.then(getRemove());
 	}
 
-	public static LiteralArgumentBuilder<FabricClientCommandSource> getAdd() {
+	public static LiteralArgumentBuilder<CommandSourceStack> getAdd() {
 		return literal("add")
 				.then(argument(ENTITY_TYPE_ARGUMENT_NAME, EntityTypeArgumentType.entityType())
 						.suggests((context, builder) -> SharedSuggestionProvider
@@ -54,7 +54,7 @@ public class PatPatClientIgnoreCommand {
 						.executes(context -> onIgnoreChange(context, true)));
 	}
 
-	public static LiteralArgumentBuilder<FabricClientCommandSource> getRemove() {
+	public static LiteralArgumentBuilder<CommandSourceStack> getRemove() {
 		return literal("remove")
 				.then(argument(ENTITY_TYPE_ARGUMENT_NAME, EntityTypeArgumentType.entityType())
 						.suggests((context, builder) -> SharedSuggestionProvider
@@ -67,7 +67,7 @@ public class PatPatClientIgnoreCommand {
 						.executes(context -> onIgnoreChange(context, false)));
 	}
 
-	private static int onIgnoreChange(CommandContext<FabricClientCommandSource> context, boolean add) {
+	private static int onIgnoreChange(CommandContext<CommandSourceStack> context, boolean add) {
 		EntityType<?> entityType = EntityTypeArgumentType.getEntityType(ENTITY_TYPE_ARGUMENT_NAME, context);
 		PatPatClientIgnoreMobListConfig config = PatPatClientIgnoreMobListConfig.getInstance();
 		boolean success = add ? config.addMob(entityType) : config.removeMob(entityType);

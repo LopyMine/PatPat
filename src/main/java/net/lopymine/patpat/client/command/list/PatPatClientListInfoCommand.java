@@ -5,7 +5,6 @@ import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
@@ -15,7 +14,8 @@ import net.lopymine.patpat.extension.ClientCommandExtension;
 
 import java.util.*;
 
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.literal;
+import net.minecraft.commands.CommandSourceStack;
+import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientListInfoCommand {
@@ -24,12 +24,12 @@ public class PatPatClientListInfoCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
+	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("info")
 				.executes(PatPatClientListInfoCommand::onInfo);
 	}
 
-	private static int onInfo(CommandContext<FabricClientCommandSource> context) {
+	private static int onInfo(CommandContext<CommandSourceStack> context) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		PatPatClientMultiplayerConfig serverConfig = config.getMultiPlayerConfig();
 		Map<UUID, String> map = PatPatClientPlayerListConfig.getInstance().getValues();

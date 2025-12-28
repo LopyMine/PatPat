@@ -1,4 +1,6 @@
-package net.lopymine.patpat.modmenu;
+package net.lopymine.patpat.modmenu.translation;
+
+//? if fabric {
 
 import lombok.Getter;
 
@@ -6,7 +8,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
 
-import net.lopymine.patpat.PatLogger;
+import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.PatPat;
 
 import java.util.*;
@@ -20,10 +22,9 @@ public class ModMenuTranslators {
 	private Map<String, Collection<String>> translators = new HashMap<>();
 	/*?} else {*/
 	/*private List<String> translators = new ArrayList<>();
-	*//*?}*/
+	 *//*?}*/
 
 	private static ModMenuTranslators instance;
-
 
 	private ModMenuTranslators() {
 		Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(PatPat.MOD_ID);
@@ -59,3 +60,4 @@ public class ModMenuTranslators {
 	}
 
 }
+//?}

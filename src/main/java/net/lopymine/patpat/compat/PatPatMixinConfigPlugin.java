@@ -1,10 +1,9 @@
 package net.lopymine.patpat.compat;
 
+import net.lopymine.patpat.entrypoint.MultiLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
-
-import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +15,7 @@ public class PatPatMixinConfigPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String mixinClass, String mixinSource) {
-		return !mixinSource.equals(MOD_MENU_MIXIN_CLASS) || FabricLoader.getInstance().isModLoaded("modmenu");
+		return !mixinSource.equals(MOD_MENU_MIXIN_CLASS) || MultiLoader.getInstance().isModLoaded("modmenu");
 	}
 
 	@Override

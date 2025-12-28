@@ -1,7 +1,7 @@
 package net.lopymine.patpat.client.config.list;
 
 import lombok.Getter;
-import net.lopymine.patpat.PatLogger;
+import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.common.config.list.AbstractListConfig;

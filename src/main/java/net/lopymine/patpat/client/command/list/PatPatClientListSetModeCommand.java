@@ -4,7 +4,6 @@ import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.command.argument.*;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
@@ -15,8 +14,9 @@ import net.lopymine.patpat.utils.*;
 
 import net.minecraft.network.chat.*;
 
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.argument;
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.literal;
+import net.minecraft.commands.CommandSourceStack;
+import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.literal;
+import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.argument;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientListSetModeCommand {
@@ -25,13 +25,13 @@ public class PatPatClientListSetModeCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
+	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("set")
 						.then(argument("mode", ListModeArgumentType.listMode())
 								.executes(PatPatClientListSetModeCommand::onSetListMode));
 	}
 
-	private static int onSetListMode(CommandContext<FabricClientCommandSource> context) {
+	private static int onSetListMode(CommandContext<CommandSourceStack> context) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		ListMode mode = ListModeArgumentType.getListMode(context, "mode");
 		PatPatClientMultiplayerConfig serverConfig = config.getMultiPlayerConfig();

@@ -1,7 +1,8 @@
 package net.lopymine.patpat.packet;
 
+import java.util.function.Function;
 import lombok.Getter;
-import net.minecraft.network.*;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import java.util.function.Function;
 

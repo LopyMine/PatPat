@@ -6,7 +6,7 @@ import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.PlayerConfig;
 import net.lopymine.patpat.client.config.sub.PatPatClientFunConfig.PvpMode;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
-import net.lopymine.patpat.client.render.PatPatClientRenderer.PatPacket;
+import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
 import net.lopymine.patpat.extension.GameProfileExtension;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
@@ -48,7 +48,7 @@ public class MultiPlayerGameModeMixin {
 		GameProfile profile = /*? if >=1.20.2 {*/ Minecraft.getInstance().getGameProfile(); /*?} else {*/ /*Minecraft.getInstance().getUser().getGameProfile(); *//*?}*/
 
 		PlayerConfig whoPatted = PlayerConfig.of(profile.getName(), profile.getUUID());
-		PatPatClientRenderer.registerClientPacket(new PatPacket(pattedEntity, whoPatted, localPlayer, false));
+		PatPatClientRenderer.registerClientPacket(new PacketPat(pattedEntity, whoPatted, localPlayer, false));
 	}
 
 }

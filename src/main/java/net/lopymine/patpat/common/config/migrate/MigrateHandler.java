@@ -1,4 +1,4 @@
-package net.lopymine.patpat.common.migrate;
+package net.lopymine.patpat.common.config.migrate;
 
 public interface MigrateHandler {
 

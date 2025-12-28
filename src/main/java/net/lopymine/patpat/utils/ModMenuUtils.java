@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 
-import net.lopymine.patpat.PatTranslation;
+import net.lopymine.patpat.translation.PatTranslation;
 
 import java.util.function.Function;
 

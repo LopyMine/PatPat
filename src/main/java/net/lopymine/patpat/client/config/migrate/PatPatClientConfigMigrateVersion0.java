@@ -12,7 +12,7 @@ import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.config.vector.Vec3f;
-import net.lopymine.patpat.common.migrate.AbstractConfigMigrateHandler;
+import net.lopymine.patpat.common.config.migrate.AbstractConfigMigrateHandler;
 import net.lopymine.patpat.utils.*;
 
 import java.io.*;

@@ -1,5 +1,6 @@
-package net.lopymine.patpat.modmenu;
+package net.lopymine.patpat.modmenu.screen;
 
+import net.lopymine.patpat.translation.PatTranslation;
 import net.minecraft.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ConfirmScreen;
@@ -9,7 +10,6 @@ import net.minecraft.util.*;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.utils.*;
-import net.lopymine.patpat.*;
 
 import java.net.*;
 import java.util.*;

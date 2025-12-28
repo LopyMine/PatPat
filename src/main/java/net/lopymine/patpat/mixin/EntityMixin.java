@@ -9,15 +9,15 @@ import net.lopymine.patpat.utils.mixin.MarkedEntity;
 public class EntityMixin implements MarkedEntity {
 
 	@Unique
-	private boolean marked;
+	private boolean patPat$marked;
 
 	@Override
 	public void patPat$mark(boolean marked) {
-		this.marked = marked;
+		this.patPat$marked = marked;
 	}
 
 	@Override
 	public boolean patPat$isMarked() {
-		return this.marked;
+		return this.patPat$marked;
 	}
 }

@@ -1,14 +1,13 @@
 package net.lopymine.patpat.client.packet;
 
-import net.fabricmc.fabric.api.client.networking.v1.*;
-
-import net.lopymine.patpat.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelistConfig;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.compat.flashback.FlashbackManager;
 import net.lopymine.patpat.compat.replaymod.ReplayModManager;
+import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.logger.PatLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 
@@ -24,7 +23,10 @@ public class PatPatClientProxLibManager {
 
 	public static void register() {
 		PatPatClientProxLibManager.reset();
-		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+		MultiLoader.getInstance().registerClientPlayerLogListener((loggedIn) -> {
+			if (loggedIn) {
+				return;
+			}
 			if (PatPatClientConfig.getInstance().getProximityPacketsConfig().isProximityPacketsEnabled()) {
 				PatPatClientProxLibManager.reset();
 			}

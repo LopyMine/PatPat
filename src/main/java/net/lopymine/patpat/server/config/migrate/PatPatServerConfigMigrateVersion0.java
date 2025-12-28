@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
-import net.lopymine.patpat.common.migrate.AbstractConfigMigrateHandler;
+import net.lopymine.patpat.common.config.migrate.AbstractConfigMigrateHandler;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.server.config.list.PatPatServerPlayerListConfig;
 

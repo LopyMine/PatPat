@@ -1,10 +1,11 @@
-package net.lopymine.patpat.common.migrate;
+package net.lopymine.patpat.common.config.migrate;
 
 import net.lopymine.patpat.*;
 import net.lopymine.patpat.common.Version;
 
 import java.util.*;
 import java.util.function.Supplier;
+import net.lopymine.patpat.logger.PatLogger;
 
 public abstract class AbstractPatPatConfigMigrateManager {
 

@@ -1,0 +1,37 @@
+license = "${mod_license}"
+issueTrackerURL = "https://github.com/LopyMine/${mod_id}"
+modLoader="javafml"
+loaderVersion="[1,)"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+side="BOTH"
+displayURL = "https://modrinth.com/mod/${mod_id}"
+logoFile = "icon/icon.png"
+authors = "${mod_authors}"
+description = '''${mod_description}'''
+
+[[mixins]]
+config = "${mod_id}.mixins.json"
+
+[[mixins]]
+config = "${mod_id}-controlling.mixins.json"
+
+[[mixins]]
+config = "${mod_id}-geckolib.mixins.json"
+
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "[1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft}"
+ordering = "NONE"
+side = "BOTH"

@@ -1,7 +1,6 @@
 package net.lopymine.patpat.server.command.ratelimit;
 
 import lombok.experimental.ExtensionMethod;
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -11,8 +10,8 @@ import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
 import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
 import net.lopymine.patpat.server.config.*;
+import net.lopymine.patpat.translation.PatTranslation;
 import net.lopymine.patpat.utils.*;
-import net.lopymine.patpat.*;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;

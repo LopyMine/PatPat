@@ -1,0 +1,28 @@
+license = "${mod_license}"
+issueTrackerURL = "https://github.com/LopyMine/${mod_id}"
+modLoader="javafml"
+loaderVersion="[1,)"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+side="BOTH"
+displayURL = "https://modrinth.com/mod/${mod_id}"
+logoFile = "icon/icon.png"
+authors = "${mod_authors}"
+description = '''${mod_description}'''
+
+[[dependencies.${mod_id}]]
+modId = "forge"
+mandatory = true
+versionRange = "${forge}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${ mod_id }]]
+modId = "minecraft"
+mandatory = true
+versionRange = "${minecraft}"
+ordering = "NONE"
+side = "BOTH"

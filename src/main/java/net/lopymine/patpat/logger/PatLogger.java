@@ -1,4 +1,4 @@
-package net.lopymine.patpat;
+package net.lopymine.patpat.logger;
 
 import org.jetbrains.annotations.Nullable;
 import lombok.*;

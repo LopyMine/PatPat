@@ -9,6 +9,7 @@ import net.lopymine.patpat.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import net.lopymine.patpat.logger.PatLogger;
 
 public class ConfigUtils {
 

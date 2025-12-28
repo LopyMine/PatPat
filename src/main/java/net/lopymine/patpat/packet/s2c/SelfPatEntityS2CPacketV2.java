@@ -1,12 +1,11 @@
 package net.lopymine.patpat.packet.s2c;
 
 import lombok.Getter;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.network.*;
-import net.minecraft.world.entity.Entity;
 import net.lopymine.patpat.packet.*;
-import net.lopymine.patpat.utils.*;
-
+import net.lopymine.patpat.utils.RLUtils;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 @Getter

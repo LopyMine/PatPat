@@ -2,19 +2,19 @@ package net.lopymine.patpat.client.keybinding;
 
 import lombok.Getter;
 import com.mojang.blaze3d.platform.InputConstants;
-//? if >=1.19.4 {
-import net.lopymine.patpat.mixin.controlling.KeyBindsScreenAccessor;
-//?}
-import net.minecraft.client.gui.screens./*? if >=1.21 {*/options./*?}*/controls.*;
+import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.minecraft.client.gui.screens.options.controls.*;
 import net.minecraft.client.KeyMapping;
-
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
+
 //? if >=1.21.9 {
-import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.utils.RLUtils;
+//?}
+
+//? if >=1.19.4 {
+import net.lopymine.patpat.mixin.controlling.KeyBindsScreenAccessor;
 //?}
 
 public class PatPatClientKeybindingManager {
@@ -40,7 +40,7 @@ public class PatPatClientKeybindingManager {
 	}
 
 	private static void registerKeybinding(KeyMapping keyBinding) {
-		KeyBindingHelper.registerKeyBinding(keyBinding);
+		MultiLoader.getInstance().registerKeybinding(keyBinding);
 	}
 
 	public static void handlePatPatKeybindingOnKeyPressed(

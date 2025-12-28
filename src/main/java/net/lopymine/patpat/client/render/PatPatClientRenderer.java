@@ -129,14 +129,12 @@ public class PatPatClientRenderer {
 				}
 			}
 
-			//? if debug_mode {
 			LocalPlayer player = Minecraft.getInstance().player;
 			if (!empty && player != null && PatPatDebugConfig.getInstance().isSelfPat()) {
 				PatPatClientManager.pat(player, PlayerConfig.currentSession());
 				ReplayModCompat.onPat(player.getId(), player.getId());
 				FlashbackCompat.onPat(player.getId(), player.getId());
 			}
-			//?}
 
 			if (!frozen) {
 				PatPatClientManager.tickEntities();

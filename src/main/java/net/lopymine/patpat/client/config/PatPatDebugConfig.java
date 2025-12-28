@@ -1,7 +1,5 @@
 package net.lopymine.patpat.client.config;
 
-//? if debug_mode {
-
 import lombok.*;
 
 import com.mojang.serialization.Codec;
@@ -61,4 +59,3 @@ public class PatPatDebugConfig {
 	}
 
 }
-//?}

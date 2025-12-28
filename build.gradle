@@ -63,6 +63,13 @@ repositories {
 	}
 }
 
+loom.runConfigs.configureEach { config ->
+	if (config.getEnvironment() == "client") {
+		config.vmArg("-Dpatpat.debug=true")
+	}
+}
+
+
 dependencies {
 	def mcVersion = stonecutter.current.version.toString()
 
@@ -159,9 +166,6 @@ stonecutter {
 		replace("ResourceLocation", "Identifier")
 		replace(".location()", ".identifier()")
 	}
-
-	// TODO: Сделать эту опцию доступной только при использовании Minecraft Client/Server, либо отдельный запуск, либо с атрибутом в gradle
-	constants["debug_mode"] = false
 
 }
 

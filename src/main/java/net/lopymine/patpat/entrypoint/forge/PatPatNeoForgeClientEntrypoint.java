@@ -2,8 +2,10 @@ package net.lopymine.patpat.entrypoint.forge;
 
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.modmenu.integration.PatPatModMenuIntegration;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 
@@ -12,9 +14,13 @@ public class PatPatNeoForgeClientEntrypoint {
 
 	private static IEventBus INITIALIZATION_EVENT_BUS;
 
-	public PatPatNeoForgeClientEntrypoint(IEventBus bus) {
+	public PatPatNeoForgeClientEntrypoint(ModContainer container, IEventBus bus) {
 		INITIALIZATION_EVENT_BUS = bus;
 		PatPatClient.onInitializeClient();
+		
+		PatPatModMenuIntegration modMenuIntegration = new PatPatModMenuIntegration();
+		modMenuIntegration.register(container);
+
 		INITIALIZATION_EVENT_BUS = null;
 	}
 

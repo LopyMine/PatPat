@@ -22,6 +22,10 @@
 		"ParentElementMixin",
 		"KeyBindsScreenMixin",
 
+		//? if fabric {
+		/*"ModMenuMixin",
+		*///?}
+
 		//? if <=1.21.10 {
 		/*"GameRendererMixin",
 		*///?} else {
@@ -35,7 +39,6 @@
 
 		"EntityMixin",
 		"EnderDragonRendererMixin",
-		"ModMenuMixin",
 		"MultiPlayerGameModeMixin"
 	],
 	"injectors": {

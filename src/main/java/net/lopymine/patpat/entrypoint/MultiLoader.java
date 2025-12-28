@@ -1,17 +1,12 @@
 package net.lopymine.patpat.entrypoint;
 
+import net.lopymine.patpat.entrypoint.forge.ForgeModLoader;
+
 public class MultiLoader {
 
-	private static IModLoader LOADER = null;
+	private static final IModLoader LOADER = new ForgeModLoader();
 
 	public static IModLoader getInstance() {
-		if (LOADER == null) {
-			throw new IllegalArgumentException("MultiLoader hasn't been initialized yet");
-		}
 		return LOADER;
-	}
-
-	public static void initialize(IModLoader loader) {
-		LOADER = loader;
 	}
 }

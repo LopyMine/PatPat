@@ -44,8 +44,12 @@ public class ForgeModLoader implements IModLoader {
 	}
 
 	@Override
-	public boolean isModLoaded(String modid) {
-		return ModList.get().isLoaded(modid);
+	public boolean isModLoaded(String modId) {
+		ModList list = ModList.get();
+		if (list == null) {
+			return FMLLoader.getCurrent().getLoadingModList().getModFileById(modId) != null;
+		}
+		return list.isLoaded(modId);
 	}
 
 	@Override
@@ -160,7 +164,7 @@ public class ForgeModLoader implements IModLoader {
 
 	@Override
 	public void registerServerPackets(Consumer<ServerPacketRegister> consumer) {
-		PatPatNeoForgeClientEntrypoint.getEventBus().addListener(RegisterPayloadHandlersEvent.class, (e) -> {
+		PatPatNeoForgeCommonEntrypoint.getEventBus().addListener(RegisterPayloadHandlersEvent.class, (e) -> {
 			PayloadRegistrar registrar = e.registrar("1").optional();
 
 			ServerPacketRegister register = new ServerPacketRegister() {

@@ -2,12 +2,12 @@ package net.lopymine.patpat.client.config;
 
 //? if debug_mode {
 
-import lombok.*;
+/*import lombok.*;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.lopymine.patpat.PatLogger;
+import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
@@ -61,4 +61,4 @@ public class PatPatDebugConfig {
 	}
 
 }
-//?}
+*///?}

@@ -4,6 +4,7 @@ import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.entrypoint.MultiLoader;
 
 import net.lopymine.patpat.client.config.*;
+import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.client.render.feature.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -41,9 +42,6 @@ import org.joml.Quaternionf;
 /*import com.mojang.blaze3d.systems.RenderSystem;
  *//*?}*/
 
-//? if <=1.21.8 {
-/*import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-*//*?}*/
 
 
 @ExtensionMethod(VertexConsumerExtension.class)
@@ -76,7 +74,7 @@ public class PatPatClientRenderer {
 
 	public static void register() {
 		//? if <=1.21.8 {
-		/*MultiLoader.getLoader().registerAfterEntitiesRenderer((source, stack) -> {
+		/*MultiLoader.getInstance().registerAfterEntitiesRenderer((source, stack) -> {
 			PatPatClientRenderer.renderPatOnYourself();
 			PatFeatureRenderer.getInstance().render();
 		});
@@ -129,13 +127,13 @@ public class PatPatClientRenderer {
 			}
 
 			//? if debug_mode {
-			LocalPlayer player = Minecraft.getInstance().player;
+			/*LocalPlayer player = Minecraft.getInstance().player;
 			if (!empty && player != null && PatPatDebugConfig.getInstance().isSelfPat()) {
 				PatPatClientManager.pat(player, PlayerConfig.currentSession());
 				ReplayModCompat.onPat(player.getId(), player.getId());
 				FlashbackCompat.onPat(player.getId(), player.getId());
 			}
-			//?}
+			*///?}
 
 			if (!frozen) {
 				PatPatClientManager.tickEntities();

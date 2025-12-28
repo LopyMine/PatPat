@@ -44,6 +44,6 @@ public class PatPatConfigManager {
 		PatPatClient.LOGGER.setDebugMode(config.getMainConfig().isDebugLogEnabled());
 
 		//? if debug_mode
-		net.lopymine.patpat.client.config.PatPatDebugConfig.reload();
+		//net.lopymine.patpat.client.config.PatPatDebugConfig.reload();
 	}
 }

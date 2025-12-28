@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //? if debug_mode
-import net.lopymine.patpat.client.config.PatPatDebugConfig;
+//import net.lopymine.patpat.client.config.PatPatDebugConfig;
 
 @Getter
 @Builder
@@ -35,12 +35,12 @@ public class PatConfig {
 		Runnable saveFunction = config::saveAsync;
 
 		//? if debug_mode {
-		PatPatDebugConfig debugConfig = PatPatDebugConfig.getInstance();
+		/*PatPatDebugConfig debugConfig = PatPatDebugConfig.getInstance();
 		saveFunction = () -> {
 			config.saveAsync();
 			debugConfig.saveAsync();
 		};
-		//?}
+		*///?}
 
 
 		return PatConfig.builder()
@@ -48,7 +48,7 @@ public class PatConfig {
 				.onSave(saveFunction)
 				.addCategory(generateMainCategory(config))
 				//? if debug_mode
-				.addCategory(generateDebugCategory(debugConfig))
+				//.addCategory(generateDebugCategory(debugConfig))
 				.build();
 	}
 
@@ -222,7 +222,7 @@ public class PatConfig {
 						.build()
 				)
 				//? if proxlib {
-				.addElement(PatGroup.builder()
+				/*.addElement(PatGroup.builder()
 						.key("proximity_packets")
 						.addOption(BooleanOption.builder()
 								.name(ModMenuUtils.getOptionName("proximity_packets_enabled"))
@@ -259,12 +259,12 @@ public class PatConfig {
 						)
 						.build()
 				)
-				//?}
+				*///?}
 				.build();
 	}
 
 	//? if debug_mode {
-	public static PatCategory generateDebugCategory(PatPatDebugConfig debugConfig) {
+	/*public static PatCategory generateDebugCategory(PatPatDebugConfig debugConfig) {
 		PatPatDebugConfig defDebugConfig = PatPatDebugConfig.getNewInstance().get();
 
 		return PatCategory.builder()
@@ -282,7 +282,7 @@ public class PatConfig {
 				)
 				.build();
 	}
-	//?}
+	*///?}
 
 	public static PatDescription getDescriptionWithWarn(String key) {
 		return PatDescription.of(

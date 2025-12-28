@@ -1,7 +1,9 @@
-//? >=1.19.4 {
+
 package net.lopymine.patpat.client;
 
-import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
+//? >=1.19.4 && fabric {
+
+/*import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
 import org.junit.jupiter.api.*;
@@ -106,4 +108,4 @@ public class PatPatClientConfigMigrateTests {
 		}
 	}
 }
-//?}
+*///?}

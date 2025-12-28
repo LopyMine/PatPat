@@ -10,6 +10,16 @@ displayName = "${mod_name}"
 side="BOTH"
 displayURL = "https://modrinth.com/mod/${mod_id}"
 logoFile = "icon/icon.png"
+credits = '''
+
+Translators:
+    TastyPommesLul: Germany
+    Hamka: Polish
+    MrLemonHog: Ukrainian
+    Balojan: Vietnamese (46%)
+    okunamayanad: Turkish (25%)
+    Gallium: French (19%)
+'''
 authors = "${mod_authors}"
 description = '''${mod_description}'''
 

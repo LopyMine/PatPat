@@ -2,7 +2,8 @@ package net.lopymine.patpat.client.render;
 
 import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.entrypoint.MultiLoader;
-import net.lopymine.patpat.client.config.sub.PatPatClientVisualConfig;
+
+import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.render.feature.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -17,9 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
-import net.lopymine.patpat.client.config.PatPatClientStatsConfig;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.client.packet.*;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
@@ -129,12 +128,14 @@ public class PatPatClientRenderer {
 				}
 			}
 
+			//? if debug_mode {
 			LocalPlayer player = Minecraft.getInstance().player;
-			if (!empty && player != null && MultiLoader.getInstance().isDevelopmentEnvironment() && config.getMainConfig().isDebugLogEnabled()) {
+			if (!empty && player != null && PatPatDebugConfig.getInstance().isSelfPat()) {
 				PatPatClientManager.pat(player, PlayerConfig.currentSession());
 				ReplayModCompat.onPat(player.getId(), player.getId());
 				FlashbackCompat.onPat(player.getId(), player.getId());
 			}
+			//?}
 
 			if (!frozen) {
 				PatPatClientManager.tickEntities();

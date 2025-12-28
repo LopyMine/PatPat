@@ -41,9 +41,12 @@
 	],
 	"custom": {
 		"translators": {
-			"okunamayanad": "Turkish (24%)",
+			"TastyPommesLul": "Germany",
+			"Hamka": "Polish",
 			"MrLemonHog": "Ukrainian",
-			"Balojan": "Vietnamese (46%)"
+			"Balojan": "Vietnamese (46%)",
+			"okunamayanad": "Turkish (25%)",
+			"Gallium": "French (19%)"
 		},
 		"modmenu": {
 			"links": {

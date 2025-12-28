@@ -156,6 +156,17 @@ stonecutter {
 		replace("ControllingOptionsScreen", "ControlsSettingsGuiNew")
 	}
 
+	replacements.string(current.parsed >= "1.18") {
+		replace("KeyBindsScreenAccessor", "KeyBindsScreenAccessor")
+		replace("KeyBindsScreenMixin", "KeyBindsScreenMixin")
+		replace("NewKeyBindsScreen", "NewKeyBindsScreen")
+		replace("ControlsScreen", "KeyBindsScreen")
+	}
+
+	replacements.string(current.parsed >= "1.21") {
+		replace("import net.minecraft.client.gui.screens.controls.*;", "import net.minecraft.client.gui.screens.options.controls.*;")
+	}
+
 	replacements.string(current.parsed >= "1.21.9") {
 		replace("int keyCode, int scanCode, int modifiers", "net.minecraft.client.input.KeyEvent event")
 		replace("double mouseX, double mouseY, int button", "net.minecraft.client.input.MouseButtonEvent event, boolean bl")
@@ -167,16 +178,8 @@ stonecutter {
 		replace(".location()", ".identifier()")
 	}
 
-	replacements.string(current.parsed >= "1.18") {
-		replace("KeyBindsScreenAccessor", "KeyBindsScreenAccessor")
-		replace("KeyBindsScreenMixin", "KeyBindsScreenMixin")
-		replace("NewKeyBindsScreen", "NewKeyBindsScreen")
-		replace("ControlsScreen", "KeyBindsScreen")
-	}
-
-	replacements.string(current.parsed >= "1.21") {
-		replace("import net.minecraft.client.gui.screens.controls.*;", "import net.minecraft.client.gui.screens.options.controls.*;")
-	}
+	// TODO: Сделать эту опцию доступной только при использовании Minecraft Client/Server, либо отдельный запуск, либо с атрибутом в gradle
+	constants["debug_mode"] = false
 
 }
 

@@ -42,5 +42,8 @@ public class PatPatConfigManager {
 		PatPatClientConfig config = PatPatClientConfig.reload();
 		PatPatClientProxLibServersWhitelistConfig.getInstance().reload();
 		PatPatClient.LOGGER.setDebugMode(config.getMainConfig().isDebugLogEnabled());
+
+		//? if debug_mode
+		net.lopymine.patpat.client.config.PatPatDebugConfig.reload();
 	}
 }

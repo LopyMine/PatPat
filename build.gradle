@@ -181,6 +181,7 @@ stonecutter {
 		replace("ProxPacketIdentifier", "ProxPacketIdentifier")
 		replace("ResourceLocation", "Identifier")
 		replace(".location()", ".identifier()")
+		replace("RenderType", "RenderTypes")
 	}
 
 }

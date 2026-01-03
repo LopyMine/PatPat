@@ -23,6 +23,8 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @AllArgsConstructor
 public class PatPatDebugConfig {
 
+	public static final boolean DEBUG_ENABLED = Boolean.getBoolean("patpat.debug");
+
 	public static final Codec<PatPatDebugConfig> CODEC = RecordCodecBuilder.create(inst -> inst.group(
 			option("selfPat", false, Codec.BOOL, PatPatDebugConfig::isSelfPat)
 	).apply(inst, PatPatDebugConfig::new));

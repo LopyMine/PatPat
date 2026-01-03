@@ -44,6 +44,9 @@ public class PatPatConfigManager {
 		PatPatClientConfig config = PatPatClientConfig.reload();
 		PatPatClientProxLibServersWhitelistConfig.getInstance().reload();
 		PatPatClient.LOGGER.setDebugMode(config.getMainConfig().isDebugLogEnabled());
-		PatPatDebugConfig.reload();
+		if(PatPatDebugConfig.DEBUG_ENABLED){
+			PatPatDebugConfig.reload();
+		}
+
 	}
 }

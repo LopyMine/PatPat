@@ -43,7 +43,7 @@ public class PatConfig {
 				.title(ModMenuUtils.getModTitle())
 				.onSave(saveFunction)
 				.addCategory(generateMainCategory(config))
-				.addCategoryIf(generateDebugCategory(debugConfig), Boolean.getBoolean("patpat.debug"))
+				.addCategoryIf(generateDebugCategory(debugConfig), PatPatDebugConfig.DEBUG_ENABLED)
 				.build();
 	}
 
@@ -289,10 +289,9 @@ public class PatConfig {
 	public static class PatConfigBuilder {
 
 		public PatConfigBuilder addCategoryIf(PatCategory category, boolean bl) {
-			if (!bl) {
-				return this;
+			if (bl) {
+				this.addCategory(category);
 			}
-			this.addCategory(category);
 			return this;
 		}
 

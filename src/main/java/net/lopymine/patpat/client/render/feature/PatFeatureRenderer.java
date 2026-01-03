@@ -29,8 +29,7 @@ public class PatFeatureRenderer {
 		return INSTANCE;
 	}
 
-	public void render() {
-		BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
+	public void render(BufferSource source) {
 
 		for (PatFeatureRequest request : this.requests) {
 			//? if >=1.21.11 {

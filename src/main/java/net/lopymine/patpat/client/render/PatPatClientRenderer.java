@@ -77,11 +77,12 @@ public class PatPatClientRenderer {
 
 	public static void register() {
 		//? if <=1.21.8 {
-		/*WorldRenderEvents.AFTER_ENTITIES.register((__) -> {
+		/*WorldRenderEvents.AFTER_ENTITIES.register((context) -> {
 			PatPatClientRenderer.renderPatOnYourself();
-			PatFeatureRenderer.getInstance().render();
+			PatFeatureRenderer.getInstance().render(context.consumers());
 		});
 		*///?}
+
 		ClientTickEvents.END_WORLD_TICK.register(client -> {
 			boolean frozen = /*? if >1.20.2 {*/ client.tickRateManager().isFrozen(); /*?} else {*/ /*false; *//*?}*/
 			PatPatClientConfig config = PatPatClientConfig.getInstance();

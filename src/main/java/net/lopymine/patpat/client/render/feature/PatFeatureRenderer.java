@@ -10,13 +10,12 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 //? if >=1.21.11 {
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 //?} else {
-
 /*import net.minecraft.client.renderer.RenderType;
-
 *///?}
 
 @ExtensionMethod(value = {VertexConsumerExtension.class, PoseExtension.class})
@@ -30,10 +29,10 @@ public class PatFeatureRenderer {
 		return INSTANCE;
 	}
 
-	public void render(/*? if <=1.21.8 {*//*MultiBufferSource*//*?} else {*/BufferSource/*?}*/ source) {
+	public void render(MultiBufferSource source) {
 
 		for (PatFeatureRequest request : this.requests) {
-			VertexConsumer buffer = source.getBuffer(RenderTypes.entityTranslucent(request.texture()));
+			VertexConsumer buffer = (request.provider() == null ? source : request.provider()).getBuffer(RenderTypes.entityTranslucent(request.texture()));
 
 			/*? if >=1.19.3 {*/ org.joml.Matrix4f /*?} else {*/ /*com.mojang.math.Matrix4f*//*?}*/ matrix = request.poseStack().pose();
 			buffer.withVertex(matrix, request.x1(), request.y1(), request.z()).withColor(255, 255, 255, 255).withUv(request.u1(), request.v1()).withOverlay(OverlayTexture.NO_OVERLAY).withLight(request.light()).withNormal(0, 1, 0).end();
@@ -58,9 +57,10 @@ public class PatFeatureRenderer {
 			float v1,
 			float u2,
 			float v2,
-			int light
+			int light,
+			@Nullable MultiBufferSource provider
 	) {
-		this.requests.add(new PatFeatureRequest(texture, poseStack.copy(), x1, y1, x2, y2, z, u1, v1, u2, v2, light));
+		this.requests.add(new PatFeatureRequest(texture, poseStack.copy(), x1, y1, x2, y2, z, u1, v1, u2, v2, light, provider));
 	}
 
 }

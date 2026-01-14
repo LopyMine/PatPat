@@ -7,6 +7,10 @@ on:
     paths-ignore:
       - '**.md'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -21,11 +25,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-      - name: setup jdk ${{ matrix.java }}
+      - name: setup jdk 21
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ matrix.java }}
-          distribution: 'microsoft'
+          java-version: 21
+          distribution: 'temurin'
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       - name: build

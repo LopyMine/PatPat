@@ -134,7 +134,6 @@ fabricApi {
 
 tasks.named("runClientGameTest", JavaExec) {
 	jvmArgs "-ea"
-	useXVFB = true
 }
 
 configurations.configureEach {

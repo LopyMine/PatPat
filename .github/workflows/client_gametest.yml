@@ -8,7 +8,7 @@ on:
       - '**.md'
 
 jobs:
-  build:
+  client_gametest:
     runs-on: ubuntu-22.04
     steps:
       - name: Free up disk on GitHub runner

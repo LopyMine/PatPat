@@ -58,7 +58,7 @@ public class PatPatClientGameTest implements FabricClientGameTest {
 			context.takeScreenshot("initializing_world");
 			context.getInput().holdKey(GLFW.GLFW_KEY_LEFT_SHIFT);
 			context.runOnClient(minecraft -> {
-				assert minecraft.player != null;
+				assert minecraft.player == null;
 				minecraft.player.setXRot(27);
 			});
 
@@ -83,6 +83,7 @@ public class PatPatClientGameTest implements FabricClientGameTest {
 			}
 		}
 		context.getInput().releaseMouse(1);
+
 		return false;
 	}
 }

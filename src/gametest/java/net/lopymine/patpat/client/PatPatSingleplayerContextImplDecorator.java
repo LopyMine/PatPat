@@ -25,15 +25,14 @@ public class PatPatSingleplayerContextImplDecorator implements TestSingleplayerC
 	public PatPatSingleplayerContextImplDecorator(TestSingleplayerContext testSingleplayerContext){
 		try {
 			this.testSingleplayerContext = testSingleplayerContext;
-			Class<? extends TestSingleplayerContext> aClass = testSingleplayerContext.getClass();
-			Field context1 = aClass.getDeclaredField("context");
-			context1.setAccessible(true);
-			this.context = (ClientGameTestContext) context1.get(testSingleplayerContext);
+			Class<? extends TestSingleplayerContext> testSingleplayerContextClass = testSingleplayerContext.getClass();
+			Field contextField = testSingleplayerContextClass.getDeclaredField("context");
+			contextField.setAccessible(true);
+			this.context = (ClientGameTestContext) contextField.get(testSingleplayerContext);
 			this.server = testSingleplayerContext.getServer();
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
-
 	}
 
 	@Override

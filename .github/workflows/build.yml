@@ -9,12 +9,6 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        # Use these Java versions
-        java: [
-          21,    # Current Java LTS
-        ]
     runs-on: ubuntu-22.04
     steps:
       - name: Free up disk on GitHub runner
@@ -44,3 +38,11 @@ jobs:
           path: |
             build/libs/
             /build/reports/tests/test/**
+      - name: run client gametest
+        run: ./gradlew runClientGameTest
+      - name: capture build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Artifacts
+          path: |
+            /build/run/clientGameTest/screenshots/**

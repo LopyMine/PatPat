@@ -7,7 +7,7 @@ loaderVersion="[1,)"
 modId = "${mod_id}"
 version = "${mod_version}"
 displayName = "${mod_name}"
-side="BOTH"
+side="${neoforge_trick_side}"
 displayURL = "https://modrinth.com/mod/${mod_id}"
 logoFile = "icon/icon.png"
 credits = '''
@@ -23,14 +23,7 @@ Translators:
 authors = "${mod_authors}"
 description = '''${mod_description}'''
 
-[[mixins]]
-config = "${mod_id}.mixins.json"
-
-[[mixins]]
-config = "${mod_id}-controlling.mixins.json"
-
-[[mixins]]
-config = "${mod_id}-geckolib.mixins.json"
+${neoforge_trick_mixin_configs}
 
 [[dependencies.${mod_id}]]
 modId = "neoforge"

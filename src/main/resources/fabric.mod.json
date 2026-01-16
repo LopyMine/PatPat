@@ -14,7 +14,7 @@
 	},
 	"license": "${mod_license}",
 	"icon": "icon/icon.png",
-	"environment": "*",
+	"environment": "${fabric_trick_side}",
 	"entrypoints": {
 		"main": [
 			"net.lopymine.patpat.PatPat"

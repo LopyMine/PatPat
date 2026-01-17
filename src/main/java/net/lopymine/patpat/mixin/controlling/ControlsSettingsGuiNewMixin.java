@@ -2,27 +2,27 @@ package net.lopymine.patpat.mixin.controlling;
 
 //? if =1.16.5 && controlling {
 
-/*import com.blamejared.controlling.client.gui.ControlsSettingsGuiNew;
+/*import com.blamejared.controlling.client.gui.ControllingOptionsScreen;
 import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.controls.ControlsScreen;
+import net.minecraft.client.gui.screens.controls.KeyBindsScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ControlsSettingsGuiNew.class)
-public class ControlsSettingsGuiNewMixin extends ControlsScreen {
+@Mixin(ControllingOptionsScreen.class)
+public class ControllingOptionsScreenMixin extends KeyBindsScreen {
 
-	public ControlsSettingsGuiNewMixin(Screen screen, Options options) {
+	public ControllingOptionsScreenMixin(Screen screen, Options options) {
 		super(screen, options);
 	}
 
 	@Inject(
 			at = @At(
 					value = "FIELD",
-					target = "Lcom/blamejared/controlling/client/gui/ControlsSettingsGuiNew;selectedKey:Lnet/minecraft/client/KeyMapping;",
+					target = "Lcom/blamejared/controlling/client/gui/ControllingOptionsScreen;selectedKey:Lnet/minecraft/client/KeyMapping;",
 					ordinal = 1,
 					shift = Shift.AFTER
 			),

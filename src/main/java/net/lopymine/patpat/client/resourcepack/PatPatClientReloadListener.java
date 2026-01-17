@@ -1,5 +1,7 @@
 package net.lopymine.patpat.client.resourcepack;
 
+import java.util.concurrent.Executor;
+import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.entrypoint.MultiLoader;
 import net.lopymine.patpat.utils.RLUtils;
 import net.minecraft.client.Minecraft;
@@ -11,14 +13,19 @@ import net.lopymine.patpat.client.config.PatPatClientConfig;
 import java.util.*;
 import org.jetbrains.annotations.NotNull;
 
-public class PatPatClientReloadListener implements ResourceManagerReloadListener {
+public class PatPatClientReloadListener extends AbstractResourceReloadListener {
 
 	public static void register() {
-		MultiLoader.getInstance().registerResourceReloadListener(RLUtils.modId("patpat_packs_listener"), new PatPatClientReloadListener());
+		MultiLoader.getInstance().registerResourceReloadListener(new PatPatClientReloadListener());
 	}
 
 	@Override
-	public void onResourceManagerReload(@NotNull ResourceManager manager) {
+	public String getModId() {
+		return PatPat.MOD_ID;
+	}
+
+	@Override
+	protected void reloadStuff(PreparationBarrier synchronizer, ResourceManager manager, Executor prepareExecutor, Executor applyExecutor) {
 		List<PackResources> list = Minecraft.getInstance().getResourceManager().listPacks().toList();
 		if (list.isEmpty()) {
 			return;

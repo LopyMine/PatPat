@@ -1,3 +1,5 @@
+//~ client_fabric_commands
+
 package net.lopymine.patpat.client.command.info;
 
 import lombok.experimental.ExtensionMethod;
@@ -20,7 +22,7 @@ import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.liter
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientInfoCommand {
 
-	private static PatPatClientInfoCommand instance;
+	private static PatPatClientInfoCommand INSTANCE;
 
 	public static final String PLATFORM = "Fabric/Client";
 
@@ -39,24 +41,24 @@ public class PatPatClientInfoCommand {
 				.withClickEvent(CommandText.getClickEvent(Action.COPY_TO_CLIPBOARD, debugInformation))
 				.withHoverEvent(CommandText.getHoverEvent(HoverEvent.Action.SHOW_TEXT, CommandText.text("info.copy").finish()));
 
-		platformText = CommandText.goldenArgs("info.platform", PLATFORM)
+		this.platformText = CommandText.goldenArgs("info.platform", PLATFORM)
 				.finish()
 				.withStyle(style);
 
-		versionText = CommandText.goldenArgs("info.version", version)
+		this.versionText = CommandText.goldenArgs("info.version", version)
 				.finish()
 				.withStyle(style);
 
-		minecraftVersionText = CommandText.goldenArgs("info.minecraft_version", minecraftVersion)
+		this.minecraftVersionText = CommandText.goldenArgs("info.minecraft_version", minecraftVersion)
 				.finish()
 				.withStyle(style);
 	}
 
 	public static PatPatClientInfoCommand getInstance() {
-		if (instance == null) {
-			instance = new PatPatClientInfoCommand();
+		if (INSTANCE == null) {
+			INSTANCE = new PatPatClientInfoCommand();
 		}
-		return instance;
+		return INSTANCE;
 	}
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
@@ -65,9 +67,9 @@ public class PatPatClientInfoCommand {
 	}
 
 	public int version(CommandContext<CommandSourceStack> context) {
-		context.sendMsg(platformText);
-		context.sendMsg(minecraftVersionText);
-		context.sendMsg(versionText);
+		context.sendMsg(this.platformText);
+		context.sendMsg(this.minecraftVersionText);
+		context.sendMsg(this.versionText);
 
 		return Command.SINGLE_SUCCESS;
 	}

@@ -1,3 +1,5 @@
+//~ client_fabric_commands
+
 package net.lopymine.patpat.common.command;
 
 import com.mojang.brigadier.arguments.ArgumentType;

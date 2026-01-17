@@ -1,10 +1,11 @@
 package net.lopymine.patpat.client.packet;
 
 import lombok.*;
+import net.lopymine.patpat.entrypoint.MultiLoader;
 import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
-import net.lopymine.patpat.entrypoint.IModLoader.ClientPacketRegister;
+import net.lopymine.patpat.entrypoint.loader.IModLoader.ClientPacketRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.social.PlayerSocialManager;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -75,7 +76,7 @@ public class PatPatClientPacketManager {
 		}
 		HelloPatPatServerC2SPacket pongPacket = packet.getPongPacket();
 		LOGGER.debug("[PONG] Sending {} packet to the server...", pongPacket.getClass().getSimpleName());
-		PatPatClientNetworkManager.sendPacketToServer(pongPacket);
+		MultiLoader.getInstance().sendPacketToServer(pongPacket);
 	}
 
 	public static void handlePatting(S2CPatPacket<?> packet, boolean replayModPacket) {

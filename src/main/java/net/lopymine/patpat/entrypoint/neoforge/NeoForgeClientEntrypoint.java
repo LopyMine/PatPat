@@ -1,21 +1,27 @@
-package net.lopymine.patpat.entrypoint.forge;
+package net.lopymine.patpat.entrypoint.neoforge;
 
+//? if neoforge {
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.dedicated.PatPatDedicatedServer;
+import net.lopymine.patpat.modmenu.integration.PatPatModMenuIntegration;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 
-@Mod(value = PatPat.MOD_ID, dist = Dist.DEDICATED_SERVER)
-public class PatPatNeoForgeDedicatedEntrypoint {
+@Mod(value = PatPat.MOD_ID, dist = Dist.CLIENT)
+public class NeoForgeClientEntrypoint {
 
 	private static IEventBus INITIALIZATION_EVENT_BUS;
 
-	public PatPatNeoForgeDedicatedEntrypoint(IEventBus bus) {
+	public NeoForgeClientEntrypoint(ModContainer container, IEventBus bus) {
 		INITIALIZATION_EVENT_BUS = bus;
-		PatPatDedicatedServer.onInitializeServer();
+		PatPatClient.onInitializeClient();
+
+		PatPatModMenuIntegration modMenuIntegration = new PatPatModMenuIntegration();
+		modMenuIntegration.register(container);
+
 		INITIALIZATION_EVENT_BUS = null;
 	}
 
@@ -24,3 +30,4 @@ public class PatPatNeoForgeDedicatedEntrypoint {
 	}
 
 }
+//?}

@@ -1,56 +1,36 @@
-package net.lopymine.patpat.entrypoint.forge;
+package net.lopymine.patpat.entrypoint.neoforge.loader;
 
+//? if neoforge {
 import com.mojang.brigadier.CommandDispatcher;
-import java.io.*;
-import java.nio.file.Path;
+
 import java.util.function.Consumer;
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.entrypoint.IModLoader;
+import net.lopymine.patpat.client.resourcepack.AbstractResourceReloadListener;
+import net.lopymine.patpat.entrypoint.loader.IModLoader;
+import net.lopymine.patpat.entrypoint.neoforge.*;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
 import net.minecraft.client.*;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.fml.*;
-import net.neoforged.fml.loading.*;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.event.lifecycle.ClientStoppingEvent;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.*;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforgespi.language.IModFileInfo;
 
-public class ForgeModLoader implements IModLoader {
-
-	@Override
-	public boolean isDevelopmentEnvironment() {
-		return !FMLEnvironment.isProduction();
-	}
-
-	@Override
-	public Path getConfigDir() {
-		return FMLPaths.CONFIGDIR.get().resolve("patpat/");
-	}
-
-	@Override
-	public boolean isModLoaded(String modId) {
-		ModList list = ModList.get();
-		if (list == null) {
-			return FMLLoader.getCurrent().getLoadingModList().getModFileById(modId) != null;
-		}
-		return list.isLoaded(modId);
-	}
+public class NeoForgeModLoader implements IModLoader {
 
 	@Override
 	public void registerOnClientStop(Runnable runnable) {
@@ -71,7 +51,7 @@ public class ForgeModLoader implements IModLoader {
 	public void registerAfterEntitiesRenderer(CustomRenderer renderer) {
 		//? if <=1.21.8 {
 		/*NeoForge.EVENT_BUS.addListener(Post.class, (p) -> renderer.render(p.getMultiBufferSource(), p.getPoseStack()));
-		*///?}
+		 *///?}
 	}
 
 	public void registerAfterWorldTickListener(Consumer<ClientLevel> runnable) {
@@ -85,28 +65,28 @@ public class ForgeModLoader implements IModLoader {
 	}
 
 	@Override
-	public void registerResourceReloadListener(Identifier id, ResourceManagerReloadListener listener) {
-		PatPatNeoForgeClientEntrypoint.getEventBus().addListener(AddClientReloadListenersEvent.class, (e) -> e.addListener(id, listener));
+	public void registerResourceReloadListener(AbstractResourceReloadListener listener) {
+		NeoForgeClientEntrypoint.getEventBus().addListener(AddClientReloadListenersEvent.class, (e) -> e.addListener(listener.getId(), listener));
 	}
 
 	@Override
 	public void registerKeybinding(KeyMapping keybinding) {
-		PatPatNeoForgeClientEntrypoint.getEventBus().addListener(RegisterKeyMappingsEvent.class, (event) -> event.register(keybinding));
+		NeoForgeClientEntrypoint.getEventBus().addListener(RegisterKeyMappingsEvent.class, (event) -> event.register(keybinding));
 	}
 
 	@Override
-	public void registerSounds(Consumer<IModLoader.SoundRegister> consumer) {
+	public void registerSounds(Consumer<SoundRegister> consumer) {
 		ForgeSoundRegister register = new ForgeSoundRegister();
 		consumer.accept(register);
 		register.finish();
 	}
 
-	public static class ForgeSoundRegister implements IModLoader.SoundRegister {
+	public static class ForgeSoundRegister implements SoundRegister {
 
 		private final DeferredRegister<SoundEvent> register;
 
 		public ForgeSoundRegister() {
-			this.register = DeferredRegister.create(VersionedThings.SOUND_EVENT.key(), "patpat");
+			this.register = DeferredRegister.create(VersionedThings.SOUND_EVENT.key(), PatPat.MOD_ID);
 		}
 
 		public SoundEvent registerSound(String id) {
@@ -116,7 +96,7 @@ public class ForgeModLoader implements IModLoader {
 		}
 
 		public void finish() {
-			this.register.register(PatPatNeoForgeClientEntrypoint.getEventBus());
+			this.register.register(NeoForgeClientEntrypoint.getEventBus());
 		}
 
 	}
@@ -145,7 +125,7 @@ public class ForgeModLoader implements IModLoader {
 
 	@Override
 	public void registerClientPackets(Consumer<ClientPacketRegister> consumer) {
-		PatPatNeoForgeClientEntrypoint.getEventBus().addListener(RegisterClientPayloadHandlersEvent.class, (event) -> {
+		NeoForgeClientEntrypoint.getEventBus().addListener(RegisterClientPayloadHandlersEvent.class, (event) -> {
 			ClientPacketRegister register = new ClientPacketRegister() {
 				@Override
 				public <P extends BasePatPatPacket<P>> void register(PatPatPacketType<P> type, PatPatClientPacketHandler<P> handler) {
@@ -164,7 +144,7 @@ public class ForgeModLoader implements IModLoader {
 
 	@Override
 	public void registerServerPackets(Consumer<ServerPacketRegister> consumer) {
-		PatPatNeoForgeCommonEntrypoint.getEventBus().addListener(RegisterPayloadHandlersEvent.class, (e) -> {
+		NeoForgeCommonEntrypoint.getEventBus().addListener(RegisterPayloadHandlersEvent.class, (e) -> {
 			PayloadRegistrar registrar = e.registrar("1").optional();
 
 			ServerPacketRegister register = new ServerPacketRegister() {
@@ -193,25 +173,22 @@ public class ForgeModLoader implements IModLoader {
 	}
 
 	@Override
-	public InputStream loadModFile(String modId, String path) {
-		IModFileInfo file = ModList.get().getModFileById(modId);
-		if (file == null) {
-			PatPat.LOGGER.error("Failed to load file at \"{}\", because \"{}\" mod container doesn't exits!", path, modId);
-			return null;
-		}
-		try {
-			return file.getFile().getContents().openFile(path);
-		} catch (IOException e) {
-			PatPat.LOGGER.error("Failed to open file at \"{}\", reason:", path, e);
-			return null;
+	public void sendPacketToPlayer(ServerPlayer player, BasePatPatPacket<?> packet) {
+		if (packet instanceof PongPatPacket<?> pingPong && pingPong.canPong()) {
+			pingPong.pong(packet);
+		} else {
+			PacketDistributor.sendToPlayer(player, packet);
 		}
 	}
 
 	@Override
-	public ModEnvironment getEnvironment() {
-		return switch (FMLEnvironment.getDist()) {
-			case CLIENT -> ModEnvironment.CLIENT;
-			case DEDICATED_SERVER -> ModEnvironment.SERVER;
-		};
+	public void sendPacketToServer(BasePatPatPacket<?> packet) {
+		if (packet instanceof PongPatPacket<?> pingPong && pingPong.canPong()) {
+			pingPong.pong(packet);
+		} else {
+			ClientPacketDistributor.sendToServer(packet);
+		}
 	}
+
 }
+//?}

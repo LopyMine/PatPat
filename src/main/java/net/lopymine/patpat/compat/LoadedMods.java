@@ -1,13 +1,13 @@
 package net.lopymine.patpat.compat;
 
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.*;
 import net.lopymine.patpat.client.PatPatClient;
 
 public final class LoadedMods {
 
-	public static final boolean REPLAY_MOD_LOADED = MultiLoader.getInstance().isModLoaded("replaymod");
-	public static final boolean FLASHBACK_MOD_LOADED = MultiLoader.getInstance().isModLoaded("flashback");
-	public static final boolean PROX_LIB_MOD_LOADED = MultiLoader.getInstance().isModLoaded("proxlib");
+	public static final boolean REPLAY_MOD_LOADED = EarlyMultiLoader.getInstance().isModLoaded("replaymod");
+	public static final boolean FLASHBACK_MOD_LOADED = EarlyMultiLoader.getInstance().isModLoaded("flashback");
+	public static final boolean PROX_LIB_MOD_LOADED = EarlyMultiLoader.getInstance().isModLoaded("proxlib");
 
 	public static void onInitialize() {
 		sendDebugLog(REPLAY_MOD_LOADED, "Replay Mod");

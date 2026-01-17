@@ -40,7 +40,7 @@ public class NewKeyEntryMixin {
 			/^? if >=1.18 {^/
 			KeyBindsScreen screen = list.keyBindsScreen;
 			 /^?} else {^/
-			/^ControlsScreen screen = ((NewKeyBindsListAccessor) list).getScreenPleaseThanks();
+			/^KeyBindsScreen screen = ((NewKeyBindsListAccessor) list).getScreenPleaseThanks();
 			^//^?}^/
 			((net.lopymine.patpat.utils.mixin.IRequestableTooltipScreen) screen).myTotemDoll$requestTooltip((pose, x, y, d) -> {
 				screen.renderTooltip(poseStack, patPatKeybinding.getFullTranslatedKeyMessage(), x, y);

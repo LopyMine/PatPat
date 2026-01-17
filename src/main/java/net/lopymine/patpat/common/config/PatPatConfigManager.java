@@ -5,7 +5,7 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelistConfig;
 import net.lopymine.patpat.client.config.migrate.PatPatClientConfigMigrateManager;
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.*;
 import net.lopymine.patpat.server.config.*;
 import net.lopymine.patpat.server.config.migrate.PatPatServerConfigMigrateManager;
 import net.lopymine.patpat.server.config.list.PatPatServerPlayerListConfig;
@@ -15,7 +15,7 @@ import java.nio.file.Path;
 
 public class PatPatConfigManager {
 
-	public static final Path CONFIG_PATH = MultiLoader.getInstance().getConfigDir().resolve("patpat/");
+	public static final Path CONFIG_PATH = EarlyMultiLoader.getInstance().getConfigDir().resolve("%s/".formatted(PatPat.MOD_ID));
 
 	private PatPatConfigManager() {
 		throw new IllegalStateException("Manager class");

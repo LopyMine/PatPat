@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //? if <1.19.3 {
-/*import net.minecraft.client.gui.screens.controls.*;
+/*import net.minecraft.client.gui.screens.options.controls.*;
 import net.minecraft.network.chat.Component;
 *///?}
 
@@ -36,7 +36,7 @@ public class KeyEntryMixin {
 			/^? if >=1.18 {^/
 			KeyBindsScreen screen = list.keyBindsScreen;
 			/^?} else {^/
-			/^ControlsScreen screen = list.controlsScreen;
+			/^KeyBindsScreen screen = list.controlsScreen;
 			^//^?}^/
 			((net.lopymine.patpat.utils.mixin.IRequestableTooltipScreen) screen).myTotemDoll$requestTooltip((pose, x, y, d) -> {
 				screen.renderTooltip(poseStack, patPatKeybinding.getFullTranslatedKeyMessage(), x, y);

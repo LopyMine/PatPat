@@ -1,8 +1,9 @@
 package net.lopymine.patpat.server.packet;
 
 import net.lopymine.patpat.*;
-import net.lopymine.patpat.entrypoint.IModLoader.ServerPacketRegister;
-import net.lopymine.patpat.entrypoint.IModLoader.ServerPacketRegister.PacketRegistrationSide;
+import net.lopymine.patpat.entrypoint.loader.IModLoader.ServerPacketRegister;
+import net.lopymine.patpat.entrypoint.loader.IModLoader.ServerPacketRegister.PacketRegistrationSide;
+import net.lopymine.patpat.entrypoint.MultiLoader;
 import net.lopymine.patpat.logger.PatLogger;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.server.level.ServerLevel;
@@ -95,7 +96,7 @@ public class PatPatServerPacketManager {
 				continue;
 			}
 			LOGGER.debug("Sending pat packet to {} from {}", player.getName().getString(), sender.getName().getString());
-			PatPatServerNetworkManager.sendPacketToPlayer(player, getPatPacket(entity, player));
+			MultiLoader.getInstance().sendPacketToPlayer(player, getPatPacket(entity, player));
 		}
 	}
 

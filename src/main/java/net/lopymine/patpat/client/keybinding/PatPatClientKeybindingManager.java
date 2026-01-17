@@ -45,7 +45,7 @@ public class PatPatClientKeybindingManager {
 
 	public static void handlePatPatKeybindingOnKeyPressed(
 			KeyMapping mapping,
-			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*ControlsScreen *//*?}*/ screen,
+			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*KeyBindsScreen *//*?}*/ screen,
 			int keyCode,
 			int scanCode,
 			Runnable cancel
@@ -65,7 +65,7 @@ public class PatPatClientKeybindingManager {
 
 	public static void handlePatPatKeybindingOnMouseClick(
 			KeyMapping mapping,
-			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*ControlsScreen *//*?}*/ screen,
+			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*KeyBindsScreen *//*?}*/ screen,
 			int button,
 			Runnable cancel
 	) {

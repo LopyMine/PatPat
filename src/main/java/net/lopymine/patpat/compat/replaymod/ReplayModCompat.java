@@ -1,5 +1,9 @@
 package net.lopymine.patpat.compat.replaymod;
 
+//? if fabric {
+/*import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+*///?}
+
 import net.lopymine.patpat.client.packet.PatPatClientPacketManager;
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.s2c.*;

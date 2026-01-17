@@ -1,39 +1,27 @@
-package net.lopymine.patpat.entrypoint;
+package net.lopymine.patpat.entrypoint.loader;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.CommandDispatcher;
-import java.io.InputStream;
-import java.nio.file.Path;
 import java.util.function.Consumer;
+import net.lopymine.patpat.client.resourcepack.AbstractResourceReloadListener;
 import net.lopymine.patpat.packet.*;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.Nullable;
 
-public interface IModLoader {
-
-	Path getConfigDir();
-
-	boolean isDevelopmentEnvironment();
-
-	boolean isModLoaded(String modid);
-
-	void registerClientCommands(Consumer<CommandDispatcher<CommandSourceStack>> consumer);
+public interface IModLoader extends ISillyModLoader {
 
 	void registerServerCommands(Consumer<CommandDispatcher<CommandSourceStack>> consumer);
 
 	void registerAfterEntitiesRenderer(CustomRenderer renderer);
 
-	void registerAfterWorldTickListener(Consumer<ClientLevel> runnable);
+	void registerAfterWorldTickListener(Consumer<ClientLevel> consumer);
 
-	void registerResourceReloadListener(Identifier id, ResourceManagerReloadListener listener);
+	void registerResourceReloadListener(AbstractResourceReloadListener listener);
 
 	void registerKeybinding(KeyMapping keybinding);
 
@@ -51,12 +39,11 @@ public interface IModLoader {
 
 	void registerClientPackets(Consumer<ClientPacketRegister> consumer);
 
-	@Nullable
-	InputStream loadModFile(String modId, String path);
-
 	void registerServerPackets(Consumer<ServerPacketRegister> consumer);
 
-	ModEnvironment getEnvironment();
+	void sendPacketToPlayer(ServerPlayer player, BasePatPatPacket<?> packet);
+
+	void sendPacketToServer(BasePatPatPacket<?> packet);
 
 	enum ModEnvironment {
 

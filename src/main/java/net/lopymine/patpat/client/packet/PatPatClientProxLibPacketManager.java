@@ -1,8 +1,13 @@
 package net.lopymine.patpat.client.packet;
 
+import net.lopymine.patpat.compat.LoadedMods;
+import net.lopymine.patpat.compat.flashback.FlashbackManager;
+import net.lopymine.patpat.compat.replaymod.ReplayModManager;
 import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import java.io.*;
+import net.lopymine.patpat.packet.s2c.PatEntityS2CPacketV2;
+import net.minecraft.client.Minecraft;
 
 public class PatPatClientProxLibPacketManager {
 

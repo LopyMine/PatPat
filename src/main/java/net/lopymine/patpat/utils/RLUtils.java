@@ -14,7 +14,7 @@ public class RLUtils {
 		/*? if >1.20.6 {*/
 		return Identifier.parse(string);
 		/*?} else {*/
-		/*return new ResourceLocation(string);
+		/*return new Identifier(string);
 		 *//*?}*/
 	}
 
@@ -39,7 +39,7 @@ public class RLUtils {
 		//? >=1.21 {
 		return Identifier.fromNamespaceAndPath(name, location);
 		//?} else {
-		/*return new ResourceLocation(name, location);
+		/*return new Identifier(name, location);
 		*///?}
 	}
 }

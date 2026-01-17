@@ -17,13 +17,13 @@
 	"environment": "${fabric_trick_side}",
 	"entrypoints": {
 		"main": [
-			"net.lopymine.patpat.PatPat"
+			"net.lopymine.patpat.entrypoint.fabric.FabricCommonEntrypoint"
 		],
 		"client": [
-			"net.lopymine.patpat.client.PatPatClient"
+			"net.lopymine.patpat.entrypoint.fabric.FabricClientEntrypoint"
 		],
 		"server": [
-			"net.lopymine.patpat.dedicated.PatPatDedicatedServer"
+			"net.lopymine.patpat.entrypoint.fabric.FabricDedicatedEntrypoint"
 		],
 		"modmenu": [
 			"net.lopymine.patpat.modmenu.integration.PatPatModMenuIntegration"

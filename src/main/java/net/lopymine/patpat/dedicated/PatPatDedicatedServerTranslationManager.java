@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.*;
 import net.minecraft.locale.Language;
 
 public class PatPatDedicatedServerTranslationManager {
@@ -18,18 +18,10 @@ public class PatPatDedicatedServerTranslationManager {
 	public static void reload() {
 		EN_US.clear();
 
-//		ModContainer modContainer = FabricLoader.getInstance().getModContainer(PatPat.MOD_ID).orElse(null);
-//		if (modContainer == null) {
-//			PatPatDedicatedServer.LOGGER.error("Failed to get PatPat language files for server-side, because PatPat mod container doesn't exits!");
-//			return;
-//		}
-//		Optional<Path> optional = modContainer.findPath("assets/%s/lang/en_us.json".formatted(PatPat.MOD_ID));
-//		if (optional.isEmpty()) {
-//			PatPatDedicatedServer.LOGGER.error("Failed to find PatPat language files for server-side!");
-//			return;
-//		}
-
-		try (InputStream stream = MultiLoader.getInstance().loadModFile(PatPat.MOD_ID, "assets/%s/lang/en_us.json".formatted(PatPat.MOD_ID))){
+		try (InputStream stream = EarlyMultiLoader.getInstance().loadModFile(PatPat.MOD_ID, "assets/%s/lang/en_us.json".formatted(PatPat.MOD_ID))) {
+			if (stream == null) {
+				throw new IllegalArgumentException("Failed to load dedicated server language file");
+			}
 			Language.loadFromJson(stream, EN_US::put);
 		} catch (Exception e) {
 			PatPatDedicatedServer.LOGGER.error("Unexpected error when parsing PatPat language file: ", e);

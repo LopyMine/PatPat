@@ -103,7 +103,7 @@ public class PatPatClientRenderer {
 				LivingEntity pattedEntity = packet.pattedEntity();
 				PlayerConfig playerConfig = packet.playerConfig();
 
-				PatPatClientNetworkManager.sendPacketToServer(PatPatClientPacketManager.getPatPacket(pattedEntity));
+				MultiLoader.getInstance().sendPacketToServer(PatPatClientPacketManager.getPatPacket(pattedEntity));
 				PatEntity patEntity = PatPatClientManager.pat(pattedEntity, playerConfig);
 
 				PatPatClientStatsConfig statsConfig = PatPatClientStatsConfig.getInstance();

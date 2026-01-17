@@ -145,13 +145,6 @@ stonecutter {
 	swaps["build_code_time"] = "\"${buildCodeTime}\";".toString()
 	dependencies["yacl"] = MossyUtils.substringBefore(prop("dep.yacl"), "+")
 
-//	replacements.regex(current.parsed.matches(">=1.21.11")) {
-//		replace(
-//				"(^|[^A-Za-z0-9_])ResourceLocation([^A-Za-z0-9_]|\$)", "\$1Identifier\$2",
-//				"(^|[^A-Za-z0-9_])Identifier([^A-Za-z0-9_]|\$)", "\$1ResourceLocation\$2"
-//		)
-//	}
-
 	replacements.string(current.parsed < "1.17") {
 		replace("ControllingOptionsScreenMixin", "ControllingOptionsScreenMixin")
 		replace("ControllingOptionsScreen", "ControlsSettingsGuiNew")
@@ -179,7 +172,6 @@ stonecutter {
 		replace(".location()", ".identifier()")
 	}
 
-	// TODO: Сделать эту опцию доступной только при использовании Minecraft Client/Server, либо отдельный запуск, либо с атрибутом в gradle
 	constants["debug_mode"] = false
 
 }

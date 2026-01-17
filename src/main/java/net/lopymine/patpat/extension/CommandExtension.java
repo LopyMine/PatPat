@@ -44,11 +44,11 @@ public class CommandExtension {
 	}
 
 	public static boolean hasPermission(CommandSourceStack context, String permission, int defaultLevel) {
-		//? if <1.17.1 {
+		// if <1.17.1 {
 		/*return context./^? if >=1.17.1 {^/hasPermissionLevel/^?} else {^//^hasPermission^//^?}^/(defaultLevel);
-		 *///?} else {
+		 *///} else {
 		//return Permissions.check(context, permission, defaultLevel);
-		//?}
+		//}
 
 		return true;
 	}

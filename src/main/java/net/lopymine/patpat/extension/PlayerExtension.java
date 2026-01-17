@@ -23,11 +23,11 @@ public class PlayerExtension {
 	}
 
 	public static boolean hasPermission(ServerPlayer player, String permission, int defaultLevel) {
-		//? if <1.17.1 {
+		// if <1.17.1 {
 		/*return player./^? if >=1.17.1 {^/hasPermissionLevel/^?} else {^//^hasPermissions^//^?}^/(defaultLevel);
-		*///?} else {
+		*///} else {
 		//return Permissions.check(player, permission, defaultLevel);
-		 //?}
+		 //}
 		return true;
 	}
 
@@ -36,12 +36,12 @@ public class PlayerExtension {
 	}
 
 	public static CompletableFuture<Boolean> hasPermission(GameProfile profile, String permission, int defaultLevel, CommandContext<CommandSourceStack> context) {
-		//? if <1.17.1 {
+		// if <1.17.1 {
 		/*return CompletableFuture.completedFuture(context.getSource()./^? if >=1.17.1 {^/getMinecraftServer().getPermissionLevel(profile)/^?} else {^/ /^getServer().getProfilePermissions(profile) ^//^?}^/ >= defaultLevel);
-		*///?} else {
+		*///} else {
 		//MinecraftServer server = context.getSource().getServer();
 		//return Permissions.check(profile, permission, defaultLevel, server);
-		//?}
+		//}
 		return CompletableFuture.completedFuture(true);
 	}
 

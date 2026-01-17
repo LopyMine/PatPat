@@ -1,3 +1,5 @@
+//~ client_fabric_commands
+
 package net.lopymine.patpat.client.command.list;
 
 import lombok.experimental.ExtensionMethod;

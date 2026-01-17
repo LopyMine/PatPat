@@ -1,6 +1,6 @@
 package net.lopymine.patpat.compat;
 
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.*;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.*;
 
@@ -22,7 +22,7 @@ public abstract class CompatPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return MultiLoader.getInstance().isModLoaded(this.getCompatModId());
+		return EarlyMultiLoader.getInstance().isModLoaded(this.getCompatModId());
 	}
 
 	@Override

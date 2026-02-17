@@ -43,12 +43,14 @@
 	],
 	"custom": {
 		"translators": {
-			"TastyPommesLul": "Germany",
-			"Hamka": "Polish",
+			"TastyPommesLul": "Germany (90%)",
+			"Hamka": "Polish (90%)",
 			"MrLemonHog": "Ukrainian",
-			"Balojan": "Vietnamese (46%)",
-			"okunamayanad": "Turkish (25%)",
-			"Gallium": "French (19%)"
+			"Balojan": "Vietnamese (42%)",
+			"okunamayanad": "Turkish (23%)",
+			"Gallium, Matt TCL": "French (28%)",
+			"Nuts0905": "European Spanish",
+			"Baymaxawa": "Chinese Simplified"
 		},
 		"modmenu": {
 			"links": {

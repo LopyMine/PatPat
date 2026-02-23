@@ -14,10 +14,10 @@
 		//?}
 
 		//? if >=1.21 {
-		"IPlatformHelperMixin",
-		//?} else {
-		/*"NewKeyBindsScreenMixin",
-		*///?}
+		/*"IPlatformHelperMixin",
+		*///?} else {
+		"NewKeyBindsScreenMixin",
+		//?}
 
 		//? if <1.19.3 {
 		/*"NewKeyBindsListMixin",

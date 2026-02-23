@@ -11,7 +11,7 @@ import net.lopymine.patpat.utils.mixin.ScreenWithPatPatKeybinding;
 public interface ParentElementMixin {
 
 	@Inject(at = @At("HEAD"), method = "keyReleased")
-	private void handleScreenWithPatPatKeybindings(net.minecraft.client.input.KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
+	private void handleScreenWithPatPatKeybindings(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
 		if (this instanceof ScreenWithPatPatKeybinding screen) {
 			screen.patPat$onKeyReleased();
 		}

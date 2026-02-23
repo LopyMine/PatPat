@@ -3,7 +3,7 @@ package net.lopymine.patpat.client.config.list;
 import lombok.Getter;
 import net.lopymine.patpat.common.config.list.AbstractListConfig;
 import net.lopymine.patpat.utils.*;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 
 import net.lopymine.patpat.logger.PatLogger;
@@ -45,7 +45,7 @@ public class PatPatClientIgnoreMobListConfig extends AbstractListConfig<EntityTy
 
 	@Override
 	protected String encode(EntityType<?> element) {
-		Identifier entityTypeResource = VersionedThings.ENTITY_TYPE.getKey(element);
+		ResourceLocation entityTypeResource = VersionedThings.ENTITY_TYPE.getKey(element);
 		if (entityTypeResource == null) {
 			return null;
 		}

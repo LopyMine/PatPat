@@ -36,7 +36,7 @@ public class PlayerConfig {
 
 	public static PlayerConfig currentSession() {
 		Minecraft minecraft = Minecraft.getInstance();
-		GameProfile profile = /*? if >=1.20.2 {*/ minecraft.getGameProfile(); /*?} else {*/ /*minecraft.getUser().getGameProfile(); *//*?}*/
+		GameProfile profile = /*? if >=1.20.2 {*/ /*minecraft.getGameProfile(); *//*?} else {*/ minecraft.getUser().getGameProfile(); /*?}*/
 		return PlayerConfig.of(profile.getName(), profile.getUUID());
 	}
 

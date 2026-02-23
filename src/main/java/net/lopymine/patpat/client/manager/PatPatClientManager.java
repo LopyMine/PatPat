@@ -180,24 +180,24 @@ public class PatPatClientManager {
 		*///?}
 
 		//? if >=1.21.2 {
-		float tickDelta = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
-		//?} elif >=1.21 {
+		/*float tickDelta = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
+		*///?} elif >=1.21 {
 		/*float tickDelta = minecraft.getTimer().getGameTimeDeltaPartialTick(false);
 		 *///?} else {
-		/*float tickDelta = minecraft.getFrameTime();
-		 *///?}
+		float tickDelta = minecraft.getFrameTime();
+		 //?}
 
 		cameraEntity.mark(true);
 		//? if >=1.21.11 {
-		HitResult result = player.raycastHitResult(tickDelta, cameraEntity);
-		//?} elif >=1.20.5 {
+		/*HitResult result = player.raycastHitResult(tickDelta, cameraEntity);
+		*///?} elif >=1.20.5 {
 		/*HitResult result = minecraft.gameRenderer.pick(cameraEntity, blockInteractionRange, entityInteractionRange, tickDelta);
 		*///?} else {
-		/*HitResult oldResult = minecraft.hitResult;
+		HitResult oldResult = minecraft.hitResult;
 		minecraft.gameRenderer.pick(tickDelta);
 		HitResult result = minecraft.hitResult;
 		minecraft.hitResult = oldResult;
-		*///?}
+		//?}
 		cameraEntity.mark(false);
 		ProfilerUtils.pop();
 
@@ -236,20 +236,20 @@ public class PatPatClientManager {
 
 		for (Entity entity : VersionedThings.getLevel(player).getEntitiesOfClass(Entity.class, aABB)) {
 			//? >1.20.6 {
-			if (!(entity instanceof Leashable leashable)) {
+			/*if (!(entity instanceof Leashable leashable)) {
 				continue;
 			}
 			if (leashable.getLeashHolder() == player) {
 				return true;
 			}
-			//?} else {
-			/*if (!(entity instanceof Mob mob)) {
+			*///?} else {
+			if (!(entity instanceof Mob mob)) {
 				continue;
 			}
 			if (mob.getLeashHolder() == player) {
 				return true;
 			}
-			*///?}
+			//?}
 		}
 		return false;
 	}

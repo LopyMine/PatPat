@@ -1,47 +1,46 @@
-package net.lopymine.patpat.entrypoint.neoforge.loader;
+package net.lopymine.patpat.entrypoint.forge.loader;
 
-//? if neoforge {
-
-/*
 import java.io.*;
-import java.nio.file.Path;
+import java.nio.file.*;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.entrypoint.loader.IEarlyModLoader;
 import net.lopymine.patpat.entrypoint.loader.IModLoader.ModEnvironment;
-import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.*;
-import net.neoforged.neoforgespi.language.IModFileInfo;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.*;
+import net.minecraftforge.forgespi.language.IModFileInfo;
+import org.jetbrains.annotations.Nullable;
 
-public class NeoForgeEarlyModLoader implements IEarlyModLoader {
-
-	@Override
-	public boolean isDevelopmentEnvironment() {
-		return !FMLEnvironment.isProduction();
-	}
+public class ForgeEarlyModLoader implements IEarlyModLoader {
 
 	@Override
 	public Path getConfigDir() {
-		return FMLPaths.CONFIGDIR.get().resolve("%s/".formatted(PatPat.MOD_ID));
+		return FMLPaths.CONFIGDIR.get();
+	}
+
+	@Override
+	public boolean isDevelopmentEnvironment() {
+		return !FMLLoader.isProduction();
 	}
 
 	@Override
 	public boolean isModLoaded(String modId) {
 		ModList list = ModList.get();
 		if (list == null) {
-			return FMLLoader.getCurrent().getLoadingModList().getModFileById(modId) != null;
+			return FMLLoader.getLoadingModList().getModFileById(modId) != null;
+		} else {
+			return list.isLoaded(modId);
 		}
-		return list.isLoaded(modId);
 	}
 
 	@Override
-	public InputStream loadModFile(String modId, String path) {
+	public @Nullable InputStream loadModFile(String modId, String path) {
 		IModFileInfo file = ModList.get().getModFileById(modId);
 		if (file == null) {
 			PatPat.LOGGER.error("Failed to load file at \"{}\", because \"{}\" mod container doesn't exits!", path, modId);
 			return null;
 		}
 		try {
-			return file.getFile().getContents().openFile(path);
+			return Files.newInputStream(file.getFile().findResource(path));
 		} catch (IOException e) {
 			PatPat.LOGGER.error("Failed to open file at \"{}\", reason:", path, e);
 			return null;
@@ -50,11 +49,9 @@ public class NeoForgeEarlyModLoader implements IEarlyModLoader {
 
 	@Override
 	public ModEnvironment getEnvironment() {
-		return switch (FMLEnvironment.getDist()) {
+		return switch (FMLEnvironment.dist) {
 			case CLIENT -> ModEnvironment.CLIENT;
 			case DEDICATED_SERVER -> ModEnvironment.SERVER;
 		};
 	}
 }
-*/
-//?}

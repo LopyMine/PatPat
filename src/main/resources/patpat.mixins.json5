@@ -11,7 +11,7 @@
 		/*? if =1.16.5*/
 		//"TitleScreenMixin",
 		/*? if >=1.21.2*/
-		"EntityRenderStateMixin",
+		//"EntityRenderStateMixin",
 		/*? if <1.19.3*/
 		//"ScreenMixin",
 		"MinecraftClientMixin",
@@ -27,19 +27,20 @@
 		*///?}
 
 		//? if <=1.21.10 {
-		/*"GameRendererMixin",
-		*///?} else {
-		"LocalPlayerMixin",
-		//?}
+		"GameRendererMixin",
+		//?} else {
+		/*"LocalPlayerMixin",
+		*///?}
 
 		/*? if >=1.21.9 {*/
-		"LevelRendererMixin",
+		/*"LevelRendererMixin",
 		"FeatureRenderDispatcherMixin",
-		/*?}*/
+		*//*?}*/
 
 		"EntityMixin",
 		"EnderDragonRendererMixin",
-		"MultiPlayerGameModeMixin"
+		"MultiPlayerGameModeMixin",
+		"forge.MinecraftMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

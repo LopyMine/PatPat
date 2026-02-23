@@ -39,8 +39,8 @@ import org.joml.Quaternionf;
 //?}
 
 //? if <=1.21.4 {
-/*import com.mojang.blaze3d.systems.RenderSystem;
- *//*?}*/
+import com.mojang.blaze3d.systems.RenderSystem;
+ /*?}*/
 
 
 
@@ -74,13 +74,13 @@ public class PatPatClientRenderer {
 
 	public static void register() {
 		//? if <=1.21.8 {
-		/*MultiLoader.getInstance().registerAfterEntitiesRenderer((source, stack) -> {
+		MultiLoader.getInstance().registerAfterEntitiesRenderer((source, stack) -> {
 			PatPatClientRenderer.renderPatOnYourself();
 			PatFeatureRenderer.getInstance().render();
 		});
-		*///?}
+		//?}
 		MultiLoader.getInstance().registerAfterWorldTickListener((level) -> {
-			boolean frozen = /*? if >1.20.2 {*/ level.tickRateManager().isFrozen(); /*?} else {*/ /*false; *//*?}*/
+			boolean frozen = /*? if >1.20.2 {*/ /*level.tickRateManager().isFrozen(); *//*?} else {*/ false; /*?}*/
 			PatPatClientConfig config = PatPatClientConfig.getInstance();
 
 			PacketPat packet;
@@ -154,12 +154,12 @@ public class PatPatClientRenderer {
 
 		EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
 		//? if >=1.21.2 {
-		float tickDelta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
-		//?} elif >=1.21 {
+		/*float tickDelta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
+		*///?} elif >=1.21 {
 		/*float tickDelta = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
 		*///?} else {
-		/*float tickDelta = Minecraft.getInstance().getFrameTime();
-		*///?}
+		float tickDelta = Minecraft.getInstance().getFrameTime();
+		//?}
 		int light = dispatcher.getPackedLightCoords(player, tickDelta);
 
 		PatEntity patEntity = PatPatClientManager.getPatEntity(player);
@@ -190,17 +190,17 @@ public class PatPatClientRenderer {
 			return RenderResult.FAILED;
 		}
 
-		int numberToMirrorTexture = /*? if >=1.21 {*/1/*?} else {*/ /*-1*//*?}*/;
+		int numberToMirrorTexture = /*? if >=1.21 {*//*1*//*?} else {*/ -1/*?}*/;
 
 		CustomAnimationSettingsConfig animation = patEntity.getAnimation();
 		FrameConfig frameConfig = animation.getFrameConfig();
 		enableBlend();
 		//? if <=1.20.4 {
-		/*float nameLabelHeight = entity != null ? entity.getBbHeight() : 0.0F;
-		 *///?} else {
-		net.minecraft.world.phys.Vec3 vec3d = entity != null ? entity.getAttachments().getNullable(net.minecraft.world.entity.EntityAttachment.NAME_TAG, 0, entity.getViewYRot(tickDelta)) : null;
+		float nameLabelHeight = entity != null ? entity.getBbHeight() : 0.0F;
+		 //?} else {
+		/*net.minecraft.world.phys.Vec3 vec3d = entity != null ? entity.getAttachments().getNullable(net.minecraft.world.entity.EntityAttachment.NAME_TAG, 0, entity.getViewYRot(tickDelta)) : null;
 		float nameLabelHeight = vec3d != null ? (float) vec3d.y : 0.0F;
-		//?}
+		*///?}
 		float yOffset = overrideOffset != null ? overrideOffset.getY() : (nameLabelHeight * PatPatClientManager.getAnimationProgress(patEntity, tickDelta)) + 0.11F - frameConfig.offsetY() - config.getVisualConfig().getAnimationOffsets().getY();
 
 		matrices.pushPose();
@@ -266,14 +266,14 @@ public class PatPatClientRenderer {
 
 	private static void enableBlend() {
 		//? if <=1.21.4 {
-		/*RenderSystem.enableBlend();
-		*//*?}*/
+		RenderSystem.enableBlend();
+		/*?}*/
 	}
 
 	private static void disableBlend() {
 		//? if <=1.21.4 {
-		/*RenderSystem.disableBlend();
-		*//*?}*/
+		RenderSystem.disableBlend();
+		/*?}*/
 	}
 
 }

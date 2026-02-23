@@ -1,7 +1,7 @@
 package net.lopymine.patpat.entrypoint.neoforge.loader;
 
 //? if neoforge {
-import com.mojang.brigadier.CommandDispatcher;
+/*import com.mojang.brigadier.CommandDispatcher;
 
 import java.util.function.Consumer;
 import net.lopymine.patpat.PatPat;
@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.client.event.*;
-import net.neoforged.neoforge.client.event.lifecycle.ClientStoppingEvent;
+import net.neoforged.neoforge.client.event.lifecycle.PatPatClientStoppingEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -34,7 +34,7 @@ public class NeoForgeModLoader implements IModLoader {
 
 	@Override
 	public void registerOnClientStop(Runnable runnable) {
-		NeoForge.EVENT_BUS.addListener(ClientStoppingEvent.class, event -> runnable.run());
+		NeoForge.EVENT_BUS.addListener(PatPatClientStoppingEvent.class, event -> runnable.run());
 	}
 
 	@Override
@@ -50,8 +50,8 @@ public class NeoForgeModLoader implements IModLoader {
 	@Override
 	public void registerAfterEntitiesRenderer(CustomRenderer renderer) {
 		//? if <=1.21.8 {
-		/*NeoForge.EVENT_BUS.addListener(Post.class, (p) -> renderer.render(p.getMultiBufferSource(), p.getPoseStack()));
-		 *///?}
+		NeoForge.EVENT_BUS.addListener(Post.class, (p) -> renderer.render(p.getMultiBufferSource(), p.getPoseStack()));
+		 //?}
 	}
 
 	public void registerAfterWorldTickListener(Consumer<ClientLevel> runnable) {
@@ -76,16 +76,16 @@ public class NeoForgeModLoader implements IModLoader {
 
 	@Override
 	public void registerSounds(Consumer<SoundRegister> consumer) {
-		ForgeSoundRegister register = new ForgeSoundRegister();
+		NeoForgeSoundRegister register = new NeoForgeSoundRegister();
 		consumer.accept(register);
 		register.finish();
 	}
 
-	public static class ForgeSoundRegister implements SoundRegister {
+	public static class NeoForgeSoundRegister implements SoundRegister {
 
 		private final DeferredRegister<SoundEvent> register;
 
-		public ForgeSoundRegister() {
+		public NeoForgeSoundRegister() {
 			this.register = DeferredRegister.create(VersionedThings.SOUND_EVENT.key(), PatPat.MOD_ID);
 		}
 
@@ -191,4 +191,4 @@ public class NeoForgeModLoader implements IModLoader {
 	}
 
 }
-//?}
+*///?}

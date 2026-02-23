@@ -8,7 +8,7 @@ import net.lopymine.patpat.client.keybinding.PatPatKeybinding;
 import net.lopymine.patpat.utils.mixin.IRequestableTooltipScreen;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.components.*;
-import net.minecraft.client.gui.screens.options.controls.*;
+import net.minecraft.client.gui.screens.controls.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;

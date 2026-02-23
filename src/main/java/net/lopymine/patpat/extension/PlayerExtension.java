@@ -10,7 +10,7 @@ import com.mojang.brigadier.context.CommandContext;
 import java.util.concurrent.CompletableFuture;
 
 /*? if >=1.21.9*/
-import net.minecraft.server.players.NameAndId;
+//import net.minecraft.server.players.NameAndId;
 
 public class PlayerExtension {
 
@@ -46,7 +46,7 @@ public class PlayerExtension {
 	}
 
 	/*? if >=1.21.9 {*/
-	public static CompletableFuture<Boolean> hasPermission(NameAndId nameAndId, String permission, CommandContext<CommandSourceStack> context) {
+	/*public static CompletableFuture<Boolean> hasPermission(NameAndId nameAndId, String permission, CommandContext<CommandSourceStack> context) {
 		return hasPermission(nameAndId, permission, 2, context);
 	}
 
@@ -55,5 +55,5 @@ public class PlayerExtension {
 		//return Permissions.check(nameAndId, permission, defaultLevel, server);
 		return CompletableFuture.completedFuture(true);
 	}
-	/*?}*/
+	*//*?}*/
 }

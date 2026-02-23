@@ -3,15 +3,15 @@ package net.lopymine.patpat.client.keybinding;
 import lombok.Getter;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.lopymine.patpat.entrypoint.MultiLoader;
-import net.minecraft.client.gui.screens.options.controls.*;
+import net.minecraft.client.gui.screens.controls.*;
 import net.minecraft.client.KeyMapping;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 
 //? if >=1.21.9 {
-import net.lopymine.patpat.utils.RLUtils;
-//?}
+/*import net.lopymine.patpat.utils.RLUtils;
+*///?}
 
 //? if >=1.19.4 {
 import net.lopymine.patpat.mixin.controlling.KeyBindsScreenAccessor;
@@ -20,8 +20,8 @@ import net.lopymine.patpat.mixin.controlling.KeyBindsScreenAccessor;
 public class PatPatClientKeybindingManager {
 
 	//? if >=1.21.9 {
-	public static final net.minecraft.client.KeyMapping.Category CATEGORY = net.minecraft.client.KeyMapping.Category.register(RLUtils.modId("keybinding"));
-	//?}
+	/*public static final net.minecraft.client.KeyMapping.Category CATEGORY = net.minecraft.client.KeyMapping.Category.register(RLUtils.modId("keybinding"));
+	*///?}
 
 	@Getter
 	private static PatPatKeybinding patKeybinding;

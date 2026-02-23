@@ -5,7 +5,7 @@ import lombok.*;
 import net.lopymine.patpat.*;
 import net.lopymine.patpat.entrypoint.MultiLoader;
 import net.lopymine.patpat.logger.PatLogger;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.*;
 
 import com.mojang.serialization.Codec;
@@ -44,7 +44,7 @@ public class PatPatClientStatsConfig {
 
 	public void count(LivingEntity pattedEntity) {
 		this.totalPatsCounter.totalPats++;
-		Identifier id = VersionedThings.ENTITY_TYPE.getKey(pattedEntity.getType());
+		ResourceLocation id = VersionedThings.ENTITY_TYPE.getKey(pattedEntity.getType());
 		if (id == null) {
 			return;
 		}

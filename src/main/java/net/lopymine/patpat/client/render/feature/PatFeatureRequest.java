@@ -1,10 +1,10 @@
 package net.lopymine.patpat.client.render.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public record PatFeatureRequest(
-		Identifier texture,
+		ResourceLocation texture,
 		Pose poseStack,
         float x1,
         float y1,

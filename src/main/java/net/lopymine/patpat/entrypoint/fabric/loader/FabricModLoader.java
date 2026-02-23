@@ -195,7 +195,7 @@ public class FabricModLoader extends FabricSillyModLoader implements IModLoader 
 	@Override
 	public void sendPacketToPlayer(ServerPlayer player, BasePatPatPacket<?> packet) {
 		//? if <1.19.4 {
-		/^Identifier id = packet.getPatPatType().getId();
+		/^ResourceLocation id = packet.getPatPatType().getId();
 		FriendlyByteBuf buf = PacketByteBufs.create();
 		packet.write(buf);
 		^///?}
@@ -217,7 +217,7 @@ public class FabricModLoader extends FabricSillyModLoader implements IModLoader 
 	@Override
 	public void sendPacketToServer(BasePatPatPacket<?> packet) {
 		//? if <1.19.4 {
-		/^Identifier id = packet.getPatPatType().getId();
+		/^ResourceLocation id = packet.getPatPatType().getId();
 		FriendlyByteBuf buf = PacketByteBufs.create();
 		packet.write(buf);
 		^///?}

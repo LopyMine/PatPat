@@ -21,6 +21,7 @@ public class PatPat {
 
 	public static void onInitialize() {
 		PatPatConfigManager.onInitialize();
+
 		PatPatConfigManager.reloadServer();
 		PatPatServerCommandManager.register();
 		PatPatServerPlayerEvents.register();

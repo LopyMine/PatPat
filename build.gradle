@@ -17,6 +17,8 @@ mossyDependencies {
 	neoForge = prop("build.neoforge")
 	parchment = prop("build.parchment")
 
+	disableMixinAp = "true"
+
 	additional {
 		// - By default, every additional project dependency ("dep.modId" from gradle.properties) will use
 		// - Modrinth Maven and "modImplementation" configuration name
@@ -109,15 +111,19 @@ dependencies {
 				modCompileOnly("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
 			}
 		} else if (neoforge) {
-			implementation("software.bernie.geckolib:geckolib-neoforge-${mcVersion}:${geckoLibVersion}")
+			compileOnly("software.bernie.geckolib:geckolib-neoforge-${mcVersion}:${geckoLibVersion}")
 		} else if (forge) {
-			implementation("software.bernie.geckolib:geckolib-forge-${mcVersion}:${geckoLibVersion}")
+			compileOnly("software.bernie.geckolib:geckolib-forge-${mcVersion}:${geckoLibVersion}")
 		}
 	}
 
 	def proxlibVersion = prop("dep.proxlib")
 	if (proxlibVersion != "unknown") {
 		include(modApi("maven.modrinth:proxlib:${proxlibVersion}"))
+	}
+
+	if (forge && mcVersion == "1.20.1") {
+		implementation("maven.modrinth:mixinbooster:0.1.2+1.20.1")
 	}
 }
 

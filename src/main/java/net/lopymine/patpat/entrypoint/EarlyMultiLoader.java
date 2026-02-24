@@ -1,7 +1,5 @@
 package net.lopymine.patpat.entrypoint;
 
-
-import net.lopymine.patpat.entrypoint.forge.loader.ForgeModLoader;
 import net.lopymine.patpat.entrypoint.loader.IEarlyModLoader;
 
 public class EarlyMultiLoader {
@@ -11,7 +9,7 @@ public class EarlyMultiLoader {
 	*///?} elif neoforge {
 	/*private static final IEarlyModLoader LOADER = new net.lopymine.patpat.entrypoint.neoforge.loader.NeoForgeEarlyModLoader();
 	*///?} elif forge {
-	private static final IEarlyModLoader LOADER = new ForgeModLoader();
+	private static final IEarlyModLoader LOADER = new net.lopymine.patpat.entrypoint.forge.loader.ForgeEarlyModLoader();
 	//?}
 
 	public static IEarlyModLoader getInstance() {

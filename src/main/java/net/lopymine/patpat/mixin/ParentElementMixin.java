@@ -10,7 +10,7 @@ import net.lopymine.patpat.utils.mixin.ScreenWithPatPatKeybinding;
 @Mixin(ContainerEventHandler.class)
 public interface ParentElementMixin {
 
-	@Inject(at = @At("HEAD"), method = "keyReleased")
+	@Inject(at = @At("HEAD"), method = "keyReleased(III)Z")
 	private void handleScreenWithPatPatKeybindings(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
 		if (this instanceof ScreenWithPatPatKeybinding screen) {
 			screen.patPat$onKeyReleased();

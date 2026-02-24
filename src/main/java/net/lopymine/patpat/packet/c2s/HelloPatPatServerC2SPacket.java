@@ -12,7 +12,7 @@ public class HelloPatPatServerC2SPacket implements PongPatPacket<HelloPatPatServ
 
 	public static final String PACKET_ID = "hello_patpat_server_c2s_packet";
 
-	public static final PatPatPacketType<HelloPatPatServerC2SPacket> TYPE = new PatPatPacketType<>(RLUtils.modId(PACKET_ID), HelloPatPatServerC2SPacket::new);
+	public static final PatPatPacketType<HelloPatPatServerC2SPacket> TYPE = new PatPatPacketType<>(RLUtils.modId(PACKET_ID), HelloPatPatServerC2SPacket::new, HelloPatPatServerC2SPacket.class);
 
 	private final Version version;
 

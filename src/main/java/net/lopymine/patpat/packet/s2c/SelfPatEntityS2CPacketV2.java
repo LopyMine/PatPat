@@ -13,7 +13,7 @@ public class SelfPatEntityS2CPacketV2 implements S2CPatPacket<SelfPatEntityS2CPa
 
 	public static final String PACKET_ID = "pat_entity_for_replay_s2c_packet_v2";
 
-	public static final PatPatPacketType<SelfPatEntityS2CPacketV2> TYPE = new PatPatPacketType<>(RLUtils.modId(PACKET_ID), SelfPatEntityS2CPacketV2::new);
+	public static final PatPatPacketType<SelfPatEntityS2CPacketV2> TYPE = new PatPatPacketType<>(RLUtils.modId(PACKET_ID), SelfPatEntityS2CPacketV2::new, SelfPatEntityS2CPacketV2.class);
 
 	private final int pattedEntityId;
 	private final int whoPattedId;

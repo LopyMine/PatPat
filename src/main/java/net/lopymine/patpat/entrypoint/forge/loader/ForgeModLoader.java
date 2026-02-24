@@ -172,9 +172,16 @@ public class ForgeModLoader implements IModLoader {
 			public <P extends BasePatPatPacket<P>> void register(PatPatPacketType<P> type, PacketRegistrationSide registrationSide, PatPatServerPacketHandler<P> handler) {
 				BiConsumer<P, Supplier<NetworkEvent.Context>> handle = (p, context) -> {
 					context.get().enqueueWork(() -> {
+						if (p instanceof PingPatPacket<?, ?> pingPacket) {
+							pingPacket.setPacketReply((packet) -> {
+								channel.reply(packet, context.get());
+							});
+						}
+
 						if (registrationSide == PacketRegistrationSide.S2C || registrationSide == PacketRegistrationSide.BOTH) {
+							Map<ResourceLocation, PatPatClientPacketHandler<?>> lazyListeners = ForgeModLoader.this.lazyClientPacketHandler.lazyListeners;
 							@SuppressWarnings("unchecked")
-							PatPatClientPacketHandler<P> packetHandler = (PatPatClientPacketHandler<P>) ForgeModLoader.this.lazyClientPacketHandler.lazyListeners.get(p.getPatPatType().getId());
+							PatPatClientPacketHandler<P> packetHandler = (PatPatClientPacketHandler<P>) lazyListeners.get(p.getPatPatType().getId());
 							if (packetHandler != null) {
 								packetHandler.handle(p);
 							}
@@ -201,7 +208,12 @@ public class ForgeModLoader implements IModLoader {
 		if (this.packerHandler == null) {
 			return;
 		}
-		this.packerHandler.getPacketsChannel().send(PacketDistributor.PLAYER.with(() -> player), packet);
+
+		if (packet instanceof PongPatPacket<?> pingPong && pingPong.canPong()) {
+			pingPong.pong(packet);
+		} else {
+			this.packerHandler.getPacketsChannel().send(PacketDistributor.PLAYER.with(() -> player), packet);
+		}
 	}
 
 	@Override
@@ -209,7 +221,12 @@ public class ForgeModLoader implements IModLoader {
 		if (this.packerHandler == null) {
 			return;
 		}
-		this.packerHandler.getPacketsChannel().sendToServer(packet);
+
+		if (packet instanceof PongPatPacket<?> pingPong && pingPong.canPong()) {
+			pingPong.pong(packet);
+		} else {
+			this.packerHandler.getPacketsChannel().sendToServer(packet);
+		}
 	}
 
 	private static class LazyClientPacketHandler {

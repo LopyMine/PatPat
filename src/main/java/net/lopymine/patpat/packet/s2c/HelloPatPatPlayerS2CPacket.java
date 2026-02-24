@@ -13,7 +13,7 @@ public class HelloPatPatPlayerS2CPacket implements PingPatPacket<HelloPatPatPlay
 
 	public static final String PACKET_ID = "hello_patpat_player_s2c_packet";
 
-	public static final PatPatPacketType<HelloPatPatPlayerS2CPacket> TYPE = new PatPatPacketType<>(RLUtils.modId(PACKET_ID), HelloPatPatPlayerS2CPacket::new);
+	public static final PatPatPacketType<HelloPatPatPlayerS2CPacket> TYPE = new PatPatPacketType<>(RLUtils.modId(PACKET_ID), HelloPatPatPlayerS2CPacket::new, HelloPatPatPlayerS2CPacket.class);
 
 	private final Version version;
 

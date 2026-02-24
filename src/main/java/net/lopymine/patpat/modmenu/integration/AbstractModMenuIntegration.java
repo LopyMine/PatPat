@@ -34,36 +34,18 @@ public abstract class AbstractModMenuIntegration {
 
 *///?} elif forge {
 
-import net.lopymine.mossylib.MossyLib;
-import net.lopymine.mossylib.client.MossyLibClient;
-import net.lopymine.mossylib.loader.MossyLoader;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory;
 import net.minecraftforge.fml.*;
-import org.apache.maven.artifact.versioning.*;
 
 public abstract class AbstractModMenuIntegration {
 
 	public void register(ModContainer container) {
-		container.registerExtensionPoint(ConfigScreenFactory.class, () -> new ConfigScreenFactory((minecraft, parent) -> {
-			if (MossyLoader.isModLoaded("yet_another_config_lib_v3", false)) {
-				ModContainer yacl = ModList.get().getModContainerById("yet_another_config_lib_v3").orElseThrow();
-				ArtifactVersion version = yacl.getModInfo().getVersion();
-				try {
-					ArtifactVersion requestsVersion = new DefaultArtifactVersion(MossyLib.YACL_DEPEND_VERSION);
-					if (version.compareTo(requestsVersion) >= 0) {
-						return this.createConfigScreen(parent);
-					}
-				} catch (Exception e) {
-					MossyLibClient.LOGGER.error("Failed to compare YACL version, tell mod author about this error: ", e);
-				}
-				return NoConfigLibraryScreen.createScreenAboutOldVersion(parent, version.getQualifier(), this.getModId());
-			}
-			return NoConfigLibraryScreen.createScreen(parent, this.getModId());
-		}));
+		container.registerExtensionPoint(
+				ConfigScreenFactory.class,
+				() -> new ConfigScreenFactory((minecraft, parent) -> this.createConfigScreen(parent))
+		);
 	}
-
- 	protected abstract String getModId();
 
 	protected abstract Screen createConfigScreen(Screen parent);
 

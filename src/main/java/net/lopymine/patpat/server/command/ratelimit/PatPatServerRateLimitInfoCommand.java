@@ -1,5 +1,6 @@
 package net.lopymine.patpat.server.command.ratelimit;
 
+import com.mojang.authlib.GameProfile;
 import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;

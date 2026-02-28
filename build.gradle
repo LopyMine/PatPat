@@ -73,6 +73,10 @@ repositories {
 			includeGroup("com.eliotlash.molang")
 		}
 	}
+	maven {
+		name = "Sinytra"
+		url = "https://maven.su5ed.dev/releases"
+	}
 }
 
 dependencies {
@@ -123,6 +127,7 @@ dependencies {
 	}
 
 	if (forge && mcVersion == "1.20.1") {
+		annotationProcessor("net.fabricmc:sponge-mixin:0.16.5+mixin.0.8.7")
 		implementation("maven.modrinth:mixinbooster:0.1.2+1.20.1")
 	}
 }

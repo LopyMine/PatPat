@@ -7,13 +7,14 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
-import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
+import net.lopymine.patpat.common.command.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.server.config.PatPatServerConfig;
 import net.lopymine.patpat.server.config.list.PatPatServerPlayerListConfig;
 
 import java.util.*;
 
+import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
 import static net.minecraft.commands.Commands.literal;
 
 
@@ -26,7 +27,7 @@ public class PatPatServerListInfoCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("info")
-				.requires(context -> context.hasPatPatPermission("list.info"))
+				.requires(permission("list.info"))
 				.executes(PatPatServerListInfoCommand::onInfo);
 	}
 

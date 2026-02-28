@@ -14,6 +14,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.Action;
 
+import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
 import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod(CommandExtension.class)
@@ -27,7 +28,7 @@ public class PatPatServerInfoCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("info")
-				.requires(context -> context.hasPatPatPermission("info"))
+				.requires(permission("info"))
 				.executes(PatPatServerInfoCommand::version);
 	}
 

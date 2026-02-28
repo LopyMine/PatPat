@@ -18,6 +18,7 @@ import net.minecraft.network.chat.*;
 import java.util.*;
 
 import static net.minecraft.commands.Commands.argument;
+import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
 import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod({TextExtension.class, CommandExtension.class})
@@ -29,7 +30,7 @@ public class PatPatServerListSetModeCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("set")
-				.requires(context -> context.hasPatPatPermission("list.set"))
+				.requires(permission("list.set"))
 				.then(argument("mode", StringArgumentType.word())
 						.suggests(((context, builder) -> SharedSuggestionProvider.suggest(List.of("WHITELIST", "BLACKLIST", "DISABLED"), builder)))
 						.executes(PatPatServerListSetModeCommand::setListMode));

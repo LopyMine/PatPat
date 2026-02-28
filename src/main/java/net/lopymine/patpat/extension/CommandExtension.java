@@ -1,6 +1,7 @@
 package net.lopymine.patpat.extension;
 
 //import me.lucko.fabric.api.permissions.v0.Permissions;
+import net.lopymine.patpat.entrypoint.ServerMultiLoader;
 import net.lopymine.patpat.server.command.PatPatServerCommandManager;
 import net.lopymine.patpat.utils.*;
 
@@ -32,25 +33,7 @@ public class CommandExtension {
 	}
 
 	public static boolean hasPatPatPermission(CommandSourceStack context, String permission) {
-		return hasPermission(context, PatPatServerCommandManager.getPermission(permission));
-	}
-
-	public static boolean hasPermission(CommandSourceStack context, String permission) {
-		return hasPermission(context, permission, 2);
-	}
-
-	public static boolean hasPatPatPermission(CommandSourceStack context, String permission, int defaultLevel) {
-		return hasPermission(context, PatPatServerCommandManager.getPermission(permission), defaultLevel);
-	}
-
-	public static boolean hasPermission(CommandSourceStack context, String permission, int defaultLevel) {
-		// if <1.17.1 {
-		/*return context./^? if >=1.17.1 {^/hasPermissionLevel/^?} else {^//^hasPermission^//^?}^/(defaultLevel);
-		 *///} else {
-		//return Permissions.check(context, permission, defaultLevel);
-		//}
-
-		return true;
+		return ServerMultiLoader.getInstance().hasPermission(context.getPlayer(), permission);
 	}
 
 }

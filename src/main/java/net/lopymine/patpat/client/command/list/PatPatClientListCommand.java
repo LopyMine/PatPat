@@ -4,7 +4,7 @@ package net.lopymine.patpat.client.command.list;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
-import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.literal;
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 public class PatPatClientListCommand {
 

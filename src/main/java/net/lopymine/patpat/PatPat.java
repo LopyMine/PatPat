@@ -1,7 +1,7 @@
 package net.lopymine.patpat;
 
 import net.lopymine.patpat.common.config.PatPatConfigManager;
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.ServerMultiLoader;
 import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.server.command.PatPatServerCommandManager;
 import net.lopymine.patpat.server.event.PatPatServerPlayerEvents;
@@ -21,11 +21,10 @@ public class PatPat {
 
 	public static void onInitialize() {
 		PatPatConfigManager.onInitialize();
-
 		PatPatConfigManager.reloadServer();
 		PatPatServerCommandManager.register();
 		PatPatServerPlayerEvents.register();
-		MultiLoader.getInstance().registerServerPackets(PatPatServerPacketManager::register);
+		ServerMultiLoader.getInstance().registerServerPackets(PatPatServerPacketManager::register);
 
 		PatPat.LOGGER.info("PatPat Initialized");
 		PatPat.LOGGER.debug("Debug Mode Enabled");

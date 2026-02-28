@@ -15,6 +15,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
 
+import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
 import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod(CommandExtension.class)
@@ -26,13 +27,13 @@ public class PatPatServerRateLimitToggleCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> getEnable() {
 		return literal("enable")
-				.requires(context -> context.hasPatPatPermission("ratelimit.toggle"))
+				.requires(permission("ratelimit.toggle"))
 				.executes(PatPatServerRateLimitToggleCommand::enable);
 	}
 
 	public static LiteralArgumentBuilder<CommandSourceStack> getDisable() {
 		return literal("disable")
-				.requires(context -> context.hasPatPatPermission("ratelimit.toggle"))
+				.requires(permission("ratelimit.toggle"))
 				.executes(PatPatServerRateLimitToggleCommand::disable);
 	}
 

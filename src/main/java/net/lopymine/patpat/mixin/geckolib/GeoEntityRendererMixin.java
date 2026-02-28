@@ -41,18 +41,26 @@ public abstract class GeoEntityRendererMixin {
 			return;
 		}
 	*///?} elif >=1.19.3 {
-	//@Inject(at = @At("HEAD"), method = "render")
-	//private void render(Entity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
-	//if (!(entity instanceof LivingEntity livingEntity)) {
-	//		return;
-	//}
+	@Inject(
+			at = @At("HEAD"),
+			//? if fabric {
+			/*method = "render"
+			*///?} elif forge {
+			method = "m_7392_",
+			remap = false
+			//?}
+	)
+	private void render(Entity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
+	if (!(entity instanceof LivingEntity livingEntity)) {
+			return;
+	}
 	//?} else {
 	/*@Dynamic
 	@Inject(at = @At("HEAD"), method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V")
 	private void render(LivingEntity livingEntity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
 	*///?}
-	//	PatPatClientRenderer.scaleEntityIfPatted(livingEntity, poseStack, partialTick);
-	//}
+		PatPatClientRenderer.scaleEntityIfPatted(livingEntity, poseStack, partialTick);
+	}
 }
 //?}
 

@@ -17,8 +17,8 @@ import net.lopymine.patpat.utils.*;
 import net.minecraft.network.chat.*;
 
 import net.minecraft.commands.CommandSourceStack;
-import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.literal;
-import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.argument;
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.argument;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientListSetModeCommand {

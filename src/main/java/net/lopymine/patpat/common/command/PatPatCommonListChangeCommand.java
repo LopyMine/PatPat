@@ -1,4 +1,4 @@
-package net.lopymine.patpat.common.command.list;
+package net.lopymine.patpat.common.command;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;

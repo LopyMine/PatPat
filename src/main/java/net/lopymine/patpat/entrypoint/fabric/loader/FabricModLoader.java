@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.*;
 import net.lopymine.patpat.client.resourcepack.*;
-import net.lopymine.patpat.entrypoint.loader.IModLoader;
+import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
 import net.minecraft.client.KeyMapping;
@@ -30,7 +30,7 @@ import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 /^import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 ^///?}
 
-public class FabricModLoader extends FabricSillyModLoader implements IModLoader {
+public class FabricModLoader extends FabricSillyModLoader implements IClientModLoader {
 
 	@Override
 	public void registerServerCommands(Consumer<CommandDispatcher<CommandSourceStack>> consumer) {

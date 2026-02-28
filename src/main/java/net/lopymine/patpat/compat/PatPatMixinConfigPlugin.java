@@ -15,7 +15,7 @@ public class PatPatMixinConfigPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String mixinClass, String mixinSource) {
-		return !mixinSource.equals(MOD_MENU_MIXIN_CLASS) || EarlyMultiLoader.getInstance().isModLoaded("modmenu");
+		return !mixinSource.equals(MOD_MENU_MIXIN_CLASS) || EarlyCommonMultiLoader.getInstance().isModLoaded("modmenu");
 	}
 
 	@Override

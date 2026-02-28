@@ -2,7 +2,7 @@ package net.lopymine.patpat.client.keybinding;
 
 import lombok.Getter;
 import com.mojang.blaze3d.platform.InputConstants;
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.minecraft.client.gui.screens.controls.*;
 import net.minecraft.client.KeyMapping;
 
@@ -40,7 +40,7 @@ public class PatPatClientKeybindingManager {
 	}
 
 	private static void registerKeybinding(KeyMapping keyBinding) {
-		MultiLoader.getInstance().registerKeybinding(keyBinding);
+		ClientMultiLoader.getInstance().registerKeybinding(keyBinding);
 	}
 
 	public static void handlePatPatKeybindingOnKeyPressed(

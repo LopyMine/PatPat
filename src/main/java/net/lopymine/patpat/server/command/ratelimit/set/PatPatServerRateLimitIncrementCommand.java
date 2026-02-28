@@ -16,6 +16,7 @@ import net.minecraft.network.chat.Component;
 
 import static net.lopymine.patpat.server.command.ratelimit.set.PatPatServerRateLimitSetCommand.VALUE_KEY;
 import static net.minecraft.commands.Commands.argument;
+import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
 import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod(CommandExtension.class)
@@ -27,7 +28,7 @@ public class PatPatServerRateLimitIncrementCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("increment")
-				.requires(context -> context.hasPatPatPermission("ratelimit.set.increment"))
+				.requires(permission("ratelimit.set.increment"))
 				.then(argument(VALUE_KEY, IntegerArgumentType.integer(1))
 						.executes(PatPatServerRateLimitIncrementCommand::set));
 	}

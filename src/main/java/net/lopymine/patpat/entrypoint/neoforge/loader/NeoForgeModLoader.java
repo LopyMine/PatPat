@@ -6,7 +6,7 @@ package net.lopymine.patpat.entrypoint.neoforge.loader;
 import java.util.function.Consumer;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.resourcepack.AbstractResourceReloadListener;
-import net.lopymine.patpat.entrypoint.loader.IModLoader;
+import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader;
 import net.lopymine.patpat.entrypoint.neoforge.*;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.client.event.*;
-import net.neoforged.neoforge.client.event.lifecycle.PatPatClientStoppingEvent;
+import net.neoforged.neoforge.client.event.lifecycle.PatPatForgeClientStoppingEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -30,11 +30,11 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class NeoForgeModLoader implements IModLoader {
+public class NeoForgeModLoader implements IClientModLoader {
 
 	@Override
 	public void registerOnClientStop(Runnable runnable) {
-		NeoForge.EVENT_BUS.addListener(PatPatClientStoppingEvent.class, event -> runnable.run());
+		NeoForge.EVENT_BUS.addListener(PatPatForgeClientStoppingEvent.class, event -> runnable.run());
 	}
 
 	@Override

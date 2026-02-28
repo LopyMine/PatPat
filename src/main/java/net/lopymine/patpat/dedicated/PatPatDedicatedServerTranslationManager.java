@@ -1,7 +1,6 @@
 package net.lopymine.patpat.dedicated;
 
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.entrypoint.*;
@@ -18,7 +17,7 @@ public class PatPatDedicatedServerTranslationManager {
 	public static void reload() {
 		EN_US.clear();
 
-		try (InputStream stream = EarlyMultiLoader.getInstance().loadModFile(PatPat.MOD_ID, "assets/%s/lang/en_us.json".formatted(PatPat.MOD_ID))) {
+		try (InputStream stream = EarlyCommonMultiLoader.getInstance().loadModFile(PatPat.MOD_ID, "assets/%s/lang/en_us.json".formatted(PatPat.MOD_ID))) {
 			if (stream == null) {
 				throw new IllegalArgumentException("Failed to load dedicated server language file");
 			}

@@ -6,7 +6,7 @@ import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelis
 import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.compat.flashback.FlashbackManager;
 import net.lopymine.patpat.compat.replaymod.ReplayModManager;
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.logger.PatLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
@@ -23,7 +23,7 @@ public class PatPatClientProxLibManager {
 
 	public static void register() {
 		PatPatClientProxLibManager.reset();
-		MultiLoader.getInstance().registerClientPlayerLogListener((loggedIn) -> {
+		ClientMultiLoader.getInstance().registerClientPlayerLogListener((loggedIn) -> {
 			if (loggedIn) {
 				return;
 			}

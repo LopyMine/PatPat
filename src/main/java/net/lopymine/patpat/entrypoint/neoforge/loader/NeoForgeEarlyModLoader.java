@@ -6,13 +6,13 @@ package net.lopymine.patpat.entrypoint.neoforge.loader;
 import java.io.*;
 import java.nio.file.Path;
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.entrypoint.loader.IEarlyModLoader;
-import net.lopymine.patpat.entrypoint.loader.IModLoader.ModEnvironment;
+import net.lopymine.patpat.entrypoint.loader.IEarlyCommonModLoader;
+import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader.ModEnvironment;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.*;
 import net.neoforged.neoforgespi.language.IModFileInfo;
 
-public class NeoForgeEarlyModLoader implements IEarlyModLoader {
+public class NeoForgeEarlyModLoader implements IEarlyCommonModLoader {
 
 	@Override
 	public boolean isDevelopmentEnvironment() {

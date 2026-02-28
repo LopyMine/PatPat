@@ -11,11 +11,11 @@ public class PatPatModMenuIntegration extends AbstractModMenuIntegration {
 	@Override
 	protected Screen createConfigScreen(Screen parent) {
 		//? >=1.20.1 {
-		if (EarlyMultiLoader.getInstance().isModLoaded("yet_another_config_lib_v3")) {
+		if (EarlyCommonMultiLoader.getInstance().isModLoaded("yet_another_config_lib_v3")) {
 			return YACLBridge.getScreen(parent);
 		}
 		//?}
-		if (EarlyMultiLoader.getInstance().isModLoaded(VersionedThings.CLOTH_CONFIG_ID)) {
+		if (EarlyCommonMultiLoader.getInstance().isModLoaded(VersionedThings.CLOTH_CONFIG_ID)) {
 			return ClothConfigBridge.getScreen(parent);
 		}
 		return NoConfigLibrariesScreen.createScreen(parent);

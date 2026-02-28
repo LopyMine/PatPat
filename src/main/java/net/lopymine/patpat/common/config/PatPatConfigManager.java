@@ -15,14 +15,14 @@ import java.nio.file.Path;
 
 public class PatPatConfigManager {
 
-	public static final Path CONFIG_PATH = EarlyMultiLoader.getInstance().getConfigDir().resolve("%s/".formatted(PatPat.MOD_ID));
+	public static final Path CONFIG_PATH = EarlyCommonMultiLoader.getInstance().getConfigDir().resolve("%s/".formatted(PatPat.MOD_ID));
 
 	private PatPatConfigManager() {
 		throw new IllegalStateException("Manager class");
 	}
 
 	public static void onInitialize() {
-		MultiLoader.getInstance().registerOnServerStop(() -> PatPatServerConfig.getInstance().saveAsync());
+		ServerMultiLoader.getInstance().registerOnServerStop(() -> PatPatServerConfig.getInstance().saveAsync());
 
 		File file = PatPatConfigManager.CONFIG_PATH.toFile();
 		if (!file.exists() && file.mkdirs()) {

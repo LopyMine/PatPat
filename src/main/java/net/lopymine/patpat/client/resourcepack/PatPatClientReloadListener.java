@@ -2,8 +2,7 @@ package net.lopymine.patpat.client.resourcepack;
 
 import java.util.concurrent.Executor;
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.entrypoint.MultiLoader;
-import net.lopymine.patpat.utils.RLUtils;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.resources.*;
@@ -11,12 +10,11 @@ import net.minecraft.server.packs.resources.*;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 
 import java.util.*;
-import org.jetbrains.annotations.NotNull;
 
 public class PatPatClientReloadListener extends AbstractResourceReloadListener {
 
 	public static void register() {
-		MultiLoader.getInstance().registerResourceReloadListener(new PatPatClientReloadListener());
+		ClientMultiLoader.getInstance().registerResourceReloadListener(new PatPatClientReloadListener());
 	}
 
 	@Override

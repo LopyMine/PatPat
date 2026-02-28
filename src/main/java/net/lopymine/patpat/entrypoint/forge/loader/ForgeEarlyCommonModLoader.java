@@ -3,14 +3,18 @@ package net.lopymine.patpat.entrypoint.forge.loader;
 import java.io.*;
 import java.nio.file.*;
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.entrypoint.loader.IEarlyModLoader;
-import net.lopymine.patpat.entrypoint.loader.IModLoader.ModEnvironment;
+import net.lopymine.patpat.entrypoint.loader.IEarlyCommonModLoader;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.*;
 import net.minecraftforge.forgespi.language.IModFileInfo;
 import org.jetbrains.annotations.Nullable;
 
-public class ForgeEarlyModLoader implements IEarlyModLoader {
+public class ForgeEarlyCommonModLoader implements IEarlyCommonModLoader {
+
+	@Override
+	public String getPlatform() {
+		return "Forge";
+	}
 
 	@Override
 	public Path getConfigDir() {

@@ -17,7 +17,7 @@ import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.Action;
 
 import net.minecraft.commands.CommandSourceStack;
-import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.literal;
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientInfoCommand {

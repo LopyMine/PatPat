@@ -6,7 +6,7 @@ package net.lopymine.patpat.entrypoint.fabric.loader;
 
 /*import com.mojang.brigadier.CommandDispatcher;
 import java.util.function.Consumer;
-import net.lopymine.patpat.entrypoint.loader.IModLoader;
+import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader;
 
 //? >=1.19 {
 import net.fabricmc.fabric.api.client.command.v2.*;
@@ -14,7 +14,7 @@ import net.fabricmc.fabric.api.client.command.v2.*;
 /^import net.fabricmc.fabric.api.client.command.v1.*;
  ^///?}
 
-public abstract class FabricSillyModLoader implements IModLoader {
+public abstract class FabricSillyModLoader implements IClientModLoader {
 
 	@Override
 	public void registerClientCommands(Consumer<CommandDispatcher<CommandSourceStack>> consumer) {

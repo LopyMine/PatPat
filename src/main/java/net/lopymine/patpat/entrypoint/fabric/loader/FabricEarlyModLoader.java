@@ -8,11 +8,11 @@ import java.nio.file.*;
 import java.util.Optional;
 import net.fabricmc.loader.api.*;
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.entrypoint.loader.IEarlyModLoader;
-import net.lopymine.patpat.entrypoint.loader.IModLoader.ModEnvironment;
+import net.lopymine.patpat.entrypoint.loader.IEarlyCommonModLoader;
+import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader.ModEnvironment;
 import org.jetbrains.annotations.Nullable;
 
-public class FabricEarlyModLoader implements IEarlyModLoader {
+public class FabricEarlyModLoader implements IEarlyCommonModLoader {
 
 	@Override
 	public Path getConfigDir() {

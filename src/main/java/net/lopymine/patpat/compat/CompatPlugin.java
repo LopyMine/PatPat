@@ -22,7 +22,7 @@ public abstract class CompatPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return EarlyMultiLoader.getInstance().isModLoaded(this.getCompatModId());
+		return EarlyCommonMultiLoader.getInstance().isModLoaded(this.getCompatModId());
 	}
 
 	@Override

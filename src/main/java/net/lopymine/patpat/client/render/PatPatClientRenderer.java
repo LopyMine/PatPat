@@ -1,14 +1,13 @@
 package net.lopymine.patpat.client.render;
 
 import lombok.experimental.ExtensionMethod;
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 
 import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.client.render.feature.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.protocol.game.ServerboundSwingPacket;
@@ -74,12 +73,12 @@ public class PatPatClientRenderer {
 
 	public static void register() {
 		//? if <=1.21.8 {
-		MultiLoader.getInstance().registerAfterEntitiesRenderer((source, stack) -> {
+		ClientMultiLoader.getInstance().registerAfterEntitiesRenderer((source, stack) -> {
 			PatPatClientRenderer.renderPatOnYourself();
 			PatFeatureRenderer.getInstance().render();
 		});
 		//?}
-		MultiLoader.getInstance().registerAfterWorldTickListener((level) -> {
+		ClientMultiLoader.getInstance().registerAfterWorldTickListener((level) -> {
 			boolean frozen = /*? if >1.20.2 {*/ /*level.tickRateManager().isFrozen(); *//*?} else {*/ false; /*?}*/
 			PatPatClientConfig config = PatPatClientConfig.getInstance();
 
@@ -103,7 +102,7 @@ public class PatPatClientRenderer {
 				LivingEntity pattedEntity = packet.pattedEntity();
 				PlayerConfig playerConfig = packet.playerConfig();
 
-				MultiLoader.getInstance().sendPacketToServer(PatPatClientPacketManager.getPatPacket(pattedEntity));
+				ClientMultiLoader.getInstance().sendPacketToServer(PatPatClientPacketManager.getPatPacket(pattedEntity));
 				PatEntity patEntity = PatPatClientManager.pat(pattedEntity, playerConfig);
 
 				PatPatClientStatsConfig statsConfig = PatPatClientStatsConfig.getInstance();

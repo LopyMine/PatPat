@@ -12,6 +12,7 @@ import net.lopymine.patpat.utils.CommandText;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 
+import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
 import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod(CommandExtension.class)
@@ -23,7 +24,7 @@ public class PatPatServerConfigReloadCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("reload")
-				.requires(context -> context.hasPatPatPermission("reload"))
+				.requires(permission("reload"))
 				.executes(PatPatServerConfigReloadCommand::reload);
 	}
 

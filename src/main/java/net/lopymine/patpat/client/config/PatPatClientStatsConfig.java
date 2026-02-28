@@ -3,7 +3,7 @@ package net.lopymine.patpat.client.config;
 import java.util.function.Supplier;
 import lombok.*;
 import net.lopymine.patpat.*;
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.logger.PatLogger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.*;
@@ -60,7 +60,7 @@ public class PatPatClientStatsConfig {
 
 	public static void registerSaveHooks() {
 		AutoSaveManager.start();
-		MultiLoader.getInstance().registerOnClientStop(() -> {
+		ClientMultiLoader.getInstance().registerOnClientStop(() -> {
 			PatPatClientStatsConfig.getInstance().save();
 		});
 	}

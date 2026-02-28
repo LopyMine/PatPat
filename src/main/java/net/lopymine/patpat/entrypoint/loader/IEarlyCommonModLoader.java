@@ -2,10 +2,11 @@ package net.lopymine.patpat.entrypoint.loader;
 
 import java.io.InputStream;
 import java.nio.file.Path;
-import net.lopymine.patpat.entrypoint.loader.IModLoader.ModEnvironment;
 import org.jetbrains.annotations.Nullable;
 
-public interface IEarlyModLoader {
+public interface IEarlyCommonModLoader {
+
+	String getPlatform();
 
 	Path getConfigDir();
 
@@ -18,5 +19,11 @@ public interface IEarlyModLoader {
 
 	ModEnvironment getEnvironment();
 
+	enum ModEnvironment {
+
+		SERVER,
+		CLIENT
+
+	}
 
 }

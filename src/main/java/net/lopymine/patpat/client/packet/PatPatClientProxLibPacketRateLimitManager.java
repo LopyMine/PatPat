@@ -1,6 +1,6 @@
 package net.lopymine.patpat.client.packet;
 
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.minecraft.client.multiplayer.ClientLevel;
 
 import net.lopymine.patpat.client.config.PatPatClientConfig;
@@ -15,7 +15,7 @@ public class PatPatClientProxLibPacketRateLimitManager {
 	private static int packetsSentPerSecond;
 
 	public static void register() {
-		MultiLoader.getInstance().registerAfterWorldTickListener(PatPatClientProxLibPacketRateLimitManager::tick);
+		ClientMultiLoader.getInstance().registerAfterWorldTickListener(PatPatClientProxLibPacketRateLimitManager::tick);
 	}
 
 	public static void tick(ClientLevel level) {

@@ -1,6 +1,6 @@
 package net.lopymine.patpat.client.resourcepack;
 
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.logger.PatLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -24,7 +24,7 @@ public class PatPatClientSoundManager {
 	private static SoundEvent lopiSoundEvent;
 
 	public static void register() {
-		MultiLoader.getInstance().registerSounds((register) -> {
+		ClientMultiLoader.getInstance().registerSounds((register) -> {
 			lopiSoundEvent = register.registerSound("lopi");
 			patPatSoundEvent = register.registerSound("patpat");
 		});

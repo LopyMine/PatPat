@@ -11,7 +11,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.lopymine.patpat.client.command.argument.*;
 import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
-import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
+import net.lopymine.patpat.common.command.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.*;
 
@@ -20,8 +20,8 @@ import net.minecraft.commands.*;
 import java.util.*;
 
 import net.minecraft.commands.CommandSourceStack;
-import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.literal;
-import static net.lopymine.patpat.common.command.PatPatCommonCommandHelper.argument;
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.argument;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientListChangeCommand {

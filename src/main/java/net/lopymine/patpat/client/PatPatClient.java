@@ -11,7 +11,7 @@ import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.compat.LoadedMods;
 
 import java.util.*;
-import net.lopymine.patpat.entrypoint.MultiLoader;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.logger.PatLogger;
 
 public class PatPatClient {
@@ -26,7 +26,7 @@ public class PatPatClient {
 		PatPatClientSoundManager.register();
 		PatPatClientCommandManager.register();
 		PatPatClientPlayerEvents.register();
-		MultiLoader.getInstance().registerClientPackets(PatPatClientPacketManager::register);
+		ClientMultiLoader.getInstance().registerClientPackets(PatPatClientPacketManager::register);
 		PatPatClientReloadListener.register();
 		PatPatClientProxLibManager.register();
 		PatPatClientProxLibPacketRateLimitManager.register();

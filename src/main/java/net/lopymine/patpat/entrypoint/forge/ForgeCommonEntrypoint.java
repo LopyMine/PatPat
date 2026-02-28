@@ -10,6 +10,7 @@ public class ForgeCommonEntrypoint {
 
 	public ForgeCommonEntrypoint() {
 		PatPat.onInitialize();
+
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ForgeClientEntrypoint::onInitializeClient);
 		DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> ForgeDedicatedEntrypoint::onInitializeServer);
 	}

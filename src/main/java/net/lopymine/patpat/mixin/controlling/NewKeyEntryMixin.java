@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class NewKeyEntryMixin {
 
 	//? if >=1.19.4 {
-	@Shadow
+	@Shadow(remap = false)
 	@Final
 	private KeyMapping key;
 	//?} else {
@@ -25,7 +25,7 @@ public class NewKeyEntryMixin {
 	private KeyMapping keybinding;
 	*///?}
 
-	@Shadow
+	@Shadow(remap = false)
 	@Final
 	private Button btnChangeKeyBinding;
 

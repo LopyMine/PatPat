@@ -27,6 +27,7 @@ import java.util.Collection;
 *//*?}*/
 
 import static net.minecraft.commands.Commands.argument;
+import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
 import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod({CommandExtension.class, PlayerExtension.class, GameProfileExtension.class})
@@ -40,7 +41,7 @@ public class PatPatServerRateLimitInfoCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("info")
-				.requires(context -> context.hasPatPatPermission("ratelimit.info"))
+				.requires(permission("ratelimit.info"))
 				.executes(PatPatServerRateLimitInfoCommand::info)
 				.then(argument(PROFILE_KEY, GameProfileArgument.gameProfile())
 						.suggests((context, builder) -> SharedSuggestionProvider.suggest(context.getSource().getOnlinePlayerNames(), builder))
@@ -97,7 +98,7 @@ public class PatPatServerRateLimitInfoCommand {
 		}
 
 		int availablePats = PatPatServerRateLimitManager.getAvailablePats(profile.getUUID());
-		profile.hasPermission(config.getPermissionBypass(), context).thenAcceptAsync(result -> {
+		profile.hasPermission(config.getPermissionBypass()).thenAcceptAsync(result -> {
 			Object arg = result ?
 					CommandText.text("ratelimit.info.tokens.bypass").finish().withStyle(ChatFormatting.GOLD)
 					:

@@ -16,17 +16,17 @@ import net.lopymine.patpat.client.manager.PatPatClientManager;
 public class CameraMixin {
 
 	/*? >1.20.2 {*/
-	/*@Shadow
+	@Shadow
 	private float partialTickTime;
-	*///?} else {
-	@Unique
+	//?} else {
+	/*@Unique
 	private float partialTickTime = 0;
 
 	@Inject(at = @At("HEAD"), method = "setup")
 	private void onUpdate(BlockGetter area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
 		this.partialTickTime = tickDelta;
 	}
-	//?}
+	*///?}
 
 	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getEyeHeight()F"), method = "tick")
 	private float applyPattingEffect(Entity entity, Operation<Float> original) {

@@ -1,6 +1,8 @@
 package net.lopymine.patpat.entrypoint.forge.loader;
 
-import com.mojang.brigadier.CommandDispatcher;
+//? if forge {
+
+/*import com.mojang.brigadier.CommandDispatcher;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.*;
@@ -17,7 +19,7 @@ import net.lopymine.patpat.utils.*;
 import net.minecraft.client.*;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderLevelStageEvent.Stage;
@@ -124,7 +126,7 @@ public class ForgeClientModLoader implements IClientModLoader {
 		ClientPacketRegister register = new ClientPacketRegister() {
 			@Override
 			public <P extends BasePatPatPacket<P>> void register(PatPatPacketType<P> type, PatPatClientPacketHandler<P> handler) {
-				Map<ResourceLocation, PatPatClientPacketHandler<?>> lazyListeners = packetHandler.getLazyListeners();
+				Map<Identifier, PatPatClientPacketHandler<?>> lazyListeners = packetHandler.getLazyListeners();
 				lazyListeners.put(type.getId(), handler);
 			}
 		};
@@ -152,7 +154,7 @@ public class ForgeClientModLoader implements IClientModLoader {
 
 	private static class LazyClientPacketHandler {
 
-		private final Map<ResourceLocation, PatPatClientPacketHandler<?>> lazyListeners = new HashMap<>();
+		private final Map<Identifier, PatPatClientPacketHandler<?>> lazyListeners = new HashMap<>();
 
 	}
 
@@ -164,8 +166,9 @@ public class ForgeClientModLoader implements IClientModLoader {
 		private final AtomicInteger latestPacketId = new AtomicInteger(0);
 
 		public ForgePackerHandler(String packetVersion, String channelName) {
-			this.packetVersion = packetVersion;
+			this.packetVersion  = packetVersion;
 			this.packetsChannel = NetworkRegistry.newSimpleChannel(RLUtils.modId(channelName), () -> packetVersion, packetVersion::equals, packetVersion::equals);
 		}
 	}
 }
+*///?}

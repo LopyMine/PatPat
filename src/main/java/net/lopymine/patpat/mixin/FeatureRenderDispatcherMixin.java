@@ -2,7 +2,7 @@ package net.lopymine.patpat.mixin;
 
 //? if >=1.21.9 {
 
-/*import net.lopymine.patpat.client.render.feature.PatFeatureRenderer;
+import net.lopymine.patpat.client.render.feature.PatFeatureRenderer;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
@@ -18,4 +18,4 @@ public class FeatureRenderDispatcherMixin {
 	}
 
 }
-*///?}
+//?}

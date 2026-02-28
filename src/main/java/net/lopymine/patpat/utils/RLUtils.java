@@ -1,7 +1,7 @@
 package net.lopymine.patpat.utils;
 
 import net.lopymine.patpat.PatPat;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.*;
 
 public class RLUtils {
@@ -10,23 +10,23 @@ public class RLUtils {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static ResourceLocation parse(String string){
+	public static Identifier parse(String string){
 		/*? if >1.20.6 {*/
-		/*return ResourceLocation.parse(string);
-		*//*?} else {*/
-		return new ResourceLocation(string);
-		 /*?}*/
+		return Identifier.parse(string);
+		/*?} else {*/
+		/*return new Identifier(string);
+		 *//*?}*/
 	}
 
-	public static ResourceLocation modId(@NotNull String path) {
+	public static Identifier modId(@NotNull String path) {
 		return RLUtils.id(PatPat.MOD_ID, path);
 	}
 
-	public static ResourceLocation vanillaId(@NotNull String path) {
+	public static Identifier vanillaId(@NotNull String path) {
 		return RLUtils.id("minecraft", path);
 	}
 
-	public static ResourceLocation id(String namespace, String path) {
+	public static Identifier id(String namespace, String path) {
 		String name = namespace;
 		String location = path;
 
@@ -37,9 +37,9 @@ public class RLUtils {
 		}
 
 		//? >=1.21 {
-		/*return ResourceLocation.fromNamespaceAndPath(name, location);
-		*///?} else {
-		return new ResourceLocation(name, location);
-		//?}
+		return Identifier.fromNamespaceAndPath(name, location);
+		//?} else {
+		/*return new Identifier(name, location);
+		*///?}
 	}
 }

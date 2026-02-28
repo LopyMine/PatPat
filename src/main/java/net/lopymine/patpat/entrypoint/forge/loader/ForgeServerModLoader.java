@@ -1,6 +1,8 @@
 package net.lopymine.patpat.entrypoint.forge.loader;
 
-import com.mojang.authlib.GameProfile;
+//? if forge {
+
+/*import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -13,7 +15,7 @@ import net.lopymine.patpat.entrypoint.loader.server.IServerModLoader;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.*;
@@ -85,7 +87,7 @@ public class ForgeServerModLoader implements IServerModLoader {
 						}
 
 						if (registrationSide == PacketRegistrationSide.S2C || registrationSide == PacketRegistrationSide.BOTH) {
-							Map<ResourceLocation, PatPatClientPacketHandler<?>> lazyListeners = ForgeServerModLoader.this.forgeLazyClientPacketHandler.lazyListeners;
+							Map<Identifier, PatPatClientPacketHandler<?>> lazyListeners = ForgeServerModLoader.this.forgeLazyClientPacketHandler.lazyListeners;
 							@SuppressWarnings("unchecked")
 							PatPatClientPacketHandler<P> packetHandler = (PatPatClientPacketHandler<P>) lazyListeners.get(p.getPatPatType().getId());
 							if (packetHandler != null) {
@@ -176,7 +178,7 @@ public class ForgeServerModLoader implements IServerModLoader {
 	@Getter
 	public static class ForgeLazyClientPacketHandler {
 
-		private final Map<ResourceLocation, PatPatClientPacketHandler<?>> lazyListeners = new HashMap<>();
+		private final Map<Identifier, PatPatClientPacketHandler<?>> lazyListeners = new HashMap<>();
 
 	}
 
@@ -188,7 +190,7 @@ public class ForgeServerModLoader implements IServerModLoader {
 		private final AtomicInteger latestPacketId = new AtomicInteger(0);
 
 		public ForgePackerHandler(String packetVersion, String channelName) {
-			this.packetVersion = packetVersion;
+			this.packetVersion  = packetVersion;
 			this.packetsChannel = NetworkRegistry.newSimpleChannel(
 					RLUtils.modId(channelName),
 					() -> packetVersion,
@@ -198,3 +200,4 @@ public class ForgeServerModLoader implements IServerModLoader {
 		}
 	}
 }
+*///?}

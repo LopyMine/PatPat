@@ -2,7 +2,7 @@ package net.lopymine.patpat.mixin;
 
 import net.lopymine.patpat.client.keybinding.*;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.gui.screens.controls.*;
+import net.minecraft.client.gui.screens.options.controls.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -22,19 +22,19 @@ public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 	//?}
 
 	@Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
-	private void handlePatPatKeybindingOnKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+	private void handlePatPatKeybindingOnKeyPressed(net.minecraft.client.input.KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
 		//? if >=1.21.9 {
-		/*int keyCode = event.key();
+		int keyCode = event.key();
 		int scanCode = event.scancode();
-		*///?}
+		//?}
 		PatPatClientKeybindingManager.handlePatPatKeybindingOnKeyPressed(this.selectedKey, (KeyBindsScreen) (Object) (this), keyCode, scanCode, () -> cir.setReturnValue(false));
 	}
 
 	@Inject(at = @At("HEAD"), method = "mouseClicked", cancellable = true)
-	private void handlePatPatKeybindingOnMouseClick(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
+	private void handlePatPatKeybindingOnMouseClick(net.minecraft.client.input.MouseButtonEvent event, boolean bl, CallbackInfoReturnable<Boolean> cir) {
 		//? if >=1.21.9 {
-		/*int button = event.button();
-		*///?}
+		int button = event.button();
+		//?}
 		PatPatClientKeybindingManager.handlePatPatKeybindingOnMouseClick(this.selectedKey, (KeyBindsScreen) (Object) (this), button, () -> cir.setReturnValue(false));
 	}
 

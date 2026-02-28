@@ -22,7 +22,7 @@ public interface PongPatPacket<T extends PongPatPacket<T>> extends BasePatPatPac
 		reply.reply(packet);
 	}
 	//?} else {
-	/*default void pong(net.minecraft.resources.ResourceLocation id, net.minecraft.network.FriendlyByteBuf buf) {
+	/*default void pong(net.minecraft.resources.Identifier id, net.minecraft.network.FriendlyByteBuf buf) {
 		PacketSender sender = this.getSender();
 		if (sender == null) {
 			return;

@@ -2,14 +2,14 @@ package net.lopymine.patpat.mixin.controlling;
 
 //? if >=1.17.1 && <=1.20.6 && controlling {
 
-import com.blamejared.controlling.client.NewKeyBindsScreen;
+/*import com.blamejared.controlling.client.NewKeyBindsScreen;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.lopymine.patpat.client.keybinding.*;
 import net.lopymine.patpat.utils.mixin.*;
 import net.minecraft.client.*;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.controls.*;
+import net.minecraft.client.gui.screens.options.controls.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.At.Shift;
@@ -40,7 +40,7 @@ public abstract class NewKeyBindsScreenMixin extends KeyBindsScreen {
 	}
 
 	//? if <1.19.3 {
-	/*@Inject(at = @At("TAIL"), method = "render")
+	/^@Inject(at = @At("TAIL"), method = "render")
 	private void renderWithTooltip(PoseStack poseStack, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
 		if (this instanceof IRequestableTooltipScreen screen) {
 			TooltipRequest tooltipRequest = screen.myTotemDoll$getCurrentRequest();
@@ -50,7 +50,7 @@ public abstract class NewKeyBindsScreenMixin extends KeyBindsScreen {
 			}
 		}
 	}
-	*///?}
+	^///?}
 
 }
-//?}
+*///?}

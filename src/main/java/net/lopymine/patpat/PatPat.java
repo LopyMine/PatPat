@@ -1,7 +1,7 @@
 package net.lopymine.patpat;
 
 import net.lopymine.patpat.common.config.PatPatConfigManager;
-import net.lopymine.patpat.entrypoint.ServerMultiLoader;
+import net.lopymine.patpat.entrypoint.*;
 import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.server.command.PatPatServerCommandManager;
 import net.lopymine.patpat.server.event.PatPatServerPlayerEvents;
@@ -9,8 +9,8 @@ import net.lopymine.patpat.server.packet.PatPatServerPacketManager;
 
 public class PatPat {
 
-	public static final String MOD_VERSION = /*$ mod_version*/ "1.2.4+1.20.1+forge";
-	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "027260c";
+	public static final String MOD_VERSION = /*$ mod_version*/ "1.2.4+1.21.11+neoforge";
+	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "027fa93";
 	public static final String MOD_NAME = /*$ mod_name*/ "PatPat";
 	public static final String MOD_ID = /*$ mod_id*/ "patpat";
 	public static final String SERVER_CONFIG_VERSION = /*$ server_config_version*/ "1.0.0";
@@ -29,4 +29,5 @@ public class PatPat {
 		PatPat.LOGGER.info("PatPat Initialized");
 		PatPat.LOGGER.debug("Debug Mode Enabled");
 	}
+
 }

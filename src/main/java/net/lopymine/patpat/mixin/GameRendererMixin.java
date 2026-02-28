@@ -2,7 +2,7 @@ package net.lopymine.patpat.mixin;
 
 //? if <=1.21.10 {
 
-import com.llamalad7.mixinextras.injector.wrapoperation.*;
+/*import com.llamalad7.mixinextras.injector.wrapoperation.*;
 import lombok.experimental.ExtensionMethod;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.*;
@@ -20,10 +20,10 @@ import org.jetbrains.annotations.Nullable;
 public class GameRendererMixin {
 
 	//? if >=1.20.5 {
-	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getEntityHitResult(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;D)Lnet/minecraft/world/phys/EntityHitResult;"), method = "pick(Lnet/minecraft/world/entity/Entity;DDF)Lnet/minecraft/world/phys/HitResult;")
-			*///?} else {
-	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getEntityHitResult(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;D)Lnet/minecraft/world/phys/EntityHitResult;"), method = "pick")
-	 //?}
+	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getEntityHitResult(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;D)Lnet/minecraft/world/phys/EntityHitResult;"), method = "pick(Lnet/minecraft/world/entity/Entity;DDF)Lnet/minecraft/world/phys/HitResult;")
+			//?} else {
+	/^@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getEntityHitResult(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;D)Lnet/minecraft/world/phys/EntityHitResult;"), method = "pick")
+	 ^///?}
 	private @Nullable EntityHitResult makeAllMobsPattable(Entity entity, Vec3 vec3, Vec3 vec32, AABB aABB, Predicate<Entity> predicate, double d, Operation<EntityHitResult> original) {
 		if (!entity.isMarked()) {
 			return original.call(entity, vec3, vec32, aABB, predicate, d);
@@ -31,4 +31,4 @@ public class GameRendererMixin {
 		return original.call(entity, vec3, vec32, aABB, EntitySelector.NO_SPECTATORS, d);
 	}
 }
-//?}
+*///?}

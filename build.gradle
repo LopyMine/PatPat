@@ -17,7 +17,9 @@ mossyDependencies {
 	neoForge = prop("build.neoforge")
 	parchment = prop("build.parchment")
 
-	disableMixinAp = "true"
+	if (sc.current.project.startsWith("forge-") && sc.current.version.toString() == "1.20.1") {
+		disableMixinAp = "true"
+	}
 
 	additional {
 		// - By default, every additional project dependency ("dep.modId" from gradle.properties) will use

@@ -6,6 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.entrypoint.EarlyCommonMultiLoader;
 import net.lopymine.patpat.extension.CommandExtension;
 import net.lopymine.patpat.utils.*;
 
@@ -20,8 +21,6 @@ import static net.minecraft.commands.Commands.literal;
 @ExtensionMethod(CommandExtension.class)
 public class PatPatServerInfoCommand {
 
-	public static final String PLATFORM = "Fabric/Server";
-
 	private PatPatServerInfoCommand() {
 		throw new IllegalStateException("Command class");
 	}
@@ -33,16 +32,18 @@ public class PatPatServerInfoCommand {
 	}
 
 	public static int version(CommandContext<CommandSourceStack> context) {
+		String platform = EarlyCommonMultiLoader.getInstance().getFullPlatform();
+
 		String version = PatPat.MOD_VERSION + "+" + PatPat.BUILD_CODE_TIME;
-		String minecraftVersion = SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*//*name*//*?} else {*/ getName /*?}*/();
+		String minecraftVersion = SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*/ /*getName *//*?}*/();
 		String debugInformation = "Platform: %s%nMinecraft: %s%nVersion: %s"
-				.formatted(PLATFORM, minecraftVersion, version);
+				.formatted(platform, minecraftVersion, version);
 
 		Style style = Style.EMPTY
 				.withClickEvent(CommandText.getClickEvent(Action.COPY_TO_CLIPBOARD, debugInformation))
 				.withHoverEvent(CommandText.getHoverEvent(HoverEvent.Action.SHOW_TEXT, CommandText.text("info.copy").finish()));
 
-		MutableComponent platformText = CommandText.goldenArgs("info.platform", PLATFORM)
+		MutableComponent platformText = CommandText.goldenArgs("info.platform", platform)
 				.finish()
 				.withStyle(style);
 

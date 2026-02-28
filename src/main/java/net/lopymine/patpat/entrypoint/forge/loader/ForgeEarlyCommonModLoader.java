@@ -1,6 +1,8 @@
 package net.lopymine.patpat.entrypoint.forge.loader;
 
-import java.io.*;
+//? if forge {
+
+/*import java.io.*;
 import java.nio.file.*;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.entrypoint.loader.IEarlyCommonModLoader;
@@ -59,3 +61,4 @@ public class ForgeEarlyCommonModLoader implements IEarlyCommonModLoader {
 		};
 	}
 }
+*///?}

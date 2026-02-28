@@ -14,17 +14,17 @@ import net.minecraft.network.chat.HoverEvent.*;
 import net.minecraft.network.chat.ClickEvent.*;
 
 //? if >=1.21.5 {
-/*import java.io.File;
+import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
 import net.minecraft.world.item.ItemStack;
-*///?}
+//?}
 
 //? if >=1.21.6 {
-/*import net.minecraft.server.dialog.Dialog;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.dialog.Dialog;
+import net.minecraft.resources.Identifier;
 import net.minecraft.core.Holder;
-*///?}
+//?}
 
 public class CommandText {
 
@@ -96,24 +96,24 @@ public class CommandText {
 		return this;
 	}
 
-	public static <T> HoverEvent getHoverEvent(Action/*? <=1.21.4 {*/<T>/*?}*/ action, T value) {
+	public static <T> HoverEvent getHoverEvent(Action/*? <=1.21.4 {*//*<T>*//*?}*/ action, T value) {
 		//? <=1.21.4 {
-		return new HoverEvent(action, value);
-		 /*?} else {*/
-		/*return switch (action) {
+		/*return new HoverEvent(action, value);
+		 *//*?} else {*/
+		return switch (action) {
 			case SHOW_TEXT -> new ShowText((Component) value);
 			case SHOW_ITEM -> new ShowItem((ItemStack) value);
 			case SHOW_ENTITY -> new ShowEntity((EntityTooltipInfo) value);
 		};
-		*//*?}*/
+		/*?}*/
 	}
 
 	@SuppressWarnings("unchecked")
 	public static ClickEvent getClickEvent(ClickEvent.Action action, Object value) {
 		//? <=1.21.4 {
-		return new ClickEvent(action, String.valueOf(value));
-		/*?} else {*/
-		/*return switch (action) {
+		/*return new ClickEvent(action, String.valueOf(value));
+		*//*?} else {*/
+		return switch (action) {
 			case OPEN_URL -> new OpenUrl((URI) value);
 			case RUN_COMMAND -> new RunCommand(String.valueOf(value));
 			case SUGGEST_COMMAND -> new SuggestCommand(String.valueOf(value));
@@ -129,11 +129,11 @@ public class CommandText {
 				yield new OpenFile((String) value);
 			}
 			//? if >=1.21.6 {
-			/^case CUSTOM -> new Custom((ResourceLocation) value, Optional.empty());
+			case CUSTOM -> new Custom((Identifier) value, Optional.empty());
 			case SHOW_DIALOG -> new ShowDialog((Holder<Dialog>) value);
-			^///?}
+			//?}
 		};
-		*//*?}*/
+		/*?}*/
 	}
 
 	public MutableComponent finish() {

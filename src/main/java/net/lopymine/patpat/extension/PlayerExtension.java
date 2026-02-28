@@ -7,7 +7,7 @@ import com.mojang.authlib.GameProfile;
 import java.util.concurrent.CompletableFuture;
 
 /*? if >=1.21.9*/
-//import net.minecraft.server.players.NameAndId;
+import net.minecraft.server.players.NameAndId;
 
 public class PlayerExtension {
 
@@ -19,13 +19,15 @@ public class PlayerExtension {
 		return ServerMultiLoader.getInstance().hasPermission(player, permission);
 	}
 
-	public static CompletableFuture<Boolean> hasPermission(GameProfile profile, String permission) {
+	//? if <=1.21.8 {
+	/*public static CompletableFuture<Boolean> hasPermission(GameProfile profile, String permission) {
 		return ServerMultiLoader.getInstance().hasOfflinePermission(profile.getId(), permission);
 	}
+	*///?}
 
 	/*? if >=1.21.9 {*/
-	/*public static CompletableFuture<Boolean> hasPermission(NameAndId nameAndId, String permission) {
-		return ServerMultiLoader.getInstance().hasOfflinePermission(profile.getId(), permission);
+	public static CompletableFuture<Boolean> hasPermission(NameAndId nameAndId, String permission) {
+		return ServerMultiLoader.getInstance().hasOfflinePermission(nameAndId.id(), permission);
 	}
-	*//*?}*/
+	/*?}*/
 }

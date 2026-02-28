@@ -26,3 +26,11 @@ mandatory = true
 versionRange = "${minecraft}"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.${ mod_id }]]
+modId = "mixinbooster"
+mandatory = true
+versionRange = "[0.1.2,)"
+ordering = "NONE"
+side = "BOTH"
+

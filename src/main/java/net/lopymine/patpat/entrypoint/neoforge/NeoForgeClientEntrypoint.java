@@ -1,7 +1,7 @@
 package net.lopymine.patpat.entrypoint.neoforge;
 
 //? if neoforge {
-/*import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.modmenu.integration.PatPatModMenuIntegration;
 import net.neoforged.api.distmarker.Dist;
@@ -30,4 +30,4 @@ public class NeoForgeClientEntrypoint {
 	}
 
 }
-*///?}
+//?}

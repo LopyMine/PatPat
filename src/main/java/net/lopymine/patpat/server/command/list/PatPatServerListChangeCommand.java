@@ -17,8 +17,8 @@ import net.minecraft.commands.arguments.GameProfileArgument;
 import java.util.*;
 
 /*? if >=1.21.9 {*/
-/*import net.minecraft.server.players.NameAndId;
-*//*?}*/
+import net.minecraft.server.players.NameAndId;
+/*?}*/
 
 import static net.minecraft.commands.Commands.argument;
 import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
@@ -61,18 +61,18 @@ public class PatPatServerListChangeCommand {
 		PatPatServerPlayerListConfig config = PatPatServerPlayerListConfig.getInstance();
 		Map<UUID, String> map = config.getValues();
 		//? if >=1.21.9 {
-		/*Collection<NameAndId> profile = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
+		Collection<NameAndId> profile = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
 
 		for (NameAndId nameAndId : profile) {
 			String name = nameAndId.name();
 			UUID uuid = nameAndId.id();
-		*///?} else {
-		Collection<GameProfile> profile = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
+		//?} else {
+		/*Collection<GameProfile> profile = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
 
 		for (GameProfile gameProfile : profile) {
 			String name = gameProfile.getName();
 			UUID uuid = gameProfile.getId();
-		//?}
+		*///?}
 			PatPatCommonListChangeCommand.changeList(add, map, uuid, name, (component) -> context.sendMsg(component));
 		}
 

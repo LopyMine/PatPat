@@ -7,10 +7,10 @@ public class ServerMultiLoader {
 	//? if fabric {
 	/*private static final IServerModLoader LOADER = new net.lopymine.patpat.entrypoint.fabric.loader.FabricServerModLoader();
 	*///?} elif neoforge {
-	/*private static final IServerModLoader LOADER = new net.lopymine.patpat.entrypoint.neoforge.loader.NeoForgeServerModLoader();
-	*///?} elif forge {
-	private static final IServerModLoader LOADER = new net.lopymine.patpat.entrypoint.forge.loader.ForgeServerModLoader();
-	//?}
+	private static final IServerModLoader LOADER = new net.lopymine.patpat.entrypoint.neoforge.loader.NeoForgeServerModLoader();
+	//?} elif forge {
+	/*private static final IServerModLoader LOADER = new net.lopymine.patpat.entrypoint.forge.loader.ForgeServerModLoader();
+	*///?}
 
 	public static IServerModLoader getInstance() {
 		return LOADER;

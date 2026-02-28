@@ -2,13 +2,13 @@ package net.lopymine.patpat.mixin;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.components.*;
-import net.minecraft.client.gui.screens./*? if >=1.21 {*//*options.*//*?}*/controls./*? if >=1.18 {*/ KeyBindsList /*?} else {*//*ControlList*//*?}*/.KeyEntry;
+import net.minecraft.client.gui.screens./*? if >=1.21 {*/options./*?}*/controls./*? if >=1.18 {*/ KeyBindsList /*?} else {*//*ControlList*//*?}*/.KeyEntry;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //? if <1.19.3 {
-/*import net.minecraft.client.gui.screens.controls.*;
+/*import net.minecraft.client.gui.screens.options.controls.*;
 import net.minecraft.network.chat.Component;
 *///?}
 

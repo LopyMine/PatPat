@@ -18,7 +18,7 @@ public abstract class AbstractModMenuIntegration implements ModMenuApi {
 
 *///?} elif neoforge {
 
-/*import net.neoforged.fml.*;
+import net.neoforged.fml.*;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.minecraft.client.gui.screens.Screen;
 
@@ -32,9 +32,9 @@ public abstract class AbstractModMenuIntegration {
 
 }
 
-*///?} elif forge {
+//?} elif forge {
 
-import net.minecraft.client.gui.screens.Screen;
+/*import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory;
 import net.minecraftforge.fml.*;
 
@@ -51,4 +51,4 @@ public abstract class AbstractModMenuIntegration {
 
 }
 
-//?}
+*///?}

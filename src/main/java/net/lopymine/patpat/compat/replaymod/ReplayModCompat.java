@@ -9,8 +9,8 @@ import net.lopymine.patpat.compat.LoadedMods;
 import net.lopymine.patpat.packet.s2c.*;
 
 //? <=1.20.1 {
-import net.minecraft.network.FriendlyByteBuf;
-//?}
+/*import net.minecraft.network.FriendlyByteBuf;
+*///?}
 
 public class ReplayModCompat {
 

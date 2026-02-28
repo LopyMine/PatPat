@@ -5,7 +5,7 @@ import com.google.gson.*;
 import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.*;
 import net.lopymine.patpat.logger.PatLogger;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -34,7 +34,7 @@ public class PatPatClientResourcePackManager {
 	private PatPatClientResourcePackManager() {
 	}
 
-	public static void parseConfig(String packName, ResourceLocation identifier, Supplier<InputStream> inputStreamInputSupplier, List<CustomAnimationConfig> configs, PatPatClientConfig config) {
+	public static void parseConfig(String packName, Identifier identifier, Supplier<InputStream> inputStreamInputSupplier, List<CustomAnimationConfig> configs, PatPatClientConfig config) {
 		String path = identifier.getPath();
 		if (!path.endsWith(".json") && !path.endsWith(".json5")) {
 			return;
@@ -64,7 +64,7 @@ public class PatPatClientResourcePackManager {
 					return;
 				}
 			}
-			CustomAnimationConfig animationConfig = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json)/*? if >=1.20.5 {*//*.getOrThrow()*//*?} else {*/.getOrThrow(false, LOGGER::error)/*?}*/.getFirst();
+			CustomAnimationConfig animationConfig = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, LOGGER::error)*//*?}*/.getFirst();
 			animationConfig.setConfigPath("%s/%s".formatted(packName, path));
 			configs.add(animationConfig);
 		} catch (Exception e) {
@@ -93,14 +93,14 @@ public class PatPatClientResourcePackManager {
 					LOGGER.error("Failed to read custom animation at {} from {}", id.toString(), resourcePackName);
 				}
 			});//?} else {
-			/*Collection<ResourceLocation> customAnimationIds = pack.getResources(PackType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures", /^? <=1.18.2 {^//^0,^//^?}^/ (identifier) -> {
+			/*Collection<Identifier> customAnimationIds = pack.getResources(PackType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures", /^? <=1.18.2 {^//^0,^//^?}^/ (identifier) -> {
 				//? >=1.19 {
 				return identifier.getPath().endsWith(".json") || identifier.getPath().endsWith(".json5");
 				//?} else {
 				/^return identifier.endsWith(".json") || identifier.endsWith(".json5");
 				^///?}
 			});
-			for (ResourceLocation customAnimationId : customAnimationIds) {
+			for (Identifier customAnimationId : customAnimationIds) {
 				try (InputStream inputStream = /^? >=1.19 {^/manager.open(customAnimationId)/^?} else {^//^manager.getResource(customAnimationId).getInputStream()^//^?}^/) {
 					PatPatClientResourcePackManager.parseConfig(resourcePackName, customAnimationId, () -> inputStream, animationConfigs, config);
 				} catch (Exception e) {

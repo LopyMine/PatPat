@@ -1,6 +1,8 @@
 package net.lopymine.patpat.entrypoint.forge;
 
-import net.lopymine.patpat.PatPat;
+//? if forge {
+
+/*import net.lopymine.patpat.PatPat;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -16,3 +18,4 @@ public class ForgeCommonEntrypoint {
 	}
 
 }
+*///?}

@@ -8,15 +8,15 @@ import net.lopymine.patpat.extension.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 //? if >=1.21.11 {
-/*import net.minecraft.client.renderer.rendertype.RenderTypes;
-*///?} else {
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+//?} else {
 
-import net.minecraft.client.renderer.RenderType;
+/*import net.minecraft.client.renderer.RenderType;
 
-//?}
+*///?}
 
 @ExtensionMethod(value = {VertexConsumerExtension.class, PoseExtension.class})
 public class PatFeatureRenderer {
@@ -34,10 +34,10 @@ public class PatFeatureRenderer {
 
 		for (PatFeatureRequest request : this.requests) {
 			//? if >=1.21.11 {
-			/*VertexConsumer buffer = source.getBuffer(RenderTypes.entityTranslucent(request.texture()));
-			*///?} else {
-			VertexConsumer buffer = source.getBuffer(RenderType.entityTranslucent(request.texture()));
-			//?}
+			VertexConsumer buffer = source.getBuffer(RenderTypes.entityTranslucent(request.texture()));
+			//?} else {
+			/*VertexConsumer buffer = source.getBuffer(RenderType.entityTranslucent(request.texture()));
+			*///?}
 
 			/*? if >=1.19.3 {*/ org.joml.Matrix4f /*?} else {*/ /*com.mojang.math.Matrix4f*//*?}*/ matrix = request.poseStack().pose();
 			buffer.withVertex(matrix, request.x1(), request.y1(), request.z()).withColor(255, 255, 255, 255).withUv(request.u1(), request.v1()).withOverlay(OverlayTexture.NO_OVERLAY).withLight(request.light()).withNormal(0, 1, 0).end();
@@ -51,7 +51,7 @@ public class PatFeatureRenderer {
 	}
 
 	public void request(
-			ResourceLocation texture,
+			Identifier texture,
 			Pose poseStack,
 			float x1,
 			float y1,

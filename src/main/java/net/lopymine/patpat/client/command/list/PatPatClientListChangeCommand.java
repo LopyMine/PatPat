@@ -5,7 +5,7 @@ import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.command.argument.*;
 import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
@@ -18,8 +18,8 @@ import net.minecraft.commands.SharedSuggestionProvider;
 
 import java.util.*;
 
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.argument;
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientListChangeCommand {

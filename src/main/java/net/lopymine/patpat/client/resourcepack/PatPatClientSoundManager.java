@@ -69,7 +69,11 @@ public class PatPatClientSoundManager {
 				SoundSource.PLAYERS,
 				soundConfig.getVolume() * (float) volume,
 				Mth.nextFloat(
-						world.random,
+						//? if >=26.1 {
+						world.getRandom(),
+						//?} else {
+						/*world.random,
+						 *///?}
 						soundConfig.getMinPitch(),
 						soundConfig.getMaxPitch()
 				));

@@ -15,10 +15,10 @@ import net.lopymine.patpat.client.manager.PatPatClientManager;
 @Mixin(Camera.class)
 public class CameraMixin {
 
-	/*? >1.20.2 {*/
-	@Shadow
+	/*? >1.20.2 && <=1.21.11 {*/
+	/*@Shadow
 	private float partialTickTime;
-	//?} else {
+	*///?} else {
 	/*@Unique
 	private float partialTickTime = 0;
 
@@ -45,12 +45,12 @@ public class CameraMixin {
 			return originalHeight;
 		}
 
-		if (PatPatClientManager.expired(patEntity, this.partialTickTime)) {
+		if (PatPatClientManager.expired(patEntity, 1.0F)) {
 			PatPatClientManager.removePatEntity(patEntity);
 			return originalHeight;
 		}
 
-		return originalHeight * PatPatClientManager.getAnimationProgress(patEntity, this.partialTickTime);
+		return originalHeight * PatPatClientManager.getAnimationProgress(patEntity, 1.0F);
 	}
 
 }

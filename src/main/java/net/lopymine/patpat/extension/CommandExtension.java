@@ -1,6 +1,6 @@
 package net.lopymine.patpat.extension;
 
-import me.lucko.fabric.api.permissions.v0.Permissions;
+//import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.lopymine.patpat.server.command.PatPatServerCommandManager;
 import net.lopymine.patpat.utils.TextUtils;
 
@@ -44,11 +44,12 @@ public class CommandExtension {
 	}
 
 	public static boolean hasPermission(CommandSourceStack context, String permission, int defaultLevel) {
-		//? if <1.17.1 {
+		// if <1.17.1 {
 		/*return context./^? if >=1.17.1 {^/hasPermissionLevel/^?} else {^//^hasPermission^//^?}^/(defaultLevel);
-		 *///?} else {
-		return Permissions.check(context, permission, defaultLevel);
-		//?}
+		 *///} else {
+		//return Permissions.check(context, permission, defaultLevel);
+		//}
+		return true;
 	}
 
 }

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 //? if >=1.21.11 {
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 //?} else {
-/*import net.minecraft.client.renderer.RenderType;
+/*import net.minecraft.client.renderer.RenderTypes;
 *///?}
 
 @ExtensionMethod(value = {VertexConsumerExtension.class, PoseExtension.class})

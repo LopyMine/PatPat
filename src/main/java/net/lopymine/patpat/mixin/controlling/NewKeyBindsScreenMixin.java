@@ -9,7 +9,7 @@ import net.lopymine.patpat.client.keybinding.*;
 import net.lopymine.patpat.utils.mixin.*;
 import net.minecraft.client.*;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.controls.*;
+import net.minecraft.client.gui.screens.options.controls.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.At.Shift;

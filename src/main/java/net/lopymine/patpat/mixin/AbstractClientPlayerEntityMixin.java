@@ -42,7 +42,7 @@ public abstract class AbstractClientPlayerEntityMixin {
 	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerInfo;getSkin()Lnet/minecraft/client/resources/PlayerSkin;"), method = "getSkin")
 	private PlayerSkin customCape(PlayerInfo instance, Operation<PlayerSkin> original) {
 		PlayerSkin call = original.call(instance);
-		ResourceLocation capeTexture = call.capeTexture();
+		Identifier capeTexture = call.capeTexture();
 		if (capeTexture != null || !PatPatClient.AUTHORS.contains(instance.getProfile().getId())) {
 			return call;
 		}
@@ -54,8 +54,8 @@ public abstract class AbstractClientPlayerEntityMixin {
 	/*@Shadow @Nullable protected abstract PlayerInfo getPlayerInfo();
 
 	@Inject(method = "getCloakTextureLocation", at = @At("RETURN"), cancellable = true)
-	private void customCape(CallbackInfoReturnable<ResourceLocation> cir) {
-		ResourceLocation original = cir.getReturnValue();
+	private void customCape(CallbackInfoReturnable<Identifier> cir) {
+		Identifier original = cir.getReturnValue();
 		if (original != null) {
 			return;
 		}

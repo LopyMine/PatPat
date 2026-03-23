@@ -102,11 +102,19 @@ public class PatPatServerPacketManager {
 	}
 
 	//? >=1.20.5 {
-	private static <T extends BasePatPatPacket<T>> void  registerC2SPacket(PatPatPacketType<T> type) {
-		PayloadTypeRegistry.playC2S().register(type.getPacketId(), type.getCodec());
+	private static <T extends BasePatPatPacket<T>> void registerC2SPacket(PatPatPacketType<T> type) {
+		//? if >=26.1 {
+		PayloadTypeRegistry.serverboundPlay().register(type.getPacketId(), type.getCodec());
+		//?} else {
+		/*PayloadTypeRegistry.playC2S().register(type.getPacketId(), type.getCodec());
+		 *///?}
 	}
-	private static <T extends BasePatPatPacket<T>> void  registerS2CPacket(PatPatPacketType<T> type) {
-		PayloadTypeRegistry.playS2C().register(type.getPacketId(), type.getCodec());
+	private static <T extends BasePatPatPacket<T>> void registerS2CPacket(PatPatPacketType<T> type) {
+		//? if >=26.1 {
+		PayloadTypeRegistry.clientboundPlay().register(type.getPacketId(), type.getCodec());
+		//?} else {
+		/*PayloadTypeRegistry.playS2C().register(type.getPacketId(), type.getCodec());
+		 *///?}
 	}
 	//?}
 

@@ -17,7 +17,7 @@ import net.minecraft.network.chat.ClickEvent.*;
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 //?}
 
 //? if >=1.21.6 {
@@ -102,7 +102,11 @@ public class CommandText {
 		 *//*?} else {*/
 		return switch (action) {
 			case SHOW_TEXT -> new ShowText((Component) value);
-			case SHOW_ITEM -> new ShowItem((ItemStack) value);
+			//? if >=26.1 {
+			case SHOW_ITEM -> new ShowItem((ItemStackTemplate) value);
+			//?} else {
+			/*case SHOW_ITEM -> new ShowItem((ItemStack) value);
+			 *///?}
 			case SHOW_ENTITY -> new ShowEntity((EntityTooltipInfo) value);
 		};
 		/*?}*/

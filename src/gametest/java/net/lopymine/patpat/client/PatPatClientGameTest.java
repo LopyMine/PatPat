@@ -1,5 +1,6 @@
 package net.lopymine.patpat.client;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState.SelectedGameMode;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,7 +22,6 @@ public class PatPatClientGameTest implements FabricClientGameTest {
 
 	@Override
 	public void runTest(ClientGameTestContext context) {
-
 		try (PatPatSingleplayerContextImplDecorator singleplayer = new PatPatSingleplayerContextImplDecorator(context.worldBuilder().adjustSettings(worldCreationUiState -> {
 			GameRules gamerules = worldCreationUiState.getGameRules();
 			gamerules.set(GameRules.ADVANCE_TIME, false, null);
@@ -54,7 +54,12 @@ public class PatPatClientGameTest implements FabricClientGameTest {
 				serverLevel.addFreshEntity(entity);
 			});
 
-			singleplayer.getClientWorld().waitForChunksDownload();
+			//? if >=26.1 {
+			singleplayer.getClientLevel().waitForChunksDownload();
+			//?} else {
+			/*singleplayer.getClientWorld().waitForChunksDownload();
+			 *///?}
+
 			context.takeScreenshot("initializing_world");
 			context.getInput().holdKey(GLFW.GLFW_KEY_LEFT_SHIFT);
 			context.runOnClient(minecraft -> {

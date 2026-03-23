@@ -19,9 +19,11 @@ import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 public class PatPatClientReloadListener implements /*? if <=1.21.8 {*/ /*SimpleSynchronousResourceReloadListener *//*?} else {*/ ResourceManagerReloadListener /*?}*/ {
 
 	public static void register() {
-		//? if >=1.21.9 {
-		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(getFabricId(), new PatPatClientReloadListener());
-		//?} else {
+		//? if >=26.1 {
+		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(getFabricId(), new PatPatClientReloadListener());
+		//?} elif >=1.21.9 {
+		/*ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(getFabricId(), new PatPatClientReloadListener());
+		 *///?} else {
 		/*ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new PatPatClientReloadListener());
 		*///?}
 	}

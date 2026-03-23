@@ -2,7 +2,7 @@ package net.lopymine.patpat.mixin.controlling;
 
 //? if >=1.17.1 && controlling {
 
-import com.blamejared.controlling.client.NewKeyBindsList;
+/*import com.blamejared.controlling.client.NewKeyBindsList;
 import com.blamejared.controlling.client.NewKeyBindsList.KeyEntry;
 import net.lopymine.patpat.client.keybinding.PatPatKeybinding;
 import net.minecraft.client.KeyMapping;
@@ -20,36 +20,36 @@ public class NewKeyEntryMixin {
 	@Final
 	private KeyMapping key;
 	//?} else {
-	/*@Shadow
+	/^@Shadow
 	@Final
 	private KeyMapping keybinding;
-	*///?}
+	^///?}
 
 	@Shadow
 	@Final
 	private Button btnChangeKeyBinding;
 
 	//? if <1.19.3 {
-	/*@Inject(at = @At("TAIL"), method = "<init>")
+	/^@Inject(at = @At("TAIL"), method = "<init>")
 	private void init(NewKeyBindsList list, KeyMapping name, CallbackInfo ci) {
 		if (!(this.keybinding instanceof PatPatKeybinding patPatKeybinding)) {
 			return;
 		}
 
 		this.btnChangeKeyBinding.onTooltip = (button, poseStack, a, b) -> {
-			/^? if >=1.18 {^/
+			/^¹? if >=1.18 {¹^/
 			KeyBindsScreen screen = list.keyBindsScreen;
-			 /^?} else {^/
-			/^ControlsScreen screen = ((NewKeyBindsListAccessor) list).getScreenPleaseThanks();
-			^//^?}^/
+			 /^¹?} else {¹^/
+			/^¹KeyBindsScreen screen = ((NewKeyBindsListAccessor) list).getScreenPleaseThanks();
+			¹^//^¹?}¹^/
 			((net.lopymine.patpat.utils.mixin.IRequestableTooltipScreen) screen).myTotemDoll$requestTooltip((pose, x, y, d) -> {
 				screen.renderTooltip(poseStack, patPatKeybinding.getFullTranslatedKeyMessage(), x, y);
 			});
 		};
 	}
-	*///?}
+	^///?}
 
-	@Inject(at = @At(/*? if >=1.19.4 {*/ "TAIL" /*?} else {*/ /*"HEAD" *//*?}*/), method = /*? if >=1.19.4 {*/ "refreshEntry" /*?} else {*/ /*"render" *//*?}*/)
+	@Inject(at = @At(/^? if >=1.19.4 {^/ "TAIL" /^?} else {^/ /^"HEAD" ^//^?}^/), method = /^? if >=1.19.4 {^/ "refreshEntry" /^?} else {^/ /^"render" ^//^?}^/)
 	private void addPatPatTooltipToPatPatKey(CallbackInfo ci) {
 		//? if >=1.19.4 {
 		if (!(this.key instanceof PatPatKeybinding patPatKeybinding)) {
@@ -60,4 +60,4 @@ public class NewKeyEntryMixin {
 	}
 
 }
-//?}
+*///?}

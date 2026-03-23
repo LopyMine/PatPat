@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface ControllingKeyBindingListWidgetNewAccessor {
 
 	@Accessor("gui")
-	ControlsSettingsGuiNew getScreenPleaseThanks();
+	ControllingOptionsScreen getScreenPleaseThanks();
 
 }
 *///?}

@@ -22,7 +22,7 @@ public class PatPatServerNetworkManager {
 
 	public static void sendPacketToPlayer(ServerPlayer player, BasePatPatPacket<?> packet) {
 		//? if <1.19.4 {
-		/*ResourceLocation id = packet.getPatPatType().getId();
+		/*Identifier id = packet.getPatPatType().getId();
 		FriendlyByteBuf buf = PacketByteBufs.create();
 		packet.write(buf);
 		*///?}

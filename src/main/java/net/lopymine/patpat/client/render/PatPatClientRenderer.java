@@ -84,7 +84,7 @@ public class PatPatClientRenderer {
 		});
 		*///?}
 
-		ClientTickEvents.END_WORLD_TICK.register(client -> {
+		ClientTickEvents.END_LEVEL_TICK.register(client -> {
 			boolean frozen = /*? if >1.20.2 {*/ client.tickRateManager().isFrozen(); /*?} else {*/ /*false; *//*?}*/
 			PatPatClientConfig config = PatPatClientConfig.getInstance();
 

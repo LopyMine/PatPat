@@ -1,6 +1,8 @@
 package net.lopymine.patpat.modmenu.bridge;
 
-import me.shedaniel.clothconfig2.api.*;
+//? if cloth-config {
+
+/*import me.shedaniel.clothconfig2.api.*;
 import me.shedaniel.clothconfig2.gui.entries.*;
 import me.shedaniel.clothconfig2.impl.builders.*;
 import net.lopymine.patpat.modmenu.PatConfig;
@@ -213,3 +215,4 @@ public class ClothConfigBridge {
 
 
 }
+*///?}

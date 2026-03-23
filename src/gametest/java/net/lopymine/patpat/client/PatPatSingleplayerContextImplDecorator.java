@@ -40,10 +40,17 @@ public class PatPatSingleplayerContextImplDecorator implements TestSingleplayerC
 		return this.testSingleplayerContext.getWorldSave();
 	}
 
+	//? if >=26.1 {
 	@Override
-	public @NotNull TestClientWorldContext getClientWorld() {
-		return this.testSingleplayerContext.getClientWorld();
+	public @NotNull TestClientLevelContext getClientLevel() {
+		return this.testSingleplayerContext.getClientLevel();
 	}
+	//?} else {
+	/*@Override
+		public @NotNull TestClientWorldContext getClientWorld() {
+			return this.testSingleplayerContext.getClientWorld();
+		}
+	*///?}
 
 	@Override
 	public @NotNull TestServerContext getServer() {

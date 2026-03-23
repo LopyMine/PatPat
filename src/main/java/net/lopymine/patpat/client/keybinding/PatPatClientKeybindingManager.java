@@ -2,13 +2,15 @@ package net.lopymine.patpat.client.keybinding;
 
 import lombok.Getter;
 import com.mojang.blaze3d.platform.InputConstants;
-//? if >=1.19.4 {
+//? if >=1.19.4 && controlling {
+/*
 import net.lopymine.patpat.mixin.controlling.KeyBindsScreenAccessor;
+*/
 //?}
 import net.minecraft.client.gui.screens./*? if >=1.21 {*/options./*?}*/controls.*;
 import net.minecraft.client.KeyMapping;
 
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
@@ -40,12 +42,12 @@ public class PatPatClientKeybindingManager {
 	}
 
 	private static void registerKeybinding(KeyMapping keyBinding) {
-		KeyBindingHelper.registerKeyBinding(keyBinding);
+		KeyMappingHelper.registerKeyMapping(keyBinding);
 	}
 
 	public static void handlePatPatKeybindingOnKeyPressed(
 			KeyMapping mapping,
-			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*ControlsScreen *//*?}*/ screen,
+			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*KeyBindsScreen *//*?}*/ screen,
 			int keyCode,
 			int scanCode,
 			Runnable cancel
@@ -56,16 +58,16 @@ public class PatPatClientKeybindingManager {
 				keybinding.sendBindingKeys();
 				screen.selectedKey = null;
 			}
-			//? if >=1.19.4 {
-			((KeyBindsScreenAccessor) (screen)).getList().refreshEntries();
-			//?}
+			//? if >=1.19.4 && controlling {
+			/*((KeyBindsScreenAccessor) (screen)).getList().refreshEntries();
+			*///?}
 			cancel.run();
 		}
 	}
 
 	public static void handlePatPatKeybindingOnMouseClick(
 			KeyMapping mapping,
-			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*ControlsScreen *//*?}*/ screen,
+			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*KeyBindsScreen *//*?}*/ screen,
 			int button,
 			Runnable cancel
 	) {
@@ -75,9 +77,9 @@ public class PatPatClientKeybindingManager {
 				keybinding.sendBindingKeys();
 				screen.selectedKey = null;
 			}
-			//? if >=1.19.4 {
-			((KeyBindsScreenAccessor) (screen)).getList().refreshEntries();
-			//?}
+			//? if >=1.19.4 && controlling {
+			/*((KeyBindsScreenAccessor) (screen)).getList().refreshEntries();
+			*///?}
 			cancel.run();
 		}
 	}

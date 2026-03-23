@@ -8,8 +8,8 @@
 	],
 	"client": [
 		//? geckolib {
-		"GeoEntityRendererMixin",
-		//?}
+		/*"GeoEntityRendererMixin",
+		*///?}
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -9,8 +9,8 @@
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/${mod_id}",
-		"sources": "https://github.com/LopyMine/${mod_id}",
-		"issues": "https://github.com/LopyMine/${mod_id}/issues"
+		"sources": "https://github.com/${github_mod_author}/${mod_id}",
+		"issues": "https://github.com/${github_mod_author}/${mod_id}/issues"
 	},
 	"license": "${mod_license}",
 	"icon": "icon/icon.png",
@@ -35,11 +35,9 @@
 		"java": ">=${java}",
 		"${fabric_api_id}": "*"
 	},
-	"accessWidener": "aws/${minecraft}.accesswidener",
+	"accessWidener": "${fabric_trick_accesswidener_id}",
 	"mixins": [
-		"${mod_id}.mixins.json",
-		"${mod_id}-geckolib.mixins.json",
-		"${mod_id}-controlling.mixins.json"
+		"${fabric_trick_mixin_configs}"
 	],
 	"custom": {
 		"translators": {

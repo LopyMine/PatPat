@@ -12,10 +12,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
 
-	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;submitEntities(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/state/LevelRenderState;Lnet/minecraft/client/renderer/SubmitNodeCollector;)V", shift = Shift.AFTER), method = "method_62214")
+	//? if >=26.1 {
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;submitEntities(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/state/level/LevelRenderState;Lnet/minecraft/client/renderer/SubmitNodeCollector;)V", shift = Shift.AFTER), method = "lambda$addMainPass$0")
 	private void renderPatOnYourself(CallbackInfo ci) {
 		PatPatClientRenderer.renderPatOnYourself();
 	}
+	//?} else {
+	/*@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;submitEntities(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/state/LevelRenderState;Lnet/minecraft/client/renderer/SubmitNodeCollector;)V", shift = Shift.AFTER), method = "method_62214")
+		private void renderPatOnYourself(CallbackInfo ci) {
+			PatPatClientRenderer.renderPatOnYourself();
+		}
+	*///?}
 
 }
 //?}

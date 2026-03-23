@@ -5,62 +5,23 @@ plugins {
 }
 
 mossyDependencies {
-	def mcVersion = stonecutter.current.version.toString()
-	minecraft = mcVersion
-	mappings = "mojang"
+	minecraft = stonecutter.current.project.substring(stonecutter.current.project.indexOf("-") + 1)
 	lombok = prop("base.lombok_version")
+
 	fabricApi = prop("build.fabric_api")
 	fabricLoader = prop("build.fabric_loader")
 
-	additional {
-		// - By default, every additional project dependency ("dep.modId" from gradle.properties) will use
-		// - Modrinth Maven and "modImplementation" configuration name
-		// - If you want to override mod configuration name, you can do this:
-		// override("modCompileOnly", "just_mod_id")
-		// - It will do this:
-		// - modImplementation("maven.modrinth:modId:version") -> modCompileOnly("maven.modrinth:modId:version")
-		// - Or if you want to disable it and handle by yourself, just disable it auto handling:
-		// disable("just_mod_id")
+	forge = prop("build.forge")
 
+	neoForge = prop("build.neoforge")
+	parchment = prop("build.parchment")
+
+	additional {
 		override("modCompileOnly", "flashback")
 		override("modCompileOnly", "replaymod")
 		//override("modCompileOnly", "iris")
 
-		// Fabric Permissions Api
 		disable("fabric-permissions-api")
-		// Cloth-Config
-		disable("cloth-config")
-		// GeckoLib
-		disable("geckolib")
-		// ProxLib
-		disable("proxlib")
-		// Replay Mod
-	}
-}
-
-mossyResources {
-	//expandFiles = ["custom", "file", "patterns", "here"]
-}
-
-repositories {
-	maven {
-		name = "Cloth Config"
-		url = "https://maven.shedaniel.me/"
-	} // Cloth Config
-
-	maven {
-		name = "Modrinth"
-		url = "https://api.modrinth.com/maven"
-	} // Replay Mod
-
-	maven {
-		name = 'GeckoLib'
-		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-		content {
-			includeGroupByRegex("software\\.bernie.*")
-			includeGroup("com.eliotlash.mclib")
-			includeGroup("com.eliotlash.molang")
-		}
 	}
 }
 
@@ -70,44 +31,31 @@ loom.runConfigs.configureEach { config ->
 	}
 }
 
-
 dependencies {
-	def mcVersion = stonecutter.current.version.toString()
-
-	// Fabric permission api
-	def fpaVersion = prop("build.fabric-permissions-api")
-	include(modImplementation('me.lucko:fabric-permissions-api:' + fpaVersion)){
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-
-	// Cloth Config
-	def clothConfigVersion = prop("dep.cloth-config")
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${stonecutter.compare("1.19", mcVersion) == 1 ? clothConfigVersion : MossyUtils.substringBefore(clothConfigVersion, "+")}") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-
-	// GeckoLib
-	def geckoLibVersion = prop("dep.geckolib")
-	if (geckoLibVersion != "unknown") {
-		if (mcVersion == "1.16.5") {
-			modCompileOnly("software.bernie.geckolib:geckolib-forge-${mcVersion}:${geckoLibVersion}")
-		} else if (mcVersion == "1.17.1") {
-			modCompileOnly("software.bernie.geckolib:geckolib-1.17.1-forge:${geckoLibVersion}")
-		} else if (mcVersion == "1.18.2") {
-			modCompileOnly("software.bernie.geckolib:geckolib-forge-1.18:${geckoLibVersion}")
-		} else if (mcVersion == "1.19.1" || mcVersion == "1.19.2") {
-			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.19:${geckoLibVersion}")
-		} else if (mcVersion == "1.20") {
-			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.20.1:${geckoLibVersion}")
-		} else {
-			modCompileOnly("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
+	def fpa = prop("build.fabric-permissions-api")
+	if (stonecutter.current.parsed.matches(">=26.1") && fpa != "unknown") {
+		include(implementation("me.lucko:fabric-permissions-api:${ fpa}")){
+			exclude(group: "net.fabricmc.fabric-api")
+		}
+	} else if (fpa != "unknown") {
+		include(modImplementation("me.lucko:fabric-permissions-api:${fpa}")){
+			exclude(group: "net.fabricmc.fabric-api")
 		}
 	}
-	testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
 
-	def proxlibVersion = prop("dep.proxlib")
-	if (proxlibVersion != "unknown") {
-		include(modApi("maven.modrinth:proxlib:${proxlibVersion}"))
+	testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
+}
+
+stonecutter {
+	replacements.string(current.parsed >= "26.1") {
+		replace("net.minecraft.client.gui.GuiGraphics", "net.minecraft.client.gui.GuiGraphicsExtractor")
+		replace("GuiGraphics", "GuiGraphicsExtractor")
+		replace("import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;", "import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;")
+		replace("KeyBindingHelper", "KeyMappingHelper")
+		replace("KeyBindingHelper.registerKeyBinding", "KeyMappingHelper.registerKeyMapping")
+		replace("import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;", "import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;")
+		replace("import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;", "import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;")
+		replace("END_WORLD_TICK", "END_LEVEL_TICK")
 	}
 }
 
@@ -186,7 +134,7 @@ stonecutter {
 }
 
 stonecutter.filters.exclude("**/*.accesswidener")
-
+stonecutter.filters.exclude("**/*.classTweaker")
 
 jar {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE

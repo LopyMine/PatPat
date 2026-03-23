@@ -5,7 +5,7 @@ import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.extension.ClientCommandExtension;
@@ -15,7 +15,7 @@ import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.Action;
 
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientInfoCommand {

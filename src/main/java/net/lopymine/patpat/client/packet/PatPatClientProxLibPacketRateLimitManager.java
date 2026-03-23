@@ -16,7 +16,7 @@ public class PatPatClientProxLibPacketRateLimitManager {
 	private static int packetsSentPerSecond;
 
 	public static void register() {
-		ClientTickEvents.END_WORLD_TICK.register(PatPatClientProxLibPacketRateLimitManager::tick);
+		ClientTickEvents.END_LEVEL_TICK.register(PatPatClientProxLibPacketRateLimitManager::tick);
 	}
 
 	public static void tick(ClientLevel level) {

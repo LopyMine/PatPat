@@ -1,3 +1,3 @@
-# v1.2.5 Update
+- Ported to 26.1
 
-- Fixed issue with second pat animation with enabled shaders
+Keep in mind that this version is still beta and some things temporary disabled. They will appear in the next updates.

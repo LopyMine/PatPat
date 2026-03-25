@@ -9,8 +9,8 @@ import net.lopymine.patpat.server.packet.PatPatServerPacketManager;
 
 public class PatPat implements ModInitializer {
 
-	public static final String MOD_VERSION = /*$ mod_version*/ "1.2.5+26.1+fabric";
-	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "02af75b";
+	public static final String MOD_VERSION = /*$ mod_version*/ "1.2.6+26.1+fabric";
+	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "02b3c23";
 	public static final String MOD_NAME = /*$ mod_name*/ "PatPat";
 	public static final String MOD_ID = /*$ mod_id*/ "patpat";
 	public static final String SERVER_CONFIG_VERSION = /*$ server_config_version*/ "1.0.0";

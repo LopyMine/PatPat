@@ -3,11 +3,10 @@ package net.lopymine.patpat.client.render.feature;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import java.util.*;
+import lombok.*;
 import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.extension.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -18,10 +17,13 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 /*import net.minecraft.client.renderer.RenderTypes;
 *///?}
 
+@Setter
+@Getter
 @ExtensionMethod(value = {VertexConsumerExtension.class, PoseExtension.class})
 public class PatFeatureRenderer {
 
-	private final List<PatFeatureRequest> requests = new ArrayList<>();
+	private boolean renderingLevel = false;
+	public final List<PatFeatureRequest> requests = new ArrayList<>();
 
 	private static final PatFeatureRenderer INSTANCE = new PatFeatureRenderer();
 
@@ -30,6 +32,9 @@ public class PatFeatureRenderer {
 	}
 
 	public void render(MultiBufferSource source) {
+		if (!this.renderingLevel) {
+			return;
+		}
 
 		for (PatFeatureRequest request : this.requests) {
 			VertexConsumer buffer = (request.provider() == null ? source : request.provider()).getBuffer(RenderTypes.entityTranslucent(request.texture()));

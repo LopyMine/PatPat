@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import java.util.*;
 import lombok.*;
 import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.compat.iris.IrisCompat;
 import net.lopymine.patpat.extension.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -32,7 +33,7 @@ public class PatFeatureRenderer {
 	}
 
 	public void render(MultiBufferSource source) {
-		if (!this.renderingLevel) {
+		if (!this.renderingLevel && !IrisCompat.isRenderingShadowPass()) {
 			return;
 		}
 

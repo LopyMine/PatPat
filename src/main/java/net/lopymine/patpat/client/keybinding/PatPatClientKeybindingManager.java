@@ -5,10 +5,10 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.minecraft.client.gui.screens.options.controls.*;
 //? if >=1.19.4 && controlling {
-/*
-import net.lopymine.patpat.mixin.controlling.KeyBindsScreenAccessor;
-*/
-//?}
+
+/*import net.lopymine.patpat.mixin.controlling.KeyBindsScreenAccessor;
+
+*///?}
 import net.minecraft.client.gui.screens./*? if >=1.21 {*/options./*?}*/controls.*;
 import net.minecraft.client.KeyMapping;
 
@@ -17,10 +17,6 @@ import net.lopymine.patpat.client.config.PatPatClientConfig;
 
 //? if >=1.21.9 {
 import net.lopymine.patpat.utils.RLUtils;
-//?}
-
-//? if >=1.19.4 {
-import net.lopymine.patpat.mixin.controlling.KeyBindsScreenAccessor;
 //?}
 
 public class PatPatClientKeybindingManager {

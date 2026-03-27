@@ -1,5 +1,7 @@
 package net.lopymine.patpat.client;
 
+//? if >=26.1 {
+
 import lombok.SneakyThrows;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -22,14 +24,14 @@ public class PatPatSingleplayerContextImplDecorator implements TestSingleplayerC
 	private final TestServerContext server;
 
 
-	public PatPatSingleplayerContextImplDecorator(TestSingleplayerContext testSingleplayerContext){
+	public PatPatSingleplayerContextImplDecorator(TestSingleplayerContext testSingleplayerContext) {
 		try {
 			this.testSingleplayerContext = testSingleplayerContext;
 			Class<? extends TestSingleplayerContext> testSingleplayerContextClass = testSingleplayerContext.getClass();
 			Field contextField = testSingleplayerContextClass.getDeclaredField("context");
 			contextField.setAccessible(true);
 			this.context = (ClientGameTestContext) contextField.get(testSingleplayerContext);
-			this.server = testSingleplayerContext.getServer();
+			this.server  = testSingleplayerContext.getServer();
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
@@ -47,9 +49,9 @@ public class PatPatSingleplayerContextImplDecorator implements TestSingleplayerC
 	}
 	//?} else {
 	/*@Override
-		public @NotNull TestClientWorldContext getClientWorld() {
-			return this.testSingleplayerContext.getClientWorld();
-		}
+	public @NotNull TestClientWorldContext getClientWorld() {
+		return this.testSingleplayerContext.getClientWorld();
+	}
 	*///?}
 
 	@Override
@@ -65,3 +67,4 @@ public class PatPatSingleplayerContextImplDecorator implements TestSingleplayerC
 		context.setScreen(TitleScreen::new);
 	}
 }
+//?}

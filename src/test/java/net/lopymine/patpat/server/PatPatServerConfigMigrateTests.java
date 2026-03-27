@@ -3,7 +3,7 @@ package net.lopymine.patpat.server;
 
 //? >=1.19.4 && fabric{
 
-/*import net.lopymine.patpat.server.config.PatPatServerConfig;
+import net.lopymine.patpat.server.config.PatPatServerConfig;
 import net.lopymine.patpat.server.config.migrate.*;
 import net.lopymine.patpat.util.PathUtils;
 import org.junit.jupiter.api.*;
@@ -73,4 +73,4 @@ class PatPatServerConfigMigrateTests {
 		}
 	}
 }
-*///?}
+//?}

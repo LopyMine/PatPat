@@ -14,7 +14,7 @@ import net.lopymine.patpat.utils.CommandText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
 
-import net.minecraft.commands.CommandSourceStack;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
@@ -24,17 +24,17 @@ public class PatPatClientModEnableCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> getOn() {
+	public static LiteralArgumentBuilder<FabricClientCommandSource> getOn() {
 		return literal("on")
 				.executes(context -> switchPatPatState(context, true));
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> getOff() {
+	public static LiteralArgumentBuilder<FabricClientCommandSource> getOff() {
 		return literal("off")
 				.executes(context -> switchPatPatState(context, false));
 	}
 
-	private static int switchPatPatState(CommandContext<CommandSourceStack> context, boolean state) {
+	private static int switchPatPatState(CommandContext<FabricClientCommandSource> context, boolean state) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		MutableComponent text;
 		if (config.getMainConfig().isModEnabled() != state) {

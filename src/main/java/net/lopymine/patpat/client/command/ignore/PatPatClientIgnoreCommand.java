@@ -19,7 +19,7 @@ import net.lopymine.patpat.utils.VersionedThings;
 
 import java.util.Objects;
 
-import net.minecraft.commands.CommandSourceStack;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.argument;
 
@@ -32,13 +32,13 @@ public class PatPatClientIgnoreCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> get() {
+	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
 		return literal("ignore")
 				.then(getAdd())
 				.then(getRemove());
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> getAdd() {
+	public static LiteralArgumentBuilder<FabricClientCommandSource> getAdd() {
 		return literal("add")
 				.then(argument(ENTITY_TYPE_ARGUMENT_NAME, EntityTypeArgumentType.entityType())
 						.suggests((context, builder) -> SharedSuggestionProvider
@@ -56,7 +56,7 @@ public class PatPatClientIgnoreCommand {
 						.executes(context -> onIgnoreChange(context, true)));
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> getRemove() {
+	public static LiteralArgumentBuilder<FabricClientCommandSource> getRemove() {
 		return literal("remove")
 				.then(argument(ENTITY_TYPE_ARGUMENT_NAME, EntityTypeArgumentType.entityType())
 						.suggests((context, builder) -> SharedSuggestionProvider
@@ -69,7 +69,7 @@ public class PatPatClientIgnoreCommand {
 						.executes(context -> onIgnoreChange(context, false)));
 	}
 
-	private static int onIgnoreChange(CommandContext<CommandSourceStack> context, boolean add) {
+	private static int onIgnoreChange(CommandContext<FabricClientCommandSource> context, boolean add) {
 		EntityType<?> entityType = EntityTypeArgumentType.getEntityType(ENTITY_TYPE_ARGUMENT_NAME, context);
 		PatPatClientIgnoreMobListConfig config = PatPatClientIgnoreMobListConfig.getInstance();
 		boolean success = add ? config.addMob(entityType) : config.removeMob(entityType);

@@ -3,7 +3,6 @@ package net.lopymine.patpat.mixin;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EnderDragonRenderer;
 
-import net.minecraft.client.renderer.entity.state.EnderDragonRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -16,6 +15,12 @@ import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.utils.mixin.EntityRenderStateWithParent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+//?}
+
+//? if >=26.1 {
+
+import net.minecraft.client.renderer.entity.state.EnderDragonRenderState;
+
 //?}
 
 @Mixin(EnderDragonRenderer.class)

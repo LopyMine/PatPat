@@ -23,6 +23,12 @@ mossyDependencies {
 	additional {
 		override("mossyCompileOnly", "flashback")
 		override("mossyCompileOnly", "replaymod")
+		override("mossyCompileOnly", "iris")
+		override("mossyCompileOnly", "sodium")
+		override("mossyCompileOnly", "controlling")
+		override("mossyCompileOnly", "searchables")
+		override("mossyCompileOnly", "cloth-config")
+		override("mossyCompileOnly", "geckolib")
 
 		disable("fabric-permissions-api")
 	}
@@ -42,7 +48,7 @@ dependencies {
 	if (fabric) {
 		def fpa = prop("build.fabric-permissions-api")
 		if (fpa != "unknown") {
-			include(mossyImplementation("me.lucko:fabric-permissions-api:${fpa}")){
+			mossyInclude(mossyImplementation("me.lucko:fabric-permissions-api:${fpa}")){
 				exclude(group: "net.fabricmc.fabric-api")
 			}
 		}
@@ -52,7 +58,7 @@ dependencies {
 
 	if (forge) {
 		annotationProcessor("net.fabricmc:sponge-mixin:0.16.5+mixin.0.8.7")
-		modImplementation("maven.modrinth:mixinbooster:0.1.2+1.20.1")
+		mossyImplementation("maven.modrinth:mixinbooster:0.1.2+1.20.1")
 	}
 }
 
@@ -73,18 +79,20 @@ if (fabric) {
 		}
 	}
 
-	fabricApi {
-		configureTests {
-			createSourceSet = true
-			modId = "patpat-mod-test-${project.name}"
-			enableGameTests = true // Default is true
-			enableClientGameTests = true // Default is true
-			eula = true // By setting this to true, you agree to the Minecraft EULA.
+	if (sc.current.parsed.matches(">=26.1")) {
+		fabricApi {
+			configureTests {
+				createSourceSet = true
+				modId = "patpat-mod-test-${project.name}"
+				enableGameTests = true // Default is true
+				enableClientGameTests = true // Default is true
+				eula = true // By setting this to true, you agree to the Minecraft EULA.
+			}
 		}
-	}
 
-	tasks.named("runClientGameTest", JavaExec) {
-		jvmArgs "-ea"
+		tasks.named("runClientGameTest", JavaExec) {
+			jvmArgs "-ea"
+		}
 	}
 
 	configurations.configureEach {
@@ -129,7 +137,10 @@ stonecutter {
 		replace("RenderType", "RenderTypes")
 	}
 
-	constants["debug_mode"] = false
+	replacements.string(current.parsed >= "26.1") {
+		replace("net.minecraft.client.gui.GuiGraphics", "net.minecraft.client.gui.GuiGraphicsExtractor")
+		replace("GuiGraphics", "GuiGraphicsExtractor")
+	}
 }
 
 stonecutter.filters.exclude("**/*.accesswidener")

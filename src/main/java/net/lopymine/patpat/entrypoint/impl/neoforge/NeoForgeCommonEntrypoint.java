@@ -1,7 +1,7 @@
 package net.lopymine.patpat.entrypoint.impl.neoforge;
 
 //? if neoforge {
-import net.lopymine.patpat.*;
+/*import net.lopymine.patpat.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
@@ -22,4 +22,4 @@ public class NeoForgeCommonEntrypoint {
 	}
 
 }
-//?}
+*///?}

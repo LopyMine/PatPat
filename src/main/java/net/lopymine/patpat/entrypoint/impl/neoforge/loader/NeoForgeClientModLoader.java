@@ -1,7 +1,7 @@
 package net.lopymine.patpat.entrypoint.impl.neoforge.loader;
 
 //? if neoforge {
-import com.mojang.brigadier.CommandDispatcher;
+/*import com.mojang.brigadier.CommandDispatcher;
 
 import java.util.function.Consumer;
 import net.lopymine.patpat.PatPat;
@@ -23,11 +23,11 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 //? if >=1.21.10 {
 
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+/^import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-//?}
+^///?}
 
 public class NeoForgeClientModLoader implements IClientModLoader {
 
@@ -44,14 +44,14 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 	@Override
 	public void registerAfterEntitiesRenderer(CustomRenderer renderer) {
 		//? if >=1.21.2 && <=1.21.8 {
-		/*NeoForge.EVENT_BUS.addListener(Post.class, (p) -> renderer.render(p.getMultiBufferSource(), p.getPoseStack()));
-		*///?}
+		/^NeoForge.EVENT_BUS.addListener(Post.class, (p) -> renderer.render(p.getMultiBufferSource(), p.getPoseStack()));
+		^///?}
 
 		//? if <=1.21.1 {
-		/*NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.class, (p) -> {
+		NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.class, (p) -> {
 			renderer.render(Minecraft.getInstance().renderBuffers().bufferSource(), p.getPoseStack());
 		});
-		*///?}
+		//?}
 	}
 
 	@Override
@@ -68,12 +68,12 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 	@Override
 	public void registerResourceReloadListener(AbstractResourceReloadListener listener) {
 		//? if >=1.21.10 {
-		NeoForgeClientEntrypoint.getEventBus().addListener(AddClientReloadListenersEvent.class, (e) -> e.addListener(listener.getId(), listener));
-		 //?}
+		/^NeoForgeClientEntrypoint.getEventBus().addListener(AddClientReloadListenersEvent.class, (e) -> e.addListener(listener.getId(), listener));
+		 ^///?}
 
 		//? if <=1.21.1 {
-		/*NeoForgeClientEntrypoint.getEventBus().addListener(RegisterClientReloadListenersEvent.class, (e) -> e.registerReloadListener(listener));
-		*///?}
+		NeoForgeClientEntrypoint.getEventBus().addListener(RegisterClientReloadListenersEvent.class, (e) -> e.registerReloadListener(listener));
+		//?}
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 	@Override
 	public void registerClientPackets(Consumer<ClientPacketRegister> consumer) {
 		//? if <=1.21.1 {
-		/*ClientPacketRegister register = new ClientPacketRegister() {
+		ClientPacketRegister register = new ClientPacketRegister() {
 			@Override
 			public <P extends BasePatPatPacket<P>> void register(PatPatPacketType<P> type, PatPatClientPacketHandler<P> handler) {
 				if (!(ServerMultiLoader.getInstance() instanceof NeoForgeServerModLoader serverLoader)) {
@@ -127,10 +127,10 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 			}
 		};
 		consumer.accept(register);
-		*///?}
+		//?}
 
 		//? if >=1.21.10 {
-		NeoForgeClientEntrypoint.getEventBus().addListener(RegisterClientPayloadHandlersEvent.class, (event) -> {
+		/^NeoForgeClientEntrypoint.getEventBus().addListener(RegisterClientPayloadHandlersEvent.class, (event) -> {
 			ClientPacketRegister register = new ClientPacketRegister() {
 				@Override
 				public <P extends BasePatPatPacket<P>> void register(PatPatPacketType<P> type, PatPatClientPacketHandler<P> handler) {
@@ -145,7 +145,7 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 			};
 			consumer.accept(register);
 		});
-		//?}
+		^///?}
 	}
 
 	@Override
@@ -154,12 +154,12 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 			pingPong.pong(packet);
 		} else {
 			//? if >=1.21.10 {
-			ClientPacketDistributor.sendToServer(packet);
-			//?} else {
-			/*PacketDistributor.sendToServer(packet);
-			*///?}
+			/^ClientPacketDistributor.sendToServer(packet);
+			^///?} else {
+			PacketDistributor.sendToServer(packet);
+			//?}
 		}
 	}
 
 }
-//?}
+*///?}

@@ -2,9 +2,11 @@ package net.lopymine.patpat.mixin;
 
 //? if >=1.21.9 {
 
+import com.llamalad7.mixinextras.injector.wrapoperation.*;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.client.render.feature.PatFeatureRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.At.Shift;
@@ -15,13 +17,10 @@ public class LevelRendererMixin {
 
 	//? if >=26.1 {
 
-	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/FeatureRenderDispatcher;renderTranslucentFeatures()V"), method = "lambda$addMainPass$0")
-	private void markLevelRendering0(CallbackInfo ci) {
+	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/FeatureRenderDispatcher;renderTranslucentFeatures()V"), method = "lambda$addMainPass$0")
+	private void markLevelRendering(FeatureRenderDispatcher instance, Operation<Void> original) {
 		PatFeatureRenderer.getInstance().setRenderingLevel(true);
-	}
-
-	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/FeatureRenderDispatcher;renderTranslucentFeatures()V", shift = Shift.AFTER), method = "lambda$addMainPass$0")
-	private void markLevelRendering1(CallbackInfo ci) {
+		original.call(instance);
 		PatFeatureRenderer.getInstance().setRenderingLevel(false);
 	}
 
@@ -30,6 +29,23 @@ public class LevelRendererMixin {
 		PatPatClientRenderer.renderPatOnYourself();
 	}
 	//?} else {
+	/*@WrapOperation(
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraft/client/renderer/feature/FeatureRenderDispatcher;renderAllFeatures()V"
+			),
+			//? if fabric {
+			method = "method_62214"
+			//?} else {
+			/^method = "lambda$addMainPass$1"
+			^///?}
+	)
+	private void markLevelRendering(FeatureRenderDispatcher instance, Operation<Void> original) {
+		PatFeatureRenderer.getInstance().setRenderingLevel(true);
+		original.call(instance);
+		PatFeatureRenderer.getInstance().setRenderingLevel(false);
+	}
+
 	@Inject(
 			at = @At(
 					value = "INVOKE",
@@ -37,15 +53,15 @@ public class LevelRendererMixin {
 					shift = Shift.AFTER
 			),
 			//? if fabric {
-			/*method = "method_62214"
-			*///?} else {
-			method = "lambda$addMainPass$1"
-			//?}
+			method = "method_62214"
+			//?} else {
+			/^method = "lambda$addMainPass$1"
+			^///?}
 	)
 	private void renderPatOnYourself(CallbackInfo ci) {
 		PatPatClientRenderer.renderPatOnYourself();
 	}
-	//?}
+	*///?}
 
 }
 //?}

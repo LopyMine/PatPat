@@ -16,7 +16,7 @@ import net.lopymine.patpat.extension.ClientCommandExtension;
 
 import java.util.*;
 
-import net.minecraft.commands.CommandSourceStack;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
@@ -26,12 +26,12 @@ public class PatPatClientListInfoCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> get() {
+	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
 		return literal("info")
 				.executes(PatPatClientListInfoCommand::onInfo);
 	}
 
-	private static int onInfo(CommandContext<CommandSourceStack> context) {
+	private static int onInfo(CommandContext<FabricClientCommandSource> context) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		PatPatClientMultiplayerConfig serverConfig = config.getMultiPlayerConfig();
 		Map<UUID, String> map = PatPatClientPlayerListConfig.getInstance().getValues();

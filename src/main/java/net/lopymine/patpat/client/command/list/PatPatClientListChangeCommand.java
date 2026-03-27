@@ -19,7 +19,7 @@ import net.minecraft.commands.*;
 
 import java.util.*;
 
-import net.minecraft.commands.CommandSourceStack;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.argument;
 
@@ -32,21 +32,21 @@ public class PatPatClientListChangeCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> getAdd() {
+	public static LiteralArgumentBuilder<FabricClientCommandSource> getAdd() {
 		return literal("add")
 				.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
 						.suggests(((context, builder) -> SharedSuggestionProvider.suggest(context.getSource().getOnlinePlayerNames(), builder)))
 						.executes(context -> onListChange(context, true)));
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> getRemove() {
+	public static LiteralArgumentBuilder<FabricClientCommandSource> getRemove() {
 		return literal("remove")
 				.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
 						.suggests((context, builder) -> SharedSuggestionProvider.suggest(ClientNetworkUtils.getOnlinePlayersFromUuids(), builder))
 						.executes(context -> onListChange(context, false)));
 	}
 
-	private static int onListChange(CommandContext<CommandSourceStack> context, boolean add) {
+	private static int onListChange(CommandContext<FabricClientCommandSource> context, boolean add) {
 		PatPatClientPlayerListConfig config = PatPatClientPlayerListConfig.getInstance();
 		Map<UUID, String> map = config.getValues();
 		PlayerInfo playerInfo = PlayerInfoArgumentType.getPlayerInfo(PLAYER_ARGUMENT_NAME, context);

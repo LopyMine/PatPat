@@ -2,7 +2,7 @@ package net.lopymine.patpat.common.config;
 
 import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.config.list.PatPatClientProxLibServersWhitelistConfig;
 import net.lopymine.patpat.client.config.migrate.PatPatClientConfigMigrateManager;
 import net.lopymine.patpat.entrypoint.*;

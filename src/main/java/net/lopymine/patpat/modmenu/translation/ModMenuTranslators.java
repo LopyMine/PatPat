@@ -2,7 +2,7 @@ package net.lopymine.patpat.modmenu.translation;
 
 //? if fabric {
 
-/*import lombok.Getter;
+import lombok.Getter;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -18,11 +18,11 @@ public class ModMenuTranslators {
 
 	private static final PatLogger logger = PatPat.LOGGER.extend("ModMenuTranslators");
 	private static final List<String> TRANSLATOR_KEY = List.of("Translator");
-	/^? >=1.20.4 {^/
+	/*? >=1.20.4 {*/
 	private Map<String, Collection<String>> translators = new HashMap<>();
-	/^?} else {^/
-	/^private List<String> translators = new ArrayList<>();
-	 ^//^?}^/
+	/*?} else {*/
+	/*private List<String> translators = new ArrayList<>();
+	 *//*?}*/
 
 	private static ModMenuTranslators instance;
 
@@ -37,19 +37,19 @@ public class ModMenuTranslators {
 			logger.warn("Failure to get translators section from fabric.mod.json!");
 			return;
 		}
-		/^? >=1.20.4 {^/
+		/*? >=1.20.4 {*/
 		Map<String, Collection<String>> translatorsMap = new HashMap<>();
 		translatorsSection.getAsObject().forEach(entry ->
 				translatorsMap.put(entry.getKey() + " - " + entry.getValue().getAsString(), TRANSLATOR_KEY)
 		);
 		this.translators = Collections.unmodifiableMap(translatorsMap);
-		/^?} else {^/
-		/^List<String> translatorsList = new ArrayList<>();
+		/*?} else {*/
+		/*List<String> translatorsList = new ArrayList<>();
 		translatorsSection.getAsObject().forEach(entry ->
 				translatorsList.add(entry.getKey() + " - " + entry.getValue().getAsString() + " (Translator)")
 		);
 		this.translators = Collections.unmodifiableList(translatorsList);
-		^//^?}^/
+		*//*?}*/
 	}
 
 	public static ModMenuTranslators getInstance() {
@@ -60,4 +60,4 @@ public class ModMenuTranslators {
 	}
 
 }
-*///?}
+//?}

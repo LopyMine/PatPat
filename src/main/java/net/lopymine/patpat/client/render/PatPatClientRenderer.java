@@ -75,8 +75,10 @@ public class PatPatClientRenderer {
 	public static void register() {
 		//? if <=1.21.8 {
 		/*ClientMultiLoader.getInstance().registerAfterEntitiesRenderer((source, stack) -> {
+			PatFeatureRenderer.getInstance().setRenderingLevel(true);
 			PatPatClientRenderer.renderPatOnYourself();
 			PatFeatureRenderer.getInstance().render(source);
+			PatFeatureRenderer.getInstance().setRenderingLevel(false);
 		});
 		*///?}
 		ClientMultiLoader.getInstance().registerAfterWorldTickListener((level) -> {

@@ -1,7 +1,7 @@
 package net.lopymine.patpat.entrypoint.impl.neoforge;
 
 //? if neoforge {
-import net.lopymine.patpat.PatPat;
+/*import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.dedicated.PatPatDedicatedServer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -24,4 +24,4 @@ public class NeoForgeDedicatedEntrypoint {
 	}
 
 }
-//?}
+*///?}

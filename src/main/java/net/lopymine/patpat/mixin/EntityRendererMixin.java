@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 
-import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,6 +27,12 @@ import org.spongepowered.asm.mixin.injection.callback.*;
 import net.minecraft.client.renderer.entity.state.*;
 //?}
 
+//? if >=26.1 {
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+//?} elif >=1.21.9 {
+/*import net.minecraft.client.renderer.state.CameraRenderState;
+ *///?}
+
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin {
 
@@ -46,25 +51,9 @@ public class EntityRendererMixin {
 //	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;submitNameTag(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V"), method = "submit")
 //	private void render(EntityRenderer<?, ?> instance, EntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, net.minecraft.client.renderer.state.CameraRenderState cameraRenderState, Operation<Void> original, @Local(argsOnly = true) PoseStack matrices) {
 //	/*?}*/
-//
-//		//? if >=1.21.2 {
-//		EntityRenderStateWithParent stateWithParent = (EntityRenderStateWithParent) state;
-//		Entity entity = stateWithParent.patPat$getEntity();
-//		float tickDelta = stateWithParent.patPat$getTickDelta();
-//		//?}
-//		//? if >=1.21.9 {
-//		Boolean result = this.render(matrices, state.lightCoords, entity, tickDelta, true, null);
-//		if (result != null) {
-//			original.call(instance, state, poseStack, submitNodeCollector, cameraRenderState);
-//		}
-//		//?} elif >=1.21.2 {
-//		/*return this.render(matrices, light, entity, tickDelta, original.call(state), provider);
-//		*///?} else {
-//		/*Boolean result = this.render(matrices, light, entity, tickDelta, bl, provider);
-//		return result != null && result;
-//		*///?}
 //	}
 
+	//? if >=26.1 {
 	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V"), method = "submit")
 	private void render(EntityRenderer<?, ?> instance, EntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, Operation<Void> original, @Local(argsOnly = true) PoseStack matrices) {
 		EntityRenderStateWithParent stateWithParent = (EntityRenderStateWithParent) state;
@@ -76,6 +65,33 @@ public class EntityRendererMixin {
 			original.call(instance, state, poseStack, submitNodeCollector, cameraRenderState);
 		}
 	}
+	//?} elif >=1.21.9 {
+	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;submitNameTag(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V"), method = "submit")
+	private void render(EntityRenderer<?, ?> instance, EntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, Operation<Void> original, @Local(argsOnly = true) PoseStack matrices) {
+			EntityRenderStateWithParent stateWithParent = (EntityRenderStateWithParent) state;
+			Entity entity = stateWithParent.patPat$getEntity();
+			float tickDelta = stateWithParent.patPat$getTickDelta();
+
+			Boolean result = this.render(matrices, state.lightCoords, entity, tickDelta, true, null);
+			if (result != null) {
+				original.call(instance, state, poseStack, submitNodeCollector, cameraRenderState);
+			}
+		}
+	*///?} elif >=1.21.2 {
+	/*@WrapOperation(at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;nameTag:Lnet/minecraft/network/chat/Component;"), method = "render")
+	private Component render(EntityRenderState state, Operation<Component> original, @Local(argsOnly = true) PoseStack matrices, @Local(argsOnly = true) MultiBufferSource provider, @Local(argsOnly = true) int light) {
+		EntityRenderStateWithParent stateWithParent = (EntityRenderStateWithParent) state;
+		Entity entity = stateWithParent.patPat$getEntity();
+		float tickDelta = stateWithParent.patPat$getTickDelta();
+		return this.render(matrices, light, entity, tickDelta, original.call(state), provider);
+	}
+	*///?} else {
+	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;shouldShowName(Lnet/minecraft/world/entity/Entity;)Z"), method = "render")
+	private boolean render(EntityRenderer<?> instance, Entity entity, Operation<Boolean> original, @Local(argsOnly = true) PoseStack matrices, @Local(argsOnly = true) MultiBufferSource provider, @Local(argsOnly = true) int light, @Local(argsOnly = true, ordinal = 1) float tickDelta) {
+		Boolean result = this.render(matrices, light, entity, tickDelta, original.call(instance, entity), provider);
+		return result != null && result;
+	}
+	*///?}
 
 	// original => render, null => cancel
 	@Unique

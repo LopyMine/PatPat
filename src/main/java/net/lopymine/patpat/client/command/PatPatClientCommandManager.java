@@ -14,7 +14,7 @@ import net.lopymine.patpat.client.command.mod.PatPatClientModEnableCommand;
 import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.extension.TextExtension;
 import net.lopymine.patpat.logger.PatLogger;
-import net.minecraft.commands.CommandSourceStack;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 @ExtensionMethod(TextExtension.class)
 public class PatPatClientCommandManager {
@@ -37,11 +37,11 @@ public class PatPatClientCommandManager {
 		});
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> literal(String name) {
+	public static LiteralArgumentBuilder<FabricClientCommandSource> literal(String name) {
 		return LiteralArgumentBuilder.literal(name);
 	}
 
-	public static <T> RequiredArgumentBuilder<CommandSourceStack, T> argument(String name, ArgumentType<T> type) {
+	public static <T> RequiredArgumentBuilder<FabricClientCommandSource, T> argument(String name, ArgumentType<T> type) {
 		return RequiredArgumentBuilder.argument(name, type);
 	}
 }

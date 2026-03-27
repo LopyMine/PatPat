@@ -1,6 +1,11 @@
 package net.lopymine.patpat.compat.iris;
 
+//? if iris {
+
 import net.irisshaders.iris.api.v0.IrisApi;
+
+//?}
+
 import net.lopymine.patpat.compat.LoadedMods;
 
 public class IrisCompat {

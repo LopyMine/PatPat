@@ -17,7 +17,7 @@ import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.Action;
 
-import net.minecraft.commands.CommandSourceStack;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
@@ -62,12 +62,12 @@ public class PatPatClientInfoCommand {
 		return INSTANCE;
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> get() {
+	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
 		return literal("info")
 				.executes(context -> PatPatClientInfoCommand.getInstance().version(context));
 	}
 
-	public int version(CommandContext<CommandSourceStack> context) {
+	public int version(CommandContext<FabricClientCommandSource> context) {
 		context.sendMsg(this.platformText);
 		context.sendMsg(this.minecraftVersionText);
 		context.sendMsg(this.versionText);

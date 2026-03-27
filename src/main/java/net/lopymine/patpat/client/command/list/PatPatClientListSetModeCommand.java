@@ -16,7 +16,7 @@ import net.lopymine.patpat.utils.*;
 
 import net.minecraft.network.chat.*;
 
-import net.minecraft.commands.CommandSourceStack;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.argument;
 
@@ -27,13 +27,13 @@ public class PatPatClientListSetModeCommand {
 		throw new IllegalStateException("Command class");
 	}
 
-	public static LiteralArgumentBuilder<CommandSourceStack> get() {
+	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
 		return literal("set")
 						.then(argument("mode", ListModeArgumentType.listMode())
 								.executes(PatPatClientListSetModeCommand::onSetListMode));
 	}
 
-	private static int onSetListMode(CommandContext<CommandSourceStack> context) {
+	private static int onSetListMode(CommandContext<FabricClientCommandSource> context) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		ListMode mode = ListModeArgumentType.getListMode(context, "mode");
 		PatPatClientMultiplayerConfig serverConfig = config.getMultiPlayerConfig();

@@ -2,7 +2,7 @@ package net.lopymine.patpat.entrypoint.impl.fabric.loader;
 
 //? if fabric {
 
-/*import java.io.InputStream;
+import java.io.InputStream;
 import java.nio.file.*;
 import java.util.Optional;
 import net.fabricmc.loader.api.*;
@@ -60,4 +60,4 @@ public class FabricEarlyModLoader implements IEarlyCommonModLoader {
 
 }
 
-*///?}
+//?}

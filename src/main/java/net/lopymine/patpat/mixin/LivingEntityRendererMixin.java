@@ -1,7 +1,6 @@
 package net.lopymine.patpat.mixin;
 
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -15,6 +14,12 @@ import net.lopymine.patpat.utils.mixin.EntityRenderStateWithParent;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.entity.Entity;
 //?}
+
+//? if >=26.1 {
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+//?} elif >=1.21.9 {
+/*import net.minecraft.client.renderer.state.CameraRenderState;
+*///?}
 
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin {
@@ -46,9 +51,10 @@ public class LivingEntityRendererMixin {
 		float tickDelta = ((EntityRenderStateWithParent) livingEntityRenderState).patPat$getTickDelta();
 		if (!(entity instanceof LivingEntity livingEntity)) {
 			return;
+		}
 		PatPatClientRenderer.scaleEntityIfPatted(livingEntity, poseStack, tickDelta);
 	}
-	}*///?} else {
+	*///?} else {
 	/*@Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"))
 		private void render(LivingEntity livingEntity, float f, float tickDelta, PoseStack poseStack, MultiBufferSource vertexConsumerProvider, int i, CallbackInfo ci) {
 		PatPatClientRenderer.scaleEntityIfPatted(livingEntity, poseStack, tickDelta);

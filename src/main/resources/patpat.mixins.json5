@@ -27,8 +27,8 @@
 		*///?}
 
 		//? if fabric {
-		/*"ModMenuMixin",
-		*///?}
+		"ModMenuMixin",
+		//?}
 
 		//? if <=1.21.10 {
 		/*"GameRendererMixin",

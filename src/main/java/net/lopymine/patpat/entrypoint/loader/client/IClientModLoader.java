@@ -5,7 +5,7 @@ package net.lopymine.patpat.entrypoint.loader.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.CommandDispatcher;
 import java.util.function.Consumer;
-import net.minecraft.commands.CommandSourceStack;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.lopymine.patpat.client.resourcepack.AbstractResourceReloadListener;
 import net.lopymine.patpat.packet.*;
 import net.minecraft.client.KeyMapping;
@@ -15,7 +15,7 @@ import net.minecraft.sounds.SoundEvent;
 
 public interface IClientModLoader {
 
-	void registerClientCommands(Consumer<CommandDispatcher<CommandSourceStack>> consumer);
+	void registerClientCommands(Consumer<CommandDispatcher<FabricClientCommandSource>> consumer);
 
 	void registerAfterEntitiesRenderer(CustomRenderer renderer);
 

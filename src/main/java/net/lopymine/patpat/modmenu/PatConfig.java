@@ -18,8 +18,7 @@ import net.lopymine.patpat.utils.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-//? if debug_mode
-//import net.lopymine.patpat.client.config.PatPatDebugConfig;
+import net.lopymine.patpat.client.config.PatPatDebugConfig;
 
 @Getter
 @Builder
@@ -32,23 +31,19 @@ public class PatConfig {
 
 	public static PatConfig generate() {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
-		Runnable saveFunction = config::saveAsync;
+		PatPatDebugConfig debugConfig = PatPatDebugConfig.getInstance();
 
-		//? if debug_mode {
-		/*PatPatDebugConfig debugConfig = PatPatDebugConfig.getInstance();
-		saveFunction = () -> {
+		Runnable saveFunction = () -> {
 			config.saveAsync();
 			debugConfig.saveAsync();
 		};
-		*///?}
 
 
 		return PatConfig.builder()
 				.title(ModMenuUtils.getModTitle())
 				.onSave(saveFunction)
 				.addCategory(generateMainCategory(config))
-				//? if debug_mode
-				//.addCategory(generateDebugCategory(debugConfig))
+				.addCategoryIf(generateDebugCategory(debugConfig), PatPatDebugConfig.DEBUG_ENABLED)
 				.build();
 	}
 
@@ -263,8 +258,7 @@ public class PatConfig {
 				.build();
 	}
 
-	//? if debug_mode {
-	/*public static PatCategory generateDebugCategory(PatPatDebugConfig debugConfig) {
+	public static PatCategory generateDebugCategory(PatPatDebugConfig debugConfig) {
 		PatPatDebugConfig defDebugConfig = PatPatDebugConfig.getNewInstance().get();
 
 		return PatCategory.builder()
@@ -282,7 +276,6 @@ public class PatConfig {
 				)
 				.build();
 	}
-	*///?}
 
 	public static PatDescription getDescriptionWithWarn(String key) {
 		return PatDescription.of(
@@ -291,5 +284,16 @@ public class PatConfig {
 						.append("\n\n")
 						.append(ModMenuUtils.getOptionDescription(key))
 		);
+	}
+
+	public static class PatConfigBuilder {
+
+		public PatConfigBuilder addCategoryIf(PatCategory category, boolean bl) {
+			if (bl) {
+				this.addCategory(category);
+			}
+			return this;
+		}
+
 	}
 }

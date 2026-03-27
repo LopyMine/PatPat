@@ -9,8 +9,8 @@
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/${mod_id}",
-		"sources": "https://github.com/LopyMine/${mod_id}",
-		"issues": "https://github.com/LopyMine/${mod_id}/issues"
+		"sources": "https://github.com/${github_mod_author}/${mod_id}",
+		"issues": "https://github.com/${github_mod_author}/${mod_id}/issues"
 	},
 	"license": "${mod_license}",
 	"icon": "icon/icon.png",
@@ -35,18 +35,20 @@
 		"java": ">=${java}",
 		"${fabric_api_id}": "*"
 	},
-	"accessWidener": "aws/fabric-${minecraft}.accesswidener",
+	"accessWidener": "${fabric_trick_accesswidener_id}",
 	"mixins": [
 		"${fabric_trick_mixin_configs}"
 	],
 	"custom": {
 		"translators": {
-			"TastyPommesLul": "Germany",
-			"Hamka": "Polish",
+			"TastyPommesLul": "Germany (90%)",
+			"Hamka": "Polish (90%)",
 			"MrLemonHog": "Ukrainian",
-			"Balojan": "Vietnamese (46%)",
-			"okunamayanad": "Turkish (25%)",
-			"Gallium": "French (19%)"
+			"Balojan": "Vietnamese (42%)",
+			"okunamayanad": "Turkish (23%)",
+			"Gallium, Matt TCL": "French (28%)",
+			"Nuts0905": "European Spanish",
+			"Baymaxawa": "Chinese Simplified"
 		},
 		"modmenu": {
 			"links": {

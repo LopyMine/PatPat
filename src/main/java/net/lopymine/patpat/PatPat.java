@@ -1,5 +1,7 @@
 package net.lopymine.patpat;
 
+import net.fabricmc.api.ModInitializer;
+
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.entrypoint.*;
 import net.lopymine.patpat.logger.PatLogger;
@@ -9,8 +11,8 @@ import net.lopymine.patpat.server.packet.PatPatServerPacketManager;
 
 public class PatPat {
 
-	public static final String MOD_VERSION = /*$ mod_version*/ "1.2.4+1.21.11+neoforge";
-	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "02b6eaf";
+	public static final String MOD_VERSION = /*$ mod_version*/ "1.2.6+26.1+fabric";
+	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "02b3c23";
 	public static final String MOD_NAME = /*$ mod_name*/ "PatPat";
 	public static final String MOD_ID = /*$ mod_id*/ "patpat";
 	public static final String SERVER_CONFIG_VERSION = /*$ server_config_version*/ "1.0.0";

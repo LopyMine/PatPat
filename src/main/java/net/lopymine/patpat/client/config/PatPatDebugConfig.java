@@ -1,8 +1,6 @@
 package net.lopymine.patpat.client.config;
 
-//? if debug_mode {
-
-/*import lombok.*;
+import lombok.*;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -24,6 +22,8 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 @Getter
 @AllArgsConstructor
 public class PatPatDebugConfig {
+
+	public static final boolean DEBUG_ENABLED = Boolean.getBoolean("patpat.debug");
 
 	public static final Codec<PatPatDebugConfig> CODEC = RecordCodecBuilder.create(inst -> inst.group(
 			option("selfPat", false, Codec.BOOL, PatPatDebugConfig::isSelfPat)
@@ -61,4 +61,3 @@ public class PatPatDebugConfig {
 	}
 
 }
-*///?}

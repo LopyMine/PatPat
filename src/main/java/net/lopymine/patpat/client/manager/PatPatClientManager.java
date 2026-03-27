@@ -31,7 +31,8 @@ import org.jetbrains.annotations.Nullable;
 @ExtensionMethod(value = {EntityExtension.class, GameProfileExtension.class})
 public class PatPatClientManager {
 
-	private static final Map<UUID, PatEntity> PAT_ENTITIES = new HashMap<>();
+	// TODO: сделать либо отдельный метод с immutable мапой, либо плдучение по UUID для GameTest
+	public static final Map<UUID, PatEntity> PAT_ENTITIES = new HashMap<>();
 
 	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("PatManager");
 
@@ -45,7 +46,7 @@ public class PatPatClientManager {
 
 	@Nullable
 	public static PatEntity getPatEntity(@NotNull LivingEntity entity) {
-		return PAT_ENTITIES.get(entity.getUUID());
+		return PAT_ENTITIES.getOrDefault(entity.getUUID(), null);
 	}
 
 	public static void tickEntities() {

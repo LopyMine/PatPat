@@ -8,16 +8,20 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
-
-//? if >=1.19.3 {
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import net.minecraft.world.entity.Entity;
-//?}
 
-//? if >=1.21.9 {
-import net.minecraft.client.renderer.state.CameraRenderState;
+//? if >=1.19.3 && <=1.21.11 {
+/*import software.bernie.geckolib.renderer.GeoEntityRenderer;
+*///?}
+
+//? if >=1.21.9 && <=1.21.11 {
+/*import net.minecraft.client.renderer.state.CameraRenderState;
+*///?}
+
+//? if >=26.1 {
+import com.geckolib.renderer.GeoEntityRenderer;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 //?}
 
 @Pseudo

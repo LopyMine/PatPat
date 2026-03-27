@@ -1,7 +1,11 @@
+//~ client_fabric_commands
+
 package net.lopymine.patpat.entrypoint.loader.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.brigadier.CommandDispatcher;
 import java.util.function.Consumer;
+import net.minecraft.commands.CommandSourceStack;
 import net.lopymine.patpat.client.resourcepack.AbstractResourceReloadListener;
 import net.lopymine.patpat.packet.*;
 import net.minecraft.client.KeyMapping;
@@ -9,7 +13,9 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.sounds.SoundEvent;
 
-public interface IClientModLoader extends ISillyClientModLoader {
+public interface IClientModLoader {
+
+	void registerClientCommands(Consumer<CommandDispatcher<CommandSourceStack>> consumer);
 
 	void registerAfterEntitiesRenderer(CustomRenderer renderer);
 

@@ -5,8 +5,7 @@ plugins {
 }
 
 mossyDependencies {
-	minecraft = stonecutter.current.version.toString()
-	mappings = "official"
+	minecraft = stonecutter.current.project.substring(stonecutter.current.project.indexOf("-") + 1)
 	lombok = prop("base.lombok_version")
 
 	fabricApi = prop("build.fabric_api")
@@ -22,59 +21,17 @@ mossyDependencies {
 	}
 
 	additional {
-		// - By default, every additional project dependency ("dep.modId" from gradle.properties) will use
-		// - Modrinth Maven and "modImplementation" configuration name
-		// - If you want to override mod configuration name, you can do this:
-		// override("modCompileOnly", "just_mod_id")
-		// - It will do this:
-		// - modImplementation("maven.modrinth:modId:version") -> modCompileOnly("maven.modrinth:modId:version")
-		// - Or if you want to disable it and handle by yourself, just disable it auto handling:
-		// disable("just_mod_id")
+		override("mossyCompileOnly", "flashback")
+		override("mossyCompileOnly", "replaymod")
 
-		override("modCompileOnly", "flashback")
-		override("modCompileOnly", "replaymod")
-
-		// Fabric Permissions Api
 		disable("fabric-permissions-api")
-		// Cloth-Config
-		//disable("cloth-config")
-		// GeckoLib
-		disable("geckolib")
-		// ProxLib
-		disable("proxlib")
-		// Replay Mod
 	}
 }
 
-def mcVersion = stonecutter.current.version.toString()
-def fabric = stonecutter.current.project.toString().contains("fabric-")
-def neoforge = stonecutter.current.project.toString().contains("neoforge-")
-def forge = stonecutter.current.project.toString().contains("forge-")
-
-mossyResources {
-	//expandFiles = ["custom", "file", "patterns", "here"]
-}
+def fabric = sc.current.project.contains("fabric")
+def forge = sc.current.project.startsWith("forge-")
 
 repositories {
-	maven {
-		name = "Cloth Config"
-		url = "https://maven.shedaniel.me/"
-	} // Cloth Config
-
-	maven {
-		name = "Modrinth"
-		url = "https://api.modrinth.com/maven"
-	} // Replay Mod
-
-	maven {
-		name = 'GeckoLib'
-		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-		content {
-			includeGroupByRegex("software\\.bernie.*")
-			includeGroup("com.eliotlash.mclib")
-			includeGroup("com.eliotlash.molang")
-		}
-	}
 	maven {
 		name = "Sinytra"
 		url = "https://maven.su5ed.dev/releases"
@@ -82,79 +39,65 @@ repositories {
 }
 
 dependencies {
-
-	// Fabric permission api
 	if (fabric) {
-		def fpaVersion = prop("build.fabric-permissions-api")
-		include(modImplementation('me.lucko:fabric-permissions-api:' + fpaVersion)){
-			exclude(group: "net.fabricmc.fabric-api")
+		def fpa = prop("build.fabric-permissions-api")
+		if (fpa != "unknown") {
+			include(modImplementation("me.lucko:fabric-permissions-api:${fpa}")){
+				exclude(group: "net.fabricmc.fabric-api")
+			}
 		}
 
 		testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
 	}
 
-	// Cloth Config
-	//def clothConfigVersion = prop("dep.cloth-config")
-	//modApi("me.shedaniel.cloth:cloth-config-fabric:${stonecutter.compare("1.19", mcVersion) == 1 ? clothConfigVersion : MossyUtils.substringBefore(clothConfigVersion, "+")}") {
-	//	exclude(group: "net.fabricmc.fabric-api")
-	//}
-
-	// GeckoLib
-	def geckoLibVersion = prop("dep.geckolib")
-	if (geckoLibVersion != "unknown") {
-		if (fabric) {
-			if (mcVersion == "1.16.5") {
-				modCompileOnly("software.bernie.geckolib:geckolib-forge-${mcVersion}:${geckoLibVersion}")
-			} else if (mcVersion == "1.17.1") {
-				modCompileOnly("software.bernie.geckolib:geckolib-1.17.1-forge:${geckoLibVersion}")
-			} else if (mcVersion == "1.18.2") {
-				modCompileOnly("software.bernie.geckolib:geckolib-forge-1.18:${geckoLibVersion}")
-			} else if (mcVersion == "1.19.1" || mcVersion == "1.19.2") {
-				modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.19:${geckoLibVersion}")
-			} else if (mcVersion == "1.20") {
-				modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.20.1:${geckoLibVersion}")
-			} else {
-				modCompileOnly("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
-			}
-		} else if (neoforge) {
-			compileOnly("software.bernie.geckolib:geckolib-neoforge-${mcVersion}:${geckoLibVersion}")
-		} else if (forge) {
-			compileOnly("software.bernie.geckolib:geckolib-forge-${mcVersion}:${geckoLibVersion}")
-		}
-	}
-
-	def proxlibVersion = prop("dep.proxlib")
-	if (proxlibVersion != "unknown") {
-		include(modApi("maven.modrinth:proxlib:${proxlibVersion}"))
-	}
-
-	if (forge && mcVersion == "1.20.1") {
+	if (forge) {
 		annotationProcessor("net.fabricmc:sponge-mixin:0.16.5+mixin.0.8.7")
-		implementation("maven.modrinth:mixinbooster:0.1.2+1.20.1")
+		modImplementation("maven.modrinth:mixinbooster:0.1.2+1.20.1")
 	}
 }
-
-// TODO: Добавить тесты на версию раньше, чем 1.18.2
-// TODO: Поправить тесты для Forge либо исключить их оттуда
-//if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0 && stonecutter.compare(stonecutter.current.version.toString(), "1.21.11") < 0) {
-//	test {
-//		useJUnitPlatform()
-//	}
-//}
 
 test {
 	failOnNoDiscoveredTests = false
 }
 
-configurations.configureEach {
-	resolutionStrategy {
-		force("net.fabricmc:fabric-loader:${prop("build.fabric_loader")}")
+if (fabric) {
+	if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0 && stonecutter.compare(stonecutter.current.version.toString(), "1.21.11") < 0) {
+		test {
+			useJUnitPlatform()
+		}
+	}
+
+	loom.runConfigs.configureEach { config ->
+		if (config.getEnvironment() == "client") {
+			config.vmArg("-Dpatpat.debug=true")
+		}
+	}
+
+	fabricApi {
+		configureTests {
+			createSourceSet = true
+			modId = "patpat-mod-test-${project.name}"
+			enableGameTests = true // Default is true
+			enableClientGameTests = true // Default is true
+			eula = true // By setting this to true, you agree to the Minecraft EULA.
+		}
+	}
+
+	tasks.named("runClientGameTest", JavaExec) {
+		jvmArgs "-ea"
+	}
+
+	configurations.configureEach {
+		resolutionStrategy {
+			force("net.fabricmc:fabric-loader:${prop("build.fabric_loader")}")
+		}
 	}
 }
 
 stonecutter {
 	var buildTime = (int) (System.currentTimeMillis() / 10000) - 174611089
 	var buildCodeTime = String.format("%07x", buildTime & 0xFFFFFFF)
+
 	swaps["build_code_time"] = "\"${buildCodeTime}\";".toString()
 	dependencies["yacl"] = MossyUtils.substringBefore(prop("dep.yacl"), "+")
 
@@ -183,14 +126,15 @@ stonecutter {
 		replace("ProxPacketIdentifier", "ProxPacketIdentifier")
 		replace("ResourceLocation", "Identifier")
 		replace(".location()", ".identifier()")
+		replace("RenderType", "RenderTypes")
 	}
 
 	constants["debug_mode"] = false
-
 }
 
 stonecutter.filters.exclude("**/*.accesswidener")
-
+stonecutter.filters.exclude("**/*.cfg")
+stonecutter.filters.exclude("**/*.classTweaker")
 
 jar {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE

@@ -1,4 +1,4 @@
-package net.lopymine.patpat.entrypoint.fabric;
+package net.lopymine.patpat.entrypoint.impl.fabric;
 
 //? if fabric {
 

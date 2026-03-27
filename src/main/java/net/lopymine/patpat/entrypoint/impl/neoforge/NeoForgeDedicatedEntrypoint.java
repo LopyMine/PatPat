@@ -1,19 +1,21 @@
-package net.lopymine.patpat.entrypoint.neoforge;
+package net.lopymine.patpat.entrypoint.impl.neoforge;
 
 //? if neoforge {
-import net.lopymine.patpat.*;
+import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.dedicated.PatPatDedicatedServer;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 
-@Mod(PatPat.MOD_ID)
-public class NeoForgeCommonEntrypoint {
+@Mod(value = PatPat.MOD_ID, dist = Dist.DEDICATED_SERVER)
+public class NeoForgeDedicatedEntrypoint {
 
 	private static IEventBus INITIALIZATION_EVENT_BUS;
 
-	public NeoForgeCommonEntrypoint(IEventBus bus) {
+	public NeoForgeDedicatedEntrypoint(IEventBus bus) {
 		INITIALIZATION_EVENT_BUS = bus;
-		PatPat.onInitialize();
+		PatPatDedicatedServer.onInitializeServer();
 		INITIALIZATION_EVENT_BUS = null;
 	}
 

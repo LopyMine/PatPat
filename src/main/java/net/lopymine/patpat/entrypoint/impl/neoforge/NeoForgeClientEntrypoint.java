@@ -1,4 +1,4 @@
-package net.lopymine.patpat.entrypoint.neoforge;
+package net.lopymine.patpat.entrypoint.impl.neoforge;
 
 //? if neoforge {
 import net.lopymine.patpat.PatPat;

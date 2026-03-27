@@ -2,7 +2,7 @@ package net.lopymine.patpat.mixin.forge;
 
 //? if forge {
 
-/*import net.lopymine.patpat.entrypoint.forge.event.PatPatForgeClientStoppingEvent;
+/*import net.lopymine.patpat.entrypoint.impl.forge.event.PatPatForgeClientStoppingEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;

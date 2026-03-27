@@ -1,4 +1,4 @@
-package net.lopymine.patpat.entrypoint.neoforge.event;
+package net.lopymine.patpat.entrypoint.impl.neoforge.event;
 
 //? if neoforge {
 

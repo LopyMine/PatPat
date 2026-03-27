@@ -1,4 +1,4 @@
-package net.lopymine.patpat.entrypoint.forge.loader;
+package net.lopymine.patpat.entrypoint.impl.forge.loader;
 
 //? if forge {
 
@@ -10,8 +10,8 @@ import lombok.Getter;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.resourcepack.AbstractResourceReloadListener;
 import net.lopymine.patpat.entrypoint.ServerMultiLoader;
-import net.lopymine.patpat.entrypoint.forge.event.PatPatForgeClientStoppingEvent;
-import net.lopymine.patpat.entrypoint.forge.loader.ForgeServerModLoader.*;
+import net.lopymine.patpat.entrypoint.impl.forge.event.PatPatForgeClientStoppingEvent;
+import net.lopymine.patpat.entrypoint.impl.forge.loader.ForgeServerModLoader.*;
 import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader;
 import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader.ClientPacketRegister.PatPatClientPacketHandler;
 import net.lopymine.patpat.packet.*;

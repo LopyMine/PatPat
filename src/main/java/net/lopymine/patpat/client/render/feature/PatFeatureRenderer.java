@@ -14,7 +14,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 //?} else {
 
-/*import net.minecraft.client.renderer.RenderType;
+/*import net.minecraft.client.renderer.RenderTypes;
 
 *///?}
 
@@ -36,7 +36,7 @@ public class PatFeatureRenderer {
 			//? if >=1.21.11 {
 			VertexConsumer buffer = source.getBuffer(RenderTypes.entityTranslucent(request.texture()));
 			//?} else {
-			/*VertexConsumer buffer = source.getBuffer(RenderType.entityTranslucent(request.texture()));
+			/*VertexConsumer buffer = source.getBuffer(RenderTypes.entityTranslucent(request.texture()));
 			*///?}
 
 			/*? if >=1.19.3 {*/ org.joml.Matrix4f /*?} else {*/ /*com.mojang.math.Matrix4f*//*?}*/ matrix = request.poseStack().pose();

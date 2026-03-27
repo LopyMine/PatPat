@@ -1,13 +1,16 @@
 package net.lopymine.patpat.extension;
 
 import net.lopymine.patpat.entrypoint.ServerMultiLoader;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import com.mojang.authlib.GameProfile;
 
 import java.util.concurrent.CompletableFuture;
 
-/*? if >=1.21.9*/
+//? if >=1.21.9 {
 import net.minecraft.server.players.NameAndId;
+//?} else {
+/*import com.mojang.authlib.GameProfile;
+ *///?}
 
 public class PlayerExtension {
 
@@ -19,15 +22,12 @@ public class PlayerExtension {
 		return ServerMultiLoader.getInstance().hasPermission(player, permission);
 	}
 
-	//? if <=1.21.8 {
-	/*public static CompletableFuture<Boolean> hasPermission(GameProfile profile, String permission) {
-		return ServerMultiLoader.getInstance().hasOfflinePermission(profile.getId(), permission);
+	public static CompletableFuture<Boolean> hasPermission(
+			/*? if >=1.21.9 {*/ NameAndId /*?} else {*/ /*GameProfile *//*?}*/ profile,
+			MinecraftServer server,
+			String permission
+	) {
+		return ServerMultiLoader.getInstance().hasOfflinePermission(profile, server, permission);
 	}
-	*///?}
 
-	/*? if >=1.21.9 {*/
-	public static CompletableFuture<Boolean> hasPermission(NameAndId nameAndId, String permission) {
-		return ServerMultiLoader.getInstance().hasOfflinePermission(nameAndId.id(), permission);
-	}
-	/*?}*/
 }

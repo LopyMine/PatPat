@@ -1,4 +1,4 @@
-package net.lopymine.patpat.entrypoint.forge;
+package net.lopymine.patpat.entrypoint.impl.forge;
 
 //? if forge {
 

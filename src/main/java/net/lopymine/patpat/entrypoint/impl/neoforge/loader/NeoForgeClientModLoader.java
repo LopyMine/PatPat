@@ -1,4 +1,4 @@
-package net.lopymine.patpat.entrypoint.neoforge.loader;
+package net.lopymine.patpat.entrypoint.impl.neoforge.loader;
 
 //? if neoforge {
 import com.mojang.brigadier.CommandDispatcher;
@@ -8,8 +8,8 @@ import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.resourcepack.AbstractResourceReloadListener;
 import net.lopymine.patpat.entrypoint.ServerMultiLoader;
 import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader;
-import net.lopymine.patpat.entrypoint.neoforge.*;
-import net.lopymine.patpat.entrypoint.neoforge.event.*;
+import net.lopymine.patpat.entrypoint.impl.neoforge.*;
+import net.lopymine.patpat.entrypoint.impl.neoforge.event.*;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
 import net.minecraft.client.*;

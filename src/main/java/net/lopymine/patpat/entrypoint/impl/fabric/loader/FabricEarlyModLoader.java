@@ -1,7 +1,6 @@
-package net.lopymine.patpat.entrypoint.fabric.loader;
+package net.lopymine.patpat.entrypoint.impl.fabric.loader;
 
 //? if fabric {
-
 
 /*import java.io.InputStream;
 import java.nio.file.*;
@@ -9,10 +8,14 @@ import java.util.Optional;
 import net.fabricmc.loader.api.*;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.entrypoint.loader.IEarlyCommonModLoader;
-import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader.ModEnvironment;
 import org.jetbrains.annotations.Nullable;
 
 public class FabricEarlyModLoader implements IEarlyCommonModLoader {
+
+	@Override
+	public String getPlatform() {
+		return "Fabric";
+	}
 
 	@Override
 	public Path getConfigDir() {

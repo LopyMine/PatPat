@@ -1,4 +1,4 @@
-package net.lopymine.patpat.entrypoint.forge.loader;
+package net.lopymine.patpat.entrypoint.impl.forge.loader;
 
 //? if forge {
 
@@ -16,6 +16,7 @@ import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.*;
@@ -133,7 +134,6 @@ public class ForgeServerModLoader implements IServerModLoader {
 
 		String permissionId = "%s.%s".formatted(PatPat.MOD_ID, permission);
 		if (this.permissionNodes.get(permissionId) != null) {
-			System.out.println("Permission node already registered: " + permission);
 			return;
 		}
 
@@ -153,25 +153,24 @@ public class ForgeServerModLoader implements IServerModLoader {
 	public boolean hasPermission(ServerPlayer player, String permission) {
 		PermissionNode<Boolean> node = this.permissionNodes.get(permission);
 		if (node == null) {
-			System.out.println("Permission node not found: " + permission);
 			return false;
 		}
-		Boolean permission1 = PermissionAPI.getPermission(player, node);
-		System.out.println("Checking permission for player " + player.getName().getString() + " (" + player.getUUID() + "): " + permission + " = " + permission1);
-		return permission1;
+		return PermissionAPI.getPermission(player, node);
 	}
 
 	@Override
-	public CompletableFuture<Boolean> hasOfflinePermission(UUID uuid, String permission) {
+	public CompletableFuture<Boolean> hasOfflinePermission(
+			GameProfile profile,
+			MinecraftServer server,
+			String permission
+	) {
+		UUID uuid = profile.getId();
 		return CompletableFuture.supplyAsync(() -> {
 			PermissionNode<Boolean> node = this.permissionNodes.get(permission);
 			if (node == null) {
-				System.out.println("Permission node not found3: " + permission);
 				return false;
 			}
-			Boolean offlinePermission = PermissionAPI.getOfflinePermission(uuid, node);
-			System.out.println("Checking offline permission for uuid " + uuid + ": " + permission + " = " + offlinePermission);
-			return offlinePermission;
+			return PermissionAPI.getOfflinePermission(uuid, node);
 		});
 	}
 

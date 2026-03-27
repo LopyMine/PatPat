@@ -1,4 +1,4 @@
-package net.lopymine.patpat.entrypoint.neoforge.loader;
+package net.lopymine.patpat.entrypoint.impl.neoforge.loader;
 
 //? if neoforge {
 import com.mojang.brigadier.CommandDispatcher;
@@ -8,12 +8,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import lombok.Getter;
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.entrypoint.impl.neoforge.NeoForgeCommonEntrypoint;
 import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader.ClientPacketRegister.PatPatClientPacketHandler;
 import net.lopymine.patpat.entrypoint.loader.server.IServerModLoader;
-import net.lopymine.patpat.entrypoint.neoforge.*;
 import net.lopymine.patpat.packet.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.NeoForge;
@@ -32,6 +33,14 @@ import net.neoforged.neoforge.server.permission.events.PermissionGatherEvent.Nod
 //? if >=1.21.10 {
 import net.minecraft.server.permissions.*;
 import net.minecraft.server.permissions.Permission.HasCommandLevel;
+//?}
+
+//? if >=1.21.9 {
+import net.minecraft.server.players.NameAndId;
+//?} else {
+/*
+import com.mojang.authlib.GameProfile;
+*/
 //?}
 
 @Getter
@@ -162,13 +171,20 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 	}
 
 	@Override
-	public CompletableFuture<Boolean> hasOfflinePermission(UUID uuid, String permission) {
+	public CompletableFuture<Boolean> hasOfflinePermission(
+			/*? if >=1.21.9 {*/ NameAndId /*?} else {*/ /*GameProfile *//*?}*/ profile,
+			MinecraftServer server,
+			String permission
+	) {
 		return CompletableFuture.supplyAsync(() -> {
 			PermissionNode<Boolean> node = this.permissionNodes.get(permission);
 			if (node == null) {
 				return false;
 			}
-			return PermissionAPI.getOfflinePermission(uuid, node);
+			return PermissionAPI.getOfflinePermission(
+					/*? if >=1.21.9 {*/ profile.id() /*?} else {*/ /*profile.getId() *//*?}*/,
+					node
+			);
 		});
 	}
 

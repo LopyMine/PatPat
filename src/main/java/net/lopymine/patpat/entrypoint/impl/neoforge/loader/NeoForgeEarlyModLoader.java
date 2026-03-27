@@ -1,4 +1,4 @@
-package net.lopymine.patpat.entrypoint.neoforge.loader;
+package net.lopymine.patpat.entrypoint.impl.neoforge.loader;
 
 //? if neoforge {
 

@@ -98,7 +98,7 @@ public class PatPatServerRateLimitInfoCommand {
 		}
 
 		int availablePats = PatPatServerRateLimitManager.getAvailablePats(profile.getUUID());
-		profile.hasPermission(config.getPermissionBypass()).thenAcceptAsync(result -> {
+		profile.hasPermission(context.getSource().getServer(), config.getPermissionBypass()).thenAcceptAsync(result -> {
 			Object arg = result ?
 					CommandText.text("ratelimit.info.tokens.bypass").finish().withStyle(ChatFormatting.GOLD)
 					:

@@ -35,7 +35,7 @@ public class NoConfigLibrariesScreen {
 	private static final Set<String> ALLOWED_PROTOCOLS = Set.of("http", "https");
 
 	public static Screen createScreen(Screen parent) {
-		return new ConfirmScreen(NoConfigLibrariesScreen::onConfirm, NoConfigLibrariesScreen.TITLE, NoConfigLibrariesScreen.MESSAGE, NoConfigLibrariesScreen.OPEN_YACL_PAGE, NoConfigLibrariesScreen.OPEN_CLOTH_CONFIG_PAGE) {
+		return new ConfirmScreen((bl) -> onConfirm(bl, null), NoConfigLibrariesScreen.TITLE, NoConfigLibrariesScreen.MESSAGE, NoConfigLibrariesScreen.OPEN_YACL_PAGE, NoConfigLibrariesScreen.OPEN_CLOTH_CONFIG_PAGE) {
 			//? if >=1.21.9 {
 
 			@Override
@@ -65,7 +65,7 @@ public class NoConfigLibrariesScreen {
 		};
 	}
 
-	private static void onConfirm(boolean bl) {
+	private static void onConfirm(boolean bl, Object ignored) {
 		try {
 			String url = (bl ? YACL_MODRINTH_LINK : CLOTH_CONFIG_API_MODRINTH_LINK).formatted(SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*/ /*getName *//*?}*/(), EarlyCommonMultiLoader.getInstance().getPlatform());
 

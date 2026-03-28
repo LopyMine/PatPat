@@ -1,5 +1,6 @@
 package net.lopymine.patpat.modmenu.screen;
 
+import net.lopymine.patpat.entrypoint.EarlyCommonMultiLoader;
 import net.lopymine.patpat.translation.PatTranslation;
 import net.minecraft.*;
 import net.minecraft.client.Minecraft;
@@ -23,8 +24,8 @@ public class NoConfigLibrariesScreen {
 		throw new IllegalStateException("Screen class, use NoConfigLibrariesScreen.createScreen(...) method!");
 	}
 
-	private static final String YACL_MODRINTH_LINK = "https://modrinth.com/mod/yacl?version=%s&loader=fabric#download";
-	private static final String CLOTH_CONFIG_API_MODRINTH_LINK = "https://modrinth.com/mod/cloth-config?version=%s&loader=fabric#download";
+	private static final String YACL_MODRINTH_LINK = "https://modrinth.com/mod/yacl?version=%s&loader=%s#download";
+	private static final String CLOTH_CONFIG_API_MODRINTH_LINK = "https://modrinth.com/mod/cloth-config?version=%s&loader=%s#download";
 
 	private static final Component TITLE;
 	private static final Component MESSAGE;
@@ -66,7 +67,7 @@ public class NoConfigLibrariesScreen {
 
 	private static void onConfirm(boolean bl) {
 		try {
-			String url = (bl ? YACL_MODRINTH_LINK : CLOTH_CONFIG_API_MODRINTH_LINK).formatted(SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*/ /*getName *//*?}*/());
+			String url = (bl ? YACL_MODRINTH_LINK : CLOTH_CONFIG_API_MODRINTH_LINK).formatted(SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*/ /*getName *//*?}*/(), EarlyCommonMultiLoader.getInstance().getPlatform());
 
 			URI link = new URI(url);
 			String string = link.getScheme();

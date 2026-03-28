@@ -10,6 +10,7 @@ import net.lopymine.patpat.utils.mixin.*;
 import net.minecraft.client.*;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.options.controls.*;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.At.Shift;
@@ -30,7 +31,8 @@ public abstract class NewKeyBindsScreenMixin extends KeyBindsScreen {
 					value = "FIELD",
 					target = "Lcom/blamejared/controlling/client/NewKeyBindsScreen;selectedKey:Lnet/minecraft/client/KeyMapping;",
 					ordinal = 1,
-					shift = Shift.AFTER
+					shift = Shift.AFTER,
+					opcode = Opcodes.GETFIELD
 			),
 			method = "keyPressed",
 			cancellable = true

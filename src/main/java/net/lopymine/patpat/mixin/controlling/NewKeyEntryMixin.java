@@ -2,8 +2,7 @@ package net.lopymine.patpat.mixin.controlling;
 
 //? if >=1.17.1 && controlling {
 
-/*import com.blamejared.controlling.client.NewKeyBindsList;
-import com.blamejared.controlling.client.NewKeyBindsList.KeyEntry;
+/*import com.blamejared.controlling.client.NewKeyBindsList.KeyEntry;
 import net.lopymine.patpat.client.keybinding.PatPatKeybinding;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.components.*;
@@ -16,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class NewKeyEntryMixin {
 
 	//? if >=1.19.4 {
-	@Shadow
+	@Shadow/^? if forge {^//^(remap = false)^//^?}^/
 	@Final
 	private KeyMapping key;
 	//?} else {
@@ -25,7 +24,7 @@ public class NewKeyEntryMixin {
 	private KeyMapping keybinding;
 	^///?}
 
-	@Shadow
+	@Shadow/^? if forge {^//^(remap = false)^//^?}^/
 	@Final
 	private Button btnChangeKeyBinding;
 

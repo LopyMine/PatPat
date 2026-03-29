@@ -36,38 +36,10 @@ public class NoConfigLibrariesScreen {
 	private static final Set<String> ALLOWED_PROTOCOLS = Set.of("http", "https");
 
 	public static Screen createScreen(Screen parent) {
-		BooleanConsumer booleanConsumer = (result) -> onConfirm(result, null);
-		return new ConfirmScreen(booleanConsumer, NoConfigLibrariesScreen.TITLE, NoConfigLibrariesScreen.MESSAGE, NoConfigLibrariesScreen.OPEN_YACL_PAGE, NoConfigLibrariesScreen.OPEN_CLOTH_CONFIG_PAGE) {
-			//? if >=1.21.9 {
-
-			@Override
-			public boolean keyPressed(KeyEvent keyEvent) {
-				if (keyEvent.key() == 256 && this.shouldCloseOnEsc()) {
-					Minecraft.getInstance().setScreen(parent);
-					return true;
-				}
-				return super.keyPressed(keyEvent);
-			}
-
-			//?} else {
-			/*@Override
-			public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
-				if (keyCode == 256 && this.shouldCloseOnEsc()) {
-					Minecraft.getInstance().setScreen(parent);
-					return true;
-				}
-				return super.keyPressed(keyCode, scanCode, modifiers);
-			}
-			*///?}
-
-			@Override
-			public boolean shouldCloseOnEsc() {
-				return true;
-			}
-		};
+		return new CustomConfirmScreen(parent);
 	}
 
-	private static void onConfirm(boolean bl, Object ignored) {
+	private static void onConfirm(boolean bl) {
 		try {
 			String url = (bl ? YACL_MODRINTH_LINK : CLOTH_CONFIG_API_MODRINTH_LINK).formatted(SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*/ /*getName *//*?}*/(), EarlyCommonMultiLoader.getInstance().getPlatform());
 
@@ -83,6 +55,44 @@ public class NoConfigLibrariesScreen {
 		} catch (URISyntaxException e) {
 			PatPatClient.LOGGER.error("Can't open {} Modrinth page: ", (bl ? "YACL" : "Cloth Config API"), e);
 		}
+	}
+
+	private static final class CustomConfirmScreen extends ConfirmScreen {
+
+		private final Screen parent;
+
+		public CustomConfirmScreen(Screen parent) {
+			super(NoConfigLibrariesScreen::onConfirm, NoConfigLibrariesScreen.TITLE, NoConfigLibrariesScreen.MESSAGE, NoConfigLibrariesScreen.OPEN_YACL_PAGE, NoConfigLibrariesScreen.OPEN_CLOTH_CONFIG_PAGE);
+			this.parent = parent;
+		}
+
+		//? if >=1.21.9 {
+
+		@Override
+		public boolean keyPressed(KeyEvent keyEvent) {
+			if (keyEvent.key() == 256 && this.shouldCloseOnEsc()) {
+				Minecraft.getInstance().setScreen(this.parent);
+				return true;
+			}
+			return super.keyPressed(keyEvent);
+		}
+
+		//?} else {
+			/*@Override
+			public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
+				if (keyCode == 256 && this.shouldCloseOnEsc()) {
+					Minecraft.getInstance().setScreen(parent);
+					return true;
+				}
+				return super.keyPressed(keyCode, scanCode, modifiers);
+			}
+			*///?}
+
+		@Override
+		public boolean shouldCloseOnEsc() {
+			return true;
+		}
+
 	}
 
 	static {

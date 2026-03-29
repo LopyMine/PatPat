@@ -10,18 +10,18 @@
 		//? controlling && >=1.17.1 {
 
 		/*//? if >=1.19.4 {
-		"KeyBindsScreenAccessor",
-		//?}
+		/^"KeyBindsScreenAccessor",
+		^///?}
 
 		//? if >=1.21 {
-		"IPlatformHelperMixin",
-		//?} else {
-		/^"NewKeyBindsScreenMixin",
-		^///?}
+		/^"IPlatformHelperMixin",
+		^///?} else {
+		"NewKeyBindsScreenMixin",
+		//?}
 
 		//? if <1.19.3 {
-		/^"NewKeyBindsListMixin",
-		^///?}
+		"NewKeyBindsListMixin",
+		//?}
 
 		//? if =1.17.1 {
 		/^"NewKeyBindsListAccessor",
@@ -35,10 +35,12 @@
 		/*//? if =1.16.5 {
 		/^"ControllingKeyBindingListWidgetNewAccessor",
 		"ControllingKeyEntryMixin",
-		"ControllingOptionsScreenMixin",
+		"ControlsSettingsGuiNewMixin",
 		^///?}
 
-		"ControllingOptionsScreenMixin"
+		//? if <=1.17 {
+		/^"ControllingOptionsScreenMixin"
+		^///?}
 
 		*///?}
 	],

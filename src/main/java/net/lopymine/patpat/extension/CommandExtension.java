@@ -9,6 +9,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 
 import com.mojang.brigadier.context.CommandContext;
+import net.minecraft.server.level.ServerPlayer;
 
 public class CommandExtension {
 
@@ -33,7 +34,14 @@ public class CommandExtension {
 	}
 
 	public static boolean hasPatPatPermission(CommandSourceStack context, String permission) {
-		return ServerMultiLoader.getInstance().hasPermission(context.getPlayer(), permission);
+		return ServerMultiLoader.getInstance().hasPermission(
+				//? if >=1.19 {
+				context.getPlayer(),
+				//?} else {
+				/*context.getEntity() instanceof ServerPlayer player ? player : null,
+				 *///?}
+				permission
+		);
 	}
 
 }

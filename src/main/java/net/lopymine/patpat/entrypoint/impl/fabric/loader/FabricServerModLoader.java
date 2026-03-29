@@ -8,7 +8,11 @@ import java.util.function.Consumer;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.*;
 import net.fabricmc.fabric.api.client.networking.v1.*;
+//? if <1.19 {
+/*import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+*///?} else {
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+ //?}
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.*;
 import net.lopymine.patpat.entrypoint.loader.server.IServerModLoader;
@@ -22,6 +26,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.NameAndId;
  //?} else {
 /*import com.mojang.authlib.GameProfile;
+*///?}
+
+//? if <=1.19.3 {
+/*import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.Identifier;
 *///?}
 
 public class FabricServerModLoader implements IServerModLoader {
@@ -97,7 +106,7 @@ public class FabricServerModLoader implements IServerModLoader {
 				//?} elif >=1.19.4 && <=1.20.4 {
 				/*(packet, sender, responseSender) -> {
 				 *///?} else {
-				/*(server, sender, networkHandler, buf, responseSender) -> { T packet = id.getFactory().apply(buf);
+				/*(server, sender, networkHandler, buf, responseSender) -> { P packet = type.getFactory().apply(buf);
 				 *///?}
 					if (packet instanceof PingPatPacket<?, ?> pingPacket) {
 						pingPacket.setPacketReply(responseSender::sendPacket);

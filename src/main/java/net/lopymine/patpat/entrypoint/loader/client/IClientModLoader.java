@@ -5,7 +5,11 @@ package net.lopymine.patpat.entrypoint.loader.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.CommandDispatcher;
 import java.util.function.Consumer;
+//? if <1.19 {
+/*import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+*///?} else {
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+ //?}
 import net.lopymine.patpat.client.resourcepack.AbstractResourceReloadListener;
 import net.lopymine.patpat.packet.*;
 import net.minecraft.client.KeyMapping;

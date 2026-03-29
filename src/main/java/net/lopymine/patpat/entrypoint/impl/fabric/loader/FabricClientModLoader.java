@@ -6,7 +6,11 @@ package net.lopymine.patpat.entrypoint.impl.fabric.loader;
 
 import com.mojang.brigadier.CommandDispatcher;
 import java.util.function.Consumer;
+//? if <1.19 {
+/*import net.fabricmc.fabric.api.client.command.v2.*;
+*///?} else {
 import net.fabricmc.fabric.api.client.command.v2.*;
+ //?}
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.*;
 import net.fabricmc.fabric.api.client.networking.v1.*;
 import net.fabricmc.fabric.api.networking.v1.*;
@@ -27,6 +31,11 @@ import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 //? if <=1.21.8 {
 /*import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+*///?}
+
+//? if <=1.19.3 {
+/*import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.Identifier;
 *///?}
 
 //? if >=26.1 {
@@ -136,7 +145,7 @@ public class FabricClientModLoader implements IClientModLoader {
 				//?} elif <=1.20.4 && >=1.19.4 {
 				/*(packet, player, responseSender) -> {
 				 *///?} else {
-				/*(client, handler, buf, responseSender) -> { P packet = id.getFactory().apply(buf);
+				/*(client, listener, buf, responseSender) -> { P packet = type.getFactory().apply(buf);
 				 *///?}
 				if (packet instanceof PingPatPacket<?, ?> pingPacket) {
 					pingPacket.setPacketReply(responseSender::sendPacket);

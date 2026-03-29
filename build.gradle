@@ -109,8 +109,14 @@ stonecutter {
 	swaps["build_code_time"] = "\"${buildCodeTime}\";".toString()
 	dependencies["yacl"] = MossyUtils.substringBefore(prop("dep.yacl"), "+")
 
+	replacements.string(current.parsed < "1.19") {
+		replace("import net.fabricmc.fabric.api.client.command.v2.", "import net.fabricmc.fabric.api.client.command.v1.")
+		replace("import net.fabricmc.fabric.api.command.v2.", "import net.fabricmc.fabric.api.command.v1.")
+	}
+
 	replacements.string(current.parsed < "1.17") {
 		replace("ControllingOptionsScreenMixin", "ControllingOptionsScreenMixin")
+		replace("ControlsSettingsGuiNewMixin", "ControlsSettingsGuiNewMixin")
 		replace("ControllingOptionsScreen", "ControlsSettingsGuiNew")
 	}
 

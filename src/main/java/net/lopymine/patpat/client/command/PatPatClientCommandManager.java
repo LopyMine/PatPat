@@ -14,7 +14,11 @@ import net.lopymine.patpat.client.command.mod.PatPatClientModEnableCommand;
 import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.extension.TextExtension;
 import net.lopymine.patpat.logger.PatLogger;
+//? if <1.19 {
+/*import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+*///?} else {
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+ //?}
 
 @ExtensionMethod(TextExtension.class)
 public class PatPatClientCommandManager {

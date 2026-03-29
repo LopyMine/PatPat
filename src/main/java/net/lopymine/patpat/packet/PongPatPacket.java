@@ -2,6 +2,11 @@ package net.lopymine.patpat.packet;
 
 import org.jetbrains.annotations.Nullable;
 
+//? if <=1.19.3 {
+/*import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.Identifier;
+*///?}
+
 public interface PongPatPacket<T extends PongPatPacket<T>> extends BasePatPatPacket<T> {
 
 	void setPacketReply(PacketReply sender);
@@ -22,12 +27,12 @@ public interface PongPatPacket<T extends PongPatPacket<T>> extends BasePatPatPac
 		reply.reply(packet);
 	}
 	//?} else {
-	/*default void pong(net.minecraft.resources.Identifier id, net.minecraft.network.FriendlyByteBuf buf) {
-		PacketSender sender = this.getSender();
-		if (sender == null) {
+	/*default void pong(Identifier id, FriendlyByteBuf buf) {
+		PacketReply reply = this.getPacketReply();
+		if (reply == null) {
 			return;
 		}
-		sender.sendPacket(id, buf);
+		reply.reply(id, buf);
 	}
 	*///?}
 

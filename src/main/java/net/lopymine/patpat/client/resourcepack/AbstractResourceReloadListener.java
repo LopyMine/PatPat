@@ -24,9 +24,11 @@ public abstract class AbstractResourceReloadListener implements /*? if >=1.21.9 
 		String path = "%s-reload-listener".formatted(modId);
 		//? if >=1.21 {
 		return Identifier.fromNamespaceAndPath(modId, path);
-		//?} else {
+		//?} elif >=1.19 {
 		/*return Identifier.tryBuild(modId, path);
-		 *///?}
+		 *///?} else {
+		/*return new Identifier(modId, path);
+		*///?}
 	}
 
 	public abstract String getModId();

@@ -90,8 +90,8 @@ public class PatPatServerPacketManager {
 			return;
 		}
 
-		ChunkPos chunkPos = /*? >=1.17 {*/entity.chunkPosition()/*?} else {*//*serverWorld.getChunk(entity./^? if >=1.17 {^/ getBlockPos() /^?} else {^//^blockPosition()^//^?}^/).getPos()*//*?}*/;
-		for (ServerPlayer player : serverWorld.getChunkSource().chunkMap.getPlayers(chunkPos, false)) {
+		ChunkPos chunkPos = /*? >=1.17 {*/entity.chunkPosition()/*?} else {*//*serverWorld.getChunk(entity.blockPosition()).getPos()*//*?}*/;
+		for (ServerPlayer player : serverWorld.getChunkSource().chunkMap.getPlayers(chunkPos, false)/*? if <=1.17.1 {*//*.toList() *//*?}*/) {
 			if (player.equals(sender)) {
 				continue;
 			}

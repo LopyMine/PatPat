@@ -42,7 +42,7 @@ public abstract class NewKeyBindsScreenMixin extends KeyBindsScreen {
 	}
 
 	//? if <1.19.3 {
-	/^@Inject(at = @At("TAIL"), method = "render")
+	@Inject(at = @At("TAIL"), method = "render")
 	private void renderWithTooltip(PoseStack poseStack, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
 		if (this instanceof IRequestableTooltipScreen screen) {
 			TooltipRequest tooltipRequest = screen.myTotemDoll$getCurrentRequest();
@@ -52,7 +52,7 @@ public abstract class NewKeyBindsScreenMixin extends KeyBindsScreen {
 			}
 		}
 	}
-	^///?}
+	//?}
 
 }
 *///?}

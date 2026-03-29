@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ControllingOptionsScreen.class)
-public class ControllingOptionsScreenMixin extends KeyBindsScreen {
+public class ControlsSettingsGuiNewMixin extends KeyBindsScreen {
 
-	public ControllingOptionsScreenMixin(Screen screen, Options options) {
+	public ControlsSettingsGuiNewMixin(Screen screen, Options options) {
 		super(screen, options);
 	}
 

@@ -1,5 +1,6 @@
 package net.lopymine.patpat.modmenu.screen;
 
+import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.lopymine.patpat.entrypoint.EarlyCommonMultiLoader;
 import net.lopymine.patpat.translation.PatTranslation;
 import net.minecraft.*;
@@ -35,7 +36,8 @@ public class NoConfigLibrariesScreen {
 	private static final Set<String> ALLOWED_PROTOCOLS = Set.of("http", "https");
 
 	public static Screen createScreen(Screen parent) {
-		return new ConfirmScreen((bl) -> onConfirm(bl, null), NoConfigLibrariesScreen.TITLE, NoConfigLibrariesScreen.MESSAGE, NoConfigLibrariesScreen.OPEN_YACL_PAGE, NoConfigLibrariesScreen.OPEN_CLOTH_CONFIG_PAGE) {
+		BooleanConsumer booleanConsumer = (result) -> onConfirm(result, null);
+		return new ConfirmScreen(booleanConsumer, NoConfigLibrariesScreen.TITLE, NoConfigLibrariesScreen.MESSAGE, NoConfigLibrariesScreen.OPEN_YACL_PAGE, NoConfigLibrariesScreen.OPEN_CLOTH_CONFIG_PAGE) {
 			//? if >=1.21.9 {
 
 			@Override

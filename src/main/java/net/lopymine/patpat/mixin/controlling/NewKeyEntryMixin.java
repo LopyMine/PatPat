@@ -2,7 +2,7 @@ package net.lopymine.patpat.mixin.controlling;
 
 //? if >=1.17.1 && controlling {
 
-/*import com.blamejared.controlling.client.NewKeyBindsList;
+import com.blamejared.controlling.client.NewKeyBindsList;
 import com.blamejared.controlling.client.NewKeyBindsList.KeyEntry;
 import net.lopymine.patpat.client.keybinding.PatPatKeybinding;
 import net.minecraft.client.KeyMapping;
@@ -16,21 +16,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class NewKeyEntryMixin {
 
 	//? if >=1.19.4 {
-	/^@Shadow/^¹? if forge {¹^//^¹(remap = false)¹^//^¹?}¹^/
+	@Shadow/*? if forge {*//*(remap = false)*//*?}*/
 	@Final
 	private KeyMapping key;
-	^///?} else {
-	@Shadow
+	//?} else {
+	/*@Shadow
 	@Final
 	private KeyMapping keybinding;
-	//?}
+	*///?}
 
-	@Shadow/^? if forge {^//^(remap = false)^//^?}^/
+	@Shadow/*? if forge {*//*(remap = false)*//*?}*/
 	@Final
 	private Button btnChangeKeyBinding;
 
 	//? if <1.19.3 {
-	@Inject(at = @At("TAIL"), method = "<init>")
+	/*@Inject(at = @At("TAIL"), method = "<init>")
 	private void init(NewKeyBindsList list, KeyMapping name, CallbackInfo ci) {
 		if (!(this.keybinding instanceof PatPatKeybinding patPatKeybinding)) {
 			return;
@@ -38,26 +38,26 @@ public class NewKeyEntryMixin {
 
 		this.btnChangeKeyBinding.onTooltip = (button, poseStack, a, b) -> {
 			/^? if >=1.18 {^/
-			/^KeyBindsScreen screen = list.keyBindsScreen;
-			 ^//^?} else {^/
-			KeyBindsScreen screen = ((NewKeyBindsListAccessor) list).getScreenPleaseThanks();
-			/^?}^/
+			KeyBindsScreen screen = list.keyBindsScreen;
+			 /^?} else {^/
+			/^KeyBindsScreen screen = ((NewKeyBindsListAccessor) list).getScreenPleaseThanks();
+			^//^?}^/
 			((net.lopymine.patpat.utils.mixin.IRequestableTooltipScreen) screen).myTotemDoll$requestTooltip((pose, x, y, d) -> {
 				screen.renderTooltip(poseStack, patPatKeybinding.getFullTranslatedKeyMessage(), x, y);
 			});
 		};
 	}
-	//?}
+	*///?}
 
-	@Inject(at = @At(/^? if >=1.19.4 {^/ /^"TAIL" ^//^?} else {^/ "HEAD" /^?}^/), method = /^? if >=1.19.4 {^/ /^"refreshEntry" ^//^?} else {^/ "render" /^?}^/)
+	@Inject(at = @At(/*? if >=1.19.4 {*/ "TAIL" /*?} else {*/ /*"HEAD" *//*?}*/), method = /*? if >=1.19.4 {*/ "refreshEntry" /*?} else {*/ /*"render" *//*?}*/)
 	private void addPatPatTooltipToPatPatKey(CallbackInfo ci) {
 		//? if >=1.19.4 {
-		/^if (!(this.key instanceof PatPatKeybinding patPatKeybinding)) {
+		if (!(this.key instanceof PatPatKeybinding patPatKeybinding)) {
 			return;
 		}
 		this.btnChangeKeyBinding.setTooltip(Tooltip.create(patPatKeybinding.getTranslatedKeyMessage()));
-		^///?}
+		//?}
 	}
 
 }
-*///?}
+//?}

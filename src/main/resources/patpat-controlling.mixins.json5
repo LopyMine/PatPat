@@ -9,26 +9,22 @@
 	"client": [
 		//? controlling && >=1.17.1 {
 
-		/*//? if >=1.19.4 {
-		/^"KeyBindsScreenAccessor",
-		^///?}
-
 		//? if >=1.21 {
-		/^"IPlatformHelperMixin",
-		^///?} else {
-		"NewKeyBindsScreenMixin",
-		//?}
+		"IPlatformHelperMixin",
+		//?} else {
+		/*"NewKeyBindsScreenMixin",
+		*///?}
 
 		//? if <1.19.3 {
-		"NewKeyBindsListMixin",
-		//?}
+		/*"NewKeyBindsListMixin",
+		*///?}
 
 		//? if =1.17.1 {
-		/^"NewKeyBindsListAccessor",
-		^///?}
+		/*"NewKeyBindsListAccessor",
+		*///?}
 
 		"NewKeyEntryMixin"
-		*///?}
+		//?}
 
 		//? if controlling && <=1.17 {
 

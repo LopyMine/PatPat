@@ -12,9 +12,9 @@ public class PoseExtension {
 		/*PoseStack poseStack = new PoseStack();
 		Pose copy = poseStack.last();
 		//? if >=1.19.3 {
-		/^copy.pose().set(entry.pose());
+		copy.pose().set(entry.pose());
 		copy.normal().set(entry.normal());
-		^///?} elif >=1.17 {
+		//?} elif >=1.17 {
 		/^copy.pose().load(entry.pose());
 		copy.normal().load(entry.normal());
 		^///?}

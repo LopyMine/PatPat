@@ -20,7 +20,7 @@ import net.minecraft.commands.*;
 import java.util.*;
 
 //? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
  //?}

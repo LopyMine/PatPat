@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 //? if yacl: >=3.6.6 {
 import dev.isxander.yacl3.gui.image.ImageRenderer;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 //?}
 
 public class YACLBridge {
@@ -229,7 +229,7 @@ public class YACLBridge {
 			builder.customImage(
 					new ImageRenderer() {
 						@Override
-						public int render(GuiGraphicsExtractor graphics, int x, int y, int renderWidth, float delta) {
+						public int render(GuiGraphics graphics, int x, int y, int renderWidth, float delta) {
 							return renderer.getMethod().render(graphics, x, y, renderWidth, delta);
 						}
 

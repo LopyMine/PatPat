@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
 //? >=1.20 {
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 //?} else {
 /*import com.mojang.blaze3d.vertex.PoseStack;
 *///?}
@@ -17,7 +17,7 @@ public class PatRenderer extends AbstractPatImage {
 
 	@FunctionalInterface
 	public interface RenderMethod {
-		int render(/*? >=1.20 {*/GuiGraphicsExtractor graphics/*?} else {*//*PoseStack poseStack*//*?}*/, int x, int y, int renderWidth, float delta);
+		int render(/*? >=1.20 {*/GuiGraphics graphics/*?} else {*//*PoseStack poseStack*//*?}*/, int x, int y, int renderWidth, float delta);
 	}
 
 }

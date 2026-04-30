@@ -7,7 +7,7 @@ package net.lopymine.patpat.entrypoint.impl.fabric.loader;
 import com.mojang.brigadier.CommandDispatcher;
 import java.util.function.Consumer;
 //? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v2.*;
+/*import net.fabricmc.fabric.api.client.command.v1.*;
 *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.*;
  //?}
@@ -39,10 +39,10 @@ import net.minecraft.resources.Identifier;
 *///?}
 
 //? if >=26.1 {
-import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
-//?} else {
-/*import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
- *///?}
+/*import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+*///?} else {
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+ //?}
 
 public class FabricClientModLoader implements IClientModLoader {
 
@@ -67,19 +67,19 @@ public class FabricClientModLoader implements IClientModLoader {
 	@Override
 	public void registerAfterWorldTickListener(Consumer<ClientLevel> consumer) {
 		//? if >=26.1 {
-		ClientTickEvents.END_LEVEL_TICK.register(consumer::accept);
-		//?} else {
-		/*ClientTickEvents.END_WORLD_TICK.register(consumer::accept);
-		 *///?}
+		/*ClientTickEvents.END_LEVEL_TICK.register(consumer::accept);
+		*///?} else {
+		ClientTickEvents.END_WORLD_TICK.register(consumer::accept);
+		 //?}
 	}
 
 	@Override
 	public void registerResourceReloadListener(AbstractResourceReloadListener listener) {
 		//? if >=26.1 {
-		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(listener.getId(), listener);
-		//?} elif >=1.21.9 {
-		/*ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(listener.getId(), listener);
-		 *///?} else {
+		/*ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(listener.getId(), listener);
+		*///?} elif >=1.21.9 {
+		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(listener.getId(), listener);
+		 //?} else {
 		/*ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(listener);
 		 *///?}
 	}
@@ -87,10 +87,10 @@ public class FabricClientModLoader implements IClientModLoader {
 	@Override
 	public void registerKeybinding(KeyMapping keybinding) {
 		//? if >=26.1 {
-		KeyMappingHelper.registerKeyMapping(keybinding);
-		//?} else {
-		/*KeyBindingHelper.registerKeyBinding(keybinding);
-		 *///?}
+		/*KeyMappingHelper.registerKeyMapping(keybinding);
+		*///?} else {
+		KeyBindingHelper.registerKeyBinding(keybinding);
+		 //?}
 	}
 
 	@Override

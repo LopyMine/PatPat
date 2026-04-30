@@ -16,11 +16,11 @@ public class PatPatModMenuIntegration extends AbstractModMenuIntegration {
 		}
 		//?}
 		//? if cloth-config {
-		/*if (EarlyCommonMultiLoader.getInstance().isModLoaded(VersionedThings.CLOTH_CONFIG_ID)) {
+		if (EarlyCommonMultiLoader.getInstance().isModLoaded(VersionedThings.CLOTH_CONFIG_ID)) {
 			return ClothConfigBridge.getScreen(parent);
 		}
 
-		*///?}
+		//?}
 		return NoConfigLibrariesScreen.createScreen(parent);
 	}
 }

@@ -1,21 +1,21 @@
 package net.lopymine.patpat.compat.flashback;
 
 //? flashback {
-/*import com.moulberry.flashback.Flashback;
+import com.moulberry.flashback.Flashback;
 import net.lopymine.patpat.compat.LoadedMods;
-*///?}
+//?}
 
 public class FlashbackManager {
 
 	public static boolean isInReplay() {
 		//? flashback {
-		/*if (!LoadedMods.FLASHBACK_MOD_LOADED) {
+		if (!LoadedMods.FLASHBACK_MOD_LOADED) {
 			return false;
 		}
 		return Flashback.isInReplay();
-		*///?} else {
-		return false;
-		//?}
+		//?} else {
+		/*return false;
+		*///?}
 	}
 
 }

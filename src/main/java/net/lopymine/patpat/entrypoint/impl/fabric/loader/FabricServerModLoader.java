@@ -9,7 +9,7 @@ import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.*;
 import net.fabricmc.fabric.api.client.networking.v1.*;
 //? if <1.19 {
-/*import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+/*import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 *///?} else {
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
  //?}
@@ -80,18 +80,18 @@ public class FabricServerModLoader implements IServerModLoader {
 			//? if >=1.20.5 {
 			if (registrationSide == PacketRegistrationSide.C2S || registrationSide == PacketRegistrationSide.BOTH) {
 				//? if >=26.1 {
-				var play = PayloadTypeRegistry.serverboundPlay();
-				//?} else {
-				/*var play = PayloadTypeRegistry.playC2S();
-				 *///?}
+				/*var play = PayloadTypeRegistry.serverboundPlay();
+				*///?} else {
+				var play = PayloadTypeRegistry.playC2S();
+				 //?}
 				play.register(type.getPacketId(), type.getCodec());
 			}
 			if (registrationSide == PacketRegistrationSide.S2C || registrationSide == PacketRegistrationSide.BOTH) {
 				//? if >=26.1 {
-				var play = PayloadTypeRegistry.clientboundPlay();
-				//?} else {
-				/*var play = PayloadTypeRegistry.playS2C();
-				 *///?}
+				/*var play = PayloadTypeRegistry.clientboundPlay();
+				*///?} else {
+				var play = PayloadTypeRegistry.playS2C();
+				 //?}
 				play.register(type.getPacketId(), type.getCodec());
 			}
 			//?}

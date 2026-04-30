@@ -17,7 +17,7 @@ public class LevelRendererMixin {
 
 	//? if >=26.1 {
 
-	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/FeatureRenderDispatcher;renderTranslucentFeatures()V"), method = "lambda$addMainPass$0")
+	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/FeatureRenderDispatcher;renderTranslucentFeatures()V"), method = "lambda$addMainPass$0")
 	private void markLevelRendering(FeatureRenderDispatcher instance, Operation<Void> original) {
 		PatFeatureRenderer.getInstance().setRenderingLevel(true);
 		original.call(instance);
@@ -28,8 +28,8 @@ public class LevelRendererMixin {
 	private void renderPatOnYourself(CallbackInfo ci) {
 		PatPatClientRenderer.renderPatOnYourself();
 	}
-	//?} else {
-	/*@WrapOperation(
+	*///?} else {
+	@WrapOperation(
 			at = @At(
 					value = "INVOKE",
 					target = "Lnet/minecraft/client/renderer/feature/FeatureRenderDispatcher;renderAllFeatures()V"
@@ -37,8 +37,8 @@ public class LevelRendererMixin {
 			//? if fabric {
 			method = "method_62214"
 			//?} else {
-			/^method = "lambda$addMainPass$1"
-			^///?}
+			/*method = "lambda$addMainPass$1"
+			*///?}
 	)
 	private void markLevelRendering(FeatureRenderDispatcher instance, Operation<Void> original) {
 		PatFeatureRenderer.getInstance().setRenderingLevel(true);
@@ -55,13 +55,13 @@ public class LevelRendererMixin {
 			//? if fabric {
 			method = "method_62214"
 			//?} else {
-			/^method = "lambda$addMainPass$1"
-			^///?}
+			/*method = "lambda$addMainPass$1"
+			*///?}
 	)
 	private void renderPatOnYourself(CallbackInfo ci) {
 		PatPatClientRenderer.renderPatOnYourself();
 	}
-	*///?}
+	//?}
 
 }
 //?}

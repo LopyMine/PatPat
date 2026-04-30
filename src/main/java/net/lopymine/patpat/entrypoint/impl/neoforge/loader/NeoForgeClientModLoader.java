@@ -43,11 +43,11 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 
 	@Override
 	public void registerAfterEntitiesRenderer(CustomRenderer renderer) {
-		//? if >=1.21.2 && <=1.21.8 {
+		//? if >=1.21.5 && <=1.21.8 {
 		/^NeoForge.EVENT_BUS.addListener(Post.class, (p) -> renderer.render(p.getMultiBufferSource(), p.getPoseStack()));
 		^///?}
 
-		//? if <=1.21.1 {
+		//? if <=1.21.4 {
 		NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.class, (p) -> {
 			renderer.render(Minecraft.getInstance().renderBuffers().bufferSource(), p.getPoseStack());
 		});
@@ -67,7 +67,7 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 
 	@Override
 	public void registerResourceReloadListener(AbstractResourceReloadListener listener) {
-		//? if >=1.21.10 {
+		//? if >=1.21.4 {
 		/^NeoForgeClientEntrypoint.getEventBus().addListener(AddClientReloadListenersEvent.class, (e) -> e.addListener(listener.getId(), listener));
 		 ^///?}
 
@@ -116,7 +116,7 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 
 	@Override
 	public void registerClientPackets(Consumer<ClientPacketRegister> consumer) {
-		//? if <=1.21.1 {
+		//? if <=1.21.4 {
 		ClientPacketRegister register = new ClientPacketRegister() {
 			@Override
 			public <P extends BasePatPatPacket<P>> void register(PatPatPacketType<P> type, PatPatClientPacketHandler<P> handler) {

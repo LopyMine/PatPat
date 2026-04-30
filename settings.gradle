@@ -1,5 +1,8 @@
 pluginManagement {
 	repositories {
+		mavenCentral()
+		gradlePluginPortal()
+		mavenLocal()
 		maven {
 			name "Fabric"
 			url "https://maven.fabricmc.net/"
@@ -24,9 +27,6 @@ pluginManagement {
 			name "NeoForge Releases"
 			url "https://maven.neoforged.net/releases"
 		}
-		mavenCentral()
-		gradlePluginPortal()
-		mavenLocal()
 	}
 }
 

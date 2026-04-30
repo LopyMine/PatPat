@@ -73,7 +73,7 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 		NeoForge.EVENT_BUS.addListener(ServerStoppingEvent.class, (s) -> runnable.run());
 	}
 
-	//? if <=1.21.1 {
+	//? if <=1.21.4 {
 	@SuppressWarnings("unchecked")
 	//?}
 	@Override
@@ -92,7 +92,7 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 						handler.handle(serverPlayer, packet);
 					};
 
-					//? if <=1.21.1 {
+					//? if <=1.21.4 {
 					IPayloadHandler<P> clientPayloadHandler = (packet, context) -> {
 						PatPatClientPacketHandler<P> clientHandler = (PatPatClientPacketHandler<P>) NeoForgeServerModLoader.this.clientHandlers.get(packet.getPatPatType().getId());
 						if (clientHandler == null) {
@@ -106,7 +106,7 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 					switch (registrationSide) {
 						case C2S -> registrar.playToServer(type.getPacketId(), type.getCodec(), payloadHandler);
 						case S2C -> registrar.playToClient(type.getPacketId(), type.getCodec()
-								//? if <=1.21.1 {
+								//? if <=1.21.4 {
 								, clientPayloadHandler
 								//?}
 						);

@@ -16,9 +16,9 @@ import net.lopymine.patpat.client.manager.PatPatClientManager;
 public abstract class CameraMixin {
 
 	/*? >1.20.2 && <=1.21.11 {*/
-	/*@Shadow
+	@Shadow
 	private float partialTickTime;
-	*///?} elif <=1.21.11 {
+	//?} elif <=1.21.11 {
 	/*@Unique
 	private float partialTickTime = 0;
 
@@ -27,8 +27,8 @@ public abstract class CameraMixin {
 		this.partialTickTime = tickDelta;
 	}
 	*///?} else {
-	@Shadow public abstract float getCameraEntityPartialTicks(DeltaTracker deltaTracker);
-	//?}
+	/*@Shadow public abstract float getCameraEntityPartialTicks(DeltaTracker deltaTracker);
+	*///?}
 
 	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getEyeHeight()F"), method = "tick")
 	private float applyPattingEffect(Entity entity, Operation<Float> original) {
@@ -48,8 +48,8 @@ public abstract class CameraMixin {
 		}
 
 		//? if >=26.1 {
-		float partialTickTime = this.getCameraEntityPartialTicks(Minecraft.getInstance().getDeltaTracker());
-		//?}
+		/*float partialTickTime = this.getCameraEntityPartialTicks(Minecraft.getInstance().getDeltaTracker());
+		*///?}
 
 		if (PatPatClientManager.expired(patEntity, partialTickTime)) {
 			PatPatClientManager.removePatEntity(patEntity);

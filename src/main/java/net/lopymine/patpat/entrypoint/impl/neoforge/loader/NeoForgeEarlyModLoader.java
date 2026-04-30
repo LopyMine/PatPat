@@ -24,7 +24,7 @@ public class NeoForgeEarlyModLoader implements IEarlyCommonModLoader {
 		/^return !FMLEnvironment.isProduction();
 		^///?}
 
-		//? if <=1.21.1 {
+		//? if <=1.21.4 {
 		return !FMLEnvironment.production;
 		//?}
 	}
@@ -42,7 +42,7 @@ public class NeoForgeEarlyModLoader implements IEarlyCommonModLoader {
 			/^return FMLLoader.getCurrent().getLoadingModList().getModFileById(modId) != null;
 			^///?}
 
-			//? if <=1.21.1 {
+			//? if <=1.21.4 {
 			return FMLLoader.getLoadingModList().getModFileById(modId) != null;
 			//?}
 		}
@@ -61,7 +61,7 @@ public class NeoForgeEarlyModLoader implements IEarlyCommonModLoader {
 			/^return file.getFile().getContents().openFile(path);
 			^///?}
 
-			//? if <=1.21.1 {
+			//? if <=1.21.4 {
 			return Files.newInputStream(file.getFile().findResource(path));
 			//?}
 		} catch (IOException e) {
@@ -79,7 +79,7 @@ public class NeoForgeEarlyModLoader implements IEarlyCommonModLoader {
 		};
 		^///?}
 
-		//? if <=1.21.1 {
+		//? if <=1.21.4 {
 		return switch (FMLEnvironment.dist) {
 			case CLIENT -> ModEnvironment.CLIENT;
 			case DEDICATED_SERVER -> ModEnvironment.SERVER;

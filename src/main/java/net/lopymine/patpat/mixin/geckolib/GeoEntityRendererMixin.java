@@ -12,17 +12,17 @@ import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.minecraft.world.entity.Entity;
 
 //? if >=1.19.3 && <=1.21.11 {
-/*import software.bernie.geckolib.renderer.GeoEntityRenderer;
-*///?}
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
+//?}
 
 //? if >=1.21.9 && <=1.21.11 {
-/*import net.minecraft.client.renderer.state.CameraRenderState;
-*///?}
+import net.minecraft.client.renderer.state.CameraRenderState;
+//?}
 
 //? if >=26.1 {
-import com.geckolib.renderer.GeoEntityRenderer;
+/*import com.geckolib.renderer.GeoEntityRenderer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-//?}
+*///?}
 
 @Pseudo
 @Mixin(/*? if <1.19.3 {*/ /*targets = "software.bernie.geckolib3.renderer.geo.GeoEntityRenderer" *//*?} else {*/ GeoEntityRenderer.class /*?}*/)

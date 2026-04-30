@@ -41,14 +41,18 @@
 	],
 	"custom": {
 		"translators": {
-			"TastyPommesLul": "Germany (90%)",
-			"Hamka": "Polish (90%)",
-			"MrLemonHog": "Ukrainian",
-			"Balojan": "Vietnamese (42%)",
-			"okunamayanad": "Turkish (23%)",
-			"Gallium, Matt TCL": "French (28%)",
-			"Nuts0905": "European Spanish",
-			"Baymaxawa": "Chinese Simplified"
+			"MrLemonHog": "Українська (Україна) (100%)",
+			"Nuts": "Español (España) (100%)",
+			"Baymaxawa": "简体中文 (中国大陆) (100%)",
+			"alinco8": "日本語 (日本) (99%)",
+			"TastyPommesLul, Clemens Schmidt": "Deutsch (Deutschland) (97%)",
+			"Hamka": "Polski (Polska) (90%)",
+			"승수": "한국어 (대한민국) (41%)",
+			"Balojan": "Tiếng Việt (Việt Nam) (42%)",
+			"Gallium, Matt TCL": "Français (France) (28%)",
+			"hectorg22": "Português (Brasil) (23%)",
+			"okunamayanad": "Türkçe (Türkiye) (23%)",
+			"Valdemras “a game” Chacha": "Lietuvių (Lietuva) (21%)"
 		},
 		"modmenu": {
 			"links": {

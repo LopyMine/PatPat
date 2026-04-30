@@ -67,7 +67,7 @@ test {
 }
 
 if (fabric) {
-	if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0 && stonecutter.compare(stonecutter.current.version.toString(), "1.21.11") < 0) {
+	if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0) {
 		test {
 			useJUnitPlatform()
 		}
@@ -122,6 +122,11 @@ stonecutter {
 		replace("ControlsScreen", "KeyBindsScreen")
 	}
 
+    replacements.string(current.parsed >= "1.19") {
+        replace("net.fabricmc.fabric.api.client.command.v1", "net.fabricmc.fabric.api.client.command.v2")
+        replace("net.fabricmc.fabric.api.command.v1", "net.fabricmc.fabric.api.command.v2")
+    }
+
 	replacements.string(current.parsed >= "1.21") {
 		replace("import net.minecraft.client.gui.screens.controls.*;", "import net.minecraft.client.gui.screens.options.controls.*;")
 	}
@@ -147,6 +152,11 @@ stonecutter {
 stonecutter.filters.exclude("**/*.accesswidener")
 stonecutter.filters.exclude("**/*.cfg")
 stonecutter.filters.exclude("**/*.classTweaker")
+
+// TODO: Сделать, чтобы таска один раз запускалась, а не на каждую версию
+tasks.register("submodulesUpdate", Exec) {
+	commandLine = ["git", "submodule", "update", "--init", "--force", "--remote"]
+}
 
 jar {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE

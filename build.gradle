@@ -17,9 +17,9 @@ mossyDependencies {
 	parchment = prop("build.parchment")
 
 	additional {
-		override("modCompileOnly", "flashback")
-		override("modCompileOnly", "replaymod")
-		//override("modCompileOnly", "iris")
+		override("compileOnly", "flashback")
+		override("compileOnly", "replaymod")
+		//override("compileOnly", "iris")
 
 		disable("fabric-permissions-api")
 	}
@@ -38,7 +38,7 @@ dependencies {
 			exclude(group: "net.fabricmc.fabric-api")
 		}
 	} else if (fpa != "unknown") {
-		include(modImplementation("me.lucko:fabric-permissions-api:${fpa}")){
+		include(implementation("me.lucko:fabric-permissions-api:${fpa}")){
 			exclude(group: "net.fabricmc.fabric-api")
 		}
 	}

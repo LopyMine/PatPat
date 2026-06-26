@@ -7,8 +7,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState.SelectedGameMode;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.gamerules.GameRules;
@@ -45,7 +44,7 @@ public class PatPatClientGameTest implements FabricClientGameTest {
 				ServerPlayer player = minecraftServer.getPlayerList().getPlayer(nickname);
 				assert player != null;
 				ServerLevel serverLevel = player.level();
-				Wolf entity = EntityType.WOLF.create(serverLevel, EntitySpawnReason.COMMAND);
+				Wolf entity = EntityTypes.WOLF.create(serverLevel, EntitySpawnReason.COMMAND);
 				assert entity != null;
 				entity.rotate(Rotation.CLOCKWISE_180);
 				entity.tame(player);

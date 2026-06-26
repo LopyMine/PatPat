@@ -13,13 +13,12 @@ import net.minecraft.client.multiplayer.ServerData;
 
 public class PatPatClientProxLibManager {
 
+	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("ProxLibManager");
+	private static boolean disabledBecauseReceivedPacketFromServer;
+
 	private PatPatClientProxLibManager() {
 		throw new IllegalStateException("Manager class");
 	}
-
-	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("ProxLibManager");
-
-	private static boolean disabledBecauseReceivedPacketFromServer;
 
 	public static void register() {
 		PatPatClientProxLibManager.reset();

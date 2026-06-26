@@ -1,14 +1,11 @@
 package net.lopymine.patpat.client.config.sub;
 
-import lombok.*;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
+import lombok.*;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.keybinding.*;
 import net.lopymine.patpat.utils.CodecUtils;
-
 import static net.lopymine.patpat.utils.CodecUtils.option;
 
 @Getter
@@ -17,9 +14,9 @@ import static net.lopymine.patpat.utils.CodecUtils.option;
 public class PatPatClientMainConfig {
 
 	public static final Codec<PatPatClientMainConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-					option("modEnabled", true, Codec.BOOL, PatPatClientMainConfig::isModEnabled),
-					option("debugLogEnabled", false, Codec.BOOL, PatPatClientMainConfig::isDebugLogEnabled),
-					option("patCombination", PatPatKeybinding.DEFAULT_COMBINATION, KeybindingCombination.CODEC, PatPatClientMainConfig::getPatCombination)
+			option("modEnabled", true, Codec.BOOL, PatPatClientMainConfig::isModEnabled),
+			option("debugLogEnabled", false, Codec.BOOL, PatPatClientMainConfig::isDebugLogEnabled),
+			option("patCombination", PatPatKeybinding.DEFAULT_COMBINATION, KeybindingCombination.CODEC, PatPatClientMainConfig::getPatCombination)
 	).apply(instance, PatPatClientMainConfig::new));
 
 	private boolean modEnabled;

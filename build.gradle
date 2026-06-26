@@ -11,14 +11,8 @@ mossyDependencies {
 	fabricApi = prop("build.fabric_api")
 	fabricLoader = prop("build.fabric_loader")
 
-	forge = prop("build.forge")
-
 	neoForge = prop("build.neoforge")
 	parchment = prop("build.parchment")
-
-	if (sc.current.project.startsWith("forge-") && sc.current.version.toString() == "1.20.1") {
-		disableMixinAp = "true"
-	}
 
 	additional {
 		override("mossyCompileOnly", "flashback")
@@ -35,7 +29,6 @@ mossyDependencies {
 }
 
 def fabric = sc.current.project.contains("fabric")
-def forge = sc.current.project.startsWith("forge-")
 
 repositories {
 	maven {
@@ -55,11 +48,6 @@ dependencies {
 
 		testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
 	}
-
-	if (forge) {
-		annotationProcessor("net.fabricmc:sponge-mixin:0.16.5+mixin.0.8.7")
-		mossyImplementation("maven.modrinth:mixinbooster:0.1.2+1.20.1")
-	}
 }
 
 test {
@@ -67,10 +55,8 @@ test {
 }
 
 if (fabric) {
-	if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0) {
-		test {
-			useJUnitPlatform()
-		}
+	test {
+		useJUnitPlatform()
 	}
 
 	loom.runConfigs.configureEach { config ->
@@ -79,20 +65,18 @@ if (fabric) {
 		}
 	}
 
-	if (sc.current.parsed.matches(">=26.1")) {
-		fabricApi {
-			configureTests {
-				createSourceSet = true
-				modId = "patpat-mod-test-${project.name}"
-				enableGameTests = true // Default is true
-				enableClientGameTests = true // Default is true
-				eula = true // By setting this to true, you agree to the Minecraft EULA.
-			}
+	fabricApi {
+		configureTests {
+			createSourceSet = true
+			modId = "patpat-mod-test-${project.name}"
+			enableGameTests = true // Default is true
+			enableClientGameTests = true // Default is true
+			eula = true // By setting this to true, you agree to the Minecraft EULA.
 		}
+	}
 
-		tasks.named("runClientGameTest", JavaExec) {
-			jvmArgs "-ea"
-		}
+	tasks.named("runClientGameTest", JavaExec) {
+		jvmArgs "-ea"
 	}
 
 	configurations.configureEach {
@@ -109,43 +93,8 @@ stonecutter {
 	swaps["build_code_time"] = "\"${buildCodeTime}\";".toString()
 	dependencies["yacl"] = MossyUtils.substringBefore(prop("dep.yacl"), "+")
 
-	replacements.string(current.parsed < "1.17") {
-		replace("ControllingOptionsScreenMixin", "ControllingOptionsScreenMixin")
-		replace("ControlsSettingsGuiNewMixin", "ControlsSettingsGuiNewMixin")
-		replace("ControllingOptionsScreen", "ControlsSettingsGuiNew")
-	}
-
-	replacements.string(current.parsed >= "1.18") {
-		replace("KeyBindsScreenAccessor", "KeyBindsScreenAccessor")
-		replace("KeyBindsScreenMixin", "KeyBindsScreenMixin")
-		replace("NewKeyBindsScreen", "NewKeyBindsScreen")
-		replace("ControlsScreen", "KeyBindsScreen")
-	}
-
-    replacements.string(current.parsed >= "1.19") {
-        replace("net.fabricmc.fabric.api.client.command.v1", "net.fabricmc.fabric.api.client.command.v2")
-        replace("net.fabricmc.fabric.api.command.v1", "net.fabricmc.fabric.api.command.v2")
-    }
-
-	replacements.string(current.parsed >= "1.21") {
-		replace("import net.minecraft.client.gui.screens.controls.*;", "import net.minecraft.client.gui.screens.options.controls.*;")
-	}
-
-	replacements.string(current.parsed >= "1.21.9") {
-		replace("int keyCode, int scanCode, int modifiers", "net.minecraft.client.input.KeyEvent event")
-		replace("double mouseX, double mouseY, int button", "net.minecraft.client.input.MouseButtonEvent event, boolean bl")
-	}
-
-	replacements.string(current.parsed >= "1.21.11") {
-		replace("ProxPacketIdentifier", "ProxPacketIdentifier")
-		replace("ResourceLocation", "Identifier")
-		replace(".location()", ".identifier()")
-		replace("RenderType", "RenderTypes")
-	}
-
-	replacements.string(current.parsed >= "26.1") {
-		replace("net.minecraft.client.gui.GuiGraphics", "net.minecraft.client.gui.GuiGraphicsExtractor")
-		replace("GuiGraphics", "GuiGraphicsExtractor")
+	replacements.string(current.parsed >= "1.12.2") {
+		replace("sound.location()", "sound.location()")
 	}
 }
 

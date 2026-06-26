@@ -35,7 +35,6 @@ public class PatEntity {
 	}
 
 	public float getProgress(float tickDelta) {
-		//? >1.20.2 {
 		net.minecraft.client.multiplayer.ClientLevel world = net.minecraft.client.Minecraft.getInstance().level;
 		if (world == null) {
 			return 0;
@@ -45,10 +44,6 @@ public class PatEntity {
 		float tickMillis = tickManager.tickrate() > 20 ? (2500F / tickManager.millisecondsPerTick()) : 50F;
 		float v = Math.max(this.tickProgress, 0) * tickMillis;
 		float v1 = tickManager.isFrozen() ? 0 : tickDelta * tickMillis;
-		//?} else {
-		/*float v = Math.max(this.tickProgress, 0) * 50F;
-		float v1 = tickDelta * 50F;
-		*///?}
 		return v + v1;
 	}
 

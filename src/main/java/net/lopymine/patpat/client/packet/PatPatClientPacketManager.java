@@ -1,41 +1,38 @@
 package net.lopymine.patpat.client.packet;
 
+import java.util.UUID;
 import lombok.*;
-import net.lopymine.patpat.entrypoint.ClientMultiLoader;
-import net.lopymine.patpat.logger.PatLogger;
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
+import net.lopymine.patpat.client.config.resourcepack.*;
+import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
+import net.lopymine.patpat.common.Version;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader.ClientPacketRegister;
+import net.lopymine.patpat.logger.PatLogger;
+import net.lopymine.patpat.packet.*;
+import net.lopymine.patpat.packet.c2s.*;
+import net.lopymine.patpat.packet.s2c.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.social.PlayerSocialManager;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
-import net.lopymine.patpat.client.config.resourcepack.*;
-import net.lopymine.patpat.client.render.PatPatClientRenderer;
-import net.lopymine.patpat.common.Version;
-import net.lopymine.patpat.packet.*;
-import net.lopymine.patpat.packet.c2s.*;
-import net.lopymine.patpat.packet.s2c.*;
-
-import java.util.UUID;
 
 public class PatPatClientPacketManager {
+
+	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("PacketManager");
+	@Getter
+	@Setter
+	private static Version currentPatPatServerPacketVersion = Version.PACKET_V1_VERSION;
 
 	private PatPatClientPacketManager() {
 		throw new IllegalStateException("Manager class");
 	}
-
-	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("PacketManager");
-
-	@Getter
-	@Setter
-	private static Version currentPatPatServerPacketVersion = Version.PACKET_V1_VERSION;
 
 	public static void register(ClientPacketRegister register) {
 		register.register(HelloPatPatPlayerS2CPacket.TYPE, PatPatClientPacketManager::handleHelloPacket);
@@ -147,7 +144,7 @@ public class PatPatClientPacketManager {
 				|| (config.getMultiPlayerConfig().getListMode() == ListMode.BLACKLIST && playerListConfig.getValues().containsKey(playerUuid))
 				|| socialManager.isBlocked(playerUuid)
 				|| socialManager.isHidden(playerUuid)
-				/*? >=1.17 {*/ || socialManager.shouldHideMessageFrom(playerUuid)/*?}*/;
+				|| socialManager.shouldHideMessageFrom(playerUuid);
 	}
 
 	public static PatPacket<ServerLevel, ?> getPatPacket(Entity pattedEntity) {

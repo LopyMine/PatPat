@@ -1,17 +1,13 @@
 package net.lopymine.patpat.client.config.migrate;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
+import java.io.*;
 import lombok.Setter;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.common.config.migrate.AbstractConfigMigrateHandler;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 // TODO: Update method for future config updates
 // TODO: Write test on this migration

@@ -4,9 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.function.Supplier;
 import lombok.*;
-import net.lopymine.patpat.translation.PatTranslation;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.EnumWithText;
+import net.lopymine.patpat.translation.PatTranslation;
 import net.lopymine.patpat.utils.CodecUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
@@ -35,7 +35,7 @@ public class PatPatClientFunConfig {
 		NOT_EMPTY_HAND,
 		ALWAYS;
 
-		public static final Codec<PvpMode> CODEC = StringRepresentable.fromEnum(PvpMode::values/*? if <=1.18.2 {*//*, PvpMode::byName *//*?}*/);
+		public static final Codec<PvpMode> CODEC = StringRepresentable.fromEnum(PvpMode::values);
 
 		@Nullable
 		public static PvpMode byName(String name) {

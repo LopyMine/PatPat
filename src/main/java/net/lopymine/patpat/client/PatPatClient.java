@@ -1,16 +1,15 @@
 package net.lopymine.patpat.client;
 
+import java.util.*;
 import net.lopymine.patpat.client.command.PatPatClientCommandManager;
 import net.lopymine.patpat.client.config.PatPatClientStatsConfig;
 import net.lopymine.patpat.client.event.PatPatClientPlayerEvents;
 import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
-import net.lopymine.patpat.client.render.*;
 import net.lopymine.patpat.client.packet.*;
+import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.client.resourcepack.*;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.compat.LoadedMods;
-
-import java.util.*;
 import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.logger.PatLogger;
 

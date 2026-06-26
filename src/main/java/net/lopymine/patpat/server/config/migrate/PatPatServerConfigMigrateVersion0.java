@@ -67,7 +67,7 @@ public class PatPatServerConfigMigrateVersion0 extends AbstractConfigMigrateHand
 		Configs configs = null;
 		AtomicBoolean success = new AtomicBoolean(true);
 		try (FileReader reader = new FileReader(file)) {
-			JsonObject rootObj = /*? <=1.17.1 {*//*new JsonParser().parse*//*?} else {*/JsonParser.parseReader/*?}*/(reader).getAsJsonObject();
+			JsonObject rootObj = JsonParser.parseReader(reader).getAsJsonObject();
 
 			String listModeStr = rootObj.get("listMode").getAsString();
 			PatPatServerConfig config = this.config == null ? PatPatServerConfig.getNewInstance().get() : this.config;
@@ -78,7 +78,7 @@ public class PatPatServerConfigMigrateVersion0 extends AbstractConfigMigrateHand
 			Map<UUID, String> oldConfigMap = new HashMap<>();
 			JsonObject jsonObject = rootObj.getAsJsonObject("list");
 
-			jsonObject/*? if >=1.19.3 {*/.asMap()/*?}*/.entrySet().forEach(entry -> {
+			jsonObject.asMap().entrySet().forEach(entry -> {
 				try {
 					String uuid = entry.getKey();
 					String nickname = entry.getValue().getAsString();

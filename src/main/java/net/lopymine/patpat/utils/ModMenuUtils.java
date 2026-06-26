@@ -1,14 +1,11 @@
 package net.lopymine.patpat.utils;
 
-import lombok.experimental.UtilityClass;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.Identifier;
-
-import net.lopymine.patpat.translation.PatTranslation;
-
 import java.util.function.Function;
+import lombok.experimental.UtilityClass;
+import net.lopymine.patpat.translation.PatTranslation;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.*;
+import net.minecraft.resources.Identifier;
 
 @UtilityClass
 public class ModMenuUtils {

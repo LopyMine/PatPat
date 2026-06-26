@@ -1,17 +1,15 @@
 package net.lopymine.patpat.client.config.list;
 
+import java.io.File;
+import java.util.*;
 import lombok.Getter;
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.common.config.list.AbstractListConfig;
+import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.utils.*;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
-
-import net.lopymine.patpat.logger.PatLogger;
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.common.config.PatPatConfigManager;
-
-import java.io.File;
-import java.util.*;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
@@ -20,15 +18,14 @@ public class PatPatClientIgnoreMobListConfig extends AbstractListConfig<EntityTy
 	private static final PatLogger LOGGER = PatPatClient.LOGGER.extend(PatPatClientIgnoreMobListConfig.class.getSimpleName());
 	private static final File CONFIG_FILE = PatPatConfigManager.CONFIG_PATH.resolve("ignore_mob_list.txt").toFile();
 	private static final PatPatClientIgnoreMobListConfig INSTANCE = new PatPatClientIgnoreMobListConfig();
-
-	public static PatPatClientIgnoreMobListConfig getInstance() {
-		return getInitialized(INSTANCE);
-	}
-
 	private final Set<EntityType<?>> values = new HashSet<>();
 
 	private PatPatClientIgnoreMobListConfig() {
 		super(new HashSet<>(), LOGGER, CONFIG_FILE);
+	}
+
+	public static PatPatClientIgnoreMobListConfig getInstance() {
+		return getInitialized(INSTANCE);
 	}
 
 	public boolean addMob(@NotNull EntityType<?> type) {

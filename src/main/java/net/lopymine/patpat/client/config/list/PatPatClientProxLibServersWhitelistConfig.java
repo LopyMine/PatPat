@@ -1,14 +1,13 @@
 package net.lopymine.patpat.client.config.list;
 
+import java.io.File;
+import java.util.*;
 import lombok.Getter;
-import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 import net.lopymine.patpat.common.config.list.AbstractListConfig;
+import net.lopymine.patpat.logger.PatLogger;
 import org.jetbrains.annotations.*;
-
-import java.io.File;
-import java.util.*;
 
 @Getter
 public class PatPatClientProxLibServersWhitelistConfig extends AbstractListConfig<String> {
@@ -19,15 +18,14 @@ public class PatPatClientProxLibServersWhitelistConfig extends AbstractListConfi
 	private static final PatPatClientProxLibServersWhitelistConfig INSTANCE = new PatPatClientProxLibServersWhitelistConfig();
 
 
-
 	private final List<String> values = new ArrayList<>();
-
-	public static PatPatClientProxLibServersWhitelistConfig getInstance() {
-		return getInitialized(INSTANCE);
-	}
 
 	private PatPatClientProxLibServersWhitelistConfig() {
 		super(DEFAULT_VALUES, LOGGER, CONFIG_FILE);
+	}
+
+	public static PatPatClientProxLibServersWhitelistConfig getInstance() {
+		return getInitialized(INSTANCE);
 	}
 
 	public static void rewriteServersList(List<String> serversList) {

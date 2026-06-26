@@ -2,26 +2,18 @@
 
 package net.lopymine.patpat.client.command.info;
 
-import lombok.experimental.ExtensionMethod;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-
+import lombok.experimental.ExtensionMethod;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.entrypoint.EarlyCommonMultiLoader;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.CommandText;
-
 import net.minecraft.SharedConstants;
-import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.Action;
-
-//? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-*///?} else {
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
- //?}
+import net.minecraft.network.chat.*;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
@@ -38,7 +30,7 @@ public class PatPatClientInfoCommand {
 		String platform = EarlyCommonMultiLoader.getInstance().getFullPlatform();
 
 		String version = PatPat.MOD_VERSION + "+" + PatPat.BUILD_CODE_TIME;
-		String minecraftVersion = SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*/ /*getName *//*?}*/();
+		String minecraftVersion = SharedConstants.getCurrentVersion().name();
 		String debugInformation = "Platform: %s%nMinecraft: %s%nVersion: %s"
 				.formatted(platform, minecraftVersion, version);
 

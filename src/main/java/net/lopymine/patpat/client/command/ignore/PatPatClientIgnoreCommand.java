@@ -2,30 +2,21 @@
 
 package net.lopymine.patpat.client.command.ignore;
 
-import lombok.experimental.ExtensionMethod;
-import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EntityType;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-
+import java.util.Objects;
+import lombok.experimental.ExtensionMethod;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.lopymine.patpat.client.command.argument.EntityTypeArgumentType;
 import net.lopymine.patpat.client.config.list.PatPatClientIgnoreMobListConfig;
 import net.lopymine.patpat.extension.ClientCommandExtension;
-import net.lopymine.patpat.utils.CommandText;
-import net.lopymine.patpat.utils.VersionedThings;
-
-import java.util.Objects;
-
-//? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-*///?} else {
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
- //?}
-import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
+import net.lopymine.patpat.utils.*;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EntityType;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.argument;
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientIgnoreCommand {
@@ -48,10 +39,7 @@ public class PatPatClientIgnoreCommand {
 						.suggests((context, builder) -> SharedSuggestionProvider
 								.suggestResource(VersionedThings.ENTITY_TYPE.stream()
 												.filter(
-														/*? >1.19.2 {*/entityType -> entityType.isEnabled((context.getSource()).enabledFeatures()) && entityType.canSummon()
-														/*?} else {*/
-														/*EntityType::canSummon
-														*//*?}*/
+														entityType -> entityType.isEnabled((context.getSource()).enabledFeatures()) && entityType.canSummon()
 												),
 										builder,
 										EntityType::getKey,

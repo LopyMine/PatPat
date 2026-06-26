@@ -1,8 +1,7 @@
 package net.lopymine.patpat.client.keybinding;
 
-import lombok.*;
-
 import com.mojang.blaze3d.platform.InputConstants.Key;
+import lombok.*;
 
 @Getter(AccessLevel.PRIVATE)
 public class PressableKeybindingCombination extends KeybindingCombination {

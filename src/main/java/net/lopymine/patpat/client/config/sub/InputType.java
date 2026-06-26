@@ -1,11 +1,9 @@
 package net.lopymine.patpat.client.config.sub;
 
-import net.lopymine.patpat.client.PatPatClient;
-import net.minecraft.util.StringRepresentable;
-
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.serialization.Codec;
-
+import net.lopymine.patpat.client.PatPatClient;
+import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.*;
 
 public enum InputType implements StringRepresentable {
@@ -14,7 +12,7 @@ public enum InputType implements StringRepresentable {
 	SCANCODE,
 	MOUSE;
 
-	public static final Codec<InputType> CODEC = StringRepresentable.fromEnum(InputType::values/*? if <=1.18.2 {*//*, InputType::byName *//*?}*/);
+	public static final Codec<InputType> CODEC = StringRepresentable.fromEnum(InputType::values);
 
 	@Nullable
 	private static InputType byName(String name) {
@@ -26,14 +24,6 @@ public enum InputType implements StringRepresentable {
 		}
 	}
 
-	public InputConstants.Type toVanillaType() {
-		return switch (this) {
-			case KEYSYM -> InputConstants.Type.KEYSYM;
-			case SCANCODE -> InputConstants.Type.SCANCODE;
-			case MOUSE -> InputConstants.Type.MOUSE;
-		};
-	}
-
 	public static InputType of(InputConstants.Type type) {
 		return switch (type) {
 			case KEYSYM -> KEYSYM;
@@ -42,6 +32,13 @@ public enum InputType implements StringRepresentable {
 		};
 	}
 
+	public InputConstants.Type toVanillaType() {
+		return switch (this) {
+			case KEYSYM -> InputConstants.Type.KEYSYM;
+			case SCANCODE -> InputConstants.Type.SCANCODE;
+			case MOUSE -> InputConstants.Type.MOUSE;
+		};
+	}
 
 	@Override
 	public @NotNull String getSerializedName() {

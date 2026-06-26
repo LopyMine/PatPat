@@ -1,10 +1,11 @@
 package net.lopymine.patpat.client.config.resourcepack;
 
-import lombok.Getter;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
+import java.io.*;
+import java.util.*;
+import lombok.Getter;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.resourcepack.PatPatClientResourcePackManager;
 import net.lopymine.patpat.utils.RLUtils;
@@ -12,8 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.entity.LivingEntity;
-import java.io.*;
-import java.util.*;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
@@ -85,15 +84,12 @@ public final class CustomAnimationSettingsConfig {
 
 	private void loadSize() {
 		try {
-			/*? >=1.19 {*/
-			Optional<Resource>/*?} else {*//*Resource*//*?}*/ resource = Minecraft.getInstance().getResourceManager().getResource(this.texture);
-			//? >=1.19 {
+			Optional<Resource> resource = Minecraft.getInstance().getResourceManager().getResource(this.texture);
 			if (resource.isEmpty()) {
 				PatPatClient.LOGGER.error("Failed to find texture at '{}'", this.texture);
 				return;
 			}
-			//?}
-			InputStream inputStream = resource/*? if >=1.19 {*/.get().open()/*?} else {*//*.getInputStream()*//*?}*/;
+			InputStream inputStream = resource.get().open();
 			NativeImage nativeImage = NativeImage.read(inputStream);
 			this.textureWidth  = nativeImage.getWidth();
 			this.textureHeight = nativeImage.getHeight();

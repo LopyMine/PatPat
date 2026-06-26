@@ -1,6 +1,5 @@
 package net.lopymine.patpat.mixin;
 
-//? if >=1.21.11 {
 
 import com.llamalad7.mixinextras.injector.wrapoperation.*;
 import java.util.function.Predicate;
@@ -32,4 +31,3 @@ public class LocalPlayerMixin {
 	}
 
 }
-//?}

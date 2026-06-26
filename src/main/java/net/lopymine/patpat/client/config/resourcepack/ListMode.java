@@ -1,11 +1,9 @@
 package net.lopymine.patpat.client.config.resourcepack;
 
 import com.mojang.serialization.Codec;
-
 import net.lopymine.patpat.utils.TextUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.*;
-
+import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Nullable;
 
 public enum ListMode {

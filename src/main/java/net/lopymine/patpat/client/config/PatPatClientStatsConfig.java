@@ -1,24 +1,20 @@
 package net.lopymine.patpat.client.config;
 
-import java.util.function.Supplier;
-import lombok.*;
-import net.lopymine.patpat.*;
-import net.lopymine.patpat.entrypoint.ClientMultiLoader;
-import net.lopymine.patpat.logger.PatLogger;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.*;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
+import java.io.File;
+import java.util.HashMap;
+import java.util.concurrent.*;
+import java.util.function.Supplier;
+import lombok.*;
+import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
+import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.utils.*;
-
-import java.io.File;
-import java.util.*;
-import java.util.concurrent.*;
-
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.LivingEntity;
 import static net.lopymine.patpat.utils.CodecUtils.option;
 
 @Getter
@@ -40,22 +36,6 @@ public class PatPatClientStatsConfig {
 
 	private PatPatClientStatsConfig() {
 		throw new IllegalArgumentException();
-	}
-
-	public void count(LivingEntity pattedEntity) {
-		this.totalPatsCounter.totalPats++;
-		Identifier id = VersionedThings.ENTITY_TYPE.getKey(pattedEntity.getType());
-		if (id == null) {
-			return;
-		}
-		String entityId = id.toString();
-		PatsCounter patsCounter = this.patsPerEntity.get(entityId);
-		if (patsCounter == null) {
-			this.patsPerEntity.put(entityId, new PatsCounter(0));
-		} else {
-			patsCounter.totalPats++;
-		}
-		AutoSaveManager.markToSave();
 	}
 
 	public static void registerSaveHooks() {
@@ -80,6 +60,22 @@ public class PatPatClientStatsConfig {
 
 	private static PatPatClientStatsConfig read() {
 		return ConfigUtils.readConfig(CODEC, CONFIG_FILE, LOGGER);
+	}
+
+	public void count(LivingEntity pattedEntity) {
+		this.totalPatsCounter.totalPats++;
+		Identifier id = VersionedThings.ENTITY_TYPE.getKey(pattedEntity.getType());
+		if (id == null) {
+			return;
+		}
+		String entityId = id.toString();
+		PatsCounter patsCounter = this.patsPerEntity.get(entityId);
+		if (patsCounter == null) {
+			this.patsPerEntity.put(entityId, new PatsCounter(0));
+		} else {
+			patsCounter.totalPats++;
+		}
+		AutoSaveManager.markToSave();
 	}
 
 	public void saveAsync() {

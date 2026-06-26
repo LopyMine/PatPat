@@ -1,42 +1,35 @@
 package net.lopymine.patpat.client.keybinding;
 
-import lombok.*;
-import net.lopymine.patpat.utils.TextUtils;
-import net.minecraft.client.*;
-import net.minecraft.network.chat.*;
-import org.lwjgl.glfw.GLFW;
-
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.InputConstants.*;
-
-import net.lopymine.patpat.PatPat;
+import java.util.List;
+import lombok.Getter;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
-
-import java.util.*;
+import net.minecraft.client.*;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
 
 public class PatPatKeybinding extends KeyMapping {
 
 	public static final KeybindingCombination DEFAULT_COMBINATION = getDefaultCombination();
+	private final PressableKeybindingCombination combination = new PressableKeybindingCombination();
+	@Getter
+	private boolean binding;
+	@Getter
+	private boolean canStartBinding = true;
+	public PatPatKeybinding(KeybindingCombination patCombination) {
+		super("patpat.keybinding.pat", -1, PatPatClientKeybindingManager.CATEGORY);
+		this.combination.setAttributeKey(patCombination.getAttributeKey());
+		this.combination.setKey(patCombination.getKey());
+	}
 
 	private static @NotNull KeybindingCombination getDefaultCombination() {
 		return new KeybindingCombination(
 				Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_LEFT_SHIFT),
 				Type.MOUSE.getOrCreate(GLFW.GLFW_MOUSE_BUTTON_2)
 		);
-	}
-
-	private final PressableKeybindingCombination combination = new PressableKeybindingCombination();
-	@Getter
-	private boolean binding;
-	@Getter
-	private boolean canStartBinding = true;
-
-	public PatPatKeybinding(KeybindingCombination patCombination) {
-		super("patpat.keybinding.pat", -1, /*? if <1.21.9 {*//*PatPat.MOD_NAME*//*?} else {*/PatPatClientKeybindingManager.CATEGORY/*?}*/);
-		this.combination.setAttributeKey(patCombination.getAttributeKey());
-		this.combination.setKey(patCombination.getKey());
 	}
 
 	public void startBinding() {
@@ -102,7 +95,7 @@ public class PatPatKeybinding extends KeyMapping {
 		if (this.combination.onlyOneKey()) {
 			this.combination.set(key, pressed);
 			this.setDown(pressed);
-			if(!pressed){
+			if (!pressed) {
 				PatPatClientManager.setPatCooldown(0);
 			}
 			return this.isDown();
@@ -130,15 +123,7 @@ public class PatPatKeybinding extends KeyMapping {
 	@Override
 	@NotNull
 	public Component getTranslatedKeyMessage() {
-		//? if >=1.19 {
 		return this.getFullTranslatedKeyMessage();
-		//?} else {
-		/*if (this.combination.onlyOneKey()) {
-			return this.getFullTranslatedKeyMessage();
-		} else {
-			return TextUtils.literal("< ... >");
-		}
-		*///?}
 	}
 
 	@NotNull
@@ -150,9 +135,9 @@ public class PatPatKeybinding extends KeyMapping {
 		List<Key> keys = this.combination.getKeys();
 		keys.forEach(key -> {
 			if (key.getType() == Type.KEYSYM) {
-				this.combination.set(key, InputConstants.isKeyDown(Minecraft.getInstance().getWindow()/*? if <=1.21.8 {*//*.getWindow() *//*?}*/, key.getValue()));
+				this.combination.set(key, InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), key.getValue()));
 			} else {
-				this.combination.set(key, GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow()/*? if <=1.21.8 {*//*.getWindow() *//*?} else {*/ .handle() /*?}*/, key.getValue()) == 1);
+				this.combination.set(key, GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().handle(), key.getValue()) == 1);
 			}
 		});
 		boolean allPressed = this.combination.allPressed();

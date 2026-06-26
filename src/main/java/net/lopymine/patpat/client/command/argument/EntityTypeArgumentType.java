@@ -1,18 +1,13 @@
 package net.lopymine.patpat.client.command.argument;
 
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityType;
-
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-
+import com.mojang.brigadier.exceptions.*;
 import net.lopymine.patpat.client.command.PatPatClientCommandManager;
-import net.lopymine.patpat.utils.CommandText;
-import net.lopymine.patpat.utils.VersionedThings;
-
+import net.lopymine.patpat.utils.*;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityTypeArgumentType implements ArgumentType<EntityType<?>> {
@@ -20,7 +15,8 @@ public class EntityTypeArgumentType implements ArgumentType<EntityType<?>> {
 	public static final DynamicCommandExceptionType FAILED_PARSING = new DynamicCommandExceptionType(o -> CommandText.text("error.failed_when_parsing", o).finish());
 	public static final DynamicCommandExceptionType UNKNOWN_ENTITY_TYPE = new DynamicCommandExceptionType(o -> CommandText.text("error.unknown_entity_type", o).finish());
 
-	private EntityTypeArgumentType() {}
+	private EntityTypeArgumentType() {
+	}
 
 	public static @NotNull EntityTypeArgumentType entityType() {
 		return new EntityTypeArgumentType();

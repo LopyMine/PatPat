@@ -2,30 +2,21 @@
 
 package net.lopymine.patpat.client.command.list;
 
-import lombok.experimental.ExtensionMethod;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-
-import net.lopymine.patpat.client.command.argument.*;
+import java.util.*;
+import lombok.experimental.ExtensionMethod;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType;
 import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.common.command.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.ClientCommandExtension;
-import net.lopymine.patpat.utils.*;
-
-import net.minecraft.commands.*;
-
-import java.util.*;
-
-//? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-*///?} else {
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
- //?}
-import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
+import net.lopymine.patpat.utils.ClientNetworkUtils;
+import net.minecraft.commands.SharedSuggestionProvider;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.argument;
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientListChangeCommand {

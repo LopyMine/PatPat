@@ -1,12 +1,9 @@
 package net.lopymine.patpat.utils;
 
+import java.util.LinkedList;
+import java.util.regex.*;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.*;
-
-import net.lopymine.patpat.PatPat;
-
-import java.util.*;
-import java.util.regex.*;
 
 public class TextUtils {
 
@@ -21,19 +18,11 @@ public class TextUtils {
 	}
 
 	public static MutableComponent empty() {
-		//? >=1.19 {
 		return Component.empty();
-		//?} else {
-		/*return TextComponent.EMPTY.plainCopy();
-		 *///?}
 	}
 
 	public static MutableComponent literal(Object text) {
-		//? >=1.19 {
 		return Component.literal(String.valueOf(text));
-		//?} else {
-		/*return new TextComponent(String.valueOf(text));
-		*///?}
 	}
 
 	public static Component of(String key) {

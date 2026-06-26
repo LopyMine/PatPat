@@ -11,7 +11,7 @@ public class PatTranslation {
 
 	public static MutableComponent text(String path, Object... args) {
 		String key = String.format("%s.%s", PatPat.MOD_ID, path);
-		
+
 		return EarlyCommonMultiLoader.getInstance().getEnvironment() == ModEnvironment.SERVER ?
 				TextUtils.processWithArgs(PatPatDedicatedServerTranslationManager.getOrDefault(key), args)
 				:

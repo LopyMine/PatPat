@@ -2,25 +2,17 @@
 
 package net.lopymine.patpat.client.command.list;
 
-import lombok.experimental.ExtensionMethod;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-
-import net.lopymine.patpat.client.config.*;
+import java.util.*;
+import lombok.experimental.ExtensionMethod;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
-import net.lopymine.patpat.client.config.sub.*;
+import net.lopymine.patpat.client.config.sub.PatPatClientMultiplayerConfig;
 import net.lopymine.patpat.common.command.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.ClientCommandExtension;
-
-import java.util.*;
-
-//? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-*///?} else {
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
- //?}
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)

@@ -1,29 +1,18 @@
 package net.lopymine.patpat.client.keybinding;
 
-import lombok.Getter;
 import com.mojang.blaze3d.platform.InputConstants;
-import net.lopymine.patpat.entrypoint.ClientMultiLoader;
-import net.minecraft.client.gui.screens.options.controls.*;
-//? if >=1.19.4 && controlling {
-
-import net.lopymine.patpat.mixin.controlling.KeyBindsScreenAccessor;
-
-//?}
-import net.minecraft.client.gui.screens./*? if >=1.21 {*/options./*?}*/controls.*;
-import net.minecraft.client.KeyMapping;
-
+import lombok.Getter;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
-
-//? if >=1.21.9 {
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
+import net.lopymine.patpat.mixin.KeyBindsScreenAccessor;
 import net.lopymine.patpat.utils.RLUtils;
-//?}
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.screens.options.controls.KeyBindsScreen;
 
 public class PatPatClientKeybindingManager {
 
-	//? if >=1.21.9 {
 	public static final net.minecraft.client.KeyMapping.Category CATEGORY = net.minecraft.client.KeyMapping.Category.register(RLUtils.modId("keybinding"));
-	//?}
 
 	@Getter
 	private static PatPatKeybinding patKeybinding;
@@ -33,7 +22,7 @@ public class PatPatClientKeybindingManager {
 	}
 
 	public static void register() {
-		if(patKeybinding != null){
+		if (patKeybinding != null) {
 			PatPatClient.LOGGER.error("PatPatClientKeybindingManager.register cannot called twice!");
 			return;
 		}
@@ -47,7 +36,7 @@ public class PatPatClientKeybindingManager {
 
 	public static void handlePatPatKeybindingOnKeyPressed(
 			KeyMapping mapping,
-			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*KeyBindsScreen *//*?}*/ screen,
+			KeyBindsScreen screen,
 			int keyCode,
 			int scanCode,
 			Runnable cancel
@@ -58,16 +47,14 @@ public class PatPatClientKeybindingManager {
 				keybinding.sendBindingKeys();
 				screen.selectedKey = null;
 			}
-			//? if >=1.19.4 && controlling {
 			((KeyBindsScreenAccessor) (screen)).getList().refreshEntries();
-			//?}
 			cancel.run();
 		}
 	}
 
 	public static void handlePatPatKeybindingOnMouseClick(
 			KeyMapping mapping,
-			/*? if >=1.18 {*/KeyBindsScreen/*?} else {*/ /*KeyBindsScreen *//*?}*/ screen,
+			KeyBindsScreen screen,
 			int button,
 			Runnable cancel
 	) {
@@ -77,9 +64,7 @@ public class PatPatClientKeybindingManager {
 				keybinding.sendBindingKeys();
 				screen.selectedKey = null;
 			}
-			//? if >=1.19.4 && controlling {
 			((KeyBindsScreenAccessor) (screen)).getList().refreshEntries();
-			//?}
 			cancel.run();
 		}
 	}

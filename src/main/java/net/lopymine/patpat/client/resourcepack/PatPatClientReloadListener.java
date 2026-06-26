@@ -1,15 +1,13 @@
 package net.lopymine.patpat.client.resourcepack;
 
+import java.util.*;
 import java.util.concurrent.Executor;
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.PackResources;
-import net.minecraft.server.packs.resources.*;
-
-import net.lopymine.patpat.client.config.PatPatClientConfig;
-
-import java.util.*;
+import net.minecraft.server.packs.resources.ResourceManager;
 
 public class PatPatClientReloadListener extends AbstractResourceReloadListener {
 

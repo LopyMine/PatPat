@@ -75,7 +75,7 @@ public class PatPatServerPacketManager {
 			}
 		}
 
-		Level level = sender./*? >=1.20 {*/level()/*?} else {*//*level*//*?}*/;
+		Level level = sender.level();
 		if (!(level instanceof ServerLevel serverWorld)) {
 			return;
 		}
@@ -90,8 +90,8 @@ public class PatPatServerPacketManager {
 			return;
 		}
 
-		ChunkPos chunkPos = /*? >=1.17 {*/entity.chunkPosition()/*?} else {*//*serverWorld.getChunk(entity.blockPosition()).getPos()*//*?}*/;
-		for (ServerPlayer player : serverWorld.getChunkSource().chunkMap.getPlayers(chunkPos, false)/*? if <=1.17.1 {*//*.toList() *//*?}*/) {
+		ChunkPos chunkPos = entity.chunkPosition();
+		for (ServerPlayer player : serverWorld.getChunkSource().chunkMap.getPlayers(chunkPos, false)) {
 			if (player.equals(sender)) {
 				continue;
 			}

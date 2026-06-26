@@ -1,9 +1,9 @@
 package net.lopymine.patpat.client.event;
 
-import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.packet.*;
+import net.lopymine.patpat.client.packet.PatPatClientPacketManager;
 import net.lopymine.patpat.common.Version;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 
 public class PatPatClientPlayerEvents {
 

@@ -1,13 +1,8 @@
 package net.lopymine.patpat.client.packet;
 
-import net.lopymine.patpat.compat.LoadedMods;
-import net.lopymine.patpat.compat.flashback.FlashbackManager;
-import net.lopymine.patpat.compat.replaymod.ReplayModManager;
-import net.lopymine.patpat.logger.PatLogger;
-import net.lopymine.patpat.client.PatPatClient;
 import java.io.*;
-import net.lopymine.patpat.packet.s2c.PatEntityS2CPacketV2;
-import net.minecraft.client.Minecraft;
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.logger.PatLogger;
 
 public class PatPatClientProxLibPacketManager {
 
@@ -16,12 +11,12 @@ public class PatPatClientProxLibPacketManager {
 	public static final int PAT_PAT_PACKETS_ID = 2;
 
 	//? if proxlib {
-	public static final me.enderkill98.proxlib.ProxPacketIdentifier PAT_PACKET_IDENTIFIER = me.enderkill98.proxlib.ProxPacketIdentifier.of(PAT_PAT_PACKETS_ID, 0);
-	//?}
+	/*public static final me.enderkill98.proxlib.ProxPacketIdentifier PAT_PACKET_IDENTIFIER = me.enderkill98.proxlib.ProxPacketIdentifier.of(PAT_PAT_PACKETS_ID, 0);
+	 *///?}
 
 	public static void register() {
 		//? if proxlib {
-		if (!LoadedMods.PROX_LIB_MOD_LOADED) {
+		/*if (!LoadedMods.PROX_LIB_MOD_LOADED) {
 			return;
 		}
 		me.enderkill98.proxlib.client.ProxLib.addHandlerFor(PAT_PACKET_IDENTIFIER, (entity, id, data) -> {
@@ -38,12 +33,12 @@ public class PatPatClientProxLibPacketManager {
 				LOGGER.debug("Failed to handle proximity packet from player: {}, packet id: {}, data: {}", entity.getName().getString(), id, data, e);
 			}
 		});
-		//?}
+		*///?}
 	}
 
 	public static void onPat(int pattedEntityId) {
 		//? if proxlib {
-		if (!PatPatClientProxLibManager.isEnabled()) {
+		/*if (!PatPatClientProxLibManager.isEnabled()) {
 			LOGGER.debug("Trying to make proximity pat, but proximity packets disabled!");
 			return;
 		}
@@ -58,7 +53,7 @@ public class PatPatClientProxLibPacketManager {
 		} catch (Exception e) {
 			LOGGER.debug("Failed to send proximity packet, patted entity: {}, packet id: {}, data: {}", pattedEntityId, PAT_PAT_PACKETS_ID, e);
 		}
-		//?}
+		*///?}
 	}
 
 	private static int decodeProxyPatPacket(byte[] data) throws IOException {
@@ -88,13 +83,13 @@ public class PatPatClientProxLibPacketManager {
 			if (j > 5) {
 				throw new RuntimeException("VarInt too big");
 			}
-		} while((b & 128) == 128);
+		} while ((b & 128) == 128);
 
 		return i;
 	}
 
 	private static void writeVarInt(DataOutputStream data, int value) throws IOException {
-		while((value & -128) != 0) {
+		while ((value & -128) != 0) {
 			data.writeByte(value & 127 | 128);
 			value >>>= 7;
 		}

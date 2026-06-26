@@ -15,9 +15,7 @@ import net.lopymine.patpat.utils.*;
 
 import java.net.*;
 import java.util.*;
-//? if >=1.21.9 {
 import net.minecraft.client.input.KeyEvent;
-//?}
 
 public class NoConfigLibrariesScreen {
 
@@ -41,7 +39,7 @@ public class NoConfigLibrariesScreen {
 
 	private static void onConfirm(boolean bl) {
 		try {
-			String url = (bl ? YACL_MODRINTH_LINK : CLOTH_CONFIG_API_MODRINTH_LINK).formatted(SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*/ /*getName *//*?}*/(), EarlyCommonMultiLoader.getInstance().getPlatform());
+			String url = (bl ? YACL_MODRINTH_LINK : CLOTH_CONFIG_API_MODRINTH_LINK).formatted(SharedConstants.getCurrentVersion().name(), EarlyCommonMultiLoader.getInstance().getPlatform());
 
 			URI link = new URI(url);
 			String string = link.getScheme();
@@ -66,27 +64,16 @@ public class NoConfigLibrariesScreen {
 			this.parent = parent;
 		}
 
-		//? if >=1.21.9 {
 
 		@Override
 		public boolean keyPressed(KeyEvent keyEvent) {
 			if (keyEvent.key() == 256 && this.shouldCloseOnEsc()) {
-				Minecraft.getInstance().setScreen(this.parent);
+				Minecraft.getInstance().gui.setScreen(this.parent);
 				return true;
 			}
 			return super.keyPressed(keyEvent);
 		}
 
-		//?} else {
-			/*@Override
-			public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
-				if (keyCode == 256 && this.shouldCloseOnEsc()) {
-					Minecraft.getInstance().setScreen(parent);
-					return true;
-				}
-				return super.keyPressed(keyCode, scanCode, modifiers);
-			}
-			*///?}
 
 		@Override
 		public boolean shouldCloseOnEsc() {

@@ -1,24 +1,20 @@
 package net.lopymine.patpat.client.config.resourcepack;
 
-import lombok.Getter;
-import lombok.experimental.ExtensionMethod;
-
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
+import java.util.*;
+import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.extension.EntityExtension;
 import net.lopymine.patpat.utils.VersionedThings;
-
-import java.util.*;
 import org.jetbrains.annotations.*;
 
-@Getter
 @ExtensionMethod(EntityExtension.class)
-public class EntityConfig {
+public record EntityConfig(@NotNull String entityId, @Nullable String entityName, @Nullable UUID entityUuid,
+                           @Nullable List<PlayerConfig> entitiesFrom) {
 
 	public static final Codec<EntityConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.STRING.fieldOf("id").forGetter(EntityConfig::getEntityId),
+			Codec.STRING.fieldOf("id").forGetter(EntityConfig::entityId),
 			Codec.STRING.optionalFieldOf("name").forGetter(EntityConfig::getOptionalEntityName),
 			VersionedThings.UUID_CODEC.optionalFieldOf("uuid").forGetter(EntityConfig::getOptionalEntityUuid),
 			PlayerConfig.CODEC.listOf().optionalFieldOf("from").forGetter(EntityConfig::getOptionalFrom)
@@ -33,10 +29,10 @@ public class EntityConfig {
 		}
 		return null;
 	}, entityData -> {
-		String id = entityData.getEntityId();
-		String name = entityData.getEntityName();
-		UUID uuid = entityData.getEntityUuid();
-		List<PlayerConfig> from = entityData.getEntitiesFrom();
+		String id = entityData.entityId();
+		String name = entityData.entityName();
+		UUID uuid = entityData.entityUuid();
+		List<PlayerConfig> from = entityData.entitiesFrom();
 		if (name == null && uuid == null && from == null) {
 			return Either.left(id);
 		}
@@ -58,20 +54,8 @@ public class EntityConfig {
 		return Either.left(list);
 	});
 
-	@NotNull
-	private final String entityId;
-	@Nullable
-	private final String entityName;
-	@Nullable
-	private final UUID entityUuid;
-	@Nullable
-	private final List<PlayerConfig> entitiesFrom;
-
 	public EntityConfig(@NotNull String entityId, Optional<String> entityName, Optional<UUID> entityUuid, Optional<List<PlayerConfig>> entitiesFrom) {
-		this.entityId     = entityId;
-		this.entityName   = entityName.orElse(null);
-		this.entityUuid   = entityUuid.orElse(null);
-		this.entitiesFrom = entitiesFrom.orElse(null);
+		this(entityId, entityName.orElse(null), entityUuid.orElse(null), entitiesFrom.orElse(null));
 	}
 
 	public static EntityConfig of(@NotNull String entityId) {

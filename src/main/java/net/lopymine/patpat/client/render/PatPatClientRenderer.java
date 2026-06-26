@@ -1,47 +1,33 @@
 package net.lopymine.patpat.client.render;
 
-import lombok.experimental.ExtensionMethod;
-import net.lopymine.patpat.entrypoint.ClientMultiLoader;
-
-import net.lopymine.patpat.client.config.*;
-import net.lopymine.patpat.client.config.sub.*;
-import net.lopymine.patpat.client.render.feature.*;
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.network.protocol.game.ServerboundSwingPacket;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-
 import com.mojang.blaze3d.vertex.PoseStack;
-
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.config.resourcepack.*;
+import net.lopymine.patpat.client.config.sub.PatPatClientVisualConfig;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.client.packet.*;
+import net.lopymine.patpat.client.render.feature.*;
+import net.lopymine.patpat.client.render.feature.PatFeatureRenderer.Submit;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
 import net.lopymine.patpat.common.config.vector.Vec3f;
 import net.lopymine.patpat.compat.flashback.FlashbackCompat;
 import net.lopymine.patpat.compat.replaymod.ReplayModCompat;
 import net.lopymine.patpat.entity.PatEntity;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.extension.VertexConsumerExtension;
-
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import net.minecraft.client.*;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.network.protocol.game.ServerboundSwingPacket;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.*;
 import org.jetbrains.annotations.Nullable;
-//? if <=1.19.2 {
-/*import com.mojang.math.Quaternion;
-*///?} else {
 import org.joml.Quaternionf;
-//?}
-
-//? if <=1.21.4 {
-/*import com.mojang.blaze3d.systems.RenderSystem;
- *//*?}*/
-
 
 
 @ExtensionMethod(VertexConsumerExtension.class)
@@ -58,31 +44,9 @@ public class PatPatClientRenderer {
 		clientPats.offer(packet);
 	}
 
-	public record PacketPat(LivingEntity pattedEntity, PlayerConfig playerConfig, LocalPlayer player,
-	                        boolean replayModPacket) {
-
-		@Override
-		public String toString() {
-			return "PatPacket{" +
-					"pattedEntity=" + this.pattedEntity.toString() +
-					", playerConfig=" + this.playerConfig.toString() +
-					", player=" + this.player.toString() +
-					", replayModPacket=" + this.replayModPacket +
-					'}';
-		}
-	}
-
 	public static void register() {
-		//? if <=1.21.8 {
-		/*ClientMultiLoader.getInstance().registerAfterEntitiesRenderer((source, stack) -> {
-			PatFeatureRenderer.getInstance().setRenderingLevel(true);
-			PatPatClientRenderer.renderPatOnYourself();
-			PatFeatureRenderer.getInstance().render(source);
-			PatFeatureRenderer.getInstance().setRenderingLevel(false);
-		});
-		*///?}
 		ClientMultiLoader.getInstance().registerAfterWorldTickListener((level) -> {
-			boolean frozen = /*? if >1.20.2 {*/ level.tickRateManager().isFrozen(); /*?} else {*/ /*false; *//*?}*/
+			boolean frozen = level.tickRateManager().isFrozen();
 			PatPatClientConfig config = PatPatClientConfig.getInstance();
 
 			PacketPat packet;
@@ -141,25 +105,19 @@ public class PatPatClientRenderer {
 		});
 	}
 
-	public static void renderPatOnYourself() {
+	public static void submitPatOnYourself(SubmitNodeCollector collector) {
 		if (!PatPatClientConfig.getInstance().getVisualConfig().isCameraShackingEnabled()) {
 			return;
 		}
 
 		LocalPlayer player = Minecraft.getInstance().player;
-		Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+		Camera camera = Minecraft.getInstance().gameRenderer.mainCamera();
 		if (player == null || camera.isDetached()) {
 			return;
 		}
 
 		EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-		//? if >=1.21.2 {
 		float tickDelta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
-		//?} elif >=1.21 {
-		/*float tickDelta = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
-		*///?} else {
-		/*float tickDelta = Minecraft.getInstance().getFrameTime();
-		*///?}
 		int light = dispatcher.getPackedLightCoords(player, tickDelta);
 
 		PatEntity patEntity = PatPatClientManager.getPatEntity(player);
@@ -172,17 +130,17 @@ public class PatPatClientRenderer {
 			return;
 		}
 
-		PatPatClientRenderer.render(new PoseStack(), camera.rotation(), patEntity, player, new Vec3f(0.0F, Mth.lerp(tickDelta, camera.eyeHeightOld, camera.eyeHeight) - 0.2F, 0.0F), tickDelta, light, null);
+		PatPatClientRenderer.submit(collector, new PoseStack(), camera.rotation(), patEntity, player, new Vec3f(0.0F, Mth.lerp(tickDelta, camera.eyeHeightOld, camera.eyeHeight) - 0.2F, 0.0F), tickDelta, light);
 	}
 
-	public static RenderResult render(PoseStack matrices, /*? if >=1.19.3 {*/ Quaternionf /*?} else {*/ /*Quaternion *//*?}*/ cameraRotation, @Nullable PatEntity providedPatEntity, @Nullable Entity entity, @Nullable Vec3f overrideOffset, float tickDelta, int light, @Nullable MultiBufferSource provider) {
+	public static RenderResult submit(SubmitNodeCollector collector, PoseStack matrices, Quaternionf cameraRotation, @Nullable PatEntity providedPatEntity, @Nullable Entity entity, @Nullable Vec3f overrideOffset, float tickDelta, int light) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		if (!config.getMainConfig().isModEnabled()) {
 			return RenderResult.FAILED;
 		}
 
 		PatEntity patEntity = providedPatEntity;
-		if(patEntity == null && entity instanceof LivingEntity livingEntity){
+		if (patEntity == null && entity instanceof LivingEntity livingEntity) {
 			patEntity = PatPatClientManager.getPatEntity(livingEntity);
 		}
 
@@ -190,17 +148,13 @@ public class PatPatClientRenderer {
 			return RenderResult.FAILED;
 		}
 
-		int numberToMirrorTexture = /*? if >=1.21 {*/1/*?} else {*/ /*-1*//*?}*/;
+		int numberToMirrorTexture = 1;
 
 		CustomAnimationSettingsConfig animation = patEntity.getAnimation();
 		FrameConfig frameConfig = animation.getFrameConfig();
 		enableBlend();
-		//? if <=1.20.4 {
-		/*float nameLabelHeight = entity != null ? entity.getBbHeight() : 0.0F;
-		 *///?} else {
 		net.minecraft.world.phys.Vec3 vec3d = entity != null ? entity.getAttachments().getNullable(net.minecraft.world.entity.EntityAttachment.NAME_TAG, 0, entity.getViewYRot(tickDelta)) : null;
 		float nameLabelHeight = vec3d != null ? (float) vec3d.y : 0.0F;
-		//?}
 		float yOffset = overrideOffset != null ? overrideOffset.getY() : (nameLabelHeight * PatPatClientManager.getAnimationProgress(patEntity, tickDelta)) + 0.11F - frameConfig.offsetY() - config.getVisualConfig().getAnimationOffsets().getY();
 
 		matrices.pushPose();
@@ -234,7 +188,7 @@ public class PatPatClientRenderer {
 		float v1 = 0.0F;
 		float v2 = 1.0F;
 
-		PatFeatureRenderer.getInstance().request(animation.getTexture(), matrices.last(), x1, y1, x2, y2, z, u1, v1, u2, v2, light, provider);
+		PatFeatureRenderer.submit(collector, new Submit(animation.getTexture(), matrices.last().copy(), x1, y1, x2, y2, z, u1, v1, u2, v2, light));
 
 		matrices.popPose();
 		disableBlend();
@@ -258,22 +212,30 @@ public class PatPatClientRenderer {
 		matrixStack.scale(1F, PatPatClientManager.getAnimationProgress(patEntity, tickDelta), 1F);
 	}
 
+	private static void enableBlend() {
+	}
+
+	private static void disableBlend() {
+	}
+
 	public enum RenderResult {
 		RENDERED,
 		RENDERER_SHOULD_CANCEL,
 		FAILED
 	}
 
-	private static void enableBlend() {
-		//? if <=1.21.4 {
-		/*RenderSystem.enableBlend();
-		*//*?}*/
-	}
+	public record PacketPat(LivingEntity pattedEntity, PlayerConfig playerConfig, LocalPlayer player,
+	                        boolean replayModPacket) {
 
-	private static void disableBlend() {
-		//? if <=1.21.4 {
-		/*RenderSystem.disableBlend();
-		*//*?}*/
+		@Override
+		public String toString() {
+			return "PatPacket{" +
+					"pattedEntity=" + this.pattedEntity.toString() +
+					", playerConfig=" + this.playerConfig.toString() +
+					", player=" + this.player.toString() +
+					", replayModPacket=" + this.replayModPacket +
+					'}';
+		}
 	}
 
 }

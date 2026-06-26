@@ -2,27 +2,20 @@
 
 package net.lopymine.patpat.client.command.list;
 
-import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-
-import net.lopymine.patpat.client.command.argument.*;
+import lombok.experimental.ExtensionMethod;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.lopymine.patpat.client.command.argument.ListModeArgumentType;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.client.config.sub.PatPatClientMultiplayerConfig;
 import net.lopymine.patpat.extension.ClientCommandExtension;
-import net.lopymine.patpat.utils.*;
-
-import net.minecraft.network.chat.*;
-
-//? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-*///?} else {
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
- //?}
-import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
+import net.lopymine.patpat.utils.CommandText;
+import net.minecraft.network.chat.Component;
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.argument;
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientListSetModeCommand {
@@ -33,8 +26,8 @@ public class PatPatClientListSetModeCommand {
 
 	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
 		return literal("set")
-						.then(argument("mode", ListModeArgumentType.listMode())
-								.executes(PatPatClientListSetModeCommand::onSetListMode));
+				.then(argument("mode", ListModeArgumentType.listMode())
+						.executes(PatPatClientListSetModeCommand::onSetListMode));
 	}
 
 	private static int onSetListMode(CommandContext<FabricClientCommandSource> context) {

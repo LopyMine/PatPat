@@ -11,11 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
-//? if >=1.21.9 {
 import net.minecraft.server.players.NameAndId;
- //?} else {
-/*import com.mojang.authlib.GameProfile;
-*///?}
 
 public interface IServerModLoader {
 
@@ -34,7 +30,7 @@ public interface IServerModLoader {
 	boolean hasPermission(ServerPlayer player, String permission);
 
 	CompletableFuture<Boolean> hasOfflinePermission(
-			/*? if >=1.21.9 {*/ NameAndId /*?} else {*/ /*GameProfile *//*?}*/ profile,
+			 NameAndId  profile,
 			MinecraftServer server,
 			String permission
 	);

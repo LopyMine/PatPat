@@ -1,18 +1,16 @@
 package net.lopymine.patpat.client.packet;
 
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.minecraft.client.multiplayer.ClientLevel;
 
-import net.lopymine.patpat.client.config.PatPatClientConfig;
-
 public class PatPatClientProxLibPacketRateLimitManager {
-
-	private PatPatClientProxLibPacketRateLimitManager() {
-		throw new IllegalStateException("Manager class");
-	}
 
 	private static int ticks;
 	private static int packetsSentPerSecond;
+	private PatPatClientProxLibPacketRateLimitManager() {
+		throw new IllegalStateException("Manager class");
+	}
 
 	public static void register() {
 		ClientMultiLoader.getInstance().registerAfterWorldTickListener(PatPatClientProxLibPacketRateLimitManager::tick);

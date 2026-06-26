@@ -6,8 +6,6 @@ import net.lopymine.patpat.entrypoint.loader.IEarlyCommonModLoader;
 import net.lopymine.patpat.entrypoint.impl.fabric.loader.FabricEarlyModLoader;
 //?} elif neoforge {
 /*import net.lopymine.patpat.entrypoint.impl.neoforge.loader.NeoForgeEarlyModLoader;
-*///?} elif forge {
-/*import net.lopymine.patpat.entrypoint.impl.forge.loader.ForgeEarlyCommonModLoader;
 *///?}
 
 public class EarlyCommonMultiLoader {
@@ -15,9 +13,7 @@ public class EarlyCommonMultiLoader {
 	//? if fabric {
 	private static final IEarlyCommonModLoader LOADER = new FabricEarlyModLoader();
 	//?} elif neoforge {
-	/*private static final IEarlyCommonModLoader LOADER = new NeoForgeEarlyModLoader();
-	*///?} elif forge {
-	/*private static final IEarlyCommonModLoader LOADER = new ForgeEarlyCommonModLoader();
+	/*private static final IEarlyCommonModLoader LOADER = new NeoForgeEarlyModLoader();;
 	*///?}
 
 	public static IEarlyCommonModLoader getInstance() {

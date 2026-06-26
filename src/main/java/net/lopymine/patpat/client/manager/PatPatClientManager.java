@@ -1,32 +1,26 @@
 package net.lopymine.patpat.client.manager;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.*;
+import lombok.*;
 import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
+import net.lopymine.patpat.client.config.list.PatPatClientIgnoreMobListConfig;
+import net.lopymine.patpat.client.config.resourcepack.*;
+import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
+import net.lopymine.patpat.client.render.PatPatClientRenderer;
+import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
+import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.extension.*;
+import net.lopymine.patpat.logger.PatLogger;
+import net.lopymine.patpat.utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.*;
-
-import net.lopymine.patpat.logger.PatLogger;
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
-import net.lopymine.patpat.client.config.list.PatPatClientIgnoreMobListConfig;
-import net.lopymine.patpat.client.config.resourcepack.CustomAnimationSettingsConfig;
-import net.lopymine.patpat.client.config.resourcepack.PlayerConfig;
-import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
-import net.lopymine.patpat.client.render.PatPatClientRenderer;
-import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
-import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.utils.ProfilerUtils;
-import net.lopymine.patpat.utils.VersionedThings;
-
-import java.util.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 @ExtensionMethod(value = {EntityExtension.class, GameProfileExtension.class})
 public class PatPatClientManager {
@@ -65,7 +59,7 @@ public class PatPatClientManager {
 	}
 
 	public static PatEntity pat(@NotNull LivingEntity entity, @NotNull PlayerConfig whoPatted) {
-		LOGGER.debug("{} just patted {}", whoPatted.getName(), entity.getName().getString());
+		LOGGER.debug("{} just patted {}", whoPatted.name(), entity.getName().getString());
 
 		UUID uuid = entity.getUUID();
 		PatEntity patEntity = PAT_ENTITIES.get(uuid);
@@ -175,30 +169,11 @@ public class PatPatClientManager {
 		}
 
 		ProfilerUtils.push("patpat$pick");
-		//? if >=1.20.5 && <=1.21.10 {
-		/*double blockInteractionRange = player.blockInteractionRange();
-		double entityInteractionRange = player.entityInteractionRange();
-		*///?}
 
-		//? if >=1.21.2 {
 		float tickDelta = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
-		//?} elif >=1.21 {
-		/*float tickDelta = minecraft.getTimer().getGameTimeDeltaPartialTick(false);
-		 *///?} else {
-		/*float tickDelta = minecraft.getFrameTime();
-		 *///?}
 
 		cameraEntity.mark(true);
-		//? if >=1.21.11 {
 		HitResult result = player.raycastHitResult(tickDelta, cameraEntity);
-		//?} elif >=1.20.5 {
-		/*HitResult result = minecraft.gameRenderer.pick(cameraEntity, blockInteractionRange, entityInteractionRange, tickDelta);
-		*///?} else {
-		/*HitResult oldResult = minecraft.hitResult;
-		minecraft.gameRenderer.pick(tickDelta);
-		HitResult result = minecraft.hitResult;
-		minecraft.hitResult = oldResult;
-		*///?}
 		cameraEntity.mark(false);
 		ProfilerUtils.pop();
 
@@ -236,21 +211,12 @@ public class PatPatClientManager {
 		AABB aABB = VersionedThings.getAABBFromPosition(player.getPosition(0), d, d, d);
 
 		for (Entity entity : VersionedThings.getLevel(player).getEntitiesOfClass(Entity.class, aABB)) {
-			//? >1.20.6 {
 			if (!(entity instanceof Leashable leashable)) {
 				continue;
 			}
 			if (leashable.getLeashHolder() == player) {
 				return true;
 			}
-			//?} else {
-			/*if (!(entity instanceof Mob mob)) {
-				continue;
-			}
-			if (mob.getLeashHolder() == player) {
-				return true;
-			}
-			*///?}
 		}
 		return false;
 	}

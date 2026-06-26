@@ -2,7 +2,7 @@ package net.lopymine.patpat.common.command;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.*;
 
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.utils.*;
@@ -26,7 +26,7 @@ public class PatPatCommonListChangeCommand {
 		String key = String.format("list.%s.%s", action, result);
 
 		MutableComponent text = CommandText.goldenArgs(key, nickname)
-				.withShowEntity(EntityType.PLAYER, uuid, nickname)
+				.withShowEntity(EntityTypes.PLAYER, uuid, nickname)
 				.withCopyToClipboard(uuid)
 				.finish();
 

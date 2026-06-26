@@ -16,11 +16,7 @@ public class IrisCompat {
 		if (!LoadedMods.IRIS_LOADED) {
 			return false;
 		}
-		//? if >=1.18.1 {
 		return IrisApi.getInstance().isRenderingShadowPass();
-		 //?} else {
-		/*return ShadowRenderingState.areShadowsCurrentlyBeingRendered();
-		*///?}
 	}
 
 }

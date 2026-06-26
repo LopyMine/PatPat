@@ -30,7 +30,7 @@ public abstract class AbstractMapConfig<K, V> {
 			return config;
 		}
 		config.read();
-		config.setInitialized(true);;
+		config.setInitialized(true);
 		return config;
 	}
 

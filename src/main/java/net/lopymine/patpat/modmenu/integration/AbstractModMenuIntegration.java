@@ -32,23 +32,4 @@ public abstract class AbstractModMenuIntegration {
 
 }
 
-*///?} elif forge {
-
-/*import net.minecraft.client.gui.screens.Screen;
-import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory;
-import net.minecraftforge.fml.*;
-
-public abstract class AbstractModMenuIntegration {
-
-	public void register(ModContainer container) {
-		container.registerExtensionPoint(
-				ConfigScreenFactory.class,
-				() -> new ConfigScreenFactory((minecraft, parent) -> this.createConfigScreen(parent))
-		);
-	}
-
-	protected abstract Screen createConfigScreen(Screen parent);
-
-}
-
 *///?}

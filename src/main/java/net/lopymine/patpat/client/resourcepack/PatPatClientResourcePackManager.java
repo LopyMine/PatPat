@@ -2,26 +2,23 @@ package net.lopymine.patpat.client.resourcepack;
 
 import com.google.common.collect.Lists;
 import com.google.gson.*;
-import lombok.experimental.ExtensionMethod;
-import net.lopymine.patpat.*;
-import net.lopymine.patpat.logger.PatLogger;
-import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.PackResources;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.world.entity.LivingEntity;
 import com.mojang.serialization.JsonOps;
-
+import java.io.*;
+import java.util.*;
+import java.util.function.Supplier;
+import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.extension.EntityExtension;
-
-import java.io.*;
-import java.util.*;
-import java.util.function.Supplier;
+import net.lopymine.patpat.logger.PatLogger;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.*;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 @ExtensionMethod(EntityExtension.class)
@@ -40,7 +37,7 @@ public class PatPatClientResourcePackManager {
 			return;
 		}
 		try (InputStream inputStream = inputStreamInputSupplier.get(); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-			JsonElement json = /*? <=1.17.1 {*//*new JsonParser().parse(reader)*//*?} else {*/JsonParser.parseReader(reader)/*?}*/;
+			JsonElement json = JsonParser.parseReader(reader);
 			if (!json.isJsonObject()) {
 				LOGGER.error("ResourcePack '{}', file '{}' is not a json object, skipping", packName, path);
 				return;
@@ -64,7 +61,7 @@ public class PatPatClientResourcePackManager {
 					return;
 				}
 			}
-			CustomAnimationConfig animationConfig = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json)/*? if >=1.20.5 {*/.getOrThrow()/*?} else {*//*.getOrThrow(false, LOGGER::error)*//*?}*/.getFirst();
+			CustomAnimationConfig animationConfig = CustomAnimationConfig.CODEC.decode(JsonOps.INSTANCE, json).getOrThrow().getFirst();
 			animationConfig.setConfigPath("%s/%s".formatted(packName, path));
 			configs.add(animationConfig);
 		} catch (Exception e) {
@@ -81,33 +78,17 @@ public class PatPatClientResourcePackManager {
 		List<List<CustomAnimationConfig>> resourcePacks = new ArrayList<>();
 
 		for (PackResources pack : packs) {
-			String resourcePackName = /*? if >=1.19.3 {*/ pack.packId(); /*?} else {*//*pack.getName(); *//*?}*/
+			String resourcePackName = pack.packId();
 			List<CustomAnimationConfig> animationConfigs = new ArrayList<>();
 
 			LOGGER.info("Registering {} resource pack", resourcePackName);
-			//? >=1.19.3 {
 			pack.listResources(PackType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures", (id, input) -> {
 				try (InputStream inputStream = input.get()) {
 					parseConfig(resourcePackName, id, () -> inputStream, animationConfigs, config);
 				} catch (Exception e) {
 					LOGGER.error("Failed to read custom animation at {} from {}", id.toString(), resourcePackName);
 				}
-			});//?} else {
-			/*Collection<Identifier> customAnimationIds = pack.getResources(PackType.CLIENT_RESOURCES, PatPat.MOD_ID, "textures", /^? <=1.18.2 {^//^0,^//^?}^/ (identifier) -> {
-				//? >=1.19 {
-				return identifier.getPath().endsWith(".json") || identifier.getPath().endsWith(".json5");
-				//?} else {
-				/^return identifier.endsWith(".json") || identifier.endsWith(".json5");
-				^///?}
 			});
-			for (Identifier customAnimationId : customAnimationIds) {
-				try (InputStream inputStream = /^? >=1.19 {^/manager.open(customAnimationId)/^?} else {^//^manager.getResource(customAnimationId).getInputStream()^//^?}^/) {
-					PatPatClientResourcePackManager.parseConfig(resourcePackName, customAnimationId, () -> inputStream, animationConfigs, config);
-				} catch (Exception e) {
-					LOGGER.error("Failed to read custom animation at {} from {}", customAnimationId.toString(), resourcePackName);
-				}
-			}
-			*///?}
 
 			if (animationConfigs.isEmpty()) {
 				continue;

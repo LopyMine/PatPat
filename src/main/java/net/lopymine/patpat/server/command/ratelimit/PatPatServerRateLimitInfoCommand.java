@@ -22,9 +22,7 @@ import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.HoverEvent.Action;
 
 import java.util.Collection;
-/*? if >=1.21.9 {*/
 import net.minecraft.server.players.NameAndId;
-/*?}*/
 
 import static net.minecraft.commands.Commands.argument;
 import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
@@ -75,22 +73,14 @@ public class PatPatServerRateLimitInfoCommand {
 	}
 
 	public static int infoWithUser(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-		//? if >=1.21.9 {
 		Collection<net.minecraft.server.players.NameAndId> profiles = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
-		//?} else {
-		/*Collection<GameProfile> profiles = GameProfileArgument.getGameProfiles(context, PROFILE_KEY);
-		*///?}
 		if (profiles.size() != 1) {
 			Component text = CommandText.text("error.only_one_player").finish();
 			context.sendMsg(text);
 		}
 
 		PatPatServerRateLimitConfig config = PatPatServerConfig.getInstance().getRateLimitConfig();
-		//? if >=1.21.9 {
 		net.minecraft.server.players.NameAndId profile = profiles.iterator().next();
-		//?} else {
-		/*GameProfile profile = profiles.iterator().next();
-		*///?}
 		if (!context.getSource().getOnlinePlayerNames().contains(profile.getName())) {
 			Component text = CommandText.goldenArgs("error.player_not_exist", profile.getName()).finish();
 			context.sendMsg(text);
@@ -109,7 +99,7 @@ public class PatPatServerRateLimitInfoCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 
-	private static void sendInfo(CommandContext<CommandSourceStack> context, /*? if >=1.21.9 {*/NameAndId/*?} else {*//*GameProfile*//*?}*/ profile, Object tokens) {
+	private static void sendInfo(CommandContext<CommandSourceStack> context, NameAndId profile, Object tokens) {
 		Component text = CommandText.goldenArgs("ratelimit.info.player", profile.getName()).finish();
 		context.sendMsg(text);
 		Component text2 = CommandText.goldenArgs("ratelimit.info.tokens", tokens).finish();

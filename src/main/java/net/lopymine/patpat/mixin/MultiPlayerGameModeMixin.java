@@ -45,7 +45,7 @@ public class MultiPlayerGameModeMixin {
 		if (!(entity instanceof LivingEntity pattedEntity)) {
 			return;
 		}
-		GameProfile profile = /*? if >=1.20.2 {*/ Minecraft.getInstance().getGameProfile(); /*?} else {*/ /*Minecraft.getInstance().getUser().getGameProfile(); *//*?}*/
+		GameProfile profile = Minecraft.getInstance().getGameProfile();
 
 		PlayerConfig whoPatted = PlayerConfig.of(profile.getName(), profile.getUUID());
 		PatPatClientRenderer.registerClientPacket(new PacketPat(pattedEntity, whoPatted, localPlayer, false));

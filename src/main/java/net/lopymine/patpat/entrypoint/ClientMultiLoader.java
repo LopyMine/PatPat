@@ -6,8 +6,6 @@ import net.lopymine.patpat.entrypoint.loader.client.IClientModLoader;
 import net.lopymine.patpat.entrypoint.impl.fabric.loader.FabricClientModLoader;
 //?} elif neoforge {
 /*import net.lopymine.patpat.entrypoint.impl.neoforge.loader.NeoForgeClientModLoader;
- *///?} elif forge {
-/*import net.lopymine.patpat.entrypoint.impl.forge.loader.ForgeClientModLoader;
  *///?}
 
 public class ClientMultiLoader {
@@ -16,8 +14,6 @@ public class ClientMultiLoader {
 	private static final IClientModLoader LOADER = new FabricClientModLoader();
 	//?} elif neoforge {
 	/*private static final IClientModLoader LOADER = new NeoForgeClientModLoader();
-	*///?} elif forge {
-	/*private static final IClientModLoader LOADER = new ForgeClientModLoader();
 	*///?}
 
 	public static IClientModLoader getInstance() {

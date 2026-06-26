@@ -3,11 +3,7 @@ package net.lopymine.patpat.modmenu.common.image;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
-//? >=1.20 {
-import net.minecraft.client.gui.GuiGraphics;
-//?} else {
-/*import com.mojang.blaze3d.vertex.PoseStack;
-*///?}
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 @Getter
 @SuperBuilder
@@ -17,7 +13,7 @@ public class PatRenderer extends AbstractPatImage {
 
 	@FunctionalInterface
 	public interface RenderMethod {
-		int render(/*? >=1.20 {*/GuiGraphics graphics/*?} else {*//*PoseStack poseStack*//*?}*/, int x, int y, int renderWidth, float delta);
+		int render(GuiGraphicsExtractor graphics, int x, int y, int renderWidth, float delta);
 	}
 
 }

@@ -1,15 +1,12 @@
 package net.lopymine.patpat.utils;
 
-import lombok.experimental.ExtensionMethod;
-import net.lopymine.patpat.extension.GameProfileExtension;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.multiplayer.PlayerInfo;
-
-import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
-
 import java.util.*;
 import java.util.stream.Stream;
+import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
+import net.lopymine.patpat.extension.GameProfileExtension;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.*;
 
 @ExtensionMethod(GameProfileExtension.class)
 public class ClientNetworkUtils {

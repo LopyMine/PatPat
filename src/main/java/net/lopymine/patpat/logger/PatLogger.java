@@ -3,11 +3,7 @@ package net.lopymine.patpat.logger;
 import org.jetbrains.annotations.Nullable;
 import lombok.*;
 
-//? if >=1.17 {
 import org.slf4j.*;
-//?} else {
-/*import org.apache.logging.log4j.*;
-*///?}
 
 public class PatLogger {
 
@@ -23,13 +19,13 @@ public class PatLogger {
 
 	public PatLogger(String name) {
 		this.name   = name;
-		this.logger = /*? if >=1.17 {*/LoggerFactory/*?} else {*//*LogManager*//*?}*/.getLogger(this.name);
+		this.logger = LoggerFactory.getLogger(this.name);
 		this.parent = null;
 	}
 
 	public PatLogger(String name, @Nullable PatLogger parent) {
 		this.name   = name;
-		this.logger = /*? if >=1.17 {*/LoggerFactory/*?} else {*//*LogManager*//*?}*/.getLogger(this.name);
+		this.logger = LoggerFactory.getLogger(this.name);
 		this.parent = parent;
 	}
 

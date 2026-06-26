@@ -1,22 +1,19 @@
 package net.lopymine.patpat.client.config.migrate;
 
-import com.google.gson.*;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import lombok.Setter;
-
 import com.mojang.serialization.Codec;
-
+import java.io.*;
+import java.util.*;
+import lombok.Setter;
 import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.*;
+import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.client.config.sub.*;
-import net.lopymine.patpat.common.config.vector.Vec3f;
 import net.lopymine.patpat.common.config.migrate.AbstractConfigMigrateHandler;
+import net.lopymine.patpat.common.config.vector.Vec3f;
 import net.lopymine.patpat.utils.*;
-
-import java.io.*;
-import java.util.*;
 
 @Setter
 public class PatPatClientConfigMigrateVersion0 extends AbstractConfigMigrateHandler {

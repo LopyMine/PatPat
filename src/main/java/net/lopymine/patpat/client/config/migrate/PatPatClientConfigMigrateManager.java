@@ -7,6 +7,8 @@ import net.lopymine.patpat.common.config.migrate.*;
 
 public class PatPatClientConfigMigrateManager extends AbstractPatPatConfigMigrateManager {
 
+	private static final PatPatClientConfigMigrateManager INSTANCE = new PatPatClientConfigMigrateManager();
+
 	public PatPatClientConfigMigrateManager(PatPatClientConfig config, MigrateHandler... handlers) {
 		super(PatPatClient.LOGGER, Version.CLIENT_CONFIG_VERSION, config::getVersion);
 		this.addHandlers(handlers);
@@ -19,8 +21,6 @@ public class PatPatClientConfigMigrateManager extends AbstractPatPatConfigMigrat
 				new PatPatClientConfigMigrateVersion100()
 		);
 	}
-
-	private static final PatPatClientConfigMigrateManager INSTANCE = new PatPatClientConfigMigrateManager();
 
 	public static PatPatClientConfigMigrateManager getInstance() {
 		return INSTANCE;

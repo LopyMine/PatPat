@@ -1,14 +1,12 @@
 package net.lopymine.patpat.client.config.sub;
 
-import java.util.function.Supplier;
-import lombok.*;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
+import java.util.function.Supplier;
+import lombok.*;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.utils.CodecUtils;
 import net.minecraft.client.Minecraft;
-
 import static net.lopymine.patpat.utils.CodecUtils.option;
 
 @Getter

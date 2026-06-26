@@ -1,21 +1,16 @@
 package net.lopymine.patpat.client.config;
 
-import lombok.*;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import net.lopymine.patpat.logger.PatLogger;
-import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.common.config.PatPatConfigManager;
-import net.lopymine.patpat.utils.CodecUtils;
-import net.lopymine.patpat.utils.ConfigUtils;
-
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
-
+import lombok.*;
+import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.common.config.PatPatConfigManager;
+import net.lopymine.patpat.logger.PatLogger;
+import net.lopymine.patpat.utils.*;
 import static net.lopymine.patpat.utils.CodecUtils.option;
 
 @Setter

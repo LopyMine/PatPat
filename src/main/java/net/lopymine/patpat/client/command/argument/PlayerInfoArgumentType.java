@@ -1,22 +1,19 @@
 package net.lopymine.patpat.client.command.argument;
 
-import lombok.experimental.ExtensionMethod;
-import net.lopymine.patpat.client.command.PatPatClientCommandManager;
-import net.lopymine.patpat.extension.GameProfileExtension;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.util.Tuple;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.*;
-
-import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.utils.CommandText;
-
 import java.util.*;
+import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.client.PatPatClient;
+import net.lopymine.patpat.client.command.PatPatClientCommandManager;
+import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
+import net.lopymine.patpat.extension.GameProfileExtension;
+import net.lopymine.patpat.utils.CommandText;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import org.jetbrains.annotations.NotNull;
 
 @ExtensionMethod(GameProfileExtension.class)

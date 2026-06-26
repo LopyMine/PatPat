@@ -2,7 +2,7 @@ package net.lopymine.patpat.utils;
 
 import net.lopymine.patpat.PatPat;
 import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.NotNull;
 
 public class RLUtils {
 
@@ -10,12 +10,8 @@ public class RLUtils {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static Identifier parse(String string){
-		/*? if >1.20.6 {*/
+	public static Identifier parse(String string) {
 		return Identifier.parse(string);
-		/*?} else {*/
-		/*return new Identifier(string);
-		 *//*?}*/
 	}
 
 	public static Identifier modId(@NotNull String path) {
@@ -36,10 +32,6 @@ public class RLUtils {
 			location = split[1];
 		}
 
-		//? >=1.21 {
 		return Identifier.fromNamespaceAndPath(name, location);
-		//?} else {
-		/*return new Identifier(name, location);
-		*///?}
 	}
 }

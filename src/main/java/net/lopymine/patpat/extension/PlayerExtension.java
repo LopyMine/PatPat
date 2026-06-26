@@ -6,11 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.concurrent.CompletableFuture;
 
-//? if >=1.21.9 {
 import net.minecraft.server.players.NameAndId;
-//?} else {
-/*import com.mojang.authlib.GameProfile;
- *///?}
 
 public class PlayerExtension {
 
@@ -23,7 +19,7 @@ public class PlayerExtension {
 	}
 
 	public static CompletableFuture<Boolean> hasPermission(
-			/*? if >=1.21.9 {*/ NameAndId /*?} else {*/ /*GameProfile *//*?}*/ profile,
+			 NameAndId  profile,
 			MinecraftServer server,
 			String permission
 	) {

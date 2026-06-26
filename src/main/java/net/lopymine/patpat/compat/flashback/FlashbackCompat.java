@@ -23,16 +23,10 @@ public class FlashbackCompat {
 		Recorder recorder = Flashback.RECORDER;
 		if (recorder != null) {
 			SelfPatEntityS2CPacketV2 patPacket = new SelfPatEntityS2CPacketV2(pattedEntityId, whoPattedId);
-			//? >1.20.1 {
-			Packet<?> packet = ServerPlayNetworking.createS2CPacket(patPacket);
-			 //?} else {
-			/*PacketByteBuf buf = PacketByteBufs.create();
-			patPacket.write(buf);
-			Packet<?> packet = ServerPlayNetworking.createS2CPacket(SelfPatEntityS2CPacket.PACKET_ID, buf);
-			*///?}
+			Packet<?> packet = ServerPlayNetworking.createClientboundPacket(patPacket);
 			recorder.writePacketAsync(
 					packet,
-					/*? >1.20.4 {*/ConnectionProtocol.PLAY/*?} else {*//*NetworkState.PLAY*//*?}*/
+					ConnectionProtocol.PLAY
 			);
 			PatPatClientPacketManager.LOGGER.debug("Saved packet to Flashback");
 		}

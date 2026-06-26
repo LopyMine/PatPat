@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [fabric, neoforge, forge]
+        platform: [fabric, neoforge]
     steps:
       - name: Free up disk on GitHub runner
         run: |

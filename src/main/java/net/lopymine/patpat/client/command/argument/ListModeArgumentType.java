@@ -5,15 +5,13 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.suggestion.*;
-
-import net.lopymine.patpat.client.PatPatClient;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 import net.lopymine.patpat.client.command.PatPatClientCommandManager;
 import net.lopymine.patpat.client.config.resourcepack.ListMode;
 import net.lopymine.patpat.utils.CommandText;
 import net.minecraft.commands.SharedSuggestionProvider;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
 
 public class ListModeArgumentType implements ArgumentType<ListMode> {
 

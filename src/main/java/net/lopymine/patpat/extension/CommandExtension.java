@@ -30,16 +30,12 @@ public class CommandExtension {
 	}
 
 	public static void sendMsg(CommandContext<CommandSourceStack> source, Component text, boolean broadcastToOps) {
-		source.getSource().sendSuccess(/*? if >=1.20 {*/() -> /*?}*/ PatPatServerCommandManager.PATPAT_ID.copy().append(text), broadcastToOps);
+		source.getSource().sendSuccess(() ->  PatPatServerCommandManager.PATPAT_ID.copy().append(text), broadcastToOps);
 	}
 
 	public static boolean hasPatPatPermission(CommandSourceStack context, String permission) {
 		return ServerMultiLoader.getInstance().hasPermission(
-				//? if >=1.19 {
 				context.getPlayer(),
-				//?} else {
-				/*context.getEntity() instanceof ServerPlayer player ? player : null,
-				 *///?}
 				permission
 		);
 	}

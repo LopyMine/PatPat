@@ -1,15 +1,14 @@
 package net.lopymine.patpat.client.config.resourcepack;
 
-import lombok.*;
-import lombok.experimental.ExtensionMethod;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
+import java.util.*;
+import lombok.*;
+import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.extension.EntityExtension;
 import net.minecraft.world.entity.Entity;
-import java.util.*;
 import org.jetbrains.annotations.*;
 
 @Getter
@@ -39,7 +38,7 @@ public final class CustomAnimationConfig implements Comparable<CustomAnimationCo
 		this.animation = animation;
 		this.blacklist = blacklist;
 		this.entities  = entities;
-		this.useForAll = entities.stream().anyMatch(config -> config.getEntityId().equals("all"));
+		this.useForAll = entities.stream().anyMatch(config -> config.entityId().equals("all"));
 	}
 
 	public boolean canUseFor(@NotNull Entity entity, @NotNull PlayerConfig whoPatted) {
@@ -53,7 +52,7 @@ public final class CustomAnimationConfig implements Comparable<CustomAnimationCo
 		for (EntityConfig entityConfig : this.entities) {
 			PatPatClient.LOGGER.debug("Comparing Entity Config: " + entityConfig.toString());
 			PatPatClient.LOGGER.debug("with {}, {}, {}, {}", entityTypeId, entityName, entityUuid, whoPatted.toString());
-			if (entityConfig.is(entityTypeId, entityName, entityUuid) && (entityConfig.getEntitiesFrom() == null || entityConfig.getEntitiesFrom().contains(whoPatted))) {
+			if (entityConfig.is(entityTypeId, entityName, entityUuid) && (entityConfig.entitiesFrom() == null || entityConfig.entitiesFrom().contains(whoPatted))) {
 				return !this.blacklist;
 			}
 		}

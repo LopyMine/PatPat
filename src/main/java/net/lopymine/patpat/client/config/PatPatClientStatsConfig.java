@@ -42,7 +42,12 @@ public class PatPatClientStatsConfig {
 		AutoSaveManager.start();
 		ClientMultiLoader.getInstance().registerOnClientStop(() -> {
 			PatPatClientStatsConfig.getInstance().save();
+			AutoSaveManager.stop();
 		});
+	}
+
+	private void stop() {
+
 	}
 
 	public static PatPatClientStatsConfig getInstance() {
@@ -99,7 +104,12 @@ public class PatPatClientStatsConfig {
 
 	private static class AutoSaveManager {
 
-		private static final ScheduledExecutorService SERVICE = Executors.newScheduledThreadPool(1);
+		private static final ScheduledExecutorService SERVICE = Executors.newScheduledThreadPool(1, (runnable) -> {
+			Thread thread = new Thread(runnable);
+			thread.setDaemon(true);
+			thread.setName("PatPatClientStatsAutoSaveManager");
+			return thread;
+		});
 		private static boolean shouldSave = true;
 
 		private static void start() {
@@ -121,6 +131,10 @@ public class PatPatClientStatsConfig {
 
 		private static void markToSave() {
 			AutoSaveManager.shouldSave = true;
+		}
+
+		public static void stop() {
+			SERVICE.shutdown();
 		}
 	}
 }

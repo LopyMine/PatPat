@@ -31,7 +31,7 @@ bin/
 # mossy
 
 runs/
-libs/
+/libs/
 personal/
 
 # java

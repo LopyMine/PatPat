@@ -16,7 +16,7 @@ public abstract class AbstractModMenuIntegration implements ModMenuApi {
 }
 
 
-//?} elif neoforge {
+//?} elif neoforge && >=1.20.5 {
 
 /*import net.neoforged.fml.*;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -26,6 +26,25 @@ public abstract class AbstractModMenuIntegration {
 
 	public void register(ModContainer container) {
 		container.registerExtensionPoint(IConfigScreenFactory.class, (modContainer, parent) -> createConfigScreen(parent));
+	}
+
+	protected abstract Screen createConfigScreen(Screen parent);
+
+}
+
+*///?} elif neoforge {
+
+/*import net.minecraft.client.gui.screens.Screen;
+import net.neoforged.neoforge.client.ConfigScreenHandler.ConfigScreenFactory;
+import net.neoforged.fml.*;
+
+public abstract class AbstractModMenuIntegration {
+
+	public void register(ModContainer container) {
+		container.registerExtensionPoint(
+				ConfigScreenFactory.class,
+				() -> new ConfigScreenFactory((minecraft, parent) -> this.createConfigScreen(parent))
+		);
 	}
 
 	protected abstract Screen createConfigScreen(Screen parent);

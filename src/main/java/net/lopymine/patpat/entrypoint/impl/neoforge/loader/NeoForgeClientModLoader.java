@@ -61,6 +61,7 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 
 	@Override
 	public void registerAfterWorldTickListener(Consumer<ClientLevel> runnable) {
+		//? if >=1.20.5 {
 		NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, (p) -> {
 			ClientLevel level = Minecraft.getInstance().level;
 			if (level == null) {
@@ -68,6 +69,18 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 			}
 			runnable.accept(level);
 		});
+		//?} else {
+		/^NeoForge.EVENT_BUS.addListener(net.neoforged.neoforge.event.TickEvent.ClientTickEvent.class, (p) -> {
+			if (p.phase != net.neoforged.neoforge.event.TickEvent.Phase.END) {
+				return;
+			}
+			ClientLevel level = Minecraft.getInstance().level;
+			if (level == null) {
+				return;
+			}
+			runnable.accept(level);
+		});
+		^///?}
 	}
 
 	@Override
@@ -160,8 +173,14 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 		} else {
 			//? if >=1.21.7 {
 			ClientPacketDistributor.sendToServer(packet);
-			//?} else {
+			//?} elif >=1.20.5 {
 			/^PacketDistributor.sendToServer(packet);
+			^///?} elif >=1.20.4 {
+			/^PacketDistributor.SERVER.noArg().send(packet);
+			^///?} else {
+			/^if (ServerMultiLoader.getInstance() instanceof NeoForgeServerModLoader serverLoader && serverLoader.getNeoForgeChannelHandler() != null) {
+				serverLoader.getNeoForgeChannelHandler().getChannel().sendToServer(packet);
+			}
 			^///?}
 		}
 	}

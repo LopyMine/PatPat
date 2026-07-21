@@ -2,7 +2,7 @@ package net.lopymine.patpat.packet;
 
 // Every PatPat packets should extend/implement this interface
 public interface BasePatPatPacket<T extends BasePatPatPacket<T>>
-/*? >=1.20.5 {*/extends net.minecraft.network.protocol.common.custom.CustomPacketPayload
+/*? >=1.20.5 || (neoforge && >=1.20.2) {*/extends net.minecraft.network.protocol.common.custom.CustomPacketPayload
 /*?} elif >=1.19.4 && fabric {*/ /*extends net.fabricmc.fabric.api.networking.v1.FabricPacket *//*?}*/ {
 
 	void write(net.minecraft.network.FriendlyByteBuf buf);
@@ -14,7 +14,12 @@ public interface BasePatPatPacket<T extends BasePatPatPacket<T>>
 	default Type<? extends net.minecraft.network.protocol.common.custom.CustomPacketPayload> type() {
 		return this.getPatPatType().getPacketId();
 	}
-	//?} elif >=1.19.4 && fabric {
+	//?} elif neoforge && >=1.20.2 {
+	/*@Override
+	default net.minecraft.resources.Identifier id() {
+		return this.getPatPatType().getId();
+	}
+	*///?} elif >=1.19.4 && fabric {
 	/*@Override
 	default net.fabricmc.fabric.api.networking.v1.PacketType<?> getType() {
 		return this.getPatPatType().getPacketId();

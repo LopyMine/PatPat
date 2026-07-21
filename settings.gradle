@@ -1,5 +1,8 @@
 pluginManagement {
 	repositories {
+		mavenCentral()
+		gradlePluginPortal()
+		mavenLocal()
 		maven {
 			name "Mossy Projects Releases"
 			url "https://maven.lopymine.net/releases"
@@ -8,9 +11,6 @@ pluginManagement {
 			name "Mossy Projects Snapshots"
 			url "https://maven.lopymine.net/snapshots"
 		}
-		mavenCentral()
-		gradlePluginPortal()
-		mavenLocal()
 		maven {
 			name "Fabric"
 			url "https://maven.fabricmc.net/"

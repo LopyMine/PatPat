@@ -21,7 +21,8 @@ import net.minecraft.network.chat.ClickEvent.Action;
 /*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
- //?}
+//?}
+
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)

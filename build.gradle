@@ -62,7 +62,7 @@ dependencies {
 
 		testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
 		if (sc.current.project.startsWith("fabric-") && sc.current.version.toString() == "1.17") {
-			mossyInclude(mossyImplementation("iris:iris-mc1.17-1.1.1"))
+			mossyImplementation("iris:iris-mc1.17-1.1.1")
 		}
 	}
 

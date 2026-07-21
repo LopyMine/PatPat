@@ -29,8 +29,8 @@ public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 		//?}
 		PatPatClientKeybindingManager.handlePatPatKeybindingOnKeyPressed(this.selectedKey, (KeyBindsScreen) (Object) (this), keyCode, scanCode, () -> cir.setReturnValue(false));
 		//? if >=26.1 {
-		/*this.keyBindsList.refreshEntries();
-		*///?}
+		this.keyBindsList.refreshEntries();
+		//?}
 	}
 
 	@Inject(at = @At("HEAD"), method = "mouseClicked", cancellable = true)
@@ -40,8 +40,8 @@ public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 		//?}
 		PatPatClientKeybindingManager.handlePatPatKeybindingOnMouseClick(this.selectedKey, (KeyBindsScreen) (Object) (this), button, () -> cir.setReturnValue(false));
 		//? if >=26.1 {
-		/*this.keyBindsList.refreshEntries();
-		*///?}
+		this.keyBindsList.refreshEntries();
+		//?}
 	}
 
 	@Override

@@ -16,16 +16,16 @@ import net.minecraft.world.entity.Entity;
 //?}
 
 //? if >=26.1 {
-/*import net.minecraft.client.renderer.state.level.CameraRenderState;
-*///?} elif >=1.21.9 {
-import net.minecraft.client.renderer.state.CameraRenderState;
-//?}
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+//?} elif >=1.21.9 {
+/*import net.minecraft.client.renderer.state.CameraRenderState;
+*///?}
 
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin {
 
 	//? if >=26.1 {
-	/*@Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"))
+	@Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"))
 	private void render(LivingEntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera, CallbackInfo ci) {
 		Entity entity = ((EntityRenderStateWithParent) state).patPat$getEntity();
 		float tickDelta = ((EntityRenderStateWithParent) state).patPat$getTickDelta();
@@ -34,8 +34,8 @@ public class LivingEntityRendererMixin {
 		}
 		PatPatClientRenderer.scaleEntityIfPatted(livingEntity, poseStack, tickDelta);
 	}
-	*///?} elif >=1.21.9 {
-	@Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;scale(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
+	//?} elif >=1.21.9 {
+	/*@Inject(method = "submit(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;scale(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
 	private void render(LivingEntityRenderState livingEntityRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, net.minecraft.client.renderer.state.CameraRenderState cameraRenderState, CallbackInfo ci) {
 		Entity entity = ((EntityRenderStateWithParent) livingEntityRenderState).patPat$getEntity();
 		float tickDelta = ((EntityRenderStateWithParent) livingEntityRenderState).patPat$getTickDelta();
@@ -44,7 +44,7 @@ public class LivingEntityRendererMixin {
 		}
 		PatPatClientRenderer.scaleEntityIfPatted(livingEntity, poseStack, tickDelta);
 	}
-	//?} elif >=1.21.2 {
+	*///?} elif >=1.21.2 {
 	/*@Inject(method = "render(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;scale(Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
 	private void render(LivingEntityRenderState livingEntityRenderState, PoseStack poseStack, MultiBufferSource vertexConsumerProvider, int i, CallbackInfo ci) {
 		Entity entity = ((EntityRenderStateWithParent) livingEntityRenderState).patPat$getEntity();

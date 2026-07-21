@@ -30,18 +30,18 @@ import net.neoforged.neoforge.server.permission.nodes.*;
 import net.neoforged.neoforge.server.permission.nodes.PermissionTypes;
 import net.neoforged.neoforge.server.permission.events.PermissionGatherEvent.Nodes;
 
-//? if >=1.21.10 {
-/^import net.minecraft.server.permissions.*;
+//? if >=1.21.11 {
+import net.minecraft.server.permissions.*;
 import net.minecraft.server.permissions.Permission.HasCommandLevel;
-^///?}
+//?}
 
 //? if >=1.21.9 {
-/^import net.minecraft.server.players.NameAndId;
-^///?} else {
+import net.minecraft.server.players.NameAndId;
+//?} else {
 
-import com.mojang.authlib.GameProfile;
+/^import com.mojang.authlib.GameProfile;
 
-//?}
+^///?}
 
 @Getter
 public class NeoForgeServerModLoader implements IServerModLoader {
@@ -73,9 +73,9 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 		NeoForge.EVENT_BUS.addListener(ServerStoppingEvent.class, (s) -> runnable.run());
 	}
 
-	//? if <=1.21.4 {
-	@SuppressWarnings("unchecked")
-	//?}
+	//? if <=1.21.6 {
+	/^@SuppressWarnings("unchecked")
+	^///?}
 	@Override
 	public void registerServerPackets(Consumer<ServerPacketRegister> consumer) {
 		NeoForgeCommonEntrypoint.getEventBus().addListener(RegisterPayloadHandlersEvent.class, (e) -> {
@@ -92,8 +92,8 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 						handler.handle(serverPlayer, packet);
 					};
 
-					//? if <=1.21.4 {
-					IPayloadHandler<P> clientPayloadHandler = (packet, context) -> {
+					//? if <=1.21.6 {
+					/^IPayloadHandler<P> clientPayloadHandler = (packet, context) -> {
 						PatPatClientPacketHandler<P> clientHandler = (PatPatClientPacketHandler<P>) NeoForgeServerModLoader.this.clientHandlers.get(packet.getPatPatType().getId());
 						if (clientHandler == null) {
 							return;
@@ -101,14 +101,14 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 
 						clientHandler.handle(packet);
 					};
-					//?}
+					^///?}
 
 					switch (registrationSide) {
 						case C2S -> registrar.playToServer(type.getPacketId(), type.getCodec(), payloadHandler);
 						case S2C -> registrar.playToClient(type.getPacketId(), type.getCodec()
-								//? if <=1.21.4 {
-								, clientPayloadHandler
-								//?}
+								//? if <=1.21.6 {
+								/^, clientPayloadHandler
+								^///?}
 						);
 						case BOTH -> {
 							registrar.playToServer(type.getPacketId(), type.getCodec(), payloadHandler);
@@ -150,11 +150,11 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 				permission,
 				PermissionTypes.BOOLEAN,
 				(serverPlayer, uuid, something) -> serverPlayer != null &&
-						//? if >=1.21.10 {
-						/^serverPlayer.permissions().hasPermission(new HasCommandLevel(PermissionLevel.GAMEMASTERS))
-						^///?} else {
-						serverPlayer.hasPermissions(2)
-						//?}
+						//? if >=1.21.11 {
+						serverPlayer.permissions().hasPermission(new HasCommandLevel(PermissionLevel.GAMEMASTERS))
+						//?} else {
+						/^serverPlayer.hasPermissions(2)
+						^///?}
 		);
 
 		this.permissionNodes.put(permissionId, node);
@@ -172,7 +172,7 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 
 	@Override
 	public CompletableFuture<Boolean> hasOfflinePermission(
-			/^? if >=1.21.9 {^/ /^NameAndId ^//^?} else {^/ GameProfile /^?}^/ profile,
+			/^? if >=1.21.9 {^/ NameAndId /^?} else {^/ /^GameProfile ^//^?}^/ profile,
 			MinecraftServer server,
 			String permission
 	) {
@@ -182,7 +182,7 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 				return false;
 			}
 			return PermissionAPI.getOfflinePermission(
-					/^? if >=1.21.9 {^/ /^profile.id() ^//^?} else {^/ profile.getId() /^?}^/,
+					/^? if >=1.21.9 {^/ profile.id() /^?} else {^/ /^profile.getId() ^//^?}^/,
 					node
 			);
 		});

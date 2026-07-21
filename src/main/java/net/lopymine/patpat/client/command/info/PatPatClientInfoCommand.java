@@ -18,7 +18,7 @@ import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.Action;
 
 //? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+/*import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 //?}

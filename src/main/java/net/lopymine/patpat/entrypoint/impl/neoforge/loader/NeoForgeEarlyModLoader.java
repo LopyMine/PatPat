@@ -20,13 +20,13 @@ public class NeoForgeEarlyModLoader implements IEarlyCommonModLoader {
 
 	@Override
 	public boolean isDevelopmentEnvironment() {
-		//? if >=1.21.10 {
-		/^return !FMLEnvironment.isProduction();
-		^///?}
-
-		//? if <=1.21.4 {
-		return !FMLEnvironment.production;
+		//? if >=1.21.9 {
+		return !FMLEnvironment.isProduction();
 		//?}
+
+		//? if <=1.21.8 {
+		/^return !FMLEnvironment.production;
+		^///?}
 	}
 
 	@Override
@@ -38,13 +38,13 @@ public class NeoForgeEarlyModLoader implements IEarlyCommonModLoader {
 	public boolean isModLoaded(String modId) {
 		ModList list = ModList.get();
 		if (list == null) {
-			//? if >=1.21.10 {
-			/^return FMLLoader.getCurrent().getLoadingModList().getModFileById(modId) != null;
-			^///?}
-
-			//? if <=1.21.4 {
-			return FMLLoader.getLoadingModList().getModFileById(modId) != null;
+			//? if >=1.21.9 {
+			return FMLLoader.getCurrent().getLoadingModList().getModFileById(modId) != null;
 			//?}
+
+			//? if <=1.21.8 {
+			/^return FMLLoader.getLoadingModList().getModFileById(modId) != null;
+			^///?}
 		}
 		return list.isLoaded(modId);
 	}
@@ -57,13 +57,13 @@ public class NeoForgeEarlyModLoader implements IEarlyCommonModLoader {
 			return null;
 		}
 		try {
-			//? if >=1.21.10 {
-			/^return file.getFile().getContents().openFile(path);
-			^///?}
-
-			//? if <=1.21.4 {
-			return Files.newInputStream(file.getFile().findResource(path));
+			//? if >=1.21.9 {
+			return file.getFile().getContents().openFile(path);
 			//?}
+
+			//? if <=1.21.8 {
+			/^return Files.newInputStream(file.getFile().findResource(path));
+			^///?}
 		} catch (IOException e) {
 			PatPat.LOGGER.error("Failed to open file at \"{}\", reason:", path, e);
 			return null;
@@ -72,19 +72,19 @@ public class NeoForgeEarlyModLoader implements IEarlyCommonModLoader {
 
 	@Override
 	public ModEnvironment getEnvironment() {
-		//? if >=1.21.10 {
-		/^return switch (FMLEnvironment.getDist()) {
-			case CLIENT -> ModEnvironment.CLIENT;
-			case DEDICATED_SERVER -> ModEnvironment.SERVER;
-		};
-		^///?}
-
-		//? if <=1.21.4 {
-		return switch (FMLEnvironment.dist) {
+		//? if >=1.21.9 {
+		return switch (FMLEnvironment.getDist()) {
 			case CLIENT -> ModEnvironment.CLIENT;
 			case DEDICATED_SERVER -> ModEnvironment.SERVER;
 		};
 		//?}
+
+		//? if <=1.21.8 {
+		/^return switch (FMLEnvironment.dist) {
+			case CLIENT -> ModEnvironment.CLIENT;
+			case DEDICATED_SERVER -> ModEnvironment.SERVER;
+		};
+		^///?}
 	}
 }
 

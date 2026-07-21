@@ -19,30 +19,30 @@ import net.minecraft.world.entity.LivingEntity;
 
 //? if >=26.1 {
 
-/*import net.minecraft.client.renderer.entity.state.EnderDragonRenderState;
+import net.minecraft.client.renderer.entity.state.EnderDragonRenderState;
 
-*///?}
+//?}
 
 @Mixin(EnderDragonRenderer.class)
 public class EnderDragonRendererMixin {
 
 	//? if >=26.1 {
-	/*@Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"), method = "submit(Lnet/minecraft/client/renderer/entity/state/EnderDragonRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V")
+	@Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"), method = "submit(Lnet/minecraft/client/renderer/entity/state/EnderDragonRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V")
 	private void makeDragonPattableBecauseWhyNot(EnderDragonRenderState enderDragonRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, net.minecraft.client.renderer.state.level.CameraRenderState cameraRenderState, CallbackInfo ci) {
 		Entity entity = ((EntityRenderStateWithParent) enderDragonRenderState).patPat$getEntity();
 		float tickDelta = ((EntityRenderStateWithParent) enderDragonRenderState).patPat$getTickDelta();
 		if (!(entity instanceof LivingEntity livingEntity)) {
 			return;
 		}
-	*///?} elif >=1.21.9 {
-	@Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"), method = "submit(Lnet/minecraft/client/renderer/entity/state/EnderDragonRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V")
+	//?} elif >=1.21.9 {
+	/*@Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"), method = "submit(Lnet/minecraft/client/renderer/entity/state/EnderDragonRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V")
 	private void makeDragonPattableBecauseWhyNot(net.minecraft.client.renderer.entity.state.EnderDragonRenderState enderDragonRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, net.minecraft.client.renderer.state.CameraRenderState cameraRenderState, CallbackInfo ci) {
 		Entity entity = ((EntityRenderStateWithParent) enderDragonRenderState).patPat$getEntity();
 		float tickDelta = ((EntityRenderStateWithParent) enderDragonRenderState).patPat$getTickDelta();
 		if (!(entity instanceof LivingEntity livingEntity)) {
 			return;
 		}
-	//?} elif >=1.21.2 {
+	*///?} elif >=1.21.2 {
 	/*@Inject(at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V"), method = "render(Lnet/minecraft/client/renderer/entity/state/EnderDragonRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V")
 	private void makeDragonPattableBecauseWhyNot(net.minecraft.client.renderer.entity.state.EnderDragonRenderState enderDragonRenderState, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
 		Entity entity = ((EntityRenderStateWithParent) enderDragonRenderState).patPat$getEntity();

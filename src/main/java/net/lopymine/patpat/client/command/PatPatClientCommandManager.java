@@ -15,7 +15,7 @@ import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.extension.TextExtension;
 import net.lopymine.patpat.logger.PatLogger;
 //? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+/*import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
  //?}

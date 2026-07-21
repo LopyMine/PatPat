@@ -28,10 +28,10 @@ import net.minecraft.client.renderer.entity.state.*;
 //?}
 
 //? if >=26.1 {
-/*import net.minecraft.client.renderer.state.level.CameraRenderState;
-*///?} elif >=1.21.9 {
-import net.minecraft.client.renderer.state.CameraRenderState;
- //?}
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+//?} elif >=1.21.9 {
+/*import net.minecraft.client.renderer.state.CameraRenderState;
+ *///?}
 
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin {
@@ -54,7 +54,7 @@ public class EntityRendererMixin {
 //	}
 
 	//? if >=26.1 {
-	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V"), method = "submit")
+	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V"), method = "submit")
 	private void render(EntityRenderer<?, ?> instance, EntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, Operation<Void> original, @Local(argsOnly = true) PoseStack matrices) {
 		EntityRenderStateWithParent stateWithParent = (EntityRenderStateWithParent) state;
 		Entity entity = stateWithParent.patPat$getEntity();
@@ -65,8 +65,8 @@ public class EntityRendererMixin {
 			original.call(instance, state, poseStack, submitNodeCollector, cameraRenderState);
 		}
 	}
-	*///?} elif >=1.21.9 {
-	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;submitNameTag(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V"), method = "submit")
+	//?} elif >=1.21.9 {
+	/*@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;submitNameTag(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V"), method = "submit")
 	private void render(EntityRenderer<?, ?> instance, EntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState, Operation<Void> original, @Local(argsOnly = true) PoseStack matrices) {
 			EntityRenderStateWithParent stateWithParent = (EntityRenderStateWithParent) state;
 			Entity entity = stateWithParent.patPat$getEntity();
@@ -77,7 +77,7 @@ public class EntityRendererMixin {
 				original.call(instance, state, poseStack, submitNodeCollector, cameraRenderState);
 			}
 		}
-	//?} elif >=1.21.2 {
+	*///?} elif >=1.21.2 {
 	/*@WrapOperation(at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/state/EntityRenderState;nameTag:Lnet/minecraft/network/chat/Component;"), method = "render")
 	private Component render(EntityRenderState state, Operation<Component> original, @Local(argsOnly = true) PoseStack matrices, @Local(argsOnly = true) MultiBufferSource provider, @Local(argsOnly = true) int light) {
 		EntityRenderStateWithParent stateWithParent = (EntityRenderStateWithParent) state;

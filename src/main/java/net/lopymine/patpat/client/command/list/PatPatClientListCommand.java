@@ -3,11 +3,15 @@
 package net.lopymine.patpat.client.command.list;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+//? if forge || neoforge {
+/*import net.minecraft.commands.FabricClientCommandSource;
+*///?} else {
 //? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
  //?}
+//?}
 import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 public class PatPatClientListCommand {

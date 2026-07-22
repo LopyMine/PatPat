@@ -69,6 +69,10 @@ dependencies {
 	if (forge) {
 		annotationProcessor("net.fabricmc:sponge-mixin:0.16.5+mixin.0.8.7")
 		mossyImplementation("maven.modrinth:mixinbooster:0.1.2+1.20.1")
+
+		if (stonecutter.compare(stonecutter.current.version.toString(), "1.18") < 0) {
+			compileOnly("org.jetbrains:annotations:23.0.0")
+		}
 	}
 }
 
@@ -123,6 +127,14 @@ stonecutter {
 		replace("ControllingOptionsScreenMixin", "ControllingOptionsScreenMixin")
 		replace("ControlsSettingsGuiNewMixin", "ControlsSettingsGuiNewMixin")
 		replace("ControllingOptionsScreen", "ControlsSettingsGuiNew")
+	}
+
+	replacements.string(current.parsed < "1.18") {
+		replace("net.minecraftforge.network", "net.minecraftforge.fmllegacy.network")
+		replace("net.minecraftforge.event.server", "net.minecraftforge.fmlserverevents")
+		replace("net.minecraftforge.client.ClientRegistry", "net.minecraftforge.fmlclient.registry.ClientRegistry")
+		replace("ServerStartedEvent", "FMLServerStartedEvent")
+		replace("ServerStoppingEvent", "FMLServerStoppingEvent")
 	}
 
 	replacements.string(current.parsed >= "1.18") {

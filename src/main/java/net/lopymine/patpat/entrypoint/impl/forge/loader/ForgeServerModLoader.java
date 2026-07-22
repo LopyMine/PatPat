@@ -25,15 +25,23 @@ import net.minecraftforge.event.server.*;
 import net.minecraftforge.network.*;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.server.permission.PermissionAPI;
+//? if >=1.18 {
 import net.minecraftforge.server.permission.events.PermissionGatherEvent.Nodes;
 import net.minecraftforge.server.permission.nodes.*;
+//?} else {
+/^import net.minecraftforge.server.permission.DefaultPermissionLevel;
+^///?}
 import org.jetbrains.annotations.Nullable;
 
 @Getter
 public class ForgeServerModLoader implements IServerModLoader {
 
+	//? if >=1.18 {
 	private final Map<String, PermissionNode<Boolean>> permissionNodes = new HashMap<>();
 	private final List<PermissionNode<?>> registrationNodes = new ArrayList<>();
+	//?} else {
+	/^private final Set<String> permissionNodes = new HashSet<>();
+	^///?}
 
 	@Nullable
 	private ForgePackerHandler packerHandler;
@@ -45,15 +53,22 @@ public class ForgeServerModLoader implements IServerModLoader {
 		MinecraftForge.EVENT_BUS.<RegisterCommandsEvent>addListener((event) -> {
 			consumer.accept(event.getDispatcher());
 		});
+		//? if >=1.18 {
 		MinecraftForge.EVENT_BUS.<Nodes>addListener((nodes) -> {
 			nodes.addNodes(this.registrationNodes);
 		});
+		//?}
 	}
 
 	@Override
 	public void registerServerPlayerLogListener(ServerPlayerLogListener consumer) {
+		//? if >=1.19 {
 		MinecraftForge.EVENT_BUS.<PlayerEvent.PlayerLoggedOutEvent>addListener((event) -> consumer.onLog(false, event.getEntity()));
 		MinecraftForge.EVENT_BUS.<PlayerEvent.PlayerLoggedInEvent>addListener((event) -> consumer.onLog(true, event.getEntity()));
+		//?} else {
+		/^MinecraftForge.EVENT_BUS.<PlayerEvent.PlayerLoggedOutEvent>addListener((event) -> consumer.onLog(false, event.getPlayer()));
+		MinecraftForge.EVENT_BUS.<PlayerEvent.PlayerLoggedInEvent>addListener((event) -> consumer.onLog(true, event.getPlayer()));
+		^///?}
 	}
 
 	@Override
@@ -133,6 +148,7 @@ public class ForgeServerModLoader implements IServerModLoader {
 		}
 
 		String permissionId = "%s.%s".formatted(PatPat.MOD_ID, permission);
+		//? if >=1.18 {
 		if (this.permissionNodes.get(permissionId) != null) {
 			return;
 		}
@@ -147,15 +163,29 @@ public class ForgeServerModLoader implements IServerModLoader {
 
 		this.permissionNodes.put(permissionId, node);
 		this.registrationNodes.add(node);
+		//?} else {
+		/^if (!this.permissionNodes.add(permissionId)) {
+			return;
+		}
+
+		PermissionAPI.registerNode(permissionId, DefaultPermissionLevel.OP, permission);
+		^///?}
 	}
 
 	@Override
 	public boolean hasPermission(ServerPlayer player, String permission) {
+		//? if >=1.18 {
 		PermissionNode<Boolean> node = this.permissionNodes.get(permission);
 		if (node == null) {
 			return false;
 		}
 		return PermissionAPI.getPermission(player, node);
+		//?} else {
+		/^if (!this.permissionNodes.contains(permission)) {
+			return false;
+		}
+		return PermissionAPI.hasPermission(player, permission);
+		^///?}
 	}
 
 	@Override
@@ -166,11 +196,18 @@ public class ForgeServerModLoader implements IServerModLoader {
 	) {
 		UUID uuid = profile.getId();
 		return CompletableFuture.supplyAsync(() -> {
+			//? if >=1.18 {
 			PermissionNode<Boolean> node = this.permissionNodes.get(permission);
 			if (node == null) {
 				return false;
 			}
 			return PermissionAPI.getOfflinePermission(uuid, node);
+			//?} else {
+			/^if (!this.permissionNodes.contains(permission)) {
+				return false;
+			}
+			return PermissionAPI.hasPermission(profile, permission, null);
+			^///?}
 		});
 	}
 

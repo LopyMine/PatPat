@@ -22,7 +22,9 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.client.event.*;
+//? if >=1.18.2 {
 import net.minecraftforge.client.event.RenderLevelStageEvent.Stage;
+//?}
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.*;
 import net.minecraftforge.fml.LogicalSide;
@@ -35,29 +37,50 @@ public class ForgeClientModLoader implements IClientModLoader {
 
 	@Override
 	public void registerClientCommands(Consumer<CommandDispatcher<CommandSourceStack>> consumer) {
+		//? if >=1.18 {
 		MinecraftForge.EVENT_BUS.<RegisterClientCommandsEvent>addListener((event) -> {
 			consumer.accept(event.getDispatcher());
 		});
+		//?}
 	}
 
 	@Override
 	public void registerAfterEntitiesRenderer(CustomRenderer renderer) {
+		//? if >=1.18.2 {
 		MinecraftForge.EVENT_BUS.<RenderLevelStageEvent>addListener((event) -> {
+			//? if >=1.19.3 {
 			if (event.getStage() != Stage.AFTER_ENTITIES) {
+			//?} else {
+			/^if (event.getStage() != Stage.AFTER_TRANSLUCENT_BLOCKS) {
+			^///?}
 				return;
 			}
 			renderer.render(Minecraft.getInstance().renderBuffers().bufferSource(), event.getPoseStack());
 		});
+		//?} else {
+		/^MinecraftForge.EVENT_BUS.<net.minecraftforge.client.event.RenderWorldLastEvent>addListener((event) -> {
+			renderer.render(Minecraft.getInstance().renderBuffers().bufferSource(), event.getMatrixStack());
+		});
+		^///?}
 	}
 
 	@Override
 	public void registerAfterWorldTickListener(Consumer<ClientLevel> consumer) {
+		//? if >=1.19 {
 		MinecraftForge.EVENT_BUS.<LevelTickEvent>addListener((event) -> {
 			if (event.side != LogicalSide.CLIENT || event.phase != Phase.END || !(event.level instanceof ClientLevel clientLevel)) {
 				return;
 			}
 			consumer.accept(clientLevel);
 		});
+		//?} else {
+		/^MinecraftForge.EVENT_BUS.<WorldTickEvent>addListener((event) -> {
+			if (event.side != LogicalSide.CLIENT || event.phase != Phase.END || !(event.world instanceof ClientLevel clientLevel)) {
+				return;
+			}
+			consumer.accept(clientLevel);
+		});
+		^///?}
 	}
 
 	@Override
@@ -69,9 +92,15 @@ public class ForgeClientModLoader implements IClientModLoader {
 
 	@Override
 	public void registerKeybinding(KeyMapping keybinding) {
+		//? if >=1.19 {
 		FMLJavaModLoadingContext.get().getModEventBus().<RegisterKeyMappingsEvent>addListener((event) -> {
 			event.register(keybinding);
 		});
+		//?} else {
+		/^FMLJavaModLoadingContext.get().getModEventBus().<net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent>addListener((event) -> {
+			net.minecraftforge.client.ClientRegistry.registerKeyBinding(keybinding);
+		});
+		^///?}
 	}
 
 	@Override
@@ -86,7 +115,11 @@ public class ForgeClientModLoader implements IClientModLoader {
 		private final DeferredRegister<SoundEvent> register;
 
 		public ForgeSoundRegister() {
+			//? if >=1.18.2 {
 			this.register = DeferredRegister.create(VersionedThings.SOUND_EVENT.key(), PatPat.MOD_ID);
+			//?} else {
+			/^this.register = DeferredRegister.create(net.minecraftforge.registries.ForgeRegistries.SOUND_EVENTS, PatPat.MOD_ID);
+			^///?}
 		}
 
 		public SoundEvent registerSound(String id) {
@@ -103,8 +136,13 @@ public class ForgeClientModLoader implements IClientModLoader {
 
 	@Override
 	public void registerClientPlayerLogListener(ClientPlayerLogListener consumer) {
+		//? if >=1.19 {
 		MinecraftForge.EVENT_BUS.<ClientPlayerNetworkEvent.LoggingOut>addListener((e) -> consumer.onLog(false));
 		MinecraftForge.EVENT_BUS.<ClientPlayerNetworkEvent.LoggingIn>addListener((e) -> consumer.onLog(true));
+		//?} else {
+		/^MinecraftForge.EVENT_BUS.<ClientPlayerNetworkEvent.LoggedOutEvent>addListener((e) -> consumer.onLog(false));
+		MinecraftForge.EVENT_BUS.<ClientPlayerNetworkEvent.LoggedInEvent>addListener((e) -> consumer.onLog(true));
+		^///?}
 	}
 
 	@Override

@@ -14,11 +14,15 @@ import net.lopymine.patpat.client.command.mod.PatPatClientModEnableCommand;
 import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.extension.TextExtension;
 import net.lopymine.patpat.logger.PatLogger;
+//? if forge || neoforge {
+/*import net.minecraft.commands.FabricClientCommandSource;
+*///?} else {
 //? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
  //?}
+//?}
 
 @ExtensionMethod(TextExtension.class)
 public class PatPatClientCommandManager {

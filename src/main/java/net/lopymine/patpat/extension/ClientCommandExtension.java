@@ -5,11 +5,15 @@ package net.lopymine.patpat.extension;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.utils.TextUtils;
 
+//? if forge || neoforge {
+/*import net.minecraft.commands.FabricClientCommandSource;
+*///?} else {
 //? if <1.19 {
 /*import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
  //?}
+//?}
 import net.minecraft.network.chat.*;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -30,8 +34,10 @@ public class ClientCommandExtension {
 	public static void sendMsg(CommandContext<FabricClientCommandSource> context, Component text) {
 		//? if fabric {
 		context.getSource().sendFeedback(PATPAT_ID.copy().append(text));
-		//?} else {
+		//?} elif >=1.19 {
 		/*context.getSource().sendSystemMessage(PATPAT_ID.copy().append(text));
+		*///?} else {
+		/*context.getSource().sendSuccess(PATPAT_ID.copy().append(text), false);
 		*///?}
 	}
 

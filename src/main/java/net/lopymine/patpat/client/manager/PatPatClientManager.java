@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.extension.*;
+import net.lopymine.patpat.tests.PatPatTestMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
@@ -79,6 +80,9 @@ public class PatPatClientManager {
 	}
 
 	public static boolean expired(PatEntity patEntity, float tickDelta) {
+		if (PatPatTestMode.isEnabled()) {
+			return false;
+		}
 		CustomAnimationSettingsConfig animationConfig = patEntity.getAnimation();
 		int duration = animationConfig.getDuration();
 		return patEntity.getProgress(tickDelta) > duration;

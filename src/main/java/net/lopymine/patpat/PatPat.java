@@ -6,11 +6,12 @@ import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.server.command.PatPatServerCommandManager;
 import net.lopymine.patpat.server.event.PatPatServerPlayerEvents;
 import net.lopymine.patpat.server.packet.PatPatServerPacketManager;
+import net.lopymine.patpat.tests.PatPatTestServerAgent;
 
 public class PatPat {
 
 	public static final String MOD_VERSION = /*$ mod_version*/ "1.2.6+26.1+fabric";
-	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "03adcb7";
+	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "03af69d";
 	public static final String MOD_NAME = /*$ mod_name*/ "PatPat";
 	public static final String MOD_ID = /*$ mod_id*/ "patpat";
 	public static final String SERVER_CONFIG_VERSION = /*$ server_config_version*/ "1.0.0";
@@ -25,6 +26,7 @@ public class PatPat {
 		PatPatServerCommandManager.register();
 		PatPatServerPlayerEvents.register();
 		ServerMultiLoader.getInstance().registerServerPackets(PatPatServerPacketManager::register);
+		PatPatTestServerAgent.register();
 
 		PatPat.LOGGER.info("PatPat Initialized");
 		PatPat.LOGGER.debug("Debug Mode Enabled");

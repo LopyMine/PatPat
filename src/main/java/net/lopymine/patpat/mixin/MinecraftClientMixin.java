@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
+import net.lopymine.patpat.tests.PatPatTestClientAgent;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftClientMixin {
@@ -20,6 +21,7 @@ public abstract class MinecraftClientMixin {
 		if (--tick >= 0) {
 			PatPatClientManager.setPatCooldown(tick);
 		}
+		PatPatTestClientAgent.onClientTick();
 	}
 
 	@Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;rightClickDelay:I", ordinal = 0, opcode = Opcodes.GETFIELD), method = "tick")

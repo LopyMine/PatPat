@@ -19,7 +19,7 @@
 		"AbstractClientPlayerEntityMixin",
 		"KeyEntryMixin",
 		"KeybindingMixin",
-		"ParentElementMixin",
+		"KeyboardHandlerMixin",
 		"KeyBindsScreenMixin",
 
         //? if >=1.19.4 {
@@ -47,7 +47,11 @@
 
 		"EntityMixin",
 		"EnderDragonRendererMixin",
-		"MultiPlayerGameModeMixin"
+		"MultiPlayerGameModeMixin",
+
+		"tests.WindowMixin",
+		"tests.KeyboardHandlerMixin",
+		"tests.MouseHandlerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

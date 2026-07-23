@@ -9,7 +9,7 @@ import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.*;
 import net.fabricmc.fabric.api.client.networking.v1.*;
 //? if <1.19 {
-/*import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+/*import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 *///?} else {
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
  //?}

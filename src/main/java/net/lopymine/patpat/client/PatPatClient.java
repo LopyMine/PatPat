@@ -13,6 +13,7 @@ import net.lopymine.patpat.compat.LoadedMods;
 import java.util.*;
 import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.lopymine.patpat.logger.PatLogger;
+import net.lopymine.patpat.tests.PatPatTestClientAgent;
 
 public class PatPatClient {
 
@@ -34,6 +35,7 @@ public class PatPatClient {
 		PatPatClientRenderer.register();
 		PatPatClientKeybindingManager.register();
 		PatPatClientStatsConfig.registerSaveHooks();
+		PatPatTestClientAgent.register();
 
 		LOGGER.info("PatPat Client Initialized");
 		LOGGER.debug("Debug Mode Enabled");

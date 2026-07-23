@@ -7,12 +7,12 @@ import com.mojang.brigadier.CommandDispatcher;
 import java.util.function.Consumer;
 //? if forge || neoforge {
 /*import net.minecraft.commands.FabricClientCommandSource;
-*///?} else {
+ *///?} else {
 //? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-*///?} else {
+/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+ *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
- //?}
+//?}
 //?}
 import net.lopymine.patpat.client.resourcepack.AbstractResourceReloadListener;
 import net.lopymine.patpat.packet.*;

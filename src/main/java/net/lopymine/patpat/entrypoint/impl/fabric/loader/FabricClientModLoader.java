@@ -7,7 +7,7 @@ package net.lopymine.patpat.entrypoint.impl.fabric.loader;
 import com.mojang.brigadier.CommandDispatcher;
 import java.util.function.Consumer;
 //? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v2.*;
+/*import net.fabricmc.fabric.api.client.command.v1.*;
 *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.*;
  //?}

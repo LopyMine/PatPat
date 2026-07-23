@@ -66,9 +66,13 @@ dependencies {
 		}
 	}
 
+	if (!fabric) {
+		testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	}
+
 	if (forge) {
 		annotationProcessor("net.fabricmc:sponge-mixin:0.16.5+mixin.0.8.7")
-		mossyImplementation("maven.modrinth:mixinbooster:0.1.2+1.20.1")
 
 		if (stonecutter.compare(stonecutter.current.version.toString(), "1.18") < 0) {
 			compileOnly("org.jetbrains:annotations:23.0.0")
@@ -78,12 +82,50 @@ dependencies {
 
 test {
 	failOnNoDiscoveredTests = false
+	outputs.upToDateWhen { false }
+	if (!fabric) {
+		useJUnitPlatform {
+			excludeTags("gameTest")
+		}
+	}
+}
+
+def registerGameTest = { String taskName, String tag, String taskDescription ->
+	tasks.register(taskName, Test) {
+		group = "verification"
+		description = taskDescription
+
+		testClassesDirs = sourceSets.test.output.classesDirs
+		classpath = sourceSets.test.runtimeClasspath.filter { file -> !file.name.startsWith("fabric-loader-junit") }
+
+		failOnNoDiscoveredTests = false
+		outputs.upToDateWhen { false }
+		useJUnitPlatform {
+			includeTags(tag)
+		}
+		testLogging {
+			showStandardStreams = true
+		}
+	}
+}
+
+registerGameTest("gameTest", "gameTest", "Runs all PatPat game tests")
+registerGameTest("twoPlayersGameTest", "twoPlayersGameTest", "Runs the PatPat two players game test, spawning a dedicated server and two clients")
+registerGameTest("singleplayerGameTest", "singleplayerGameTest", "Runs the PatPat singleplayer game test, spawning a single client")
+
+if (project.hasProperty("patpat.test.port")) {
+	tasks.withType(JavaExec).configureEach {
+		jvmArgs("-Dpatpat.test.port=${project.property("patpat.test.port")}")
+		maxHeapSize = "1g"
+	}
 }
 
 if (fabric) {
 	if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0) {
 		test {
-			useJUnitPlatform()
+			useJUnitPlatform {
+				excludeTags("gameTest")
+			}
 		}
 	}
 
@@ -94,19 +136,19 @@ if (fabric) {
 	}
 
 	if (sc.current.parsed.matches(">=26.1")) {
-		fabricApi {
-			configureTests {
-				createSourceSet = true
-				modId = "patpat-mod-test-${project.name}"
-				enableGameTests = true // Default is true
-				enableClientGameTests = true // Default is true
-				eula = true // By setting this to true, you agree to the Minecraft EULA.
-			}
-		}
+		//fabricApi {
+		//	configureTests {
+		//		createSourceSet = true
+		//		modId = "patpat-mod-test-${project.name}"
+		//		enableGameTests = true // Default is true
+		//		enableClientGameTests = true // Default is true
+		//		eula = true // By setting this to true, you agree to the Minecraft EULA.
+		//	}
+		//}
 
-		tasks.named("runClientGameTest", JavaExec) {
-			jvmArgs "-ea"
-		}
+		//tasks.named("runClientGameTest", JavaExec) {
+		//	jvmArgs "-ea"
+		//}
 	}
 
 	configurations.configureEach {
@@ -144,10 +186,6 @@ stonecutter {
 		replace("ControlsScreen", "KeyBindsScreen")
 	}
 
-    replacements.string(current.parsed >= "1.19") {
-        replace("net.fabricmc.fabric.api.client.command.v1", "net.fabricmc.fabric.api.client.command.v2")
-        replace("net.fabricmc.fabric.api.command.v1", "net.fabricmc.fabric.api.command.v2")
-    }
 
 	replacements.string(current.parsed >= "1.21") {
 		replace("import net.minecraft.client.gui.screens.controls.*;", "import net.minecraft.client.gui.screens.options.controls.*;")
@@ -184,12 +222,12 @@ jar {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
+def modId = prop("data.mod_id")
 processResources {
 	from("../../patpat-languages-files/lang") {
-		into "assets/${prop("data.mod_id")}/lang/"
+		into "assets/${modId}/lang/"
 		eachFile { file ->
 			if (!file.isDirectory()) {
-				// Client requires lang files in lower case
 				file.name = file.name.toLowerCase()
 			}
 		}

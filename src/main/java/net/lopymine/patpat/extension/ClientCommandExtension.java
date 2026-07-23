@@ -7,12 +7,12 @@ import net.lopymine.patpat.utils.TextUtils;
 
 //? if forge || neoforge {
 /*import net.minecraft.commands.FabricClientCommandSource;
-*///?} else {
+ *///?} else {
 //? if <1.19 {
-/*import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-*///?} else {
+/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+ *///?} else {
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
- //?}
+//?}
 //?}
 import net.minecraft.network.chat.*;
 

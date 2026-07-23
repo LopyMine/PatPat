@@ -112,6 +112,7 @@ def registerGameTest = { String taskName, String tag, String taskDescription ->
 registerGameTest("gameTest", "gameTest", "Runs all PatPat game tests")
 registerGameTest("twoPlayersGameTest", "twoPlayersGameTest", "Runs the PatPat two players game test, spawning a dedicated server and two clients")
 registerGameTest("singleplayerGameTest", "singleplayerGameTest", "Runs the PatPat singleplayer game test, spawning a single client")
+registerGameTest("keybindingGameTest", "keybindingGameTest", "Runs the PatPat keybinding game test, rebinding the keybinding with real input")
 
 if (project.hasProperty("patpat.test.port")) {
 	tasks.withType(JavaExec).configureEach {

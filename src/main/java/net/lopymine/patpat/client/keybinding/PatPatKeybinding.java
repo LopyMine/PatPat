@@ -27,6 +27,7 @@ public class PatPatKeybinding extends KeyMapping {
 		);
 	}
 
+	@Getter
 	private final PressableKeybindingCombination combination = new PressableKeybindingCombination();
 	@Getter
 	private boolean binding;
@@ -136,9 +137,13 @@ public class PatPatKeybinding extends KeyMapping {
 		/*if (this.combination.onlyOneKey()) {
 			return this.getFullTranslatedKeyMessage();
 		} else {
-			return TextUtils.literal("< ... >");
+			return TextUtils.literal(this.isSelected() ? "..." : "< ... >");
 		}
 		*///?}
+	}
+
+	public boolean isSelected() {
+		return Minecraft.getInstance().screen instanceof net.minecraft.client.gui.screens./*? if >=1.21 {*/options./*?}*/controls.KeyBindsScreen screen && screen.selectedKey == this;
 	}
 
 	@NotNull

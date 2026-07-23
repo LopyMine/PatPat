@@ -11,14 +11,19 @@ import net.lopymine.patpat.tests.PatPatTestMode;
 @Mixin(Window.class)
 public class WindowMixin {
 
-	//? if >=1.21.9 {
-	@Inject(method = {"onFocus", "onEnter", "onIconify"}, at = @At("HEAD"), cancellable = true)
-	//?} else {
-	/*@Inject(method = {"onFocus", "onEnter"}, at = @At("HEAD"), cancellable = true)
-	*///?}
+	@Inject(method = {"onFocus", "onEnter"}, at = @At("HEAD"), cancellable = true)
 	private void keepWindowFocusedDuringTests(long window, boolean value, CallbackInfo ci) {
-		if (PatPatTestMode.isEnabled()) {
+		if (PatPatTestMode.isEnabled() && !value) {
 			ci.cancel();
 		}
 	}
+
+	//? if >=1.21.9 {
+	@Inject(method = "onIconify", at = @At("HEAD"), cancellable = true)
+	private void keepWindowRestoredDuringTests(long window, boolean value, CallbackInfo ci) {
+		if (PatPatTestMode.isEnabled() && value) {
+			ci.cancel();
+		}
+	}
+	//?}
 }

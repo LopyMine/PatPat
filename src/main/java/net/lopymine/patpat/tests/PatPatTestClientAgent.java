@@ -1,18 +1,25 @@
 package net.lopymine.patpat.tests;
 
 import java.io.File;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BooleanSupplier;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.InputConstants.Key;
+import org.lwjgl.glfw.GLFW;
 
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.keybinding.*;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
+import net.lopymine.patpat.mixin.tests.*;
 import net.lopymine.patpat.tests.PatPatTestAgent.PatPatTestRequest;
 import net.minecraft.client.*;
+import net.minecraft.client.gui.components.*;
+import net.minecraft.client.gui.components.events.*;
 import net.minecraft.client.gui.screens.ConnectScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens./*? if >=1.21 {*/options./*?}*/controls.KeyBindsScreen;
 import net.minecraft.client.multiplayer.ServerData;
 //? if >=1.17 {
 import net.minecraft.client.multiplayer.resolver.ServerAddress;
@@ -31,6 +38,10 @@ public class PatPatTestClientAgent {
 	private static final int JOIN_ATTEMPTS = 5;
 	private static final int WORLD_LOAD_TIMEOUT_TICKS = 12000;
 	private static final long WORLD_SEED = 0L;
+	private static final int SCROLL_TIMEOUT_TICKS = 400;
+	private static final int LIST_TOP_PADDING = 40;
+	private static final int LIST_BOTTOM_PADDING = 32;
+	private static final int ROW_HEIGHT = 20;
 
 	//? if >=26.1 {
 	private static final String[] WORLD_SETUP_COMMANDS = {
@@ -141,6 +152,11 @@ public class PatPatTestClientAgent {
 			case "CREATE_WORLD" -> createWorld(minecraft, request.argument().trim());
 			case "SETUP_WORLD" -> runCommands(minecraft, WORLD_SETUP_COMMANDS);
 			case "RUN_COMMAND" -> runCommands(minecraft, request.argument());
+			case "OPEN_KEY_BINDS" -> openKeyBinds(minecraft);
+			case "SCROLL_TO_KEYBINDING" -> scrollToKeybinding(minecraft);
+			case "CLICK_KEYBINDING" -> clickKeybinding(minecraft);
+			case "PRESS_KEYS" -> pressKeys(minecraft, request.argument().trim());
+			case "KEYBINDING" -> keybinding();
 			case "WAIT_TICKS" -> waitTicks(Integer.parseInt(request.argument().trim()));
 			case "LOOK_AT" -> lookAt(minecraft, request.argument().trim());
 			case "PAT" -> pat(minecraft, request.argument().trim());
@@ -205,6 +221,24 @@ public class PatPatTestClientAgent {
 	}
 
 	private static BooleanSupplier createWorld(Minecraft minecraft, String name) {
+		boolean[] created = {false};
+
+		return () -> {
+			if (ticks > WORLD_LOAD_TIMEOUT_TICKS) {
+				throw new IllegalStateException("The test world was not loaded in %d ticks".formatted(WORLD_LOAD_TIMEOUT_TICKS));
+			}
+			if (!created[0]) {
+				if (minecraft.getOverlay() != null) {
+					return false;
+				}
+				created[0] = true;
+				createFreshLevel(minecraft, name);
+			}
+			return isWorldReady(minecraft);
+		};
+	}
+
+	private static void createFreshLevel(Minecraft minecraft, String name) {
 		//? if >=1.20.3 {
 		minecraft.createWorldOpenFlows().createFreshLevel(name, createLevelSettings(name), createWorldOptions(), PatPatTestClientAgent::createFlatWorldDimensions, new TitleScreenHolder().get());
 		//?} elif >=1.19.3 {
@@ -219,8 +253,6 @@ public class PatPatTestClientAgent {
 		/*net.minecraft.core.RegistryAccess.RegistryHolder registries = net.minecraft.core.RegistryAccess.builtin();
 		minecraft.createLevel(name, createLevelSettings(name), registries, createFlatWorldGenSettings(registries));
 		*///?}
-
-		return awaitWorld(minecraft);
 	}
 
 	private static net.minecraft.world.level.LevelSettings createLevelSettings(String name) {
@@ -335,14 +367,9 @@ public class PatPatTestClientAgent {
 	}
 	*///?}
 
-	private static BooleanSupplier awaitWorld(Minecraft minecraft) {
-		return () -> {
-			if (ticks > WORLD_LOAD_TIMEOUT_TICKS) {
-				throw new IllegalStateException("The test world was not loaded in %d ticks".formatted(WORLD_LOAD_TIMEOUT_TICKS));
-			}
-			MinecraftServer server = minecraft.getSingleplayerServer();
-			return minecraft.level != null && minecraft.player != null && minecraft.screen == null && server != null && server.isReady();
-		};
+	private static boolean isWorldReady(Minecraft minecraft) {
+		MinecraftServer server = minecraft.getSingleplayerServer();
+		return minecraft.level != null && minecraft.player != null && minecraft.screen == null && server != null && server.isReady();
 	}
 
 	private static BooleanSupplier runCommands(Minecraft minecraft, String... commands) {
@@ -374,6 +401,214 @@ public class PatPatTestClientAgent {
 			future.join();
 			return true;
 		};
+	}
+
+	private static BooleanSupplier openKeyBinds(Minecraft minecraft) {
+		return () -> {
+			if (minecraft.getOverlay() != null) {
+				return false;
+			}
+			if (!(minecraft.screen instanceof KeyBindsScreen)) {
+				minecraft.setScreen(new KeyBindsScreen(minecraft.screen, minecraft.options));
+				return false;
+			}
+			return findKeybindingButton(minecraft) != null;
+		};
+	}
+
+	private static BooleanSupplier scrollToKeybinding(Minecraft minecraft) {
+		return () -> {
+			AbstractSelectionList<?> list = findKeyBindsList(minecraft);
+			int index = list == null ? -1 : findKeybindingIndex(list);
+			if (index == -1) {
+				if (ticks > SCROLL_TIMEOUT_TICKS) {
+					throw new IllegalStateException("The PatPat keybinding entry was not found in the key binds list");
+				}
+				return false;
+			}
+
+			int top = LIST_TOP_PADDING;
+			int bottom = minecraft.getWindow().getGuiScaledHeight() - LIST_BOTTOM_PADDING;
+			int rowTop = ((AbstractSelectionListInvoker) list).invokeGetRowTop(index);
+
+			if (rowTop >= top && (rowTop + ROW_HEIGHT) <= bottom) {
+				payload = "%d".formatted(rowTop);
+				return true;
+			}
+			if (ticks > SCROLL_TIMEOUT_TICKS) {
+				throw new IllegalStateException("Failed to scroll the key binds list to the PatPat keybinding, the row is at %d".formatted(rowTop));
+			}
+
+			moveMouse(minecraft, minecraft.getWindow().getGuiScaledWidth() / 2.0D, minecraft.getWindow().getGuiScaledHeight() / 2.0D);
+			scroll(minecraft, rowTop < top ? 5.0D : -5.0D);
+			return false;
+		};
+	}
+
+	private static AbstractSelectionList<?> findKeyBindsList(Minecraft minecraft) {
+		Screen screen = minecraft.screen;
+		if (screen == null) {
+			return null;
+		}
+		for (GuiEventListener child : screen.children()) {
+			if (child instanceof AbstractSelectionList<?> list) {
+				return list;
+			}
+		}
+		return null;
+	}
+
+	private static int findKeybindingIndex(AbstractSelectionList<?> list) {
+		List<?> entries = list.children();
+		for (int index = 0; index < entries.size(); index++) {
+			if (entries.get(index) instanceof KeyEntryAccessor entry && entry.getKeyMapping() instanceof PatPatKeybinding) {
+				return index;
+			}
+		}
+		return -1;
+	}
+
+	private static BooleanSupplier clickKeybinding(Minecraft minecraft) {
+		int[] index = {0};
+		return () -> {
+			if (index[0] == 0) {
+				Button button = awaitKeybindingButton(minecraft);
+				if (button == null) {
+					return false;
+				}
+				moveMouse(minecraft, getButtonX(button) + (button.getWidth() / 2.0D), getButtonY(button) + (button.getHeight() / 2.0D));
+				index[0]++;
+				return false;
+			}
+			if (index[0] == 1) {
+				click(minecraft, GLFW.GLFW_PRESS);
+				index[0]++;
+				return false;
+			}
+			if (index[0] == 2) {
+				click(minecraft, GLFW.GLFW_RELEASE);
+				index[0]++;
+				return false;
+			}
+			PatPatKeybinding keybinding = PatPatClientKeybindingManager.getPatKeybinding();
+			if (!(minecraft.screen instanceof KeyBindsScreen screen) || screen.selectedKey != keybinding) {
+				throw new IllegalStateException("The PatPat keybinding was not selected by the click");
+			}
+			return ticks >= 5;
+		};
+	}
+
+	private static BooleanSupplier pressKeys(Minecraft minecraft, String argument) {
+		List<Key> keys = new ArrayList<>();
+		for (String name : argument.split("\\+")) {
+			keys.add(InputConstants.getKey("key.keyboard." + name.trim().toLowerCase(Locale.ROOT).replace('_', '.')));
+		}
+
+		List<Runnable> steps = new ArrayList<>();
+		for (Key key : keys) {
+			steps.add(() -> sendKey(minecraft, key, GLFW.GLFW_PRESS));
+		}
+		for (int i = keys.size() - 1; i >= 0; i--) {
+			Key key = keys.get(i);
+			steps.add(() -> sendKey(minecraft, key, GLFW.GLFW_RELEASE));
+		}
+
+		int[] index = {0};
+		return () -> {
+			if (index[0] >= steps.size()) {
+				return true;
+			}
+			steps.get(index[0]++).run();
+			return false;
+		};
+	}
+
+	private static BooleanSupplier keybinding() {
+		KeybindingCombination combination = PatPatClientKeybindingManager.getPatKeybinding().getCombination();
+		Key attributeKey = combination.getAttributeKey();
+		Key key = combination.getKey();
+
+		payload = "%s+%s".formatted(attributeKey == null ? "none" : attributeKey.getName(), key == null ? "none" : key.getName());
+		return () -> true;
+	}
+
+	private static Button awaitKeybindingButton(Minecraft minecraft) {
+		Button button = findKeybindingButton(minecraft);
+		if (button == null && ticks > SCROLL_TIMEOUT_TICKS) {
+			throw new IllegalStateException("The PatPat keybinding entry was not found in the key binds list");
+		}
+		return button;
+	}
+
+	private static Button findKeybindingButton(Minecraft minecraft) {
+		Screen screen = minecraft.screen;
+		return screen == null ? null : findKeybindingButton(screen.children());
+	}
+
+	private static Button findKeybindingButton(List<? extends GuiEventListener> children) {
+		for (GuiEventListener child : children) {
+			if (child instanceof KeyEntryAccessor entry && entry.getKeyMapping() instanceof PatPatKeybinding) {
+				return entry.getChangeButton();
+			}
+			if (child instanceof ContainerEventHandler container) {
+				Button button = findKeybindingButton(container.children());
+				if (button != null) {
+					return button;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static int getButtonX(Button button) {
+		//? if >=1.19.3 {
+		return button.getX();
+		//?} else {
+		/*return button.x;
+		*///?}
+	}
+
+	private static int getButtonY(Button button) {
+		//? if >=1.19.3 {
+		return button.getY();
+		//?} else {
+		/*return button.y;
+		*///?}
+	}
+
+	private static void moveMouse(Minecraft minecraft, double guiX, double guiY) {
+		double x = (guiX * minecraft.getWindow().getScreenWidth()) / minecraft.getWindow().getGuiScaledWidth();
+		double y = (guiY * minecraft.getWindow().getScreenHeight()) / minecraft.getWindow().getGuiScaledHeight();
+
+		PatPatTestMode.runSyntheticInput(() -> ((MouseHandlerInvoker) minecraft.mouseHandler).invokeOnMove(getWindowHandle(minecraft), x, y));
+	}
+
+	private static void scroll(Minecraft minecraft, double amount) {
+		PatPatTestMode.runSyntheticInput(() -> ((MouseHandlerInvoker) minecraft.mouseHandler).invokeOnScroll(getWindowHandle(minecraft), 0.0D, amount));
+	}
+
+	private static void click(Minecraft minecraft, int action) {
+		PatPatTestMode.runSyntheticInput(() -> {
+			//? if >=1.21.9 {
+			((MouseHandlerInvoker) minecraft.mouseHandler).invokeOnButton(getWindowHandle(minecraft), new net.minecraft.client.input.MouseButtonInfo(GLFW.GLFW_MOUSE_BUTTON_LEFT, 0), action);
+			//?} else {
+			/*((MouseHandlerInvoker) minecraft.mouseHandler).invokeOnPress(getWindowHandle(minecraft), GLFW.GLFW_MOUSE_BUTTON_LEFT, action, 0);
+			*///?}
+		});
+	}
+
+	private static void sendKey(Minecraft minecraft, Key key, int action) {
+		PatPatTestMode.runSyntheticInput(() -> {
+			//? if >=1.21.9 {
+			((KeyboardHandlerInvoker) minecraft.keyboardHandler).invokeKeyPress(getWindowHandle(minecraft), action, new net.minecraft.client.input.KeyEvent(key.getValue(), 0, 0));
+			//?} else {
+			/*((KeyboardHandlerInvoker) minecraft.keyboardHandler).invokeKeyPress(getWindowHandle(minecraft), key.getValue(), 0, action, 0);
+			*///?}
+		});
+	}
+
+	private static long getWindowHandle(Minecraft minecraft) {
+		return minecraft.getWindow()/*? if <=1.21.8 {*//*.getWindow()*//*?} else {*/.handle()/*?}*/;
 	}
 
 	private static BooleanSupplier waitTicks(int amount) {

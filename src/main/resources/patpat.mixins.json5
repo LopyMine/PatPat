@@ -51,7 +51,11 @@
 
 		"tests.WindowMixin",
 		"tests.KeyboardHandlerMixin",
-		"tests.MouseHandlerMixin"
+		"tests.KeyboardHandlerInvoker",
+		"tests.MouseHandlerMixin",
+		"tests.MouseHandlerInvoker",
+		"tests.KeyEntryAccessor",
+		"tests.AbstractSelectionListInvoker"
 	],
 	"injectors": {
 		"defaultRequire": 1

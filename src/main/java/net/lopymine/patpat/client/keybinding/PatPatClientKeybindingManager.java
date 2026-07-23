@@ -4,9 +4,9 @@ import lombok.Getter;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.minecraft.client.gui.screens.options.controls.*;
-//? if >=1.19.4 && controlling {
+//? if >=1.19.4 {
 
-import net.lopymine.patpat.mixin.controlling.KeyBindsScreenAccessor;
+import net.lopymine.patpat.mixin.KeyBindsScreenAccessor;
 
 //?}
 import net.minecraft.client.gui.screens./*? if >=1.21 {*/options./*?}*/controls.*;
@@ -58,7 +58,7 @@ public class PatPatClientKeybindingManager {
 				keybinding.sendBindingKeys();
 				screen.selectedKey = null;
 			}
-			//? if >=1.19.4 && controlling {
+			//? if >=1.19.4 {
 			((KeyBindsScreenAccessor) (screen)).getList().refreshEntries();
 			//?}
 			cancel.run();
@@ -77,7 +77,7 @@ public class PatPatClientKeybindingManager {
 				keybinding.sendBindingKeys();
 				screen.selectedKey = null;
 			}
-			//? if >=1.19.4 && controlling {
+			//? if >=1.19.4 {
 			((KeyBindsScreenAccessor) (screen)).getList().refreshEntries();
 			//?}
 			cancel.run();

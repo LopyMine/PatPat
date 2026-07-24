@@ -34,6 +34,8 @@ runs/
 /libs/
 /runs-tests/
 personal/
+versions/*/.fabric/
+user-images/
 
 # java
 

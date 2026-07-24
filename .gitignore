@@ -34,7 +34,6 @@ runs/
 /libs/
 /runs-tests/
 personal/
-versions/*/tests/
 
 # java
 

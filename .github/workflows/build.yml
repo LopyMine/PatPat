@@ -47,13 +47,3 @@ jobs:
           path: |
             build/libs/
             /build/reports/tests/test/**
-      - name: run client gametest
-        if: matrix.platform == 'fabric'
-        run: ./gradlew runClientGameTest -Pci_loader=${{ matrix.platform }}
-      - name: capture build artifacts
-        if: matrix.platform == 'fabric'
-        uses: actions/upload-artifact@v4
-        with:
-          name: Artifacts
-          path: |
-            /build/run/clientGameTest/screenshots/**

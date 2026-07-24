@@ -113,10 +113,14 @@ registerGameTest("gameTest", "gameTest", "Runs all PatPat game tests")
 registerGameTest("twoPlayersGameTest", "twoPlayersGameTest", "Runs the PatPat two players game test, spawning a dedicated server and two clients")
 registerGameTest("singleplayerGameTest", "singleplayerGameTest", "Runs the PatPat singleplayer game test, spawning a single client")
 registerGameTest("keybindingGameTest", "keybindingGameTest", "Runs the PatPat keybinding game test, rebinding the keybinding with real input")
+registerGameTest("shadersGameTest", "shadersGameTest", "Runs the PatPat shaders game test, launching with the configured mods and shader packs")
 
 if (project.hasProperty("patpat.test.port")) {
 	tasks.withType(JavaExec).configureEach {
 		jvmArgs("-Dpatpat.test.port=${project.property("patpat.test.port")}")
+		if (project.hasProperty("patpat.test.jvmargs")) {
+			jvmArgs(project.property("patpat.test.jvmargs").toString().split(" ").findAll { argument -> !argument.isEmpty() })
+		}
 		maxHeapSize = "1g"
 	}
 }
@@ -134,22 +138,6 @@ if (fabric) {
 		if (config.getEnvironment() == "client") {
 			config.vmArg("-Dpatpat.debug=true")
 		}
-	}
-
-	if (sc.current.parsed.matches(">=26.1")) {
-		//fabricApi {
-		//	configureTests {
-		//		createSourceSet = true
-		//		modId = "patpat-mod-test-${project.name}"
-		//		enableGameTests = true // Default is true
-		//		enableClientGameTests = true // Default is true
-		//		eula = true // By setting this to true, you agree to the Minecraft EULA.
-		//	}
-		//}
-
-		//tasks.named("runClientGameTest", JavaExec) {
-		//	jvmArgs "-ea"
-		//}
 	}
 
 	configurations.configureEach {

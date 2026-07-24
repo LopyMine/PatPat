@@ -94,6 +94,10 @@ public class PatPatTestHarness implements AutoCloseable {
 		return this.loader;
 	}
 
+	public String getVersion() {
+		return this.version;
+	}
+
 	public int getServerPort() {
 		return SERVER_PORT_BASE + this.lane;
 	}
@@ -120,7 +124,7 @@ public class PatPatTestHarness implements AutoCloseable {
 		}
 	}
 
-	private void log(String message, Object... arguments) {
+	public void log(String message, Object... arguments) {
 		System.out.printf("[%s] [%s] %s%n", LocalTime.now().truncatedTo(ChronoUnit.MILLIS), this.project, message.formatted(arguments));
 	}
 
@@ -141,6 +145,13 @@ public class PatPatTestHarness implements AutoCloseable {
 			}
 		}
 		throw new AssertionError("Minecraft server did not start listening on %s:%d".formatted(SERVER_HOST, this.getServerPort()));
+	}
+
+	public Path collectScreenshotWithCustomName(String sourcePath, String name) throws IOException {
+		Path target = this.root.resolve("runs-tests").resolve(name);
+		Files.createDirectories(target.getParent());
+		Files.copy(Path.of(sourcePath), target, StandardCopyOption.REPLACE_EXISTING);
+		return target;
 	}
 
 	public Path collectScreenshot(String sourcePath, String player) throws IOException {
@@ -197,6 +208,54 @@ public class PatPatTestHarness implements AutoCloseable {
 		Files.writeString(dir.resolve(PORT_FILE_NAME), String.valueOf(this.getPort()));
 	}
 
+	private Path suiteDir(String suite) {
+		return this.root.resolve("versions").resolve(this.project).resolve("tests").resolve(suite);
+	}
+
+	public boolean hasSuiteMods(String suite) {
+		Path mods = this.suiteDir(suite).resolve("mods");
+		if (!Files.isDirectory(mods)) {
+			return false;
+		}
+		try (Stream<Path> stream = Files.list(mods)) {
+			return stream.anyMatch(path -> path.getFileName().toString().endsWith(".jar"));
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
+	public void installSuiteAssets(String suite) throws IOException {
+		Path source = this.suiteDir(suite);
+		if (!Files.isDirectory(source)) {
+			return;
+		}
+		Path dest = this.laneDir("client");
+		try (Stream<Path> stream = Files.list(source)) {
+			List<Path> directories = stream.filter(Files::isDirectory).toList();
+			for (Path directory : directories) {
+				Path target = dest.resolve(directory.getFileName().toString());
+				deleteRecursively(target);
+				copyRecursively(directory, target);
+			}
+		}
+		this.log("Installed suite '%s' assets into %s", suite, dest);
+	}
+
+	private static void copyRecursively(Path source, Path target) throws IOException {
+		try (Stream<Path> stream = Files.walk(source)) {
+			List<Path> entries = stream.toList();
+			for (Path entry : entries) {
+				Path resolved = target.resolve(source.relativize(entry).toString());
+				if (Files.isDirectory(entry)) {
+					Files.createDirectories(resolved);
+				} else {
+					Files.createDirectories(resolved.getParent());
+					Files.copy(entry, resolved, StandardCopyOption.REPLACE_EXISTING);
+				}
+			}
+		}
+	}
+
 	public void assertServerPortIsFree() {
 		try (Socket probe = new Socket()) {
 			probe.connect(new InetSocketAddress(SERVER_HOST, this.getServerPort()), 1000);
@@ -206,32 +265,34 @@ public class PatPatTestHarness implements AutoCloseable {
 		throw new AssertionError("Port %d is already in use, a previous test run is probably still alive".formatted(this.getServerPort()));
 	}
 
-	public Agent launchServer() throws IOException, InterruptedException {
-		this.processes.add(this.launch("runServerTest", "server"));
+	public Agent launchServer(String... arguments) throws IOException, InterruptedException {
+		this.processes.add(this.launch("runServerTest", "server", arguments));
 		return this.awaitAgent("server");
 	}
 
-	public Agent launchClientOne() throws IOException, InterruptedException {
-		this.processes.add(this.launch("runClientTest", "client"));
+	public Agent launchClientOne(String... arguments) throws IOException, InterruptedException {
+		this.processes.add(this.launch("runClientTest", "client", arguments));
 		return this.awaitAgent("client1");
 	}
 
-	public Agent launchClientTwo() throws IOException, InterruptedException {
-		this.processes.add(this.launch("runClientTest_" + CLIENT_TWO_NAME, "client2"));
+	public Agent launchClientTwo(String... arguments) throws IOException, InterruptedException {
+		this.processes.add(this.launch("runClientTest_" + CLIENT_TWO_NAME, "client2", arguments));
 		return this.awaitAgent("client2");
 	}
 
-	private Process launch(String task, String logName) throws IOException {
+	private Process launch(String task, String logName, String... arguments) throws IOException {
 		String wrapper = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win") ? "gradlew.bat" : "gradlew";
 
-		List<String> command = List.of(
+		List<String> command = new ArrayList<>(List.of(
 				this.root.resolve(wrapper).toString(),
 				":%s:%s".formatted(this.project, task),
 				"-Ppatpat.test.port=" + this.getPort(),
 				"-Pmossy.lane=" + this.lane,
 				"--configure-on-demand",
 				"--console=plain"
-		);
+		));
+
+		command.addAll(List.of(arguments));
 
 		Path logDir = this.root.resolve("build/patpat-tests");
 		Files.createDirectories(logDir);

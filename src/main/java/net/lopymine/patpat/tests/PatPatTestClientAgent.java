@@ -157,6 +157,7 @@ public class PatPatTestClientAgent {
 			case "CLICK_KEYBINDING" -> clickKeybinding(minecraft);
 			case "PRESS_KEYS" -> pressKeys(minecraft, request.argument().trim());
 			case "KEYBINDING" -> keybinding();
+			case "ENABLE_SHADERS" -> enableShaders();
 			case "WAIT_TICKS" -> waitTicks(Integer.parseInt(request.argument().trim()));
 			case "LOOK_AT" -> lookAt(minecraft, request.argument().trim());
 			case "PAT" -> pat(minecraft, request.argument().trim());
@@ -521,6 +522,11 @@ public class PatPatTestClientAgent {
 			steps.get(index[0]++).run();
 			return false;
 		};
+	}
+
+	private static BooleanSupplier enableShaders() {
+		payload = net.lopymine.patpat.compat.iris.IrisShaderController.enableFirstShaderPack();
+		return () -> ticks >= 20;
 	}
 
 	private static BooleanSupplier keybinding() {

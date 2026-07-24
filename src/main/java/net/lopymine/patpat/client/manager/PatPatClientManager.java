@@ -3,6 +3,7 @@ package net.lopymine.patpat.client.manager;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.client.keybinding.*;
 import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.tests.PatPatTestMode;
 import net.minecraft.client.Minecraft;
@@ -18,7 +19,6 @@ import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.list.PatPatClientIgnoreMobListConfig;
 import net.lopymine.patpat.client.config.resourcepack.CustomAnimationSettingsConfig;
 import net.lopymine.patpat.client.config.resourcepack.PlayerConfig;
-import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
 import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
 import net.lopymine.patpat.entity.PatEntity;
@@ -113,7 +113,12 @@ public class PatPatClientManager {
 			return;
 		}
 
-		if (!PatPatClientKeybindingManager.getPatKeybinding().isDown()) {
+		PatPatKeybinding patKeybinding = PatPatClientKeybindingManager.getPatKeybinding();
+		if (patKeybinding == null) {
+			return;
+		}
+
+		if (!patKeybinding.isDown()) {
 			return;
 		}
 
@@ -153,7 +158,11 @@ public class PatPatClientManager {
 		if (!config.getMainConfig().isModEnabled()) {
 			return false;
 		}
-		if (!PatPatClientKeybindingManager.getPatKeybinding().isDown()) {
+		PatPatKeybinding patKeybinding = PatPatClientKeybindingManager.getPatKeybinding();
+		if (patKeybinding == null) {
+			return false;
+		}
+		if (!patKeybinding.isDown()) {
 			return false;
 		}
 		return getPatEntityFromHitResult() != null;

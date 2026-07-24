@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import lombok.Getter;
+import lombok.*;
 import net.lopymine.patpat.logger.PatLogger;
 
 public class PatPatTestAgent {
@@ -21,6 +21,7 @@ public class PatPatTestAgent {
 	private Socket socket;
 	private BufferedWriter writer;
 	private boolean failed;
+	@Setter
 	private Runnable disconnectHandler;
 
 	@Getter
@@ -112,10 +113,6 @@ public class PatPatTestAgent {
 		if (this.disconnectHandler != null) {
 			this.disconnectHandler.run();
 		}
-	}
-
-	public void setDisconnectHandler(Runnable handler) {
-		this.disconnectHandler = handler;
 	}
 
 	public PatPatTestRequest poll() {

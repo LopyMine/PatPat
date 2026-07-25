@@ -54,7 +54,6 @@
 		"tests.KeyboardHandlerInvoker",
 		"tests.MouseHandlerMixin",
 		"tests.MouseHandlerInvoker",
-		"tests.KeyEntryAccessor",
 		"tests.AbstractSelectionListInvoker"
 	],
 	"injectors": {

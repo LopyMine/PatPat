@@ -204,6 +204,8 @@ public class PatPatTestHarness implements AutoCloseable {
 		Path dir = this.laneDir("client");
 		Files.createDirectories(dir);
 		deleteRecursively(dir.resolve("config"));
+		deleteRecursively(dir.resolve("mods"));
+		deleteRecursively(dir.resolve("shaderpacks"));
 		deleteRecursively(dir.resolve("saves").resolve(WORLD_NAME));
 		Files.writeString(dir.resolve(PORT_FILE_NAME), String.valueOf(this.getPort()));
 	}

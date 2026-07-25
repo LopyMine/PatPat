@@ -14,7 +14,7 @@
 		//?}
 
 		//? if >=1.21 {
-		"IPlatformHelperMixin",
+		"NewKeyBindsScreenModernMixin",
 		//?} else {
 		/*"NewKeyBindsScreenMixin",
 		*///?}

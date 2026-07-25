@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag("controllingGameTest")
 public class PatPatControllingTest {
 
+	private static final String SUITE = "controlling";
 	private static final String COMBINATION = "CAPS_LOCK+T";
 	private static final String EXPECTED_COMBINATION = "key.keyboard.caps.lock+key.keyboard.t";
 
@@ -24,7 +25,13 @@ public class PatPatControllingTest {
 		assertTrue(Files.exists(root.resolve("gradlew.bat")) || Files.exists(root.resolve("gradlew")), "Project root not found at " + root);
 
 		try (PatPatTestHarness harness = new PatPatTestHarness(root, project)) {
+			if (!harness.hasSuiteMods(SUITE)) {
+				harness.log("Skipping the shaders test, suite '%s' has no mods for this version", SUITE);
+				return;
+			}
+
 			harness.prepareSingleplayerDirectory();
+			harness.installSuiteAssets(SUITE);
 
 			Agent client = harness.launchClientOne();
 

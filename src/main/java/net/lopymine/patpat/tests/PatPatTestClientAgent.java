@@ -1,6 +1,7 @@
 package net.lopymine.patpat.tests;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BooleanSupplier;
@@ -39,8 +40,8 @@ public class PatPatTestClientAgent {
 	private static final int WORLD_LOAD_TIMEOUT_TICKS = 12000;
 	private static final long WORLD_SEED = 0L;
 	private static final int SCROLL_TIMEOUT_TICKS = 400;
+	private static final int CLICK_ATTEMPTS = 40;
 	private static final int LIST_TOP_PADDING = 40;
-	private static final int LIST_BOTTOM_PADDING = 32;
 	private static final int ROW_HEIGHT = 20;
 
 	//? if >=26.1 {
@@ -413,7 +414,13 @@ public class PatPatTestClientAgent {
 				minecraft.setScreen(new KeyBindsScreen(minecraft.screen, minecraft.options));
 				return false;
 			}
-			return findKeybindingButton(minecraft) != null;
+			if (findKeybindingButton(minecraft) != null) {
+				return true;
+			}
+			if (ticks > SCROLL_TIMEOUT_TICKS) {
+				throw new IllegalStateException("The PatPat keybinding button was not found on the key binds screen %s".formatted(minecraft.screen));
+			}
+			return false;
 		};
 	}
 
@@ -428,20 +435,19 @@ public class PatPatTestClientAgent {
 				return false;
 			}
 
-			int top = LIST_TOP_PADDING;
-			int bottom = minecraft.getWindow().getGuiScaledHeight() - LIST_BOTTOM_PADDING;
 			int rowTop = ((AbstractSelectionListInvoker) list).invokeGetRowTop(index);
+			Button button = findChangeButton(list.children().get(index));
 
-			if (rowTop >= top && (rowTop + ROW_HEIGHT) <= bottom) {
-				payload = "%d".formatted(rowTop);
+			if (button != null && Math.abs(getButtonY(button) - rowTop) <= ROW_HEIGHT) {
+				payload = "%d".formatted(getButtonY(button));
 				return true;
 			}
 			if (ticks > SCROLL_TIMEOUT_TICKS) {
-				throw new IllegalStateException("Failed to scroll the key binds list to the PatPat keybinding, the row is at %d".formatted(rowTop));
+				throw new IllegalStateException("Failed to scroll the key binds list to the PatPat keybinding, the row is at %d, the button is at %d".formatted(rowTop, button == null ? -1 : getButtonY(button)));
 			}
 
-			moveMouse(minecraft, minecraft.getWindow().getGuiScaledWidth() / 2.0D, minecraft.getWindow().getGuiScaledHeight() / 2.0D);
-			scroll(minecraft, rowTop < top ? 5.0D : -5.0D);
+			int desiredY = LIST_TOP_PADDING + ROW_HEIGHT;
+			list.setScrollAmount(getScrollAmount(list) + (rowTop - desiredY));
 			return false;
 		};
 	}
@@ -462,40 +468,71 @@ public class PatPatTestClientAgent {
 	private static int findKeybindingIndex(AbstractSelectionList<?> list) {
 		List<?> entries = list.children();
 		for (int index = 0; index < entries.size(); index++) {
-			if (entries.get(index) instanceof KeyEntryAccessor entry && entry.getKeyMapping() instanceof PatPatKeybinding) {
+			if (isKeybindingEntry(entries.get(index))) {
 				return index;
 			}
 		}
 		return -1;
 	}
 
-	private static BooleanSupplier clickKeybinding(Minecraft minecraft) {
-		int[] index = {0};
-		return () -> {
-			if (index[0] == 0) {
-				Button button = awaitKeybindingButton(minecraft);
-				if (button == null) {
-					return false;
+	private static boolean isKeybindingEntry(Object entry) {
+		return findEntryField(entry, KeyMapping.class, false) instanceof PatPatKeybinding;
+	}
+
+	private static Button findChangeButton(Object entry) {
+		return (Button) findEntryField(entry, Button.class, true);
+	}
+
+	private static Object findEntryField(Object entry, Class<?> type, boolean excludeReset) {
+		for (Class<?> current = entry.getClass(); current != null && current != Object.class; current = current.getSuperclass()) {
+			for (Field field : current.getDeclaredFields()) {
+				if (!type.isAssignableFrom(field.getType())) {
+					continue;
 				}
-				moveMouse(minecraft, getButtonX(button) + (button.getWidth() / 2.0D), getButtonY(button) + (button.getHeight() / 2.0D));
-				index[0]++;
-				return false;
+				if (excludeReset && field.getName().toLowerCase(Locale.ROOT).contains("reset")) {
+					continue;
+				}
+				try {
+					field.setAccessible(true);
+					return field.get(entry);
+				} catch (Exception e) {
+					return null;
+				}
 			}
-			if (index[0] == 1) {
-				click(minecraft, GLFW.GLFW_PRESS);
-				index[0]++;
-				return false;
-			}
-			if (index[0] == 2) {
-				click(minecraft, GLFW.GLFW_RELEASE);
-				index[0]++;
-				return false;
-			}
+		}
+		return null;
+	}
+
+	private static BooleanSupplier clickKeybinding(Minecraft minecraft) {
+		int[] phase = {0};
+		int[] attempts = {0};
+		return () -> {
 			PatPatKeybinding keybinding = PatPatClientKeybindingManager.getPatKeybinding();
-			if (!(minecraft.screen instanceof KeyBindsScreen screen) || screen.selectedKey != keybinding) {
-				throw new IllegalStateException("The PatPat keybinding was not selected by the click");
+			if (minecraft.screen instanceof KeyBindsScreen screen && screen.selectedKey == keybinding) {
+				return ticks >= 5;
 			}
-			return ticks >= 5;
+			if (attempts[0] >= CLICK_ATTEMPTS) {
+				throw new IllegalStateException("The PatPat keybinding was not selected by the click after %d attempts, screen=%s".formatted(attempts[0], minecraft.screen));
+			}
+
+			Button button = awaitKeybindingButton(minecraft);
+			if (button == null) {
+				return false;
+			}
+			if (phase[0] == 0) {
+				moveMouse(minecraft, getButtonX(button) + (button.getWidth() / 2.0D), getButtonY(button) + (button.getHeight() / 2.0D));
+				phase[0] = 1;
+				return false;
+			}
+			if (phase[0] == 1) {
+				click(minecraft, GLFW.GLFW_PRESS);
+				phase[0] = 2;
+				return false;
+			}
+			click(minecraft, GLFW.GLFW_RELEASE);
+			phase[0] = 0;
+			attempts[0]++;
+			return false;
 		};
 	}
 
@@ -547,14 +584,22 @@ public class PatPatTestClientAgent {
 	}
 
 	private static Button findKeybindingButton(Minecraft minecraft) {
+		AbstractSelectionList<?> list = findKeyBindsList(minecraft);
+		if (list != null) {
+			int index = findKeybindingIndex(list);
+			if (index != -1) {
+				return findChangeButton(list.children().get(index));
+			}
+		}
+
 		Screen screen = minecraft.screen;
 		return screen == null ? null : findKeybindingButton(screen.children());
 	}
 
 	private static Button findKeybindingButton(List<? extends GuiEventListener> children) {
 		for (GuiEventListener child : children) {
-			if (child instanceof KeyEntryAccessor entry && entry.getKeyMapping() instanceof PatPatKeybinding) {
-				return entry.getChangeButton();
+			if (isKeybindingEntry(child)) {
+				return findChangeButton(child);
 			}
 			if (child instanceof ContainerEventHandler container) {
 				Button button = findKeybindingButton(container.children());
@@ -574,6 +619,14 @@ public class PatPatTestClientAgent {
 		*///?}
 	}
 
+	private static double getScrollAmount(AbstractSelectionList<?> list) {
+		//? if >=1.21.4 {
+		return list.scrollAmount();
+		//?} else {
+		/*return list.getScrollAmount();
+		*///?}
+	}
+
 	private static int getButtonY(Button button) {
 		//? if >=1.19.3 {
 		return button.getY();
@@ -587,10 +640,6 @@ public class PatPatTestClientAgent {
 		double y = (guiY * minecraft.getWindow().getScreenHeight()) / minecraft.getWindow().getGuiScaledHeight();
 
 		PatPatTestMode.runSyntheticInput(() -> ((MouseHandlerInvoker) minecraft.mouseHandler).invokeOnMove(getWindowHandle(minecraft), x, y));
-	}
-
-	private static void scroll(Minecraft minecraft, double amount) {
-		PatPatTestMode.runSyntheticInput(() -> ((MouseHandlerInvoker) minecraft.mouseHandler).invokeOnScroll(getWindowHandle(minecraft), 0.0D, amount));
 	}
 
 	private static void click(Minecraft minecraft, int action) {

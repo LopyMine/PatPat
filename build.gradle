@@ -113,6 +113,7 @@ registerGameTest("gameTest", "gameTest", "Runs all PatPat game tests")
 registerGameTest("twoPlayersGameTest", "twoPlayersGameTest", "Runs the PatPat two players game test, spawning a dedicated server and two clients")
 registerGameTest("singleplayerGameTest", "singleplayerGameTest", "Runs the PatPat singleplayer game test, spawning a single client")
 registerGameTest("keybindingGameTest", "keybindingGameTest", "Runs the PatPat keybinding game test, rebinding the keybinding with real input")
+registerGameTest("controllingGameTest", "controllingGameTest", "Runs the PatPat keybinding game test, but with Controlling mod, rebinding the keybinding with real input")
 registerGameTest("shadersGameTest", "shadersGameTest", "Runs the PatPat shaders game test, launching with the configured mods and shader packs")
 
 if (project.hasProperty("patpat.test.port")) {

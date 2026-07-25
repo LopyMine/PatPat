@@ -189,24 +189,5 @@ public class ForgeClientModLoader implements IClientModLoader {
 			packerHandler.getPacketsChannel().sendToServer(packet);
 		}
 	}
-
-	private static class LazyClientPacketHandler {
-
-		private final Map<Identifier, PatPatClientPacketHandler<?>> lazyListeners = new HashMap<>();
-
-	}
-
-	@Getter
-	private static class ForgePackerHandler {
-
-		private final String packetVersion;
-		private final SimpleChannel packetsChannel;
-		private final AtomicInteger latestPacketId = new AtomicInteger(0);
-
-		public ForgePackerHandler(String packetVersion, String channelName) {
-			this.packetVersion  = packetVersion;
-			this.packetsChannel = NetworkRegistry.newSimpleChannel(RLUtils.modId(channelName), () -> packetVersion, packetVersion::equals, packetVersion::equals);
-		}
-	}
 }
 *///?}

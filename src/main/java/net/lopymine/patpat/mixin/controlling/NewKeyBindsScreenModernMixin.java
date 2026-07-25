@@ -19,7 +19,7 @@ public abstract class NewKeyBindsScreenModernMixin extends KeyBindsScreen {
 	}
 
 	@Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
-	private void handlePatPatKeybindingOnKeyPressed(/*? if >=1.21.9 {*/net.minecraft.client.input.KeyEvent event/*?} else {*/ /*int keyCode, int scanCode, int modifiers*//*?}*/, CallbackInfoReturnable<Boolean> cir) {
+	private void handlePatPatKeybindingOnKeyPressed(/*? if >=1.21.9 {*/net.minecraft.client.input.KeyEvent event/*?} else {*/ /*net.minecraft.client.input.KeyEvent event*//*?}*/, CallbackInfoReturnable<Boolean> cir) {
 		//? if >=1.21.9 {
 		int keyCode = event.key();
 		int scanCode = event.scancode();

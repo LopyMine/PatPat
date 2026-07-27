@@ -13,7 +13,7 @@
 		"issues": "https://github.com/${github_mod_author}/${mod_id}/issues"
 	},
 	"license": "${mod_license}",
-	"icon": "icon/icon.png",
+	"icon": "icon.png",
 	"environment": "${fabric_trick_side}",
 	"entrypoints": {
 		"main": [

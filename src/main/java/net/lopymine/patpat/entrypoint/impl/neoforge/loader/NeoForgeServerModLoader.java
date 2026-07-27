@@ -140,7 +140,7 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 		});
 		^///?} elif >=1.20.4 {
 		/^NeoForgeCommonEntrypoint.getEventBus().addListener(RegisterPayloadHandlerEvent.class, (e) -> {
-			IPayloadRegistrar registrar = e.registrar("1").optional();
+			IPayloadRegistrar registrar = e.registrar(PatPat.MOD_ID).optional();
 
 			ServerPacketRegister register = new ServerPacketRegister() {
 				@Override
@@ -150,6 +150,9 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 						if (!(player instanceof ServerPlayer serverPlayer)) {
 							return;
 						}
+						if (packet instanceof PingPatPacket<?, ?> pingPacket) {
+							pingPacket.setPacketReply(context.replyHandler()::send);
+						}
 						handler.handle(serverPlayer, packet);
 					};
 
@@ -158,7 +161,9 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 						if (clientHandler == null) {
 							return;
 						}
-
+						if (packet instanceof PingPatPacket<?, ?> pingPacket) {
+							pingPacket.setPacketReply(context.replyHandler()::send);
+						}
 						clientHandler.handle(packet);
 					};
 

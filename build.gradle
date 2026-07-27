@@ -34,6 +34,10 @@ mossyDependencies {
 		override("mossyCompileOnly", "cloth-config")
 		override("mossyCompileOnly", "geckolib")
 
+		if (sc.current.project == "neoforge-1.20.2" || sc.current.project == "neoforge-1.20.4") {
+			override("mossyCompileOnly", "yacl")
+		}
+
 		disable("fabric-permissions-api")
 	}
 }

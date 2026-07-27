@@ -1,5 +1,5 @@
 license = "${mod_license}"
-issueTrackerURL = "https://github.com/LopyMine/${mod_id}"
+issueTrackerURL = "https://github.com/${github_mod_author}/${mod_id}"
 modLoader="javafml"
 loaderVersion="[1,)"
 
@@ -9,7 +9,7 @@ version = "${mod_version}"
 displayName = "${mod_name}"
 side="${neoforge_trick_side}"
 displayURL = "https://modrinth.com/mod/${mod_id}"
-logoFile = "icon/icon.png"
+logoFile = "icon.png"
 credits = '''
 
 Translators:

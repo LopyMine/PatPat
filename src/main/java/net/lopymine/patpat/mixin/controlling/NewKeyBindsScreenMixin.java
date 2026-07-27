@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.callback.*;
 
-@Debug(export = true)
+@Debug(export = true, print = true)
 @Mixin(NewKeyBindsScreen.class)
 // Ignore the "Cannot find 'KeyBindsScreen' in the hierarchy of target class 'NewKeyBindsScreen'"
 // That's fine

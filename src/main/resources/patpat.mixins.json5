@@ -54,7 +54,8 @@
 		"tests.KeyboardHandlerInvoker",
 		"tests.MouseHandlerMixin",
 		"tests.MouseHandlerInvoker",
-		"tests.AbstractSelectionListInvoker"
+		"tests.AbstractSelectionListInvoker",
+		"KeyMappingAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

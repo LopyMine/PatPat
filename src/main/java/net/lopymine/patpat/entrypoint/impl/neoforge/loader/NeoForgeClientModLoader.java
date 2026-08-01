@@ -13,21 +13,24 @@ import net.lopymine.patpat.entrypoint.impl.neoforge.event.*;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
 import net.minecraft.client.*;
-import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
+//? if =1.20.4 {
+/^import net.neoforged.neoforge.network.registration.NetworkRegistry;
+^///?}
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 //? if >=1.21.7 {
 
-/^import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-^///?}
+//?}
 
 public class NeoForgeClientModLoader implements IClientModLoader {
 
@@ -50,27 +53,27 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 		^///?}
 
 		//? if <=1.21.5 {
-		NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.class, (p) -> {
+		/^NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.class, (p) -> {
 			if (p.getStage() != RenderLevelStageEvent.Stage.AFTER_ENTITIES) {
 				return;
 			}
 			renderer.render(Minecraft.getInstance().renderBuffers().bufferSource(), p.getPoseStack());
 		});
-		//?}
+		^///?}
 	}
 
 	@Override
 	public void registerAfterWorldTickListener(Consumer<ClientLevel> runnable) {
 		//? if >=1.20.5 {
-		/^NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, (p) -> {
+		NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, (p) -> {
 			ClientLevel level = Minecraft.getInstance().level;
 			if (level == null) {
 				return;
 			}
 			runnable.accept(level);
 		});
-		^///?} else {
-		NeoForge.EVENT_BUS.addListener(net.neoforged.neoforge.event.TickEvent.ClientTickEvent.class, (p) -> {
+		//?} else {
+		/^NeoForge.EVENT_BUS.addListener(net.neoforged.neoforge.event.TickEvent.ClientTickEvent.class, (p) -> {
 			if (p.phase != net.neoforged.neoforge.event.TickEvent.Phase.END) {
 				return;
 			}
@@ -80,18 +83,18 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 			}
 			runnable.accept(level);
 		});
-		//?}
+		^///?}
 	}
 
 	@Override
 	public void registerResourceReloadListener(AbstractResourceReloadListener listener) {
 		//? if >=1.21.4 {
-		/^NeoForgeClientEntrypoint.getEventBus().addListener(AddClientReloadListenersEvent.class, (e) -> e.addListener(listener.getId(), listener));
-		 ^///?}
+		NeoForgeClientEntrypoint.getEventBus().addListener(AddClientReloadListenersEvent.class, (e) -> e.addListener(listener.getId(), listener));
+		 //?}
 
 		//? if <=1.21.1 {
-		NeoForgeClientEntrypoint.getEventBus().addListener(RegisterClientReloadListenersEvent.class, (e) -> e.registerReloadListener(listener));
-		//?}
+		/^NeoForgeClientEntrypoint.getEventBus().addListener(RegisterClientReloadListenersEvent.class, (e) -> e.registerReloadListener(listener));
+		^///?}
 	}
 
 	@Override
@@ -135,7 +138,7 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 	@Override
 	public void registerClientPackets(Consumer<ClientPacketRegister> consumer) {
 		//? if <=1.21.6 {
-		ClientPacketRegister register = new ClientPacketRegister() {
+		/^ClientPacketRegister register = new ClientPacketRegister() {
 			@Override
 			public <P extends BasePatPatPacket<P>> void register(PatPatPacketType<P> type, PatPatClientPacketHandler<P> handler) {
 				if (!(ServerMultiLoader.getInstance() instanceof NeoForgeServerModLoader serverLoader)) {
@@ -145,10 +148,10 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 			}
 		};
 		consumer.accept(register);
-		//?}
+		^///?}
 
 		//? if >=1.21.7 {
-		/^NeoForgeClientEntrypoint.getEventBus().addListener(RegisterClientPayloadHandlersEvent.class, (event) -> {
+		NeoForgeClientEntrypoint.getEventBus().addListener(RegisterClientPayloadHandlersEvent.class, (event) -> {
 			ClientPacketRegister register = new ClientPacketRegister() {
 				@Override
 				public <P extends BasePatPatPacket<P>> void register(PatPatPacketType<P> type, PatPatClientPacketHandler<P> handler) {
@@ -163,25 +166,38 @@ public class NeoForgeClientModLoader implements IClientModLoader {
 			};
 			consumer.accept(register);
 		});
-		^///?}
+		//?}
 	}
 
 	@Override
 	public void sendPacketToServer(BasePatPatPacket<?> packet) {
+		ClientPacketListener connection = Minecraft.getInstance().getConnection();
+		if (connection == null) {
+			return;
+		}
+		//? if >=1.20.5 {
+		if (!connection.hasChannel(packet.type())) {
+			return;
+		}
+		//?} elif >=1.20.4 {
+		/^if (!NetworkRegistry.getInstance().isConnected(connection, packet.getPatPatType().getId())) {
+			return;
+		}
+		^///?}
 		if (packet instanceof PongPatPacket<?> pingPong && pingPong.canPong()) {
 			pingPong.pong(packet);
 		} else {
 			//? if >=1.21.7 {
-			/^ClientPacketDistributor.sendToServer(packet);
-			^///?} elif >=1.20.5 {
+			ClientPacketDistributor.sendToServer(packet);
+			//?} elif >=1.20.5 {
 			/^PacketDistributor.sendToServer(packet);
 			^///?} elif >=1.20.4 {
 			/^PacketDistributor.SERVER.noArg().send(packet);
 			^///?} else {
-			if (ServerMultiLoader.getInstance() instanceof NeoForgeServerModLoader serverLoader && serverLoader.getNeoForgeChannelHandler() != null) {
+			/^if (ServerMultiLoader.getInstance() instanceof NeoForgeServerModLoader serverLoader && serverLoader.getNeoForgeChannelHandler() != null) {
 				serverLoader.getNeoForgeChannelHandler().getChannel().sendToServer(packet);
 			}
-			//?}
+			^///?}
 		}
 	}
 

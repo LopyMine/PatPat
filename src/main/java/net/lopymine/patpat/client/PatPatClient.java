@@ -19,6 +19,7 @@ public class PatPatClient {
 
 	public static final PatLogger LOGGER = new PatLogger("PatPat/Client");
 	public static final Set<UUID> AUTHORS = Set.of(UUID.fromString("7b829ed5-9b74-428f-9b4d-ede06975fbc1"), UUID.fromString("192e3748-12d5-4573-a8a5-479cd394a1dc"));
+	public static final UUID SECOND_AUTHOR_UUID = UUID.fromString("192e3748-12d5-4573-a8a5-479cd394a1dc");
 	public static final String CLIENT_CONFIG_VERSION = /*$ client_config_version*/ "1.0.1";
 
 	public static void onInitializeClient() {

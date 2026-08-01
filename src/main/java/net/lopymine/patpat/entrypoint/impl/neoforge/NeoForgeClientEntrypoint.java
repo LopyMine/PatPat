@@ -11,8 +11,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 
 //? if >=1.20.5 {
-/^@Mod(value = PatPat.MOD_ID, dist = Dist.CLIENT)
-^///?}
+@Mod(value = PatPat.MOD_ID, dist = Dist.CLIENT)
+//?}
 public class NeoForgeClientEntrypoint {
 
 	private static IEventBus INITIALIZATION_EVENT_BUS;

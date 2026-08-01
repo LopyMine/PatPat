@@ -10,8 +10,8 @@ import net.lopymine.patpat.tests.PatPatTestServerAgent;
 
 public class PatPat {
 
-	public static final String MOD_VERSION = /*$ mod_version*/ "1.2.6+26.1+fabric";
-	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "03b8369";
+	public static final String MOD_VERSION = /*$ mod_version*/ "1.3.1+26.1+fabric";
+	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "03c3f6d";
 	public static final String MOD_NAME = /*$ mod_name*/ "PatPat";
 	public static final String MOD_ID = /*$ mod_id*/ "patpat";
 	public static final String SERVER_CONFIG_VERSION = /*$ server_config_version*/ "1.0.0";

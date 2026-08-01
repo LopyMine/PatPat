@@ -26,36 +26,36 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.permission.PermissionAPI;
 
 //? if >=1.20.5 {
-/^import net.neoforged.neoforge.network.handling.IPayloadHandler;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-^///?} elif >=1.20.4 {
+//?} elif >=1.20.4 {
 /^import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 import net.neoforged.neoforge.network.registration.NetworkRegistry;
 ^///?} else {
-import java.util.concurrent.atomic.AtomicInteger;
+/^import java.util.concurrent.atomic.AtomicInteger;
 import net.neoforged.neoforge.network.NetworkEvent;
 import net.neoforged.neoforge.network.NetworkRegistry;
 import net.neoforged.neoforge.network.simple.SimpleChannel;
-//?}
+^///?}
 
 import net.neoforged.neoforge.server.permission.nodes.*;
 import net.neoforged.neoforge.server.permission.nodes.PermissionTypes;
 import net.neoforged.neoforge.server.permission.events.PermissionGatherEvent.Nodes;
 
 //? if >=1.21.11 {
-/^import net.minecraft.server.permissions.*;
+import net.minecraft.server.permissions.*;
 import net.minecraft.server.permissions.Permission.HasCommandLevel;
-^///?}
+//?}
 
 //? if >=1.21.9 {
-/^import net.minecraft.server.players.NameAndId;
-^///?} else {
+import net.minecraft.server.players.NameAndId;
+//?} else {
 
-import com.mojang.authlib.GameProfile;
+/^import com.mojang.authlib.GameProfile;
 
-//?}
+^///?}
 
 @Getter
 public class NeoForgeServerModLoader implements IServerModLoader {
@@ -66,8 +66,8 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 	private final Map<Identifier, PatPatClientPacketHandler<?>> clientHandlers = new HashMap<>();
 
 	//? if <=1.20.3 {
-	private NeoForgeChannelHandler neoForgeChannelHandler;
-	//?}
+	/^private NeoForgeChannelHandler neoForgeChannelHandler;
+	^///?}
 
 	@Override
 	public void registerServerCommands(Consumer<CommandDispatcher<CommandSourceStack>> consumer) {
@@ -92,12 +92,12 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 	}
 
 	//? if <=1.21.6 {
-	@SuppressWarnings("unchecked")
-	//?}
+	/^@SuppressWarnings("unchecked")
+	^///?}
 	@Override
 	public void registerServerPackets(Consumer<ServerPacketRegister> consumer) {
 		//? if >=1.20.5 {
-		/^NeoForgeCommonEntrypoint.getEventBus().addListener(RegisterPayloadHandlersEvent.class, (e) -> {
+		NeoForgeCommonEntrypoint.getEventBus().addListener(RegisterPayloadHandlersEvent.class, (e) -> {
 			PayloadRegistrar registrar = e.registrar("1").optional();
 
 			ServerPacketRegister register = new ServerPacketRegister() {
@@ -112,7 +112,7 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 					};
 
 					//? if <=1.21.6 {
-					IPayloadHandler<P> clientPayloadHandler = (packet, context) -> {
+					/^IPayloadHandler<P> clientPayloadHandler = (packet, context) -> {
 						PatPatClientPacketHandler<P> clientHandler = (PatPatClientPacketHandler<P>) NeoForgeServerModLoader.this.clientHandlers.get(packet.getPatPatType().getId());
 						if (clientHandler == null) {
 							return;
@@ -120,14 +120,14 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 
 						clientHandler.handle(packet);
 					};
-					//?}
+					^///?}
 
 					switch (registrationSide) {
 						case C2S -> registrar.playToServer(type.getPacketId(), type.getCodec(), payloadHandler);
 						case S2C -> registrar.playToClient(type.getPacketId(), type.getCodec()
 								//? if <=1.21.6 {
-								, clientPayloadHandler
-								//?}
+								/^, clientPayloadHandler
+								^///?}
 						);
 						case BOTH -> {
 							registrar.playToServer(type.getPacketId(), type.getCodec(), payloadHandler);
@@ -138,7 +138,7 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 			};
 			consumer.accept(register);
 		});
-		^///?} elif >=1.20.4 {
+		//?} elif >=1.20.4 {
 		/^NeoForgeCommonEntrypoint.getEventBus().addListener(RegisterPayloadHandlerEvent.class, (e) -> {
 			IPayloadRegistrar registrar = e.registrar(PatPat.MOD_ID).optional();
 
@@ -178,7 +178,7 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 			consumer.accept(register);
 		});
 		^///?} else {
-		if (this.neoForgeChannelHandler == null) {
+		/^if (this.neoForgeChannelHandler == null) {
 			this.neoForgeChannelHandler = new NeoForgeChannelHandler("1", "patpat_packets_channel");
 		}
 
@@ -211,34 +211,34 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 			}
 		};
 		consumer.accept(register);
-		//?}
+		^///?}
 	}
 
 	@Override
 	public void sendPacketToPlayer(ServerPlayer player, BasePatPatPacket<?> packet) {
 		//? if >=1.20.5 {
-		/^if (!player.connection.hasChannel(packet.getPatPatType().getId())) {
+		if (!player.connection.hasChannel(packet.getPatPatType().getId())) {
 			return;
 		}
-		^///?} elif >=1.20.4 {
+		//?} elif >=1.20.4 {
 		/^if (!NetworkRegistry.getInstance().isConnected(player.connection, packet.getPatPatType().getId())) {
 			return;
 		}
 		^///?} else {
-		if (this.neoForgeChannelHandler == null) {
+		/^if (this.neoForgeChannelHandler == null) {
 			return;
 		}
-		//?}
+		^///?}
 		if (packet instanceof PongPatPacket<?> pingPong && pingPong.canPong()) {
 			pingPong.pong(packet);
 		} else {
 			//? if >=1.20.5 {
-			/^PacketDistributor.sendToPlayer(player, packet);
-			^///?} elif >=1.20.4 {
+			PacketDistributor.sendToPlayer(player, packet);
+			//?} elif >=1.20.4 {
 			/^PacketDistributor.PLAYER.with(player).send(packet);
 			^///?} else {
-			this.neoForgeChannelHandler.channel.send(PacketDistributor.PLAYER.with(() -> player), packet);
-			//?}
+			/^this.neoForgeChannelHandler.channel.send(PacketDistributor.PLAYER.with(() -> player), packet);
+			^///?}
 		}
 	}
 
@@ -260,10 +260,10 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 				PermissionTypes.BOOLEAN,
 				(serverPlayer, uuid, something) -> serverPlayer != null &&
 						//? if >=1.21.11 {
-						/^serverPlayer.permissions().hasPermission(new HasCommandLevel(PermissionLevel.GAMEMASTERS))
-						^///?} else {
-						serverPlayer.hasPermissions(2)
-						//?}
+						serverPlayer.permissions().hasPermission(new HasCommandLevel(PermissionLevel.GAMEMASTERS))
+						//?} else {
+						/^serverPlayer.hasPermissions(2)
+						^///?}
 		);
 
 		this.permissionNodes.put(permissionId, node);
@@ -281,7 +281,7 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 
 	@Override
 	public CompletableFuture<Boolean> hasOfflinePermission(
-			/^? if >=1.21.9 {^/ /^NameAndId ^//^?} else {^/ GameProfile /^?}^/ profile,
+			/^? if >=1.21.9 {^/ NameAndId /^?} else {^/ /^GameProfile ^//^?}^/ profile,
 			MinecraftServer server,
 			String permission
 	) {
@@ -291,14 +291,14 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 				return false;
 			}
 			return PermissionAPI.getOfflinePermission(
-					/^? if >=1.21.9 {^/ /^profile.id() ^//^?} else {^/ profile.getId() /^?}^/,
+					/^? if >=1.21.9 {^/ profile.id() /^?} else {^/ /^profile.getId() ^//^?}^/,
 					node
 			);
 		});
 	}
 
 	//? if <=1.20.3 {
-	@Getter
+	/^@Getter
 	public static class NeoForgeChannelHandler {
 
 		private final SimpleChannel channel;
@@ -313,7 +313,7 @@ public class NeoForgeServerModLoader implements IServerModLoader {
 			);
 		}
 	}
-	//?}
+	^///?}
 
 }
 *///?}

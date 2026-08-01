@@ -15,16 +15,12 @@ public class PatPatClientProxLibPacketManager {
 
 	public static final int PAT_PAT_PACKETS_ID = 2;
 
-	//? if proxlib {
-	/*public static final me.enderkill98.proxlib.ProxPacketIdentifier PAT_PACKET_IDENTIFIER = me.enderkill98.proxlib.ProxPacketIdentifier.of(PAT_PAT_PACKETS_ID, 0);
-	*///?}
-
 	public static void register() {
 		//? if proxlib {
 		/*if (!LoadedMods.PROX_LIB_MOD_LOADED) {
 			return;
 		}
-		me.enderkill98.proxlib.client.ProxLib.addHandlerFor(PAT_PACKET_IDENTIFIER, (entity, id, data) -> {
+		me.enderkill98.proxlib.client.ProxLib.addHandlerFor(me.enderkill98.proxlib.ProxPacketIdentifier.of(PAT_PAT_PACKETS_ID, 0), (entity, id, data) -> {
 			LOGGER.debug("Received proximity packet, ProxLib enabled: {}", PatPatClientProxLibManager.isEnabled());
 			if (!PatPatClientProxLibManager.isEnabled()) {
 				return;
@@ -52,7 +48,7 @@ public class PatPatClientProxLibPacketManager {
 			return;
 		}
 		try {
-			int packetsCount = me.enderkill98.proxlib.client.ProxLib.sendPacket(Minecraft.getInstance(), PAT_PACKET_IDENTIFIER, encodeProxyPatPacket(pattedEntityId));
+			int packetsCount = me.enderkill98.proxlib.client.ProxLib.sendPacket(Minecraft.getInstance(), me.enderkill98.proxlib.ProxPacketIdentifier.of(PAT_PAT_PACKETS_ID, 0), encodeProxyPatPacket(pattedEntityId));
 			LOGGER.debug("Sent proximity packets ({}) to pat entity with id {}", packetsCount, pattedEntityId);
 			PatPatClientProxLibPacketRateLimitManager.countPacket();
 		} catch (Exception e) {

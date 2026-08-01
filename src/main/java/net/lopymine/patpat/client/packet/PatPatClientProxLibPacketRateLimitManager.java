@@ -1,8 +1,7 @@
 package net.lopymine.patpat.client.packet;
 
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
 import net.minecraft.client.multiplayer.ClientLevel;
-
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 
@@ -16,7 +15,7 @@ public class PatPatClientProxLibPacketRateLimitManager {
 	private static int packetsSentPerSecond;
 
 	public static void register() {
-		ClientTickEvents.END_WORLD_TICK.register(PatPatClientProxLibPacketRateLimitManager::tick);
+		ClientMultiLoader.getInstance().registerAfterWorldTickListener(PatPatClientProxLibPacketRateLimitManager::tick);
 	}
 
 	public static void tick(ClientLevel level) {

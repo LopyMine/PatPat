@@ -10,6 +10,7 @@ import net.lopymine.patpat.*;
 import net.lopymine.patpat.client.config.resourcepack.*;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.common.config.*;
+import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
 import net.lopymine.patpat.utils.*;
 

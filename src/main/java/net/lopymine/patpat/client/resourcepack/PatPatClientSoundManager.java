@@ -1,9 +1,9 @@
 package net.lopymine.patpat.client.resourcepack;
 
-import net.lopymine.patpat.PatLogger;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
+import net.lopymine.patpat.logger.PatLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.Registry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -11,7 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.resourcepack.SoundConfig;
 import net.lopymine.patpat.entity.PatEntity;
-import net.lopymine.patpat.utils.*;
 
 public class PatPatClientSoundManager {
 
@@ -25,30 +24,24 @@ public class PatPatClientSoundManager {
 	private static SoundEvent lopiSoundEvent;
 
 	public static void register() {
-		lopiSoundEvent   = getLopiSoundEvent();
-		patPatSoundEvent = getPatPatSoundEvent();
+		ClientMultiLoader.getInstance().registerSounds((register) -> {
+			lopiSoundEvent = register.registerSound("lopi");
+			patPatSoundEvent = register.registerSound("patpat");
+		});
 	}
 
 	public static SoundEvent getLopiSoundEvent() {
 		if (lopiSoundEvent == null) {
-			lopiSoundEvent = registerModSound("lopi");
+			throw new IllegalStateException();
 		}
 		return lopiSoundEvent;
 	}
 
 	public static SoundEvent getPatPatSoundEvent() {
 		if (patPatSoundEvent == null) {
-			patPatSoundEvent = registerModSound("patpat");
+			throw new IllegalStateException();
 		}
 		return patPatSoundEvent;
-	}
-
-	private static SoundEvent registerModSound(String id) {
-		return Registry.register(
-				VersionedThings.SOUND_EVENT,
-				IdentifierUtils.modId(id),
-				SoundUtils.getSoundEvent(id)
-		);
 	}
 
 	public static void playSound(PatEntity whoPatted, Player pattedEntity, double volume) {
@@ -69,7 +62,11 @@ public class PatPatClientSoundManager {
 				SoundSource.PLAYERS,
 				soundConfig.getVolume() * (float) volume,
 				Mth.nextFloat(
-						world.random,
+						//? if >=26.1 {
+						world.getRandom(),
+						//?} else {
+						/*world.random,
+						 *///?}
 						soundConfig.getMinPitch(),
 						soundConfig.getMaxPitch()
 				));

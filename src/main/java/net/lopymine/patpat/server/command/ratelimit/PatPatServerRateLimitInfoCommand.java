@@ -1,7 +1,7 @@
 package net.lopymine.patpat.server.command.ratelimit;
 
-import lombok.experimental.ExtensionMethod;
 import com.mojang.authlib.GameProfile;
+import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -11,8 +11,8 @@ import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.server.config.sub.PatPatServerRateLimitConfig;
 import net.lopymine.patpat.server.ratelimit.PatPatServerRateLimitManager;
 import net.lopymine.patpat.server.config.*;
+import net.lopymine.patpat.translation.PatTranslation;
 import net.lopymine.patpat.utils.*;
-import net.lopymine.patpat.*;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -27,6 +27,7 @@ import net.minecraft.server.players.NameAndId;
 /*?}*/
 
 import static net.minecraft.commands.Commands.argument;
+import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
 import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod({CommandExtension.class, PlayerExtension.class, GameProfileExtension.class})
@@ -40,7 +41,7 @@ public class PatPatServerRateLimitInfoCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("info")
-				.requires(context -> context.hasPatPatPermission("ratelimit.info"))
+				.requires(permission("ratelimit.info"))
 				.executes(PatPatServerRateLimitInfoCommand::info)
 				.then(argument(PROFILE_KEY, GameProfileArgument.gameProfile())
 						.suggests((context, builder) -> SharedSuggestionProvider.suggest(context.getSource().getOnlinePlayerNames(), builder))
@@ -97,7 +98,7 @@ public class PatPatServerRateLimitInfoCommand {
 		}
 
 		int availablePats = PatPatServerRateLimitManager.getAvailablePats(profile.getUUID());
-		profile.hasPermission(config.getPermissionBypass(), context).thenAcceptAsync(result -> {
+		profile.hasPermission(context.getSource().getServer(), config.getPermissionBypass()).thenAcceptAsync(result -> {
 			Object arg = result ?
 					CommandText.text("ratelimit.info.tokens.bypass").finish().withStyle(ChatFormatting.GOLD)
 					:

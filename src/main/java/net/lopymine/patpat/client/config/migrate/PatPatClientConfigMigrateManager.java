@@ -3,7 +3,7 @@ package net.lopymine.patpat.client.config.migrate;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.common.Version;
-import net.lopymine.patpat.common.migrate.*;
+import net.lopymine.patpat.common.config.migrate.*;
 
 public class PatPatClientConfigMigrateManager extends AbstractPatPatConfigMigrateManager {
 

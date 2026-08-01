@@ -3,8 +3,9 @@ package net.lopymine.patpat.client.manager;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.ExtensionMethod;
-import net.fabricmc.loader.api.FabricLoader;
+import net.lopymine.patpat.client.keybinding.*;
 import net.lopymine.patpat.extension.*;
+import net.lopymine.patpat.tests.PatPatTestMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
@@ -12,17 +13,14 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.*;
 
-import com.mojang.authlib.GameProfile;
-
-import net.lopymine.patpat.PatLogger;
+import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.list.PatPatClientIgnoreMobListConfig;
 import net.lopymine.patpat.client.config.resourcepack.CustomAnimationSettingsConfig;
 import net.lopymine.patpat.client.config.resourcepack.PlayerConfig;
-import net.lopymine.patpat.client.keybinding.PatPatClientKeybindingManager;
 import net.lopymine.patpat.client.render.PatPatClientRenderer;
-import net.lopymine.patpat.client.render.PatPatClientRenderer.PatPacket;
+import net.lopymine.patpat.client.render.PatPatClientRenderer.PacketPat;
 import net.lopymine.patpat.entity.PatEntity;
 import net.lopymine.patpat.utils.ProfilerUtils;
 import net.lopymine.patpat.utils.VersionedThings;
@@ -34,7 +32,8 @@ import org.jetbrains.annotations.Nullable;
 @ExtensionMethod(value = {EntityExtension.class, GameProfileExtension.class})
 public class PatPatClientManager {
 
-	private static final Map<UUID, PatEntity> PAT_ENTITIES = new HashMap<>();
+	// TODO: сделать либо отдельный метод с immutable мапой, либо плдучение по UUID для GameTest
+	public static final Map<UUID, PatEntity> PAT_ENTITIES = new HashMap<>();
 
 	public static final PatLogger LOGGER = PatPatClient.LOGGER.extend("PatManager");
 
@@ -48,7 +47,7 @@ public class PatPatClientManager {
 
 	@Nullable
 	public static PatEntity getPatEntity(@NotNull LivingEntity entity) {
-		return PAT_ENTITIES.get(entity.getUUID());
+		return PAT_ENTITIES.getOrDefault(entity.getUUID(), null);
 	}
 
 	public static void tickEntities() {
@@ -81,6 +80,9 @@ public class PatPatClientManager {
 	}
 
 	public static boolean expired(PatEntity patEntity, float tickDelta) {
+		if (PatPatTestMode.isEnabled()) {
+			return false;
+		}
 		CustomAnimationSettingsConfig animationConfig = patEntity.getAnimation();
 		int duration = animationConfig.getDuration();
 		return patEntity.getProgress(tickDelta) > duration;
@@ -111,7 +113,12 @@ public class PatPatClientManager {
 			return;
 		}
 
-		if (!PatPatClientKeybindingManager.getPatKeybinding().isDown()) {
+		PatPatKeybinding patKeybinding = PatPatClientKeybindingManager.getPatKeybinding();
+		if (patKeybinding == null) {
+			return;
+		}
+
+		if (!patKeybinding.isDown()) {
 			return;
 		}
 
@@ -139,9 +146,11 @@ public class PatPatClientManager {
 			return;
 		}
 
-		PatPatClientRenderer.registerClientPacket(new PatPacket(pattedEntity, PlayerConfig.currentSession(), player, false));
+		PatPatClientRenderer.registerClientPacket(new PacketPat(pattedEntity, PlayerConfig.currentSession(), player, false));
 
 		PatPatClientManager.patCooldown = 4;
+		Minecraft.getInstance().options.keyUse.setDown(false);
+		Minecraft.getInstance().options.keyUse.clickCount = 0;
 	}
 
 	public static boolean canPat() {
@@ -149,7 +158,11 @@ public class PatPatClientManager {
 		if (!config.getMainConfig().isModEnabled()) {
 			return false;
 		}
-		if (!PatPatClientKeybindingManager.getPatKeybinding().isDown()) {
+		PatPatKeybinding patKeybinding = PatPatClientKeybindingManager.getPatKeybinding();
+		if (patKeybinding == null) {
+			return false;
+		}
+		if (!patKeybinding.isDown()) {
 			return false;
 		}
 		return getPatEntityFromHitResult() != null;
@@ -175,10 +188,10 @@ public class PatPatClientManager {
 		}
 
 		ProfilerUtils.push("patpat$pick");
-		//? if >=1.20.5 {
-		double blockInteractionRange = player.blockInteractionRange();
+		//? if >=1.20.5 && <=1.21.10 {
+		/*double blockInteractionRange = player.blockInteractionRange();
 		double entityInteractionRange = player.entityInteractionRange();
-		//?}
+		*///?}
 
 		//? if >=1.21.2 {
 		float tickDelta = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
@@ -189,9 +202,11 @@ public class PatPatClientManager {
 		 *///?}
 
 		cameraEntity.mark(true);
-		//? if >=1.20.5 {
-		HitResult result = minecraft.gameRenderer.pick(cameraEntity, blockInteractionRange, entityInteractionRange, tickDelta);
-		//?} else {
+		//? if >=1.21.11 {
+		HitResult result = player.raycastHitResult(tickDelta, cameraEntity);
+		//?} elif >=1.20.5 {
+		/*HitResult result = minecraft.gameRenderer.pick(cameraEntity, blockInteractionRange, entityInteractionRange, tickDelta);
+		*///?} else {
 		/*HitResult oldResult = minecraft.hitResult;
 		minecraft.gameRenderer.pick(tickDelta);
 		HitResult result = minecraft.hitResult;

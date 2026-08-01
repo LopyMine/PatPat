@@ -1,10 +1,12 @@
 package net.lopymine.patpat.client.render.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 public record PatFeatureRequest(
-		ResourceLocation texture,
+		Identifier texture,
 		Pose poseStack,
         float x1,
         float y1,
@@ -15,5 +17,6 @@ public record PatFeatureRequest(
         float v1,
 		float u2,
         float v2,
-        int light
+        int light,
+		@Nullable MultiBufferSource provider
 ) { }

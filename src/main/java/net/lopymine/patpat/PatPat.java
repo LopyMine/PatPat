@@ -1,16 +1,17 @@
 package net.lopymine.patpat;
 
-import net.fabricmc.api.ModInitializer;
-
 import net.lopymine.patpat.common.config.PatPatConfigManager;
+import net.lopymine.patpat.entrypoint.*;
+import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.server.command.PatPatServerCommandManager;
 import net.lopymine.patpat.server.event.PatPatServerPlayerEvents;
 import net.lopymine.patpat.server.packet.PatPatServerPacketManager;
+import net.lopymine.patpat.tests.PatPatTestServerAgent;
 
-public class PatPat implements ModInitializer {
+public class PatPat {
 
-	public static final String MOD_VERSION = /*$ mod_version*/ "1.2.3+1.21.10";
-	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "0159b04";
+	public static final String MOD_VERSION = /*$ mod_version*/ "1.3.1+26.1+fabric";
+	public static final String BUILD_CODE_TIME = /*$ build_code_time*/ "03c3f6d";
 	public static final String MOD_NAME = /*$ mod_name*/ "PatPat";
 	public static final String MOD_ID = /*$ mod_id*/ "patpat";
 	public static final String SERVER_CONFIG_VERSION = /*$ server_config_version*/ "1.0.0";
@@ -19,15 +20,16 @@ public class PatPat implements ModInitializer {
 
 	public static final PatLogger LOGGER = new PatLogger(MOD_NAME);
 
-	@Override
-	public void onInitialize() {
+	public static void onInitialize() {
 		PatPatConfigManager.onInitialize();
 		PatPatConfigManager.reloadServer();
 		PatPatServerCommandManager.register();
 		PatPatServerPlayerEvents.register();
-		PatPatServerPacketManager.register();
+		ServerMultiLoader.getInstance().registerServerPackets(PatPatServerPacketManager::register);
+		PatPatTestServerAgent.register();
 
 		PatPat.LOGGER.info("PatPat Initialized");
 		PatPat.LOGGER.debug("Debug Mode Enabled");
 	}
+
 }

@@ -1,3 +1,5 @@
+//~ client_fabric_commands
+
 package net.lopymine.patpat.client.command.list;
 
 import lombok.experimental.ExtensionMethod;
@@ -5,17 +7,25 @@ import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.lopymine.patpat.client.config.sub.*;
-import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
+import net.lopymine.patpat.common.command.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 
 import java.util.*;
 
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.literal;
+//? if forge || neoforge {
+/*import net.minecraft.commands.FabricClientCommandSource;
+*///?} else {
+//? if <1.19 {
+/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+*///?} else {
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+ //?}
+//?}
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientListInfoCommand {

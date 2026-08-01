@@ -11,29 +11,29 @@ import org.spongepowered.asm.mixin.Unique;
 public class EntityRenderStateMixin implements EntityRenderStateWithParent {
 
 	@Unique
-	private Entity entity;
+	private Entity patPat$entity;
 
 	@Unique
-	private float tickDelta;
+	private float patPat$tickDelta;
 
 	@Override
 	public void patPat$setEntity(Entity entity) {
-		this.entity = entity;
+		this.patPat$entity = entity;
 	}
 
 	@Override
 	public Entity patPat$getEntity() {
-		return this.entity;
+		return this.patPat$entity;
 	}
 
 	@Override
 	public void patPat$setTickDelta(float tickDelta) {
-		this.tickDelta = tickDelta;
+		this.patPat$tickDelta = tickDelta;
 	}
 
 	@Override
 	public float patPat$getTickDelta() {
-		return this.tickDelta;
+		return this.patPat$tickDelta;
 	}
 }
 //?}

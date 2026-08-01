@@ -1,0 +1,40 @@
+license = "${mod_license}"
+issueTrackerURL = "https://github.com/${github_mod_author}/${mod_id}"
+modLoader="javafml"
+loaderVersion="[1,)"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+side="${neoforge_trick_side}"
+displayURL = "https://modrinth.com/mod/${mod_id}"
+logoFile = "icon.png"
+credits = '''
+
+Translators:
+    TastyPommesLul: Germany
+    Hamka: Polish
+    MrLemonHog: Ukrainian
+    Balojan: Vietnamese (46%)
+    okunamayanad: Turkish (25%)
+    Gallium: French (19%)
+'''
+authors = "${mod_authors}"
+description = '''${mod_description}'''
+
+${neoforge_trick_mixin_configs}
+
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "[1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft}"
+ordering = "NONE"
+side = "BOTH"

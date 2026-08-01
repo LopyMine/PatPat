@@ -1,14 +1,13 @@
 package net.lopymine.patpat.client.packet;
 
-import net.lopymine.patpat.PatLogger;
-import net.lopymine.patpat.client.PatPatClient;
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.compat.LoadedMods;
-import net.lopymine.patpat.compat.flashback.*;
-import net.lopymine.patpat.compat.replaymod.*;
+import net.lopymine.patpat.compat.flashback.FlashbackManager;
+import net.lopymine.patpat.compat.replaymod.ReplayModManager;
+import net.lopymine.patpat.logger.PatLogger;
+import net.lopymine.patpat.client.PatPatClient;
+import java.io.*;
 import net.lopymine.patpat.packet.s2c.PatEntityS2CPacketV2;
 import net.minecraft.client.Minecraft;
-import java.io.*;
 
 public class PatPatClientProxLibPacketManager {
 
@@ -16,16 +15,12 @@ public class PatPatClientProxLibPacketManager {
 
 	public static final int PAT_PAT_PACKETS_ID = 2;
 
-	//? if proxlib {
-	public static final me.enderkill98.proxlib.ProxPacketIdentifier PAT_PACKET_IDENTIFIER = me.enderkill98.proxlib.ProxPacketIdentifier.of(PAT_PAT_PACKETS_ID, 0);
-	//?}
-
 	public static void register() {
 		//? if proxlib {
-		if (!LoadedMods.PROX_LIB_MOD_LOADED) {
+		/*if (!LoadedMods.PROX_LIB_MOD_LOADED) {
 			return;
 		}
-		me.enderkill98.proxlib.client.ProxLib.addHandlerFor(PAT_PACKET_IDENTIFIER, (entity, id, data) -> {
+		me.enderkill98.proxlib.client.ProxLib.addHandlerFor(me.enderkill98.proxlib.ProxPacketIdentifier.of(PAT_PAT_PACKETS_ID, 0), (entity, id, data) -> {
 			LOGGER.debug("Received proximity packet, ProxLib enabled: {}", PatPatClientProxLibManager.isEnabled());
 			if (!PatPatClientProxLibManager.isEnabled()) {
 				return;
@@ -39,12 +34,12 @@ public class PatPatClientProxLibPacketManager {
 				LOGGER.debug("Failed to handle proximity packet from player: {}, packet id: {}, data: {}", entity.getName().getString(), id, data, e);
 			}
 		});
-		//?}
+		*///?}
 	}
 
 	public static void onPat(int pattedEntityId) {
 		//? if proxlib {
-		if (!PatPatClientProxLibManager.isEnabled()) {
+		/*if (!PatPatClientProxLibManager.isEnabled()) {
 			LOGGER.debug("Trying to make proximity pat, but proximity packets disabled!");
 			return;
 		}
@@ -53,13 +48,13 @@ public class PatPatClientProxLibPacketManager {
 			return;
 		}
 		try {
-			int packetsCount = me.enderkill98.proxlib.client.ProxLib.sendPacket(Minecraft.getInstance(), PAT_PACKET_IDENTIFIER, encodeProxyPatPacket(pattedEntityId));
+			int packetsCount = me.enderkill98.proxlib.client.ProxLib.sendPacket(Minecraft.getInstance(), me.enderkill98.proxlib.ProxPacketIdentifier.of(PAT_PAT_PACKETS_ID, 0), encodeProxyPatPacket(pattedEntityId));
 			LOGGER.debug("Sent proximity packets ({}) to pat entity with id {}", packetsCount, pattedEntityId);
 			PatPatClientProxLibPacketRateLimitManager.countPacket();
 		} catch (Exception e) {
 			LOGGER.debug("Failed to send proximity packet, patted entity: {}, packet id: {}, data: {}", pattedEntityId, PAT_PAT_PACKETS_ID, e);
 		}
-		//?}
+		*///?}
 	}
 
 	private static int decodeProxyPatPacket(byte[] data) throws IOException {

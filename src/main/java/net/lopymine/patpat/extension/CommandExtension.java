@@ -1,13 +1,15 @@
 package net.lopymine.patpat.extension;
 
-import me.lucko.fabric.api.permissions.v0.Permissions;
+//import me.lucko.fabric.api.permissions.v0.Permissions;
+import net.lopymine.patpat.entrypoint.ServerMultiLoader;
 import net.lopymine.patpat.server.command.PatPatServerCommandManager;
-import net.lopymine.patpat.utils.TextUtils;
+import net.lopymine.patpat.utils.*;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 
 import com.mojang.brigadier.context.CommandContext;
+import net.minecraft.server.level.ServerPlayer;
 
 public class CommandExtension {
 
@@ -32,23 +34,14 @@ public class CommandExtension {
 	}
 
 	public static boolean hasPatPatPermission(CommandSourceStack context, String permission) {
-		return hasPermission(context, PatPatServerCommandManager.getPermission(permission));
-	}
-
-	public static boolean hasPermission(CommandSourceStack context, String permission) {
-		return hasPermission(context, permission, 2);
-	}
-
-	public static boolean hasPatPatPermission(CommandSourceStack context, String permission, int defaultLevel) {
-		return hasPermission(context, PatPatServerCommandManager.getPermission(permission), defaultLevel);
-	}
-
-	public static boolean hasPermission(CommandSourceStack context, String permission, int defaultLevel) {
-		//? if <1.17.1 {
-		/*return context./^? if >=1.17.1 {^/hasPermissionLevel/^?} else {^//^hasPermission^//^?}^/(defaultLevel);
-		 *///?} else {
-		return Permissions.check(context, permission, defaultLevel);
-		//?}
+		return ServerMultiLoader.getInstance().hasPermission(
+				//? if >=1.19 {
+				context.getPlayer(),
+				//?} else {
+				/*context.getEntity() instanceof ServerPlayer player ? player : null,
+				 *///?}
+				permission
+		);
 	}
 
 }

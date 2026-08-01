@@ -9,6 +9,7 @@ import net.lopymine.patpat.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import net.lopymine.patpat.logger.PatLogger;
 
 public class ConfigUtils {
 
@@ -45,7 +46,7 @@ public class ConfigUtils {
 			return config;
 		}
 		try (FileWriter writer = new FileWriter(location, StandardCharsets.UTF_8)) {
-			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, logger::error));*/
+			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*///.getOrThrow(false, logger::error));
 			writer.write(json);
 		} catch (Exception e) {
 			logger.error("Failed to create config", e);
@@ -69,7 +70,7 @@ public class ConfigUtils {
 	public static <A> void saveConfig(A config, Codec<A> codec, File location, PatLogger logger) {
 		logger.debug("Saving config...");
 		try (FileWriter writer = new FileWriter(location, StandardCharsets.UTF_8)) {
-			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*//*.getOrThrow(false, logger::error));*/
+			String json = GSON.toJson(codec.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.empty())/*? if >=1.20.5 {*/.getOrThrow());/*?} else*///.getOrThrow(false, logger::error));
 			writer.write(json);
 		} catch (Exception e) {
 			logger.error("Failed to save config:", e);

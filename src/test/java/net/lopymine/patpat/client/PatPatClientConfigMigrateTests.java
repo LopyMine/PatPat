@@ -1,5 +1,7 @@
-//? >=1.19.4 {
+
 package net.lopymine.patpat.client;
+
+//? >=1.19.4 && fabric {
 
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
 import net.minecraft.server.Bootstrap;

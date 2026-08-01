@@ -3,10 +3,10 @@ package net.lopymine.patpat.client.config.list;
 import lombok.Getter;
 import net.lopymine.patpat.common.config.list.AbstractListConfig;
 import net.lopymine.patpat.utils.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 
-import net.lopymine.patpat.PatLogger;
+import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
 
@@ -45,7 +45,7 @@ public class PatPatClientIgnoreMobListConfig extends AbstractListConfig<EntityTy
 
 	@Override
 	protected String encode(EntityType<?> element) {
-		ResourceLocation entityTypeResource = VersionedThings.ENTITY_TYPE.getKey(element);
+		Identifier entityTypeResource = VersionedThings.ENTITY_TYPE.getKey(element);
 		if (entityTypeResource == null) {
 			return null;
 		}
@@ -54,7 +54,7 @@ public class PatPatClientIgnoreMobListConfig extends AbstractListConfig<EntityTy
 
 	@Override
 	protected EntityType<?> decode(String line) {
-		EntityType<?> entityType = VersionedThings.ENTITY_TYPE.getOptional(ResourceLocationUtils.parse(line)).orElse(null);
+		EntityType<?> entityType = VersionedThings.ENTITY_TYPE.getOptional(RLUtils.parse(line)).orElse(null);
 		if (entityType == null) {
 			this.getLogger().error("Failed to find entity type from line: \"{}\"", line);
 			return null;

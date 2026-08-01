@@ -10,6 +10,7 @@ import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.common.Version;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
+import net.lopymine.patpat.logger.PatLogger;
 import net.lopymine.patpat.utils.CodecUtils;
 import net.lopymine.patpat.utils.ConfigUtils;
 

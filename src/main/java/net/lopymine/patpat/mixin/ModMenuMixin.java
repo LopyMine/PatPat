@@ -1,5 +1,7 @@
 package net.lopymine.patpat.mixin;
 
+//? if fabric {
+
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.terraformersmc.modmenu.util.mod.fabric.FabricMod;
 import org.spongepowered.asm.mixin.*;
@@ -9,7 +11,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 
 import net.lopymine.patpat.PatPat;
-import net.lopymine.patpat.modmenu.ModMenuTranslators;
+import net.lopymine.patpat.modmenu.translation.ModMenuTranslators;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +20,7 @@ import java.util.Collection;
 import java.util.Map;
 /*?} else {*/
 /*import java.util.List;
-*//*?}*/
+ *//*?}*/
 
 @Mixin(value = FabricMod.class, remap = false)
 public class ModMenuMixin {
@@ -39,7 +41,7 @@ public class ModMenuMixin {
 		if (MOD_CONTAINER.equals(container)) {
 			original.putAll(ModMenuTranslators.getInstance().getTranslators());
 		}
-	/*?} else {*/
+		/*?} else {*/
 	/*@ModifyReturnValue(at = @At("RETURN"), method = "getContributors()Ljava/util/List;", remap = false, require = 0)
 	private List<String> getContributorsInject(@NotNull List<String> original) {
 		if (MOD_CONTAINER.equals(container)) {
@@ -49,4 +51,5 @@ public class ModMenuMixin {
 		return original;
 	}
 }
+//?}
 

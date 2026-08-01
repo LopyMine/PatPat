@@ -1,3 +1,5 @@
+//~ client_fabric_commands
+
 package net.lopymine.patpat.client.command.ignore;
 
 import lombok.experimental.ExtensionMethod;
@@ -8,7 +10,6 @@ import net.minecraft.world.entity.EntityType;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.command.argument.EntityTypeArgumentType;
 import net.lopymine.patpat.client.config.list.PatPatClientIgnoreMobListConfig;
@@ -18,8 +19,17 @@ import net.lopymine.patpat.utils.VersionedThings;
 
 import java.util.Objects;
 
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.argument;
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.literal;
+//? if forge || neoforge {
+/*import net.minecraft.commands.FabricClientCommandSource;
+*///?} else {
+//? if <1.19 {
+/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+*///?} else {
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+ //?}
+//?}
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.argument;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientIgnoreCommand {

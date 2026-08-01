@@ -1,12 +1,15 @@
 package net.lopymine.patpat.client.render;
 
 import lombok.experimental.ExtensionMethod;
-import net.fabricmc.loader.api.FabricLoader;
-import net.lopymine.patpat.client.config.sub.PatPatClientVisualConfig;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
+
+import net.lopymine.patpat.client.config.*;
+import net.lopymine.patpat.client.config.sub.*;
 import net.lopymine.patpat.client.render.feature.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.util.Mth;
@@ -15,11 +18,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
-import net.lopymine.patpat.client.config.PatPatClientConfig;
 import net.lopymine.patpat.client.config.resourcepack.*;
-import net.lopymine.patpat.client.config.PatPatClientStatsConfig;
 import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.lopymine.patpat.client.packet.*;
 import net.lopymine.patpat.client.resourcepack.PatPatClientSoundManager;
@@ -42,26 +42,23 @@ import org.joml.Quaternionf;
 /*import com.mojang.blaze3d.systems.RenderSystem;
  *//*?}*/
 
-//? if <=1.21.8 {
-/*import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-*//*?}*/
 
 
 @ExtensionMethod(VertexConsumerExtension.class)
 public class PatPatClientRenderer {
 
-	private static final Queue<PatPacket> serverPats = new ConcurrentLinkedQueue<>();
-	private static final Queue<PatPacket> clientPats = new ConcurrentLinkedQueue<>();
+	private static final Queue<PacketPat> serverPats = new ConcurrentLinkedQueue<>();
+	private static final Queue<PacketPat> clientPats = new ConcurrentLinkedQueue<>();
 
-	public static void registerServerPacket(PatPacket packet) {
+	public static void registerServerPacket(PacketPat packet) {
 		serverPats.offer(packet);
 	}
 
-	public static void registerClientPacket(PatPacket packet) {
+	public static void registerClientPacket(PacketPat packet) {
 		clientPats.offer(packet);
 	}
 
-	public record PatPacket(LivingEntity pattedEntity, PlayerConfig playerConfig, LocalPlayer player,
+	public record PacketPat(LivingEntity pattedEntity, PlayerConfig playerConfig, LocalPlayer player,
 	                        boolean replayModPacket) {
 
 		@Override
@@ -77,16 +74,18 @@ public class PatPatClientRenderer {
 
 	public static void register() {
 		//? if <=1.21.8 {
-		/*WorldRenderEvents.AFTER_ENTITIES.register((__) -> {
+		/*ClientMultiLoader.getInstance().registerAfterEntitiesRenderer((source, stack) -> {
+			PatFeatureRenderer.getInstance().setRenderingLevel(true);
 			PatPatClientRenderer.renderPatOnYourself();
-			PatFeatureRenderer.getInstance().render();
+			PatFeatureRenderer.getInstance().render(source);
+			PatFeatureRenderer.getInstance().setRenderingLevel(false);
 		});
 		*///?}
-		ClientTickEvents.END_WORLD_TICK.register(client -> {
-			boolean frozen = /*? if >1.20.2 {*/ client.tickRateManager().isFrozen(); /*?} else {*/ /*false; *//*?}*/
+		ClientMultiLoader.getInstance().registerAfterWorldTickListener((level) -> {
+			boolean frozen = /*? if >1.20.2 {*/ level.tickRateManager().isFrozen(); /*?} else {*/ /*false; *//*?}*/
 			PatPatClientConfig config = PatPatClientConfig.getInstance();
 
-			PatPacket packet;
+			PacketPat packet;
 			if (!frozen) {
 				while ((packet = serverPats.poll()) != null) {
 					LivingEntity pattedEntity = packet.pattedEntity();
@@ -106,7 +105,7 @@ public class PatPatClientRenderer {
 				LivingEntity pattedEntity = packet.pattedEntity();
 				PlayerConfig playerConfig = packet.playerConfig();
 
-				PatPatClientNetworkManager.sendPacketToServer(PatPatClientPacketManager.getPatPacket(pattedEntity));
+				ClientMultiLoader.getInstance().sendPacketToServer(PatPatClientPacketManager.getPatPacket(pattedEntity));
 				PatEntity patEntity = PatPatClientManager.pat(pattedEntity, playerConfig);
 
 				PatPatClientStatsConfig statsConfig = PatPatClientStatsConfig.getInstance();
@@ -130,7 +129,7 @@ public class PatPatClientRenderer {
 			}
 
 			LocalPlayer player = Minecraft.getInstance().player;
-			if (!empty && player != null && FabricLoader.getInstance().isDevelopmentEnvironment()) {
+			if (!empty && player != null && PatPatDebugConfig.DEBUG_ENABLED && PatPatDebugConfig.getInstance().isSelfPat()) {
 				PatPatClientManager.pat(player, PlayerConfig.currentSession());
 				ReplayModCompat.onPat(player.getId(), player.getId());
 				FlashbackCompat.onPat(player.getId(), player.getId());
@@ -173,10 +172,10 @@ public class PatPatClientRenderer {
 			return;
 		}
 
-		PatPatClientRenderer.render(new PoseStack(), camera.rotation(), patEntity, player, new Vec3f(0.0F, Mth.lerp(tickDelta, camera.eyeHeightOld, camera.eyeHeight) - 0.2F, 0.0F), tickDelta, light);
+		PatPatClientRenderer.render(new PoseStack(), camera.rotation(), patEntity, player, new Vec3f(0.0F, Mth.lerp(tickDelta, camera.eyeHeightOld, camera.eyeHeight) - 0.2F, 0.0F), tickDelta, light, null);
 	}
 
-	public static RenderResult render(PoseStack matrices, /*? if >=1.19.3 {*/ Quaternionf /*?} else {*/ /*Quaternion *//*?}*/ cameraRotation, @Nullable PatEntity providedPatEntity, @Nullable Entity entity, @Nullable Vec3f overrideOffset, float tickDelta, int light) {
+	public static RenderResult render(PoseStack matrices, /*? if >=1.19.3 {*/ Quaternionf /*?} else {*/ /*Quaternion *//*?}*/ cameraRotation, @Nullable PatEntity providedPatEntity, @Nullable Entity entity, @Nullable Vec3f overrideOffset, float tickDelta, int light, @Nullable MultiBufferSource provider) {
 		PatPatClientConfig config = PatPatClientConfig.getInstance();
 		if (!config.getMainConfig().isModEnabled()) {
 			return RenderResult.FAILED;
@@ -235,7 +234,7 @@ public class PatPatClientRenderer {
 		float v1 = 0.0F;
 		float v2 = 1.0F;
 
-		PatFeatureRenderer.getInstance().request(animation.getTexture(), matrices.last(), x1, y1, x2, y2, z, u1, v1, u2, v2, light);
+		PatFeatureRenderer.getInstance().request(animation.getTexture(), matrices.last(), x1, y1, x2, y2, z, u1, v1, u2, v2, light, provider);
 
 		matrices.popPose();
 		disableBlend();

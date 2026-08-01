@@ -6,6 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.lopymine.patpat.extension.*;
 import net.minecraft.commands.CommandSourceStack;
 
+import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
 import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod(CommandExtension.class)
@@ -17,7 +18,7 @@ public class PatPatServerListCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> get() {
 		return literal("list")
-				.requires(context -> context.hasPatPatPermission("list"))
+				.requires(permission("list"))
 				.then(PatPatServerListInfoCommand.get())
 				.then(PatPatServerListSetModeCommand.get())
 				.then(PatPatServerListChangeCommand.getAdd())

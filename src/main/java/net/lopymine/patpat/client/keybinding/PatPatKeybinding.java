@@ -27,6 +27,7 @@ public class PatPatKeybinding extends KeyMapping {
 		);
 	}
 
+	@Getter
 	private final PressableKeybindingCombination combination = new PressableKeybindingCombination();
 	@Getter
 	private boolean binding;
@@ -34,7 +35,7 @@ public class PatPatKeybinding extends KeyMapping {
 	private boolean canStartBinding = true;
 
 	public PatPatKeybinding(KeybindingCombination patCombination) {
-		super("patpat.keybinding.pat", -1, /*? if <1.21.9 {*//*PatPat.MOD_NAME + "." + PatPat.MOD_NAME*//*?} else {*/PatPatClientKeybindingManager.CATEGORY/*?}*/);
+		super("patpat.keybinding.pat", -1, /*? if <1.21.9 {*//*PatPat.MOD_NAME*//*?} else {*/PatPatClientKeybindingManager.CATEGORY/*?}*/);
 		this.combination.setAttributeKey(patCombination.getAttributeKey());
 		this.combination.setKey(patCombination.getKey());
 	}
@@ -136,9 +137,13 @@ public class PatPatKeybinding extends KeyMapping {
 		/*if (this.combination.onlyOneKey()) {
 			return this.getFullTranslatedKeyMessage();
 		} else {
-			return TextUtils.literal("...");
+			return TextUtils.literal(this.isSelected() ? "..." : "< ... >");
 		}
 		*///?}
+	}
+
+	public boolean isSelected() {
+		return Minecraft.getInstance().screen instanceof net.minecraft.client.gui.screens./*? if >=1.21 {*/options./*?}*/controls.KeyBindsScreen screen && screen.selectedKey == this;
 	}
 
 	@NotNull

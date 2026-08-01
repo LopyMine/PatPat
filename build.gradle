@@ -1,140 +1,227 @@
-import net.lopymine.mossy.MossyPlugin
+import net.lopymine.utils.MossyUtils
 
 plugins {
-	id("net.lopymine.mossy-plugin")
+	id "net.lopymine.mossy-plugin-core" version "$mossy_plugin_version"
 }
 
 mossyDependencies {
-	def mcVersion = stonecutter.current.version.toString()
-	minecraft = mcVersion
-	mappings = prop("build.yarn")
+	minecraft = stonecutter.current.project.substring(stonecutter.current.project.indexOf("-") + 1)
 	lombok = prop("base.lombok_version")
+
 	fabricApi = prop("build.fabric_api")
 	fabricLoader = prop("build.fabric_loader")
 
+	forge = prop("build.forge")
+
+	neoForge = prop("build.neoforge")
+	parchment = prop("build.parchment")
+
+	if (sc.current.project.startsWith("forge-") && sc.current.version.toString() == "1.20.1") {
+		disableMixinAp = "true"
+	}
+
 	additional {
-		// - By default, every additional project dependency ("dep.modId" from gradle.properties) will use
-		// - Modrinth Maven and "modImplementation" configuration name
-		// - If you want to override mod configuration name, you can do this:
-		// override("modCompileOnly", "just_mod_id")
-		// - It will do this:
-		// - modImplementation("maven.modrinth:modId:version") -> modCompileOnly("maven.modrinth:modId:version")
-		// - Or if you want to disable it and handle by yourself, just disable it auto handling:
-		// disable("just_mod_id")
+		override("mossyCompileOnly", "flashback")
+		override("mossyCompileOnly", "replaymod")
+		if (sc.current.project.startsWith("fabric-") && sc.current.version.toString() == "1.17") {
+			disable("iris")
+		} else {
+			override("mossyCompileOnly", "iris")
+		}
+		override("mossyCompileOnly", "sodium")
+		override("mossyCompileOnly", "controlling")
+		override("mossyCompileOnly", "searchables")
+		override("mossyCompileOnly", "cloth-config")
+		override("mossyCompileOnly", "geckolib")
 
-		override("modCompileOnly", "flashback")
-		override("modCompileOnly", "replaymod")
+		if (sc.current.project == "neoforge-1.20.2" || sc.current.project == "neoforge-1.20.4") {
+			override("mossyCompileOnly", "yacl")
+		}
 
-		// Fabric Permissions Api
 		disable("fabric-permissions-api")
-		// Cloth-Config
-		disable("cloth-config")
-		// GeckoLib
-		disable("geckolib")
-		// ProxLib
-		disable("proxlib")
-		// Replay Mod
 	}
 }
 
-mossyResources {
-	//expandFiles = ["custom", "file", "patterns", "here"]
-}
+def fabric = sc.current.project.contains("fabric")
+def forge = sc.current.project.startsWith("forge-")
 
 repositories {
 	maven {
-		name = "Cloth Config"
-		url = "https://maven.shedaniel.me/"
-	} // Cloth Config
-
-	maven {
-		name = "Modrinth"
-		url = "https://api.modrinth.com/maven"
-	} // Replay Mod
-
-	maven {
-		name = 'GeckoLib'
-		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-		content {
-			includeGroupByRegex("software\\.bernie.*")
-			includeGroup("com.eliotlash.mclib")
-			includeGroup("com.eliotlash.molang")
-		}
+		name = "Sinytra"
+		url = "https://maven.su5ed.dev/releases"
+	}
+	flatDir {
+		dir 'libs'
 	}
 }
 
 dependencies {
-	def mcVersion = stonecutter.current.version.toString()
+	if (fabric) {
+		def fpa = prop("build.fabric-permissions-api")
+		if (fpa != "unknown") {
+			mossyInclude(mossyImplementation("me.lucko:fabric-permissions-api:${fpa}")){
+				exclude(group: "net.fabricmc.fabric-api")
+			}
+		}
 
-	mappings loom.officialMojangMappings()
-
-	// Fabric permission api
-	def fpaVersion = prop("build.fabric-permissions-api")
-	include(modImplementation('me.lucko:fabric-permissions-api:' + fpaVersion)){
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-
-	// Cloth Config
-	def clothConfigVersion = prop("dep.cloth-config")
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${stonecutter.compare("1.19", mcVersion) == 1 ? clothConfigVersion : MossyPlugin.substringBefore(clothConfigVersion, "+")}") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-
-	// GeckoLib
-	def geckoLibVersion = prop("dep.geckolib")
-	if (geckoLibVersion != "unknown") {
-		if (mcVersion == "1.16.5") {
-			modCompileOnly("software.bernie.geckolib:geckolib-forge-${mcVersion}:${geckoLibVersion}")
-		} else if (mcVersion == "1.17.1") {
-			modCompileOnly("software.bernie.geckolib:geckolib-1.17.1-forge:${geckoLibVersion}")
-		} else if (mcVersion == "1.18.2") {
-			modCompileOnly("software.bernie.geckolib:geckolib-forge-1.18:${geckoLibVersion}")
-		} else if (mcVersion == "1.19.1" || mcVersion == "1.19.2") {
-			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.19:${geckoLibVersion}")
-		} else if (mcVersion == "1.20") {
-			modCompileOnly("software.bernie.geckolib:geckolib-fabric-1.20.1:${geckoLibVersion}")
-		} else {
-			modCompileOnly("software.bernie.geckolib:geckolib-fabric-${mcVersion}:${geckoLibVersion}")
+		testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
+		if (sc.current.project.startsWith("fabric-") && sc.current.version.toString() == "1.17") {
+			mossyImplementation("iris:iris-mc1.17-1.1.1")
 		}
 	}
-	testImplementation("net.fabricmc:fabric-loader-junit:${prop("build.fabric_loader")}")
 
-	def proxlibVersion = prop("dep.proxlib")
-	if (proxlibVersion != "unknown") {
-		include(modApi("maven.modrinth:proxlib:${proxlibVersion}"))
+	if (!fabric) {
+		testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	}
+
+	if (forge) {
+		annotationProcessor("net.fabricmc:sponge-mixin:0.16.5+mixin.0.8.7")
+
+		if (stonecutter.compare(stonecutter.current.version.toString(), "1.18") < 0) {
+			compileOnly("org.jetbrains:annotations:23.0.0")
+		}
 	}
 }
 
-// TODO: Добавить тесты на версию раньше, чем 1.18.2
-if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0) {
-	test {
-		useJUnitPlatform()
+test {
+	failOnNoDiscoveredTests = false
+	outputs.upToDateWhen { false }
+	if (!fabric) {
+		useJUnitPlatform {
+			excludeTags("gameTest")
+		}
 	}
 }
 
-configurations.configureEach {
-	resolutionStrategy {
-		force("net.fabricmc:fabric-loader:${prop("build.fabric_loader")}")
+def registerGameTest = { String taskName, String tag, String taskDescription ->
+	tasks.register(taskName, Test) {
+		group = "verification"
+		description = taskDescription
+
+		testClassesDirs = sourceSets.test.output.classesDirs
+		classpath = sourceSets.test.runtimeClasspath.filter { file -> !file.name.startsWith("fabric-loader-junit") }
+
+		failOnNoDiscoveredTests = false
+		outputs.upToDateWhen { false }
+		useJUnitPlatform {
+			includeTags(tag)
+		}
+		testLogging {
+			showStandardStreams = true
+		}
+	}
+}
+
+registerGameTest("gameTest", "gameTest", "Runs all PatPat game tests")
+registerGameTest("twoPlayersGameTest", "twoPlayersGameTest", "Runs the PatPat two players game test, spawning a dedicated server and two clients")
+registerGameTest("singleplayerGameTest", "singleplayerGameTest", "Runs the PatPat singleplayer game test, spawning a single client")
+registerGameTest("keybindingGameTest", "keybindingGameTest", "Runs the PatPat keybinding game test, rebinding the keybinding with real input")
+registerGameTest("controllingGameTest", "controllingGameTest", "Runs the PatPat keybinding game test, but with Controlling mod, rebinding the keybinding with real input")
+registerGameTest("shadersGameTest", "shadersGameTest", "Runs the PatPat shaders game test, launching with the configured mods and shader packs")
+
+if (project.hasProperty("patpat.test.port")) {
+	tasks.withType(JavaExec).configureEach {
+		jvmArgs("-Dpatpat.test.port=${project.property("patpat.test.port")}")
+		if (project.hasProperty("patpat.test.jvmargs")) {
+			jvmArgs(project.property("patpat.test.jvmargs").toString().split(" ").findAll { argument -> !argument.isEmpty() })
+		}
+		maxHeapSize = "1g"
+	}
+}
+
+if (fabric) {
+	if (stonecutter.compare(stonecutter.current.version.toString(), "1.18.2") >= 0) {
+		test {
+			useJUnitPlatform {
+				excludeTags("gameTest")
+			}
+		}
+	}
+
+	loom.runConfigs.configureEach { config ->
+		if (config.getEnvironment() == "client") {
+			config.vmArg("-Dpatpat.debug=true")
+		}
+	}
+
+	configurations.configureEach {
+		resolutionStrategy {
+			force("net.fabricmc:fabric-loader:${prop("build.fabric_loader")}")
+		}
 	}
 }
 
 stonecutter {
 	var buildTime = (int) (System.currentTimeMillis() / 10000) - 174611089
 	var buildCodeTime = String.format("%07x", buildTime & 0xFFFFFFF)
-	swap("build_code_time", "\"${buildCodeTime}\";")
+
+	swaps["build_code_time"] = "\"${buildCodeTime}\";".toString()
+	dependencies["yacl"] = MossyUtils.substringBefore(prop("dep.yacl"), "+")
+
+	replacements.string(current.parsed < "1.17") {
+		replace("ControllingOptionsScreenMixin", "ControllingOptionsScreenMixin")
+		replace("ControlsSettingsGuiNewMixin", "ControlsSettingsGuiNewMixin")
+		replace("ControllingOptionsScreen", "ControlsSettingsGuiNew")
+	}
+
+	replacements.string(current.parsed < "1.18") {
+		replace("net.minecraftforge.network", "net.minecraftforge.fmllegacy.network")
+		replace("net.minecraftforge.event.server", "net.minecraftforge.fmlserverevents")
+		replace("net.minecraftforge.client.ClientRegistry", "net.minecraftforge.fmlclient.registry.ClientRegistry")
+		replace("ServerStartedEvent", "FMLServerStartedEvent")
+		replace("ServerStoppingEvent", "FMLServerStoppingEvent")
+	}
+
+	replacements.string(current.parsed >= "1.18") {
+		replace("KeyBindsScreenAccessor", "KeyBindsScreenAccessor")
+		replace("KeyBindsScreenMixin", "KeyBindsScreenMixin")
+		replace("NewKeyBindsScreen", "NewKeyBindsScreen")
+		replace("ControlsScreen", "KeyBindsScreen")
+	}
+
+
+	replacements.string(current.parsed >= "1.21") {
+		replace("import net.minecraft.client.gui.screens.controls.*;", "import net.minecraft.client.gui.screens.options.controls.*;")
+	}
+
+	replacements.string(current.parsed >= "1.21.9") {
+		replace("int keyCode, int scanCode, int modifiers", "net.minecraft.client.input.KeyEvent event")
+		replace("double mouseX, double mouseY, int button", "net.minecraft.client.input.MouseButtonEvent event, boolean bl")
+	}
+
+	replacements.string(current.parsed >= "1.21.11") {
+		replace("ProxPacketIdentifier", "ProxPacketIdentifier")
+		replace("ResourceLocation", "Identifier")
+		replace(".location()", ".identifier()")
+		replace("RenderType", "RenderTypes")
+	}
+
+	replacements.string(current.parsed >= "26.1") {
+		replace("net.minecraft.client.gui.GuiGraphics", "net.minecraft.client.gui.GuiGraphicsExtractor")
+		replace("GuiGraphics", "GuiGraphicsExtractor")
+	}
 }
 
+stonecutter.filters.exclude("**/*.accesswidener")
+stonecutter.filters.exclude("**/*.cfg")
+stonecutter.filters.exclude("**/*.classTweaker")
+
+// TODO: Сделать, чтобы таска один раз запускалась, а не на каждую версию
+tasks.register("submodulesUpdate", Exec) {
+	commandLine = ["git", "submodule", "update", "--init", "--force", "--remote"]
+}
 
 jar {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
+def modId = prop("data.mod_id")
 processResources {
 	from("../../patpat-languages-files/lang") {
-		into "assets/${prop("data.mod_id")}/lang/"
+		into "assets/${modId}/lang/"
 		eachFile { file ->
 			if (!file.isDirectory()) {
-				// Client requires lang files in lower case
 				file.name = file.name.toLowerCase()
 			}
 		}

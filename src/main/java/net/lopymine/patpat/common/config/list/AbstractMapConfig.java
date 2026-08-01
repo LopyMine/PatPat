@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import lombok.*;
-import net.lopymine.patpat.PatLogger;
+import net.lopymine.patpat.logger.PatLogger;
 import org.jetbrains.annotations.Nullable;
 
 @Getter

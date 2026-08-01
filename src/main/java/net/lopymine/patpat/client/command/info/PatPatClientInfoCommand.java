@@ -1,3 +1,5 @@
+//~ client_fabric_commands
+
 package net.lopymine.patpat.client.command.info;
 
 import lombok.experimental.ExtensionMethod;
@@ -5,9 +7,9 @@ import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
 
 import net.lopymine.patpat.PatPat;
+import net.lopymine.patpat.entrypoint.EarlyCommonMultiLoader;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.CommandText;
 
@@ -15,14 +17,22 @@ import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.Action;
 
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.literal;
+//? if forge || neoforge {
+/*import net.minecraft.commands.FabricClientCommandSource;
+*///?} else {
+//? if <1.19 {
+/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+*///?} else {
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+//?}
+//?}
+
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientInfoCommand {
 
-	private static PatPatClientInfoCommand instance;
-
-	public static final String PLATFORM = "Fabric/Client";
+	private static PatPatClientInfoCommand INSTANCE;
 
 	private final MutableComponent platformText;
 	private final MutableComponent versionText;
@@ -30,33 +40,35 @@ public class PatPatClientInfoCommand {
 
 
 	private PatPatClientInfoCommand() {
+		String platform = EarlyCommonMultiLoader.getInstance().getFullPlatform();
+
 		String version = PatPat.MOD_VERSION + "+" + PatPat.BUILD_CODE_TIME;
 		String minecraftVersion = SharedConstants.getCurrentVersion()./*? if >=1.21.6 {*/name/*?} else {*/ /*getName *//*?}*/();
 		String debugInformation = "Platform: %s%nMinecraft: %s%nVersion: %s"
-				.formatted(PLATFORM, minecraftVersion, version);
+				.formatted(platform, minecraftVersion, version);
 
 		Style style = Style.EMPTY
 				.withClickEvent(CommandText.getClickEvent(Action.COPY_TO_CLIPBOARD, debugInformation))
 				.withHoverEvent(CommandText.getHoverEvent(HoverEvent.Action.SHOW_TEXT, CommandText.text("info.copy").finish()));
 
-		platformText = CommandText.goldenArgs("info.platform", PLATFORM)
+		this.platformText = CommandText.goldenArgs("info.platform", platform)
 				.finish()
 				.withStyle(style);
 
-		versionText = CommandText.goldenArgs("info.version", version)
+		this.versionText = CommandText.goldenArgs("info.version", version)
 				.finish()
 				.withStyle(style);
 
-		minecraftVersionText = CommandText.goldenArgs("info.minecraft_version", minecraftVersion)
+		this.minecraftVersionText = CommandText.goldenArgs("info.minecraft_version", minecraftVersion)
 				.finish()
 				.withStyle(style);
 	}
 
 	public static PatPatClientInfoCommand getInstance() {
-		if (instance == null) {
-			instance = new PatPatClientInfoCommand();
+		if (INSTANCE == null) {
+			INSTANCE = new PatPatClientInfoCommand();
 		}
-		return instance;
+		return INSTANCE;
 	}
 
 	public static LiteralArgumentBuilder<FabricClientCommandSource> get() {
@@ -65,9 +77,9 @@ public class PatPatClientInfoCommand {
 	}
 
 	public int version(CommandContext<FabricClientCommandSource> context) {
-		context.sendMsg(platformText);
-		context.sendMsg(minecraftVersionText);
-		context.sendMsg(versionText);
+		context.sendMsg(this.platformText);
+		context.sendMsg(this.minecraftVersionText);
+		context.sendMsg(this.versionText);
 
 		return Command.SINGLE_SUCCESS;
 	}

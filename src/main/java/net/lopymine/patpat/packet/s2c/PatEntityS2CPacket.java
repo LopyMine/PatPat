@@ -1,13 +1,12 @@
 package net.lopymine.patpat.packet.s2c;
 
+import java.util.UUID;
 import lombok.Getter;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.network.*;
-import net.minecraft.world.entity.Entity;
 import net.lopymine.patpat.packet.*;
 import net.lopymine.patpat.utils.*;
-
-import java.util.UUID;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
@@ -15,7 +14,7 @@ public class PatEntityS2CPacket implements S2CPatPacket<PatEntityS2CPacket> {
 
 	public static final String PACKET_ID = "pat_entity_s2c_packet";
 
-	public static final PatPatPacketType<PatEntityS2CPacket> TYPE = new PatPatPacketType<>(IdentifierUtils.modId(PACKET_ID), PatEntityS2CPacket::new);
+	public static final PatPatPacketType<PatEntityS2CPacket> TYPE = new PatPatPacketType<>(RLUtils.modId(PACKET_ID), PatEntityS2CPacket::new, PatEntityS2CPacket.class);
 
 	private final UUID pattedEntityUuid;
 	private final UUID whoPattedUuid;

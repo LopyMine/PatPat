@@ -4,33 +4,58 @@
 	"refmap": "${mod_id}.refmap.json",
 	"compatibilityLevel": "JAVA_${java}",
 	"plugin": "net.lopymine.patpat.compat.PatPatMixinConfigPlugin",
-	"mixins": [
-	],
+	"mixins": [],
 	"client": [
 		"EntityRendererMixin",
 		"LivingEntityRendererMixin",
 		/*? if =1.16.5*/
-		/*"TitleScreenMixin",*/
+		//"TitleScreenMixin",
 		/*? if >=1.21.2*/
 		"EntityRenderStateMixin",
 		/*? if <1.19.3*/
-		/*"ScreenMixin",*/
+		//"ScreenMixin",
 		"MinecraftClientMixin",
 		"CameraMixin",
 		"AbstractClientPlayerEntityMixin",
-		"ControlsListWidgetMixin",
+		"KeyEntryMixin",
 		"KeybindingMixin",
-		"ParentElementMixin",
+		"KeyboardHandlerMixin",
 		"KeyBindsScreenMixin",
-		"GameRendererMixin",
-		"EntityMixin",
-		"EnderDragonRendererMixin",
+
+        //? if >=1.19.4 {
+        "KeyBindsScreenAccessor",
+        //?}
+
+		//? if forge {
+		/*"forge.MinecraftMixin",
+		*///?}
+
+		//? if fabric {
 		"ModMenuMixin",
-		"MultiPlayerGameModeMixin",
+		//?}
+
+		//? if <=1.21.10 {
+		/*"GameRendererMixin",
+		*///?} else {
+		"LocalPlayerMixin",
+		//?}
+
 		/*? if >=1.21.9 {*/
 		"LevelRendererMixin",
-		"FeatureRenderDispatcherMixin"
+		"FeatureRenderDispatcherMixin",
 		/*?}*/
+
+		"EntityMixin",
+		"EnderDragonRendererMixin",
+		"MultiPlayerGameModeMixin",
+
+		"tests.WindowMixin",
+		"tests.KeyboardHandlerMixin",
+		"tests.KeyboardHandlerInvoker",
+		"tests.MouseHandlerMixin",
+		"tests.MouseHandlerInvoker",
+		"tests.AbstractSelectionListInvoker",
+		"KeyMappingAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -1,3 +1,5 @@
+//~ client_fabric_commands
+
 package net.lopymine.patpat.client.command.list;
 
 import lombok.experimental.ExtensionMethod;
@@ -5,21 +7,29 @@ import lombok.experimental.ExtensionMethod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.FabricClientCommandSource;
 
 import net.lopymine.patpat.client.command.argument.*;
 import net.lopymine.patpat.client.command.argument.PlayerInfoArgumentType.PlayerInfo;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
-import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
+import net.lopymine.patpat.common.command.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.ClientCommandExtension;
 import net.lopymine.patpat.utils.*;
 
-import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.*;
 
 import java.util.*;
 
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.argument;
-import static net.fabricmc.fabric.api.client.command./*? if >=1.19 {*/ v2 /*?} else {*/ /*v1 *//*?}*/.ClientCommandManager.literal;
+//? if forge || neoforge {
+/*import net.minecraft.commands.FabricClientCommandSource;
+*///?} else {
+//? if <1.19 {
+/*import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+*///?} else {
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+ //?}
+//?}
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.literal;
+import static net.lopymine.patpat.client.command.PatPatClientCommandManager.argument;
 
 @ExtensionMethod(ClientCommandExtension.class)
 public class PatPatClientListChangeCommand {
@@ -40,7 +50,7 @@ public class PatPatClientListChangeCommand {
 	public static LiteralArgumentBuilder<FabricClientCommandSource> getRemove() {
 		return literal("remove")
 				.then(argument(PLAYER_ARGUMENT_NAME, PlayerInfoArgumentType.player())
-						.suggests((context, builder) -> SharedSuggestionProvider.suggest(ClientNetworkUtils.getOnlinePlayersFromUuids(context.getSource().getClient().getConnection()), builder))
+						.suggests((context, builder) -> SharedSuggestionProvider.suggest(ClientNetworkUtils.getOnlinePlayersFromUuids(), builder))
 						.executes(context -> onListChange(context, false)));
 	}
 

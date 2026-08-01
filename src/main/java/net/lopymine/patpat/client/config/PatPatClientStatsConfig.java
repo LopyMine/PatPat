@@ -3,13 +3,13 @@ package net.lopymine.patpat.client.config;
 import java.util.function.Supplier;
 import lombok.*;
 import net.lopymine.patpat.*;
-import net.minecraft.resources.ResourceLocation;
+import net.lopymine.patpat.entrypoint.ClientMultiLoader;
+import net.lopymine.patpat.logger.PatLogger;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.*;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.PatPatConfigManager;
@@ -44,7 +44,7 @@ public class PatPatClientStatsConfig {
 
 	public void count(LivingEntity pattedEntity) {
 		this.totalPatsCounter.totalPats++;
-		ResourceLocation id = VersionedThings.ENTITY_TYPE.getKey(pattedEntity.getType());
+		Identifier id = VersionedThings.ENTITY_TYPE.getKey(pattedEntity.getType());
 		if (id == null) {
 			return;
 		}
@@ -60,7 +60,7 @@ public class PatPatClientStatsConfig {
 
 	public static void registerSaveHooks() {
 		AutoSaveManager.start();
-		ClientLifecycleEvents.CLIENT_STOPPING.register((client) -> {
+		ClientMultiLoader.getInstance().registerOnClientStop(() -> {
 			PatPatClientStatsConfig.getInstance().save();
 		});
 	}

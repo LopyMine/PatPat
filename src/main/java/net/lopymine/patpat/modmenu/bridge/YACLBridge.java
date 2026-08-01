@@ -1,6 +1,6 @@
 package net.lopymine.patpat.modmenu.bridge;
 
-//? >=1.20.1 {
+//? >=1.20.1 && yacl {
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 //? if yacl: >=3.6.6 {
 import dev.isxander.yacl3.gui.image.ImageRenderer;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 //?}
 
 public class YACLBridge {
@@ -229,7 +229,7 @@ public class YACLBridge {
 			builder.customImage(
 					new ImageRenderer() {
 						@Override
-						public int render(GuiGraphics graphics, int x, int y, int renderWidth, float delta) {
+						public int render(GuiGraphicsExtractor graphics, int x, int y, int renderWidth, float delta) {
 							return renderer.getMethod().render(graphics, x, y, renderWidth, delta);
 						}
 

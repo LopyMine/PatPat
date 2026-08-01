@@ -2,6 +2,7 @@ package net.lopymine.patpat.entity;
 
 import lombok.*;
 import net.lopymine.patpat.client.config.resourcepack.*;
+import net.lopymine.patpat.tests.PatPatTestMode;
 import net.minecraft.world.entity.LivingEntity;
 import java.util.*;
 
@@ -28,6 +29,9 @@ public class PatEntity {
 	}
 
 	public void tick() {
+		if (PatPatTestMode.isEnabled() && PatPatTestMode.isFrozen(this.getProgress(0.0F), this.animation.getDuration())) {
+			return;
+		}
 		this.tickProgress += 1;
 		if (this.tickProgress == Integer.MAX_VALUE) {
 			this.tickProgress = 0;

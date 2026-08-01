@@ -7,7 +7,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import net.lopymine.patpat.common.command.list.PatPatCommonListChangeCommand;
+import net.lopymine.patpat.common.command.PatPatCommonListChangeCommand;
 import net.lopymine.patpat.extension.*;
 import net.lopymine.patpat.server.config.list.PatPatServerPlayerListConfig;
 
@@ -21,6 +21,7 @@ import net.minecraft.server.players.NameAndId;
 /*?}*/
 
 import static net.minecraft.commands.Commands.argument;
+import static net.lopymine.patpat.server.command.PatPatServerCommandManager.permission;
 import static net.minecraft.commands.Commands.literal;
 
 @ExtensionMethod({TextExtension.class, CommandExtension.class})
@@ -34,7 +35,7 @@ public class PatPatServerListChangeCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> getRemove() {
 		return literal("remove")
-				.requires(context -> context.hasPatPatPermission("list.remove"))
+				.requires(permission("list.remove"))
 				.then(argument(PROFILE_KEY, GameProfileArgument.gameProfile())
 						.suggests((context, builder) -> SharedSuggestionProvider.suggest(context.getSource().getOnlinePlayerNames(), builder))
 						.executes(PatPatServerListChangeCommand::remove));
@@ -42,7 +43,7 @@ public class PatPatServerListChangeCommand {
 
 	public static LiteralArgumentBuilder<CommandSourceStack> getAdd() {
 		return literal("add")
-				.requires(context -> context.hasPatPatPermission("list.add"))
+				.requires(permission("list.add"))
 				.then(argument(PROFILE_KEY, GameProfileArgument.gameProfile())
 						.suggests(((context, builder) -> SharedSuggestionProvider.suggest(context.getSource().getOnlinePlayerNames(), builder)))
 						.executes(PatPatServerListChangeCommand::add));

@@ -3,18 +3,28 @@ package net.lopymine.patpat.client.render.feature;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import java.util.*;
+import lombok.*;
 import lombok.experimental.ExtensionMethod;
+import net.lopymine.patpat.compat.iris.IrisCompat;
 import net.lopymine.patpat.extension.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.Nullable;
 
+//? if >=1.21.11 {
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+//?} else {
+/*import net.minecraft.client.renderer.RenderTypes;
+*///?}
+
+@Setter
+@Getter
 @ExtensionMethod(value = {VertexConsumerExtension.class, PoseExtension.class})
 public class PatFeatureRenderer {
 
-	private final List<PatFeatureRequest> requests = new ArrayList<>();
+	private boolean renderingLevel = false;
+	public final List<PatFeatureRequest> requests = new ArrayList<>();
 
 	private static final PatFeatureRenderer INSTANCE = new PatFeatureRenderer();
 
@@ -22,11 +32,13 @@ public class PatFeatureRenderer {
 		return INSTANCE;
 	}
 
-	public void render() {
-		BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
+	public void render(MultiBufferSource source) {
+		if (!this.renderingLevel && !IrisCompat.isRenderingShadowPass()) {
+			return;
+		}
 
 		for (PatFeatureRequest request : this.requests) {
-			VertexConsumer buffer = source.getBuffer(RenderType.entityTranslucent(request.texture()));
+			VertexConsumer buffer = (request.provider() == null ? source : request.provider()).getBuffer(RenderTypes.entityTranslucent(request.texture()));
 
 			/*? if >=1.19.3 {*/ org.joml.Matrix4f /*?} else {*/ /*com.mojang.math.Matrix4f*//*?}*/ matrix = request.poseStack().pose();
 			buffer.withVertex(matrix, request.x1(), request.y1(), request.z()).withColor(255, 255, 255, 255).withUv(request.u1(), request.v1()).withOverlay(OverlayTexture.NO_OVERLAY).withLight(request.light()).withNormal(0, 1, 0).end();
@@ -40,7 +52,7 @@ public class PatFeatureRenderer {
 	}
 
 	public void request(
-			ResourceLocation texture,
+			Identifier texture,
 			Pose poseStack,
 			float x1,
 			float y1,
@@ -51,9 +63,10 @@ public class PatFeatureRenderer {
 			float v1,
 			float u2,
 			float v2,
-			int light
+			int light,
+			@Nullable MultiBufferSource provider
 	) {
-		this.requests.add(new PatFeatureRequest(texture, poseStack.copy(), x1, y1, x2, y2, z, u1, v1, u2, v2, light));
+		this.requests.add(new PatFeatureRequest(texture, poseStack.copy(), x1, y1, x2, y2, z, u1, v1, u2, v2, light, provider));
 	}
 
 }

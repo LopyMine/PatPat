@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.function.Supplier;
 import lombok.*;
-import net.lopymine.patpat.PatTranslation;
+import net.lopymine.patpat.translation.PatTranslation;
 import net.lopymine.patpat.client.PatPatClient;
 import net.lopymine.patpat.common.config.EnumWithText;
 import net.lopymine.patpat.utils.CodecUtils;

@@ -1,0 +1,31 @@
+license = "${mod_license}"
+issueTrackerURL = "https://github.com/${github_mod_author}/${mod_id}"
+modLoader="javafml"
+loaderVersion="[1,)"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+side="${neoforge_trick_side}"
+displayURL = "https://modrinth.com/mod/${mod_id}"
+logoFile = "icon.png"
+authors = "${mod_authors}"
+description = '''${mod_description}'''
+
+${old_neoforge_trick_mixin_configs}
+
+[[dependencies.${mod_id}]]
+modId = "${old_neoforge_id_trick}"
+${required_forge_thing}
+versionRange = "[1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${ mod_id }]]
+modId = "minecraft"
+${required_forge_thing}
+versionRange = "${minecraft}"
+ordering = "NONE"
+side = "BOTH"
+

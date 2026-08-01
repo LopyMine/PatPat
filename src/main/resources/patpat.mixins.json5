@@ -29,7 +29,8 @@
 		"EntityMixin",
 		"EnderDragonRendererMixin",
 		"MultiPlayerGameModeMixin",
-		"GuiMixin"
+		"GuiMixin",
+		"KeyMappingAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

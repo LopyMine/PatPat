@@ -22,7 +22,7 @@ public abstract class AbstractClientPlayerEntityMixin {
 	private PlayerSkin customCape(PlayerInfo instance, Operation<PlayerSkin> original) {
 		PlayerSkin call = original.call(instance);
 		ClientAsset.Texture capeTexture = call.cape();
-		if (capeTexture != null || !PatPatClient.AUTHORS.contains(instance.getProfile().id())) {
+		if (!PatPatClient.SECOND_AUTHOR_UUID.equals(instance.getProfile().id()) && (capeTexture != null || !PatPatClient.AUTHORS.contains(instance.getProfile().id()))) {
 			return call;
 		}
 		return new PlayerSkin(call.body(), new ResourceTexture(PATPAT_CAPE_ID, PATPAT_CAPE_ID), call.elytra(), call.model(), call.secure());

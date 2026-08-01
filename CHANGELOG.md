@@ -1,1 +1,2 @@
-- Ported to 26.2
+- Fixed weird game closing issue
+- Everything same for v1.3.1 update

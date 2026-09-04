@@ -50,7 +50,7 @@ public class FabricServerModLoader implements IServerModLoader {
 
 	@Override
 	public void registerServerPlayerLogListener(ServerPlayerLogListener consumer) {
-		ServerPlayConnectionEvents.INIT.register((handler, server) -> { ServerPlayer player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
+		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> { ServerPlayer player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;
 			consumer.onLog(true, player);
 		});
 		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> { ServerPlayer player = /*? if >=1.21 {*/ handler.getPlayer() /*?} else {*/ /*handler.player *//*?}*/;

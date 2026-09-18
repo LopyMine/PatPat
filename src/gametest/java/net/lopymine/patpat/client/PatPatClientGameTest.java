@@ -1,9 +1,9 @@
 package net.lopymine.patpat.client;
 
 // 😭 я ни понимяу
-//? if >=26.1 {
+//? if =26.2 {
 
-import net.fabricmc.loader.api.FabricLoader;
+/*import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState.SelectedGameMode;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,8 +59,8 @@ public class PatPatClientGameTest implements FabricClientGameTest {
 			//? if >=26.1 {
 			singleplayer.getClientLevel().waitForChunksDownload();
 			 //?} else {
-			/*singleplayer.getClientWorld().waitForChunksDownload();
-			*///?}
+			/^singleplayer.getClientWorld().waitForChunksDownload();
+			^///?}
 
 			context.takeScreenshot("initializing_world");
 			context.getInput().holdKey(GLFW.GLFW_KEY_LEFT_SHIFT);
@@ -94,4 +94,4 @@ public class PatPatClientGameTest implements FabricClientGameTest {
 		return false;
 	}
 }
-//?}
+*///?}

@@ -1,8 +1,8 @@
 package net.lopymine.patpat.client;
 
-//? if >=26.1 {
+//? if =26.2 {
 
-import lombok.SneakyThrows;
+/*import lombok.SneakyThrows;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.screens.TitleScreen;
 
@@ -48,11 +48,11 @@ public class PatPatSingleplayerContextImplDecorator implements TestSingleplayerC
 		return this.testSingleplayerContext.getClientLevel();
 	}
 	//?} else {
-	/*@Override
+	/^@Override
 	public @NotNull TestClientWorldContext getClientWorld() {
 		return this.testSingleplayerContext.getClientWorld();
 	}
-	*///?}
+	^///?}
 
 	@Override
 	public @NotNull TestServerContext getServer() {
@@ -67,4 +67,4 @@ public class PatPatSingleplayerContextImplDecorator implements TestSingleplayerC
 		context.setScreen(TitleScreen::new);
 	}
 }
-//?}
+*///?}

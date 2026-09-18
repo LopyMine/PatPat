@@ -1,13 +1,5 @@
 pluginManagement {
 	repositories {
-		maven {
-			name "Mossy Projects Releases"
-			url "https://maven.lopymine.net/releases"
-		}
-		maven {
-			name "Mossy Projects Snapshots"
-			url "https://maven.lopymine.net/snapshots"
-		}
 		mavenCentral()
 		gradlePluginPortal()
 		mavenLocal()
@@ -22,6 +14,14 @@ pluginManagement {
 		maven {
 			name "Kiku Releases"
 			url "https://maven.kikugie.dev/releases"
+		}
+		maven {
+			name "Mossy Projects Releases"
+			url "https://maven.lopymine.net/releases"
+		}
+		maven {
+			name "Mossy Projects Snapshots"
+			url "https://maven.lopymine.net/snapshots"
 		}
 		maven {
 			name "NeoForge Releases"

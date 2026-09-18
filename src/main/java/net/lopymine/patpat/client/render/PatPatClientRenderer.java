@@ -22,12 +22,18 @@ import net.minecraft.client.*;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
+
+//? if >=26.3 {
+import net.minecraft.network.protocol.game.ServerboundPunchPacket;
+import net.minecraft.world.item.component.SwingAnimation;
+//?} else {
+/*import net.minecraft.network.protocol.game.ServerboundSwingPacket;
+*///?}
 
 
 @ExtensionMethod(VertexConsumerExtension.class)
@@ -77,10 +83,18 @@ public class PatPatClientRenderer {
 
 				PatPatClientVisualConfig visualConfig = config.getVisualConfig();
 				if (visualConfig.isClientSwingHandEnabled()) {
-					player.swing(InteractionHand.MAIN_HAND, false);
+					//? if >=26.3 {
+					player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, false);
+					//?} else {
+					/*player.swing(InteractionHand.MAIN_HAND, false);
+					*///?}
 				}
 				if (visualConfig.isServerSwingHandEnabled() && !player.isSpectator()) {
-					player.connection.send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+					//? if >=26.3 {
+					player.connection.send(ServerboundPunchPacket.INSTANCE);
+					//?} else {
+					/*player.connection.send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+					*///?}
 				}
 
 				ReplayModCompat.onPat(pattedEntity.getId(), player.getId());
@@ -159,7 +173,11 @@ public class PatPatClientRenderer {
 
 		matrices.pushPose();
 		matrices.translate(0.0F, yOffset, 0.0F);
-		matrices.mulPose(cameraRotation);
+		//? if >=26.3 {
+		matrices.rotate(cameraRotation);
+		//?} else {
+		/*matrices.mulPose(cameraRotation);
+		*///?}
 		matrices.scale(0.85F * numberToMirrorTexture, -0.85F, 0.85F);
 
 		int frameWidth = animation.getTextureWidth() / frameConfig.totalFrames();

@@ -9,7 +9,12 @@ import net.lopymine.patpat.client.manager.PatPatClientManager;
 import net.minecraft.client.*;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.glfw.GLFW;
+
+//? if >=26.3 {
+import org.lwjgl.sdl.SDLMouse;
+//?} else {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 public class PatPatKeybinding extends KeyMapping {
 
@@ -20,15 +25,19 @@ public class PatPatKeybinding extends KeyMapping {
 	@Getter
 	private boolean canStartBinding = true;
 	public PatPatKeybinding(KeybindingCombination patCombination) {
-		super("patpat.keybinding.pat", -1, PatPatClientKeybindingManager.CATEGORY);
+		super("patpat.keybinding.pat", InputConstants.UNKNOWN.getValue(), PatPatClientKeybindingManager.CATEGORY);
 		this.combination.setAttributeKey(patCombination.getAttributeKey());
 		this.combination.setKey(patCombination.getKey());
 	}
 
 	private static @NotNull KeybindingCombination getDefaultCombination() {
 		return new KeybindingCombination(
-				Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_LEFT_SHIFT),
-				Type.MOUSE.getOrCreate(GLFW.GLFW_MOUSE_BUTTON_2)
+				//? if >=26.3 {
+				Type.KEYBOARD.getOrCreate(InputConstants.KEY_LSHIFT),
+				//?} else {
+				/*Type.KEYSYM.getOrCreate(InputConstants.KEY_LSHIFT),
+				*///?}
+				Type.MOUSE.getOrCreate(InputConstants.MOUSE_BUTTON_RIGHT)
 		);
 	}
 
@@ -46,7 +55,7 @@ public class PatPatKeybinding extends KeyMapping {
 		if (!this.isBinding()) {
 			return true;
 		}
-		if (key.getValue() == GLFW.GLFW_KEY_ESCAPE) {
+		if (key.getValue() == InputConstants.KEY_ESCAPE) {
 			this.refreshPressedState();
 			this.combination.setKey(null);
 			this.combination.setAttributeKey(null);
@@ -134,11 +143,19 @@ public class PatPatKeybinding extends KeyMapping {
 	public void refreshPressedState() {
 		List<Key> keys = this.combination.getKeys();
 		keys.forEach(key -> {
-			if (key.getType() == Type.KEYSYM) {
+			//? if >=26.3 {
+			if (key.getType() == Type.KEYBOARD) {
+				this.combination.set(key, InputConstants.isKeyDown(key.getValue()));
+			} else {
+				this.combination.set(key, (SDLMouse.SDL_GetMouseState(null, null) & (1 << (key.getValue() - 1))) != 0);
+			}
+			//?} else {
+			/*if (key.getType() == Type.KEYSYM) {
 				this.combination.set(key, InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), key.getValue()));
 			} else {
 				this.combination.set(key, GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().handle(), key.getValue()) == 1);
 			}
+			*///?}
 		});
 		boolean allPressed = this.combination.allPressed();
 		this.setDown(allPressed);

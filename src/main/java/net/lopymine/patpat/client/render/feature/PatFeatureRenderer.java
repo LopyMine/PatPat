@@ -7,7 +7,6 @@ import lombok.experimental.ExtensionMethod;
 import net.lopymine.patpat.PatPat;
 import net.lopymine.patpat.client.render.feature.PatFeatureRenderer.Submit;
 import net.lopymine.patpat.extension.*;
-import net.lopymine.patpat.mixin.SubmitNodeCollectionAccessor;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.feature.*;
 import net.minecraft.client.renderer.feature.submit.TranslucentSubmit;
@@ -24,11 +23,7 @@ public class PatFeatureRenderer extends RenderTypeFeatureRenderer<Submit> {
 		if (!(collector instanceof SubmitNodeStorage storage)) {
 			return;
 		}
-		SubmitNodeCollection collection = storage.order(0);
-		if (!(collection instanceof SubmitNodeCollectionAccessor accessor)) {
-			return;
-		}
-		accessor.getTranslucentModels().submit(request);
+		storage.order(0).translucentModels.submit(request);
 	}
 
 	@Override

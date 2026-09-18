@@ -24,6 +24,11 @@ mossyDependencies {
 		override("mossyCompileOnly", "cloth-config")
 		override("mossyCompileOnly", "geckolib")
 
+		// remove when proxlib gets updated
+		if (sc.current.parsed.matches(">=26.2")) {
+			override("mossyCompileOnly", "proxlib")
+		}
+
 		disable("fabric-permissions-api")
 	}
 }
@@ -59,11 +64,11 @@ if (fabric) {
 		useJUnitPlatform()
 	}
 
-	loom.runConfigs.configureEach { config ->
-		if (config.getEnvironment() == "client") {
-			config.vmArg("-Dpatpat.debug=true")
-		}
-	}
+	//loom.runConfigs.configureEach { config ->
+	//	if (config.getRuntimeEnvironment().get() == "client") {
+	//		config.vmArg("-Dpatpat.debug=true")
+	//	}
+	//}
 
 	fabricApi {
 		configureTests {

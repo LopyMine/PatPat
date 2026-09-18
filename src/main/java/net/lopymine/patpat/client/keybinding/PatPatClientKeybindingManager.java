@@ -37,12 +37,11 @@ public class PatPatClientKeybindingManager {
 	public static void handlePatPatKeybindingOnKeyPressed(
 			KeyMapping mapping,
 			KeyBindsScreen screen,
-			int keyCode,
-			int scanCode,
+			InputConstants.Key key,
 			Runnable cancel
 	) {
 		if (mapping instanceof PatPatKeybinding keybinding) {
-			boolean bl = keybinding.addBindingKey(getKey(keyCode, scanCode));
+			boolean bl = keybinding.addBindingKey(key);
 			if (bl) {
 				keybinding.sendBindingKeys();
 				screen.selectedKey = null;
@@ -67,10 +66,6 @@ public class PatPatClientKeybindingManager {
 			((KeyBindsScreenAccessor) (screen)).getList().refreshEntries();
 			cancel.run();
 		}
-	}
-
-	public static InputConstants.Key getKey(int keyCode, int scanCode) {
-		return keyCode == -1 ? InputConstants.Type.SCANCODE.getOrCreate(scanCode) : InputConstants.Type.KEYSYM.getOrCreate(keyCode);
 	}
 
 }

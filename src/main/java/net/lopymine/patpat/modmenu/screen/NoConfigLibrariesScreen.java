@@ -17,6 +17,10 @@ import java.net.*;
 import java.util.*;
 import net.minecraft.client.input.KeyEvent;
 
+//? if >=26.3 {
+import com.mojang.blaze3d.Blaze3D;
+//?}
+
 public class NoConfigLibrariesScreen {
 
 	private NoConfigLibrariesScreen() {
@@ -49,7 +53,11 @@ public class NoConfigLibrariesScreen {
 			if (!ALLOWED_PROTOCOLS.contains(string.toLowerCase(Locale.ROOT))) {
 				throw new URISyntaxException(url, "Unsupported protocol: " + string.toLowerCase(Locale.ROOT));
 			}
-			Util.getPlatform().openUri(link);
+			//? if >=26.3 {
+			Blaze3D.openUri(link);
+			//?} else {
+			/*Util.getPlatform().openUri(link);
+			*///?}
 		} catch (URISyntaxException e) {
 			PatPatClient.LOGGER.error("Can't open {} Modrinth page: ", (bl ? "YACL" : "Cloth Config API"), e);
 		}

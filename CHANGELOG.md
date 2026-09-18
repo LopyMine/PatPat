@@ -1,2 +1,2 @@
-- Fixed weird game closing issue
-- Everything same for v1.3.1 update
+- Updated to 26.3 drop
+- Updated/Enabled compatibilities for other mods 

@@ -9,7 +9,7 @@ import net.lopymine.patpat.logger.PatLogger;
 
 public abstract class AbstractPatPatConfigMigrateManager {
 
-	private final Set<MigrateHandler> handlers = new HashSet<>();
+	private final Set<MigrateHandler> handlers = new LinkedHashSet<>();
 	private final PatLogger logger;
 	private final Version currentGlobalConfigVersion;
 	private final Supplier<Version> currentConfigVersionSupplier;

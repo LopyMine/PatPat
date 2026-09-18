@@ -1,0 +1,18 @@
+// no j52j
+{
+	"version": "1.0.1",
+	"main": {
+		"modEnabled": true,
+		"debugLogEnabled": false,
+		"patCombination": {
+			"attributeKey": {
+				"id": 340,
+				"type": "keysym"
+			},
+			"key": {
+				"id": 1,
+				"type": "mouse"
+			}
+		}
+	}
+}

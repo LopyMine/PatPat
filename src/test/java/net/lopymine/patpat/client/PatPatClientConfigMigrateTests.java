@@ -3,10 +3,16 @@ package net.lopymine.patpat.client;
 
 //? >=1.19.4 && fabric {
 
+import com.google.gson.*;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.serialization.JsonOps;
 import net.lopymine.patpat.client.config.list.PatPatClientPlayerListConfig;
+import net.lopymine.patpat.client.keybinding.KeybindingCombination;
+import net.lopymine.patpat.common.Version;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.TempDir;
 
 import net.lopymine.patpat.client.config.*;
 import net.lopymine.patpat.client.config.migrate.*;
@@ -16,7 +22,7 @@ import net.lopymine.patpat.common.config.vector.Vec3f;
 import net.lopymine.patpat.util.PathUtils;
 
 import java.io.*;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.util.*;
 
 public class PatPatClientConfigMigrateTests {
@@ -105,6 +111,43 @@ public class PatPatClientConfigMigrateTests {
 			// Sounds Config
 			Assertions.assertEquals(1.2346F, soundsConfig.getSoundsVolume());
 			Assertions.assertTrue(soundsConfig.isSoundsEnabled());
+		}
+	}
+
+	@Nested
+	class V101 {
+
+		@TempDir
+		Path configFolder;
+
+		@Test
+		void testMigrationV101() throws IOException {
+			// PREPARE DATA
+			File file = PathUtils.getResource("client/test_2.json5").toFile();
+			Assertions.assertTrue(file.exists());
+			Files.copy(file.toPath(), this.configFolder.resolve(file.getName()));
+
+			// PREPARE MIGRATION ENVIRONMENT
+			PatPatClientConfigMigrateVersion101 migrator = new PatPatClientConfigMigrateVersion101();
+			migrator.setConfigFolder(this.configFolder);
+			migrator.setMigrateFileName(file.getName());
+
+			// MIGRATE
+			Assertions.assertTrue(migrator.needMigrate());
+			Assertions.assertTrue(migrator.migrate());
+			Assertions.assertFalse(migrator.needMigrate());
+
+			// ASSERT VALUES
+			JsonElement json = JsonParser.parseString(Files.readString(this.configFolder.resolve(file.getName())));
+			PatPatClientConfig config = PatPatClientConfig.CODEC.parse(JsonOps.INSTANCE, json).getOrThrow();
+			KeybindingCombination combination = config.getMainConfig().getPatCombination();
+
+			Assertions.assertEquals(Version.CLIENT_CONFIG_VERSION, config.getVersion());
+			Assertions.assertNotNull(combination.getAttributeKey());
+			Assertions.assertNotNull(combination.getKey());
+			Assertions.assertEquals(InputConstants.KEY_LSHIFT, combination.getAttributeKey().getValue());
+			Assertions.assertEquals(InputConstants.Type.MOUSE, combination.getKey().getType());
+			Assertions.assertEquals(InputConstants.MOUSE_BUTTON_RIGHT, combination.getKey().getValue());
 		}
 	}
 }

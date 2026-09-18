@@ -7,11 +7,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.*;
 import java.util.stream.Stream;
 import lombok.*;
-import net.lopymine.patpat.client.config.sub.InputType;
 import net.lopymine.patpat.utils.TextUtils;
 import net.minecraft.network.chat.*;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 
 @Getter
 @Setter
@@ -19,26 +17,29 @@ import org.lwjgl.glfw.GLFW;
 @AllArgsConstructor
 public class KeybindingCombination {
 
-	public static final Codec<Key> KEY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.INT.optionalFieldOf("id").xmap((o) -> o.orElse(-1), Optional::ofNullable).forGetter(Key::getValue),
-			InputType.CODEC.optionalFieldOf("type").xmap((o) -> o.orElse(InputType.of(InputConstants.UNKNOWN.getType())), Optional::ofNullable).forGetter((key) -> InputType.of(key.getType()))
-	).apply(instance, (id, type) -> type.toVanillaType().getOrCreate(id)));
+	public static final Codec<Key> KEY_CODEC = Codec.STRING.xmap(KeybindingCombination::getKeyByName, Key::getName);
 	public static final Codec<KeybindingCombination> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			KEY_CODEC.optionalFieldOf("attributeKey").xmap((o) -> o.orElse(InputConstants.UNKNOWN), Optional::ofNullable).forGetter(KeybindingCombination::getAttributeKey),
 			KEY_CODEC.optionalFieldOf("key").xmap((o) -> o.orElse(InputConstants.UNKNOWN), Optional::ofNullable).forGetter(KeybindingCombination::getKey)
 	).apply(instance, KeybindingCombination::new));
 	private static final Component COLLECT_TEXT = TextUtils.literal(" + ");
 	private static final Set<Integer> ATTRIBUTE_KEY_IDS = Set.of(
-			GLFW.GLFW_KEY_LEFT_ALT,
-			GLFW.GLFW_KEY_LEFT_CONTROL,
-			GLFW.GLFW_KEY_LEFT_SHIFT,
-			GLFW.GLFW_KEY_LEFT_SUPER,
-			GLFW.GLFW_KEY_RIGHT_ALT,
-			GLFW.GLFW_KEY_RIGHT_CONTROL,
-			GLFW.GLFW_KEY_RIGHT_SHIFT,
-			GLFW.GLFW_KEY_RIGHT_SUPER,
-			GLFW.GLFW_KEY_TAB,
-			GLFW.GLFW_KEY_CAPS_LOCK
+			//? if >=26.3 {
+			InputConstants.KEY_RGUI,
+			InputConstants.KEY_LGUI,
+			//?} else {
+			/*InputConstants.KEY_RSUPER,
+			InputConstants.KEY_LSUPER,
+			*///?}
+
+			InputConstants.KEY_LALT,
+			InputConstants.KEY_LCONTROL,
+			InputConstants.KEY_LSHIFT,
+			InputConstants.KEY_RALT,
+			InputConstants.KEY_RCONTROL,
+			InputConstants.KEY_RSHIFT,
+			InputConstants.KEY_TAB,
+			InputConstants.KEY_CAPSLOCK
 	);
 
 	@Nullable
@@ -50,8 +51,16 @@ public class KeybindingCombination {
 		return ATTRIBUTE_KEY_IDS.contains(keyId);
 	}
 
+	private static Key getKeyByName(String name) {
+		try {
+			return InputConstants.getKey(name);
+		} catch (IllegalArgumentException e) {
+			return InputConstants.UNKNOWN;
+		}
+	}
+
 	public void setAttributeKey(@Nullable Key attributeKey) {
-		if (attributeKey != null && attributeKey.getValue() == -1) {
+		if (InputConstants.UNKNOWN.equals(attributeKey)) {
 			this.attributeKey = null;
 			return;
 		}
@@ -59,7 +68,7 @@ public class KeybindingCombination {
 	}
 
 	public void setKey(@Nullable Key key) {
-		if (key != null && key.getValue() == -1) {
+		if (InputConstants.UNKNOWN.equals(key)) {
 			this.key = null;
 			return;
 		}
@@ -71,7 +80,7 @@ public class KeybindingCombination {
 	}
 
 	public List<Key> getKeys() {
-		return Stream.of(this.getKey(), this.getAttributeKey()).filter(Objects::nonNull).filter((key) -> key.getValue() != -1).toList();
+		return Stream.of(this.getKey(), this.getAttributeKey()).filter(Objects::nonNull).filter((key) -> !InputConstants.UNKNOWN.equals(key)).toList();
 	}
 
 	public Component getCombinationLocalizedComponent(boolean asFinished) {

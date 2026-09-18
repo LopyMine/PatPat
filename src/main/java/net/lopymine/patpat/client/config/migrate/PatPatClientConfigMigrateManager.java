@@ -18,6 +18,7 @@ public class PatPatClientConfigMigrateManager extends AbstractPatPatConfigMigrat
 		super(PatPatClient.LOGGER, Version.CLIENT_CONFIG_VERSION, () -> PatPatClientConfig.getInstance().getVersion());
 		this.addHandlers(
 				new PatPatClientConfigMigrateVersion0(),
+				new PatPatClientConfigMigrateVersion101(),
 				new PatPatClientConfigMigrateVersion100()
 		);
 	}

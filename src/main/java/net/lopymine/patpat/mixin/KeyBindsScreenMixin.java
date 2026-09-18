@@ -1,5 +1,6 @@
 package net.lopymine.patpat.mixin;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.lopymine.patpat.client.keybinding.*;
 import net.lopymine.patpat.utils.mixin.ScreenWithPatPatKeybinding;
 import net.minecraft.client.KeyMapping;
@@ -21,9 +22,7 @@ public class KeyBindsScreenMixin implements ScreenWithPatPatKeybinding {
 
 	@Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
 	private void handlePatPatKeybindingOnKeyPressed(net.minecraft.client.input.KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
-		int keyCode = event.key();
-		int scanCode = event.scancode();
-		PatPatClientKeybindingManager.handlePatPatKeybindingOnKeyPressed(this.selectedKey, (KeyBindsScreen) (Object) (this), keyCode, scanCode, () -> cir.setReturnValue(false));
+		PatPatClientKeybindingManager.handlePatPatKeybindingOnKeyPressed(this.selectedKey, (KeyBindsScreen) (Object) (this), InputConstants.getKey(event), () -> cir.setReturnValue(false));
 	}
 
 	@Inject(at = @At("HEAD"), method = "mouseClicked", cancellable = true)

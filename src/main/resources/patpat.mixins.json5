@@ -25,7 +25,6 @@
 		"LocalPlayerMixin",
 		"LevelRendererMixin",
 		"FeatureRenderDispatcherMixin",
-		"SubmitNodeCollectionAccessor",
 		"EntityMixin",
 		"EnderDragonRendererMixin",
 		"MultiPlayerGameModeMixin",
